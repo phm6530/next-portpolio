@@ -13,7 +13,7 @@ export default function SurveyList() {
   const { data, isLoading, isError } = useQuery<SurveyProp[]>({
     queryKey: ["list", "survey"],
     queryFn: getList,
-    staleTime: 1 * 60 * 1000,
+    staleTime: 1000,
   });
 
   if (isLoading) {
@@ -23,6 +23,7 @@ export default function SurveyList() {
   if (isError) {
     return <div>Error....</div>;
   }
+  console.log(data);
 
   return (
     <>

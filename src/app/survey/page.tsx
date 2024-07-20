@@ -10,7 +10,7 @@ type SurveyProp = {
 
 export async function getList(): Promise<SurveyProp[]> {
   try {
-    const response = await fetch("/api/survey/list");
+    const response = await fetch("http://localhost:3000/api/survey");
     if (!response.ok) {
       throw new Error("서버 이상");
     }
@@ -33,7 +33,6 @@ export default async function surveyPage() {
 
   return (
     <>
-      survey Page
       <div className={classes.wrap}>
         {/* List */}
         <HydrationBoundary state={hydurateState}>
