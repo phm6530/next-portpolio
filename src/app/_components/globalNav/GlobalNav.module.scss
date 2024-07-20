@@ -1,0 +1,12 @@
+@import "mixin";
+
+.header {
+  position: fixed;
+  width: 100%;
+  background: red;
+  padding: 1rem 0;
+
+  .nav {
+    @include grid-center;
+  }
+}
