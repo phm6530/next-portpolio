@@ -9,6 +9,7 @@ export default function GlobalNav() {
         <Link href={"/about"}>about</Link>
         <Link href={"/survey"}>진행중 설문조사</Link>
         <Link href={"/admin"}>Admin</Link>
+        <Link href={"/auth/login"}>로그인</Link>
       </nav>
     </header>
   );
