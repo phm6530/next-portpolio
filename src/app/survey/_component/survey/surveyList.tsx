@@ -23,7 +23,7 @@ export default function SurveyList() {
   if (isError) {
     return <div>Error....</div>;
   }
-  console.log(data);
+  // console.log(data);
 
   return (
     <>

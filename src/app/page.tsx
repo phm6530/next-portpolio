@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const awiat = await fetchUsers();
-  console.log(awiat);
+
   return (
     <main>
       <h1 className={classes.title}>무한한 아름다움, 무제한 무료 응답</h1>

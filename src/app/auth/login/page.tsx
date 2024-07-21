@@ -1,10 +1,13 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { signIn, useSession, SignInResponse } from "next-auth/react";
+import { FormEvent, useState, useEffect } from "react";
 
 export default function LoginPage() {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
+  const { data: session, status } = useSession(); // 세션 상태를 가져옴
+
+  console.log(session);
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,18 +21,25 @@ export default function LoginPage() {
       return;
     }
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-    });
+    try {
+      const res = (await signIn("credentials", {
+        redirect: false,
+        username,
+        password,
+      })) as SignInResponse;
 
-    if (res?.ok) {
-      console.log("Login successful");
-      window.location.href = "/"; // 메인 페이지로 리다이렉트
-    } else {
-      setError("Login failed. Please check your username and password.");
-      console.error("Login failed", res);
+      if (res?.error) {
+        setError("Invalid username or password.");
+      } else if (res?.ok) {
+        console.log("Login successful");
+
+        // 로그인 후 메인 페이지로 리디렉션
+        window.location.href = "/";
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } catch (err) {
+      setError("An error occurred while attempting to log in.");
     }
   };
 
