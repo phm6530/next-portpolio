@@ -4,15 +4,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
         if (credentials.username === "1" && credentials.password === "1") {
-          return { id: "1", name: "Hyunmin", email: "hyunmin@example.com" };
+          return {
+            id: "1",
+            name: "Hyunmin",
+            email: "hyunmin@example.com",
+          };
         } else {
           return null;
         }
@@ -23,19 +25,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/auth/login",
   },
   session: {
-    strategy: "jwt", // 세션 전략을 JWT로 설정
+    strategy: "jwt",
+    maxAge: 15 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // user 객체의 ID를 token에 추가
+        token.name = user.name;
+        token.email = user.email;
       }
+
       return token;
     },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string; // 세션에 accessToken 추가
+    async session({ session, token, user }) {
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true, // JavaScript에서 접근 불가
+        secure: process.env.NODE_ENV === "production", // HTTPS에서만 전송
+        sameSite: "lax", // CSRF 공격 방지
+      },
+    },
+  },
 });

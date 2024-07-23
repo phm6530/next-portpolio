@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import classes from "./home.module.scss";
+import { auth } from "@/auth";
+import { getToken } from "next-auth/jwt";
 
 async function fetchUsers() {
   const response = await fetch("https://jsonplaceholder.typicode.com/users"); // 예시 API URL
@@ -16,7 +18,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const awiat = await fetchUsers();
+  const session = await auth();
+  console.log(session);
 
   return (
     <main>

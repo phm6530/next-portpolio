@@ -3,6 +3,26 @@ import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    accessToken?: string; // 세션에 accessToken 추가
+    user?: {
+      id?: string;
+      accessToken?: string;
+      userImage?: string;
+      rule?: number;
+    } & DefaultSession["user"];
+  }
+
+  interface User extends DefaultUser {
+    id: string;
+    accessToken?: string;
+    userImage?: string;
+    rule?: number;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string;
+    userImage?: string;
+    rule?: number;
   }
 }
