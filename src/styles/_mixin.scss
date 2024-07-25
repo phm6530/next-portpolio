@@ -1,6 +1,21 @@
 //grid
 @mixin grid-center {
-  max-width: 1500px;
+  max-width: 1300px;
   width: 100%;
   margin: 0 auto;
+}
+
+//btn Hover
+@mixin gradient-btn-hover($color, $hover-color) {
+  background: $color;
+  &:hover {
+    background: $hover-color;
+  }
+}
+
+@mixin btn-hover($color) {
+  background: $color;
+  &:hover {
+    background: darken($color, 10%);
+  }
 }

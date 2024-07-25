@@ -1,3 +1,65 @@
+@import "mixin";
+
 .title {
-  font-size: 4rem;
+  font-weight: bold;
+  font-size: 60px;
+  letter-spacing: -3px;
+  line-height: 80px;
+  padding-bottom: 4rem;
+  grid-column: 1 / -1;
+}
+
+.mainDescription {
+  font-size: 20px;
+  line-height: 2rem;
+  font-size: 1.1rem;
+  color: #5b5883;
+  grid-column: 1 / -1;
+}
+
+.btnMove {
+  margin-top: 5rem;
+  color: #fff;
+  border: 0;
+  padding: 1.3rem 2rem;
+  box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.15);
+  border-radius: 3rem;
+  @include gradient-btn-hover($btn-submit-color, $btn-submit-color-hover);
+}
+
+.btnGray {
+  margin-top: 5rem;
+  padding: 1.3rem 2rem;
+  margin-left: 1rem;
+  color: rgba(0, 0, 0, 0.3);
+  border-radius: 3rem;
+  @include btn-hover(rgba(243, 243, 243, 0.57));
+}
+
+.leftSection {
+  flex: 1;
+  display: grid;
+  height: 100%;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  justify-items: start;
+}
+
+.mainGrid {
+  display: flex;
+  flex: 1;
+
+  width: 100%;
+  height: calc(100dvh - 200px);
+  min-height: 500px;
+  align-items: flex-start;
+}
+.rightSection {
+  flex: 1;
+  display: flex;
+}
+.slideWrap {
+  flex: 1;
+  max-width: 350px;
 }

@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 export async function middleware(req: NextRequest) {
   console.log(`Middleware is running for ${req.url}`);
 
-  const session = await auth(req); // req를 전달하여 쿠키를 확인
+  const session = await auth(); // req를 전달하여 쿠키를 확인
 
   console.log("Session:", session);
 

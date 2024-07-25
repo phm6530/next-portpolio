@@ -1,57 +1,57 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { signIn, SignInResponse } from "next-auth/react";
+import { FormEvent, useState } from "react";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+export default function LoginForm({
+  redirectPath = "/",
+}: {
+  redirectPath: string;
+}) {
+  const [error, setError] = useState<string>("");
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
 
-    if (response.ok) {
-      // 로그인 성공, 세션이 설정됨
-      const redirectUrl = router.query.redirect || "/";
-      router.push(redirectUrl as string);
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
+    const res = (await signIn("credentials", {
+      redirect: false,
+      username,
+      password,
+    })) as SignInResponse;
+
+    if (!res.error) {
+      window.location.href = redirectPath;
+      return;
     } else {
-      // 로그인 실패, 에러 처리
-      alert("Login failed");
+      setError("비밀번호나 아이디가 일치하지 않습니다.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <>
+      <form onSubmit={onSubmitHandler}>
+        <label>
+          Username:
+          <input type="text" name="username" />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input type="password" name="password" />
+        </label>
+        <br />
+        <button type="submit">Login</button>
+      </form>
+      {error && <p>{error}</p>}
+    </>
   );
-};
-
-export default Login;
+}
