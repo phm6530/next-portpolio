@@ -1,8 +1,13 @@
-import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 export async function middleware(req: NextRequest) {
-  const session = await auth();
+  console.log(`Middleware is running for ${req.url}`);
+
+  const session = await auth(req); // req를 전달하여 쿠키를 확인
+
+  console.log("Session:", session);
+
   const currentUrl = new URL(req.url);
   const redirectPath = currentUrl.pathname;
 

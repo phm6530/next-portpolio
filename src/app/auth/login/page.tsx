@@ -1,26 +1,59 @@
-import LoginForm from "@/app/auth/login/_component/LoginForm";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: {
-    redirect: string;
+import { signIn, SignInResponse } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const params = useSearchParams();
+
+  const test = params.get("redirect");
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const response = (await signIn("credentials", {
+      redirect: false,
+      username,
+      password,
+    })) as SignInResponse;
+
+    if (response.ok) {
+      // 로그인 성공, 세션이 설정됨
+      const redirectUrl = test || "/";
+      router.push(redirectUrl as string);
+    } else {
+      // 로그인 실패, 에러 처리
+      alert("Login failed");
+    }
   };
-}) {
-  const session = await auth();
 
-  if (session) {
-    console.log("세션들어오냐?");
-    redirect("/");
-  } else {
-    console.log("세션 없음");
-  }
   return (
-    <div>
-      <h1>Login</h1>
-      <LoginForm redirectPath={searchParams.redirect} />
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Username</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
-}
+};
+
+export default Login;

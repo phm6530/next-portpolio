@@ -1,56 +1,57 @@
 "use client";
 
-import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
-export default function LoginForm({
-  redirectPath = "/",
-}: {
-  redirectPath: string;
-}) {
-  const [error, setError] = useState<string>("");
-  const { refresh, push } = useRouter();
-  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
-    const formData = new FormData(e.currentTarget);
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-    if (!username || !password) {
-      setError("Please enter both username and password.");
-      return;
-    }
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
 
-    const res = (await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-    })) as SignInResponse;
-
-    if (!res.error) {
-      window.location.href = redirectPath;
-      return;
+    if (response.ok) {
+      // 로그인 성공, 세션이 설정됨
+      const redirectUrl = router.query.redirect || "/";
+      router.push(redirectUrl as string);
+    } else {
+      // 로그인 실패, 에러 처리
+      alert("Login failed");
     }
   };
 
   return (
-    <>
-      <form onSubmit={onSubmitHandler}>
-        <label>
-          Username:
-          <input type="text" name="username" />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" name="password" />
-        </label>
-        <br />
-        <button type="submit">Login</button>
-      </form>
-      {error && <p>{error}</p>}
-    </>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Username</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
-}
+};
+
+export default Login;
