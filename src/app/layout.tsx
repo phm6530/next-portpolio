@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
 import GlobalNav from "@/app/_components/globalNav/GlobalNav";
 import ProviderContext from "@/app/_provider";
-import "@/styles/_styles.scss";
 import { auth } from "@/auth";
+import PageTransition from "@/app/lib/PageTransition";
+
+import "@/styles/_styles.scss";
 
 export default async function RootLayout({
   children,
@@ -16,7 +17,9 @@ export default async function RootLayout({
       <body className="body">
         <ProviderContext>
           <GlobalNav isLogin={!!auths} />
-          <main className="container">{children}</main>
+          <PageTransition>
+            <main className="container">{children}</main>
+          </PageTransition>
         </ProviderContext>
       </body>
     </html>

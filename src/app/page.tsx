@@ -19,6 +19,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+  //공백 arr
+  const arr = Array.from({ length: 2 }, (_, idx) => idx);
+
   return (
     <div className={classes.mainGrid}>
       <div className={classes.leftSection}>
@@ -33,12 +36,13 @@ export default async function Home() {
         <button className={classes.btnGray}>자세히보기</button>
       </div>
       <div className={classes.rightSection}>
-        <div className={classes.slideWrap}>
-          <SurveyList />
-        </div>
-        <div className={classes.slideWrap}>
-          <SurveyList />
-        </div>
+        {arr.map((_, idx) => {
+          return (
+            <div className={classes.slideWrap} key={`slideWrap-${idx}`}>
+              <SurveyList idx={idx} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

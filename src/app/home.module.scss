@@ -17,19 +17,22 @@
   grid-column: 1 / -1;
 }
 
-.btnMove {
+.btnStyle {
   margin-top: 5rem;
+  padding: 1.3rem 2rem;
+}
+
+.btnMove {
+  @extend .btnStyle;
   color: #fff;
   border: 0;
-  padding: 1.3rem 2rem;
   box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.15);
   border-radius: 3rem;
   @include gradient-btn-hover($btn-submit-color, $btn-submit-color-hover);
 }
 
 .btnGray {
-  margin-top: 5rem;
-  padding: 1.3rem 2rem;
+  @extend .btnStyle;
   margin-left: 1rem;
   color: rgba(0, 0, 0, 0.3);
   border-radius: 3rem;

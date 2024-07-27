@@ -11,7 +11,7 @@ export interface ParticipationMainProps {
 
 //설문조사 Props
 export interface SurveyItemProps {
-  img: string | null;
+  img: string;
   surveyTitle: string;
   createUser: userProps;
   ParticipationMain: ParticipationMainProps;

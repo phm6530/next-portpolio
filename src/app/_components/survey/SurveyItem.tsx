@@ -15,12 +15,7 @@ export default function SurveyItem({ item }: { item: SurveyItemProps }) {
   return (
     <div className={classes.itemBox}>
       <div className={classes.surveyThumbNail}>
-        <Image
-          alt="test"
-          src="https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg"
-          layout="fill"
-          objectFit="cover"
-        />
+        <Image alt="test" src={img} layout="fill" objectFit="cover" />
       </div>
       <div className={classes.summryInfo}>
         <div className={classes.surveyTitle}>{surveyTitle}</div>

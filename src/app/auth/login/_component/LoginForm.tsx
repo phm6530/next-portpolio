@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn, SignInResponse } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function LoginForm({
@@ -9,6 +10,7 @@ export default function LoginForm({
   redirectPath: string;
 }) {
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ export default function LoginForm({
     })) as SignInResponse;
 
     if (!res.error) {
-      window.location.href = redirectPath;
+      router.push(redirectPath);
       return;
     } else {
       setError("비밀번호나 아이디가 일치하지 않습니다.");
