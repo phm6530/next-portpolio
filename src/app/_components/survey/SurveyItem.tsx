@@ -1,6 +1,7 @@
 import { SurveyItemProps } from "@/types/survey";
 import classes from "./SurveyItem.module.scss";
 import Image from "next/image";
+import { useRef } from "react";
 
 export default function SurveyItem({ item }: { item: SurveyItemProps }) {
   const {
@@ -20,7 +21,7 @@ export default function SurveyItem({ item }: { item: SurveyItemProps }) {
       <div className={classes.summryInfo}>
         <div className={classes.surveyTitle}>{surveyTitle}</div>
         <div className={classes.Participation}>
-          <span>{ParticipationMain.ageRange}</span>대{" "}
+          <span>{ParticipationMain.ageRange}</span>대
           <span
             className={
               ParticipationMain.gender === "men"

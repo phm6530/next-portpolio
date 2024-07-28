@@ -1,0 +1,65 @@
+"use client";
+
+import gsap from "gsap";
+import "./styles.scss";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+
+export default function Page() {
+  const ref = useRef<HTMLDivElement>(null);
+  const gsapFn = useRef<gsap.core.Tween | null>(null);
+
+  const { contextSafe } = useGSAP(
+    () => {
+      //부모 높이
+      const Perents = ref.current?.offsetHeight;
+
+      if (Perents) {
+        gsap.set(".box", {
+          y: (i) => i * (Perents / 3),
+        });
+
+        const animation = gsap.to(".box", {
+          duration: 12,
+          ease: "none",
+          y: `+=${Perents}`,
+          modifiers: {
+            y: gsap.utils.unitize((y) => parseFloat(y) % Perents), //force x value to be between 0 and 500 using modulus
+          },
+          repeat: -1,
+        });
+
+        gsapFn.current = animation;
+      }
+    },
+    { scope: ".wrapper" }
+  );
+
+  const hoverHandler = contextSafe(() => {
+    if (gsapFn.current) {
+      gsap.to(gsapFn.current, { timeScale: 0, duration: 0.5 });
+    }
+  });
+
+  const onMouseLeaveHandler = () => {
+    if (gsapFn.current) {
+      gsap.to(gsapFn.current, { timeScale: 1, duration: 0.5 });
+    }
+  };
+
+  return (
+    <>
+      <div
+        className="wrapper"
+        onMouseOver={hoverHandler}
+        onMouseLeave={onMouseLeaveHandler}
+      >
+        <div className="boxes" ref={ref}>
+          <div className="box">1</div>
+          <div className="box">2</div>
+          <div className="box">3</div>
+        </div>
+      </div>
+    </>
+  );
+}

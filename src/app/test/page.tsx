@@ -2,7 +2,6 @@
 import gsap from "gsap";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-
 import "./test.scss";
 
 export default function Page() {
@@ -13,20 +12,17 @@ export default function Page() {
 
   const { contextSafe } = useGSAP(
     () => {
-      // 각각의 .hi 요소에 대해 개별적으로 애니메이션 설정
-      const animations = gsap.utils
-        .toArray<HTMLElement>(".hi")
-        .map((el, idx) => {
-          return gsap.to(el, {
-            backgroundColor: "blue",
-            y: 400,
-            yoyo: true,
-            ease: "bounce.out",
-            delay: Math.random(), // 0초에서 1초 사이의 랜덤 지연 시간
-            repeat: -1,
-            duration: 2,
-          });
+      const animations = gsap.utils.toArray<HTMLElement>(".hi").map((el, _) => {
+        return gsap.to(el, {
+          backgroundColor: "blue",
+          y: 400,
+          yoyo: true,
+          ease: "bounce.out",
+          delay: Math.random(),
+          repeat: -1,
+          duration: 2,
         });
+      });
 
       tweenRef.current = animations;
     },

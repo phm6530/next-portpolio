@@ -1,6 +1,9 @@
 .wrap {
   position: relative;
   display: flex;
+  border: 1px solid rgb(167, 160, 160, 0.2);
+  height: 500px;
+  border-radius: 1rem;
 }
 
 .hi {
@@ -23,5 +26,17 @@
     &:active {
       background: darken(rgb(129, 129, 129), 10%);
     }
+  }
+}
+
+input {
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.searchItem {
+  &:hover {
+    background: red;
   }
 }

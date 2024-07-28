@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import classes from "./home.module.scss";
 import SurveyList from "@/app/_components/survey/SurveyList";
+import MainGsap from "@/app/_aniPage/MainGsap";
 // import { auth } from "@/auth";
 // import { getToken } from "next-auth/jwt";
 
@@ -23,27 +24,30 @@ export default async function Home() {
   const arr = Array.from({ length: 2 }, (_, idx) => idx);
 
   return (
-    <div className={classes.mainGrid}>
-      <div className={classes.leftSection}>
-        <h1 className={classes.title}>
-          나만의 설문조사를<br></br> 만들어보세요.
-        </h1>
-        <p className={classes.mainDescription}>100% 익명을 보장합니다.</p>
-        <p className={classes.mainDescription}>
-          익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!
-        </p>
-        <button className={classes.btnMove}>설문조사 만들기</button>
-        <button className={classes.btnGray}>자세히보기</button>
+    <MainGsap>
+      <div className={classes.mainGrid}>
+        <div className={classes.leftSection}>
+          <h1 className={`title ${classes.title}`}>
+            나만의 설문조사를<br></br> 만들어보세요.
+          </h1>
+          <p className={classes.mainDescription}>100% 익명을 보장합니다.</p>
+          <p className={classes.mainDescription}>
+            익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!
+          </p>
+          <button className={classes.btnMove}>설문조사 만들기</button>
+          <button className={classes.btnGray}>자세히보기</button>
+        </div>
+        <div className={classes.rightSection}>
+          {/* 순위별 List */}
+          {arr.map((_, idx) => {
+            return (
+              <div className={classes.slideWrap} key={`slideWrap-${idx}`}>
+                <SurveyList idx={idx} />
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <div className={classes.rightSection}>
-        {arr.map((_, idx) => {
-          return (
-            <div className={classes.slideWrap} key={`slideWrap-${idx}`}>
-              <SurveyList idx={idx} />
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    </MainGsap>
   );
 }

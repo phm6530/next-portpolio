@@ -1,0 +1,32 @@
+.wrapper {
+  width: 450px;
+  height: 50px;
+  position: relative;
+  margin: auto;
+  background: #ccc;
+  overflow: hidden;
+}
+
+.box {
+  width: 50px;
+
+  background: red;
+  font-size: 25px;
+  line-height: 50px;
+  height: 300px;
+  text-align: center;
+  color: var(--color-just-black);
+}
+
+.boxes {
+  position: relative;
+}
+
+.nav {
+  position: relative;
+  text-align: center;
+
+  color: white;
+  font-size: 20px;
+  margin: 20px 0;
+}
