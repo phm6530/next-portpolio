@@ -1,95 +1,62 @@
 "use client";
 
-import gsap from "gsap";
+import { useState } from "react";
 import "./style.scss";
-import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import gsap from "gsap";
 
 export default function Page() {
-  const ref = useRef<HTMLDivElement>(null);
-  var colors = ["#0ae448", "#ff8709", "#9d95ff", "#00bae2"];
+  const colors = ["#0ae448", "#ff8709", "#9d95ff", "#00bae2"];
+  const [targetIdx, setTargetIdx] = useState<string | null>(null);
 
-  useGSAP(() => {
-    const width = ref.current?.offsetWidth;
-    const boxes = ref.current?.querySelectorAll(".box");
+  // 배열 생성
+  const arr = [...Array(5)].fill("");
 
-    console.log(width);
+  const onCompleteFn = (idx: number) => {
+    setTargetIdx(`${idx}를 완료했습니다.`);
+  };
 
-    gsap.set(".box", {
-      backgroundColor: (i) => colors[i % colors.length],
-      x: (i) => i * 50,
-    });
+  const onStartFn = (idx: number) => {
+    setTargetIdx(`${idx}를 실행중입니다.`);
+  };
 
-    gsap.to(".box", {
-      duration: 5,
-      ease: "none",
-      x: "+=500", //move each box 500px to right
-      modifiers: {
-        x: gsap.utils.unitize((x) => parseFloat(x) % 500), //force x value to be between 0 and 500 using modulus
-      },
-      repeat: -1,
-    });
+  const RandomRotation = () => {
+    const rotationArr = [90, 180, 360, 720];
+    const idx = Math.ceil(Math.random() * 4) - 1;
+    return rotationArr[idx];
+  };
 
-    gsap.to(".box2", {
+  const animationHandler = (
+    idx: number,
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    const target = e.currentTarget;
+
+    gsap.to(target, {
       keyframes: {
-        x: [0, 80, -10, 30, 0],
-        y: [300, -50, -100, 0],
-        ease: "none",
-        easeEach: "power2.inOut",
+        "15%": { y: -200, ease: "power1.out" },
+        "30%": { rotation: RandomRotation },
+        "100%": { y: 0, ease: "bounce.out" },
       },
-      rotate: 180,
-      ease: "elastic.in",
-      duration: 5,
-      stagger: 0.2,
+      onComplete: onCompleteFn,
+      onCompleteParams: [idx],
+      onStart: () => onStartFn(idx),
+      duration: 2,
     });
-  });
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline();
-      tl.to(".among", {
-        keyframes: {
-          "0%": {},
-          "30%": { x: 500 },
-          "50%": { scale: 2 },
-          "75%": { x: 0 },
-          "100%": { x: 500, scale: 1 },
-        },
-        ease: "sine.inOut",
-        duration: 5,
-      });
-    },
-    { scope: ".stage" }
-  );
+  };
 
   return (
     <>
-      <label>
-        <input type="checkbox" name="overflow" id="overflow" value="1" /> Show
-        overflow
-      </label>
-      <div className="stage">
-        <div className="among"></div>
-      </div>
-      <div className="wrapper-box2">
-        <div className="box2"></div>
-        <div className="box2"></div>
-        <div className="box2"></div>
-        <div className="box2"></div>
-      </div>
-
-      <div className="wrapper" ref={ref}>
-        <div className="boxes">
-          <div className="box">1</div>
-          <div className="box">2</div>
-          <div className="box">3</div>
-          <div className="box">4</div>
-          <div className="box">5</div>
-          <div className="box">6</div>
-          <div className="box">7</div>
-          <div className="box">8</div>
-          <div className="box">9</div>
-          <div className="box">10</div>
+      <div className="wrapper">
+        {targetIdx && <h1>{targetIdx}</h1>}
+        <div className="boxArea">
+          {arr.map((_, idx) => (
+            <div
+              className="box-item"
+              key={idx}
+              style={{ backgroundColor: colors[idx % colors.length] }}
+              onClick={(e) => animationHandler(idx + 1, e)}
+            ></div>
+          ))}
         </div>
       </div>
     </>

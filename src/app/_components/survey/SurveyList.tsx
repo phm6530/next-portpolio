@@ -4,6 +4,8 @@ import { SurveyItemProps } from "@/types/survey";
 import SurveyItem from "@/app/_components/survey/SurveyItem";
 import classes from "./SurveyList.module.scss";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef } from "react";
 
 const DUMMY_DATA: SurveyItemProps[] = [
   {
@@ -69,13 +71,36 @@ const DUMMY_DATA: SurveyItemProps[] = [
 ];
 
 export default function SurveyList({ idx }: { idx: number }) {
+  const gsapFn = useRef<gsap.core.Tween | null>(null);
+
+  const { contextSafe } = useGSAP(
+    () => {
+      const test = gsap.to(".test", {
+        y: "+=30%",
+        repeat: -1,
+        yoyo: true,
+        duration: 15,
+        ease: "none",
+      });
+
+      gsapFn.current = test;
+    },
+    { scope: ".ts" }
+  );
+
   return (
-    <div className={idx ? classes.slideTop : classes.slideBottom}>
-      {DUMMY_DATA.map((item, idx) => (
-        <div key={`surveyItem-${idx}`} style={{ marginRight: "20px" }}>
-          <SurveyItem item={item} />
-        </div>
-      ))}
+    <div className={`ts ${idx ? classes.slideTop : classes.slideBottom}`}>
+      <div className="test">
+        {DUMMY_DATA.map((item, idx) => (
+          <div
+            className="tttt"
+            key={`surveyItem-${idx}`}
+            style={{ marginRight: "20px" }}
+          >
+            <SurveyItem item={item} gsapFn={gsapFn} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

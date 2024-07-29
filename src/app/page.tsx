@@ -21,14 +21,37 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   //공백 arr
-  const arr = Array.from({ length: 2 }, (_, idx) => idx);
+  const arr = Array.from({ length: 1 }, (_, idx) => idx);
 
   return (
     <MainGsap>
       <div className={classes.mainGrid}>
         <div className={classes.leftSection}>
           <h1 className={`title ${classes.title}`}>
-            나만의 설문조사를<br></br> 만들어보세요.
+            <div className={classes.titleSection}>
+              <div className="char">나</div>
+              <div className="char">만</div>
+              <div className="char">의</div>
+              <div className="char">&nbsp;</div>
+              <div className="char">설</div>
+              <div className="char">문</div>
+              <div className="char">조</div>
+              <div className="char">사</div>
+              <div className="char">를</div>
+            </div>
+
+            <div className={classes.titleSection}>
+              <div className="char"></div>
+              <div className="char"> </div>
+              <div className="char"></div>
+              <div className="char">만</div>
+              <div className="char">들</div>
+              <div className="char">어</div>
+              <div className="char">보</div>
+              <div className="char">세</div>
+              <div className="char">요</div>
+              <div className="char">.</div>
+            </div>
           </h1>
           <p className={classes.mainDescription}>100% 익명을 보장합니다.</p>
           <p className={classes.mainDescription}>

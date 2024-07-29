@@ -21,9 +21,12 @@
 }
 
 .slideBottom {
-  animation: slide-for-bottom 1.2s ease forwards;
+  opacity: 0;
+  animation: slide-for-bottom 1s 1.2s ease forwards;
 }
 
 .slideTop {
-  animation: slide-for-top 1.4s ease forwards;
+  opacity: 0;
+  animation-delay: 1s;
+  animation: slide-for-top 1.4s 2s ease forwards;
 }

@@ -7,6 +7,13 @@
   line-height: 80px;
   padding-bottom: 4rem;
   grid-column: 1 / -1;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .titleSection {
+    display: flex;
+  }
 }
 
 .mainDescription {

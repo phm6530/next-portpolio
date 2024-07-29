@@ -12,26 +12,22 @@ export default function MainGsap({ children }: { children: ReactNode }) {
     () => {
       const wrap = ref.current;
       if (wrap) {
-        const tl = gsap.timeline({ defaults: { opacity: 0 } });
-        tl.from(wrap, { autoAlpha: 0 });
-        tl.fromTo(
-          ".title",
-          { x: -100 },
-          {
-            x: 0,
-            ease: "power4.inOut",
-            duration: 1.4,
-            opacity: 1,
-          }
-        );
+        const chars = document.querySelectorAll(".char");
+        gsap.set(".title", { autoAlpha: 1 });
+        gsap.set(".test", { autoAlpha: 1 });
+
+        const tl = gsap.timeline();
+        tl.from(chars, {
+          ease: "power4.out",
+          y: -50,
+
+          opacity: 0,
+          stagger: 0.05,
+        });
       }
     },
     { scope: ref }
   );
 
-  return (
-    <div ref={ref} className="wrap">
-      {children}
-    </div>
-  );
+  return <div ref={ref}>{children}</div>;
 }
