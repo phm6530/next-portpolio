@@ -29,7 +29,38 @@ export default function Page() {
       },
       repeat: -1,
     });
+
+    gsap.to(".box2", {
+      keyframes: {
+        x: [0, 80, -10, 30, 0],
+        y: [300, -50, -100, 0],
+        ease: "none",
+        easeEach: "power2.inOut",
+      },
+      rotate: 180,
+      ease: "elastic.in",
+      duration: 5,
+      stagger: 0.2,
+    });
   });
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+      tl.to(".among", {
+        keyframes: {
+          "0%": {},
+          "30%": { x: 500 },
+          "50%": { scale: 2 },
+          "75%": { x: 0 },
+          "100%": { x: 500, scale: 1 },
+        },
+        ease: "sine.inOut",
+        duration: 5,
+      });
+    },
+    { scope: ".stage" }
+  );
 
   return (
     <>
@@ -37,6 +68,15 @@ export default function Page() {
         <input type="checkbox" name="overflow" id="overflow" value="1" /> Show
         overflow
       </label>
+      <div className="stage">
+        <div className="among"></div>
+      </div>
+      <div className="wrapper-box2">
+        <div className="box2"></div>
+        <div className="box2"></div>
+        <div className="box2"></div>
+        <div className="box2"></div>
+      </div>
 
       <div className="wrapper" ref={ref}>
         <div className="boxes">

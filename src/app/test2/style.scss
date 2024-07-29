@@ -18,6 +18,16 @@
   color: var(--color-just-black);
 }
 
+.wrapper-box2 {
+  display: flex;
+}
+
+.box2 {
+  width: 50px;
+  height: 50px;
+  background: yellow;
+}
+
 .boxes {
   position: relative;
 }
@@ -29,4 +39,24 @@
   color: white;
   font-size: 20px;
   margin: 20px 0;
+}
+
+.stage {
+  width: 500px;
+  height: 350px;
+  background: gray;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.among {
+  width: 80px;
+  height: 90px;
+  background: url(https://simseonbeom.github.io/Final/assets/among/Crew/Red.png);
+  background-size: cover;
+  position: absolute;
+  top: 100px;
+  transform: translateX(-100%);
 }
