@@ -28,11 +28,20 @@ export async function getSurveyItem(
   try {
     const response = await fetch(
       `http://localhost:3000/api/survey/${surveyId}`,
-      { cache: "no-store" }
+      {
+        next: {
+          revalidate: 10,
+          tags: ["surveyItem", surveyId + ""],
+        },
+      }
     );
+
     if (!response.ok) {
       throw new Error("서버 이상");
     }
+
+    // const cacheStatus = response.headers.get("x-cache") ? "CACING" : "MISS";
+    // console.log(`Cache Status: ${cacheStatus}`);
 
     // await new Promise((resolve) => setTimeout(resolve, 3000));
     return response.json();

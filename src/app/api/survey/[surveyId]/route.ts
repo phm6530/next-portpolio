@@ -25,9 +25,6 @@ export async function GET(
 ) {
   try {
     const id = params.surveyId;
-
-    console.log(id);
-
     const surveys = DUMMY_ITEM[id] ? DUMMY_ITEM[id] : null;
 
     // JSON 응답

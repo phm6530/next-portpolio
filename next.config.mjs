@@ -18,6 +18,11 @@ const nextConfig = {
     // 전역적으로 반영된거임
     prependData: `@import "@/styles/_var.scss";`,
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
 };
 
 export default nextConfig;
