@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import PageTransition from "@/app/lib/PageTransition";
 
 import "@/styles/_styles.scss";
+import { Suspense } from "react";
 
 export default async function RootLayout({
   children,
@@ -17,9 +18,7 @@ export default async function RootLayout({
       <body className="body">
         <ProviderContext>
           <GlobalNav isLogin={!!auths} />
-          <PageTransition>
-            <main className="container">{children}</main>
-          </PageTransition>
+          <main className="container">{children}</main>
         </ProviderContext>
       </body>
     </html>

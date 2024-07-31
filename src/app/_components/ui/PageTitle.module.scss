@@ -1,0 +1,12 @@
+.pageTitleText {
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 50px;
+  /* or 125% */
+
+  background: linear-gradient(90deg, #000000 0%, #a842b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}

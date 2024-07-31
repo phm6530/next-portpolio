@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import classes from "./home.module.scss";
 import SurveyList from "@/app/_components/survey/SurveyList";
 import MainGsap from "@/app/_aniPage/MainGsap";
+import dynamic from "next/dynamic";
 // import { auth } from "@/auth";
 // import { getToken } from "next-auth/jwt";
 
@@ -19,12 +20,15 @@ export const metadata: Metadata = {
   description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
 };
 
+const DynamicMainGsap = dynamic(() => import("@/app/_aniPage/MainGsap"), {
+  ssr: false,
+});
 export default async function Home() {
   //공백 arr
   const arr = Array.from({ length: 1 }, (_, idx) => idx);
 
   return (
-    <MainGsap>
+    <DynamicMainGsap>
       <div className={classes.mainGrid}>
         <div className={classes.leftSection}>
           <h1 className={`title ${classes.title}`}>
@@ -71,6 +75,6 @@ export default async function Home() {
           })}
         </div>
       </div>
-    </MainGsap>
+    </DynamicMainGsap>
   );
 }

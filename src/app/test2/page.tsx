@@ -3,6 +3,7 @@
 import { useState } from "react";
 import "./style.scss";
 import gsap from "gsap";
+import GsapProgress from "@/app/test2/_component/GsapProgress";
 
 export default function Page() {
   const colors = ["#0ae448", "#ff8709", "#9d95ff", "#00bae2"];
@@ -31,7 +32,7 @@ export default function Page() {
   ) => {
     const target = e.currentTarget;
 
-    gsap.to(target, {
+    const ani = gsap.to(target, {
       keyframes: {
         "15%": { y: -200, ease: "power1.out" },
         "30%": { rotation: RandomRotation },
@@ -42,6 +43,8 @@ export default function Page() {
       onStart: () => onStartFn(idx),
       duration: 2,
     });
+
+    console.log(ani);
   };
 
   return (
@@ -59,6 +62,9 @@ export default function Page() {
           ))}
         </div>
       </div>
+      <br></br>
+      <br></br>
+      <GsapProgress />
     </>
   );
 }

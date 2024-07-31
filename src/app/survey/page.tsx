@@ -2,38 +2,28 @@ import SurveyList from "@/app/survey/_component/survey/surveyList";
 import classes from "./surveyPage.modules.scss";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
-type SurveyProp = {
-  id: number;
-  title: string;
-};
-
-export async function getList(): Promise<SurveyProp[]> {
-  try {
-    const response = await fetch("http://localhost:3000/api/survey");
-    if (!response.ok) {
-      throw new Error("서버 이상");
-    }
-    return response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    } else {
-      throw new Error("알 수 없는 에러");
-    }
-  }
-}
+import { getList } from "@/app/_services/surveySerivce";
+import PageTitle from "@/app/_components/ui/PageTitle";
 
 export default async function surveyPage() {
   await queryClient.prefetchQuery({
     queryKey: ["list", "survey"],
     queryFn: getList,
+    staleTime: 1000,
   });
   const hydurateState = dehydrate(queryClient);
+
+  console.log(hydurateState);
+
+  console.log("서버컴포넌트 호출");
 
   return (
     <>
       <div className={classes.wrap}>
+        <PageTitle>
+          다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
+        </PageTitle>
+
         {/* List */}
         <HydrationBoundary state={hydurateState}>
           <SurveyList />

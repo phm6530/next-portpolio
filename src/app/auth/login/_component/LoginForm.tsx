@@ -31,7 +31,7 @@ export default function LoginForm({
     })) as SignInResponse;
 
     if (!res.error) {
-      router.push(redirectPath);
+      window.location.href = redirectPath;
       return;
     } else {
       setError("비밀번호나 아이디가 일치하지 않습니다.");
