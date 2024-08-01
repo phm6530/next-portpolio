@@ -23,10 +23,18 @@
 .slideBottom {
   opacity: 0;
   animation: slide-for-bottom 1s 1.2s ease forwards;
+  gap: 10px;
 }
 
 .slideTop {
+  gap: 10px;
   opacity: 0;
   animation-delay: 1s;
   animation: slide-for-top 1.4s 2s ease forwards;
+}
+
+.test {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }

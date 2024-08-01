@@ -1,18 +1,8 @@
 import { Metadata } from "next";
 import classes from "./home.module.scss";
-import SurveyList from "@/app/_components/survey/SurveyList";
-import MainGsap from "@/app/_aniPage/MainGsap";
-import dynamic from "next/dynamic";
-// import { auth } from "@/auth";
-// import { getToken } from "next-auth/jwt";
 
-// async function fetchUsers() {
-//   const response = await fetch("https://jsonplaceholder.typicode.com/users"); // 예시 API URL
-//   if (!response.ok) {
-//     throw new Error("Network response was not ok");
-//   }
-//   return response.json();
-// }
+import dynamic from "next/dynamic";
+import SurveySlide from "@/app/_main/SurveySlide";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -69,7 +59,7 @@ export default async function Home() {
           {arr.map((_, idx) => {
             return (
               <div className={classes.slideWrap} key={`slideWrap-${idx}`}>
-                <SurveyList idx={idx} />
+                <SurveySlide idx={idx} />
               </div>
             );
           })}

@@ -14,16 +14,13 @@ export default function SearchInput() {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (searchText.length !== 0) {
-      router.push(`/survey?keyword=${searchText}`);
-    } else {
-      router.push(`/survey`);
-    }
+    router.push(
+      searchText.length !== 0 ? `/survey?search=${searchText}` : "/survey "
+    );
   };
 
   return (
     <div>
-      <div>인기검색어</div>
       <form className={classes.searchForm} onSubmit={searchHandler}>
         <input
           type="text"

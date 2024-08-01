@@ -12,12 +12,11 @@ export default function MainGsap({ children }: { children: ReactNode }) {
     () => {
       const wrap = ref.current;
       if (wrap) {
-        const chars = document.querySelectorAll(".char");
         gsap.set(".title", { autoAlpha: 1 });
         gsap.set(".test", { autoAlpha: 1 });
 
         const tl = gsap.timeline();
-        tl.from(chars, {
+        tl.from(".char", {
           ease: "power4.out",
           y: -50,
 

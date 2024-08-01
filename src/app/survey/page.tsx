@@ -1,9 +1,13 @@
 import SurveyList from "@/app/survey/_component/survey/surveyList";
 import classes from "./surveyPage.modules.scss";
+import PageTitle from "@/app/_components/ui/PageTitle";
+import SurveyControler from "@/app/survey/_component/survey/SurveyControler";
+import SearchInput from "@/app/_components/ui/SearchInput";
+import HotKeyword from "@/app/survey/_component/HotKeyWords";
+
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getList } from "@/app/_services/surveySerivce";
-import PageTitle from "@/app/_components/ui/PageTitle";
 
 export default async function surveyPage() {
   await queryClient.prefetchQuery({
@@ -13,16 +17,17 @@ export default async function surveyPage() {
   });
   const hydurateState = dehydrate(queryClient);
 
-  console.log(hydurateState);
-
-  console.log("서버컴포넌트 호출");
-
   return (
     <>
       <div className={classes.wrap}>
         <PageTitle>
           다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
         </PageTitle>
+
+        {/* btn Area */}
+        <SurveyControler />
+        <HotKeyword />
+        <SearchInput />
 
         {/* List */}
         <HydrationBoundary state={hydurateState}>

@@ -1,71 +1,63 @@
-"use client";
-
 import { SurveyItemProps } from "@/types/survey";
 import classes from "./SurveyItem.module.scss";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ForwardedRef, useRef } from "react";
 import gsap from "gsap";
-
-import { ForwardedRef, MouseEventHandler, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 
 export default function SurveyItem({
-  item,
-  gsapFn,
+  itemData,
 }: {
-  item: SurveyItemProps;
-  gsapFn: ForwardedRef<gsap.core.Tween | null>;
+  itemData: SurveyItemProps;
+  refs?: ForwardedRef<HTMLDivElement[]>;
 }) {
   const {
-    img,
+    surveyId,
     surveyTitle,
     createUser,
+    img,
     ParticipationCnt,
     ParticipationMain,
-    item: hit,
-  } = item;
-
+  } = itemData;
+  const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
 
-  const hoverHandler = () => {
-    if (gsapFn.current) {
-      const tl = gsap.timeline();
-      tl.to(gsapFn.current, { timeScale: 0, duration: 1 });
-      tl.to(
-        ref.current,
-        {
-          keyframes: {
-            "0%": {},
-            "80%": { rotation: -10, x: 100 },
-            "100%": { scale: 1.1 },
-            ease: "power1.in",
-          },
-        },
-        "<"
-      );
-    }
+  const gsapRef = useRef<gsap.core.Timeline | null>(null);
+
+  const onClickHandler = (e: Pick<SurveyItemProps, "surveyId">["surveyId"]) => {
+    router.push(`/survey/${e}`);
   };
 
-  const onMouseLeaveHandler = () => {
-    if (gsapFn.current) {
-      const tl = gsap.timeline();
-      tl.to(gsapFn.current, { timeScale: 1, duration: 1 });
-      tl.to(
-        ref.current,
-        {
-          rotation: 0,
-          x: 0,
-          scale: 1,
-        },
-        "<"
-      );
-    }
-  };
+  const { contextSafe } = useGSAP(
+    () => {
+      const tl = gsap.timeline({ paused: true });
+      tl.to(ref.current, {
+        scale: 1.1,
+        ease: "power4.inOut",
+      });
+
+      gsapRef.current = tl;
+    },
+    { scope: ref }
+  );
+
+  const onMouseHandler = contextSafe(() => {
+    gsapRef.current?.play();
+  });
+
+  const onMouseReaver = contextSafe(() => {
+    gsapRef.current?.reverse();
+  });
+
+  const gender = ParticipationMain.gender;
 
   return (
     <div
-      className={classes.itemBox}
-      onMouseOver={hoverHandler}
-      onMouseLeave={onMouseLeaveHandler}
+      className={`tdd ${classes.surveyBox}`}
+      onClick={() => onClickHandler(surveyId)}
+      onMouseOver={onMouseHandler}
+      onMouseLeave={onMouseReaver}
       ref={ref}
     >
       <div className={classes.surveyThumbNail}>
@@ -78,24 +70,21 @@ export default function SurveyItem({
           style={{ objectFit: "cover" }}
         />
       </div>
-      <div className={classes.summryInfo}>
+      {/* <Image src={img} fill /> */}
+      <div className={classes.surveySummary}>
         <div className={classes.surveyTitle}>{surveyTitle}</div>
-        <div className={classes.Participation}>
-          <span>{ParticipationMain.ageRange}</span>대
-          <span
-            className={
-              ParticipationMain.gender === "men"
-                ? classes.genderMen
-                : classes.genderGirl
-            }
-          >
-            {ParticipationMain.gender === "men" ? "남자" : "여자"}
+        <div className={classes.groupParticipants}>
+          {ParticipationMain.ageRange}대{" "}
+          <span className={gender === "men" ? classes.male : classes.female}>
+            {gender}
           </span>
           의 참여율이 가장 높습니다.
         </div>
-        <div className={classes.itemBottom}>
+        <div className={classes.bottomWrap}>
           <span className={classes.createUser}>by {createUser.username}</span>
-          참여자 {ParticipationCnt}명
+          <span className={classes.Participation}>
+            참여자 {ParticipationCnt}명
+          </span>
         </div>
       </div>
     </div>

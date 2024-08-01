@@ -10,19 +10,19 @@ const btnArr = [
   },
   {
     label: "참여자 높은 순",
-    value: "e",
+    value: "participantHigh",
   },
   {
     label: "좋아요 높은 순",
-    value: "e",
+    value: "likeHigh",
   },
   {
     label: "남자 선호가 높은",
-    value: "e",
+    value: "MenPreference",
   },
   {
     label: "여자 선호가 높은",
-    value: "e",
+    value: "femailPreference",
   },
 ];
 
@@ -35,19 +35,18 @@ export default function SurveyControler() {
 
   return (
     <>
-      {btnArr.map((btn) => {
+      {btnArr.map((btn, idx) => {
         return (
-          <>
-            <button
-              className={`${active === btn.value ? classes.active : ""} ${
-                classes.btnControler
-              }`}
-              value={btn.value}
-              onClick={onClickHandler}
-            >
-              {btn.label}
-            </button>
-          </>
+          <button
+            key={`btn-${idx}`}
+            className={`${active === btn.value ? classes.active : ""} ${
+              classes.btnControler
+            }`}
+            value={btn.value}
+            onClick={onClickHandler}
+          >
+            {btn.label}
+          </button>
         );
       })}
     </>

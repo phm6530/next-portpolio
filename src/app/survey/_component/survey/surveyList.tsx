@@ -1,15 +1,15 @@
 "use client";
 
 import { getList } from "@/app/_services/surveySerivce";
-import SurveyItem from "@/app/survey/_component/survey/surverItem";
-import SurveyControler from "@/app/survey/_component/survey/SurveyControler";
-
 import { SurveyItemProps } from "@/types/survey";
 import { useQuery } from "@tanstack/react-query";
+
 import classes from "./SurveyList.module.scss";
-import SearchInput from "@/app/_components/ui/SearchInput";
+import SurveyItem from "@/app/_components/survey/SurveyItem";
+import PageGsap from "@/app/_aniPage/PageGsap";
 
 export default function SurveyList() {
+  //하이듀레이션
   const { data, isLoading } = useQuery<SurveyItemProps[]>({
     queryKey: ["list", "survey"],
     queryFn: getList,
@@ -21,18 +21,17 @@ export default function SurveyList() {
   }
 
   return (
-    <>
-      {/* btn Area */}
-      <SurveyControler />
-
-      <SearchInput />
-
-      <div className={classes.surveyItemWrapper}>
+    <PageGsap>
+      <div className={`ani-surveyList ${classes.surveyItemWrapper}`}>
         {data &&
           data.map((item, idx) => {
-            return <SurveyItem key={`${item}-${idx}`} itemData={item} />;
+            return (
+              <div key={`${item}-${idx}`} className="tester autoAlpha">
+                <SurveyItem itemData={item} />
+              </div>
+            );
           })}
       </div>
-    </>
+    </PageGsap>
   );
 }
