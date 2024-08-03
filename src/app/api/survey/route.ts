@@ -1,4 +1,4 @@
-import { apiErrorhandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { SurveyItemProps } from "@/types/survey";
 import { NextResponse } from "next/server";
 
@@ -7,8 +7,7 @@ const getDatabase = async () => {
     {
       surveyId: 5,
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle:
-        "여러분의 안녕하세요 여러분의 안녕하세요  여러분의 안녕하세요 ",
+      surveyTitle: "여러분의 안녕하세요 여러분의 안녕하세요 ",
       createUser: {
         username: "리슨업",
       },
@@ -96,6 +95,6 @@ export async function GET() {
     // JSON 응답
     return NextResponse.json(surveys);
   } catch (error) {
-    return apiErrorhandler(error);
+    return apiErrorHandler(error);
   }
 }

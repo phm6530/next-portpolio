@@ -27,6 +27,7 @@ export default async function surveyPage() {
         {/* btn Area */}
         <SurveyControler />
         <HotKeyword />
+
         <SearchInput />
 
         {/* List */}

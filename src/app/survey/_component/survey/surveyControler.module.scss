@@ -1,7 +1,7 @@
 .btnControler {
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   background: transparent;
-  border: 1px solid;
+  border: 2px solid;
   color: $border-box-color;
   border-radius: 3rem;
   margin-right: 1rem;
@@ -10,5 +10,6 @@
 }
 
 .active {
-  color: red;
+  color: #778ce1;
+  border: 2px solid;
 }

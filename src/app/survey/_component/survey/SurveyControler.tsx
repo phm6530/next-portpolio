@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import classes from "./surveyControler.module.scss";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const btnArr = [
   {
@@ -27,10 +28,16 @@ const btnArr = [
 ];
 
 export default function SurveyControler() {
-  const [active, setActive] = useState("all");
+  const router = useRouter();
+  const queryString = useSearchParams();
+
+  const [active, setActive] = useState(() => {
+    return queryString.get("sort") || "all";
+  });
 
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActive(e.currentTarget.value);
+    router.push(`/survey?sort=${e.currentTarget.value}`);
   };
 
   return (

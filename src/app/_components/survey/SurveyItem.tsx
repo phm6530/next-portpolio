@@ -76,7 +76,7 @@ export default function SurveyItem({
         <div className={classes.groupParticipants}>
           {ParticipationMain.ageRange}대{" "}
           <span className={gender === "men" ? classes.male : classes.female}>
-            {gender}
+            {gender === "men" ? "남자" : "여자"}
           </span>
           의 참여율이 가장 높습니다.
         </div>
