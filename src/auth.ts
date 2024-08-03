@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { dbConnectTest } from "@/app/config/db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -10,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         if (credentials.username === "1" && credentials.password === "1") {
+          await dbConnectTest();
           return {
             id: "1",
             name: "Hyunmin",
