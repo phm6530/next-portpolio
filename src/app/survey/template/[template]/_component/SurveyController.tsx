@@ -24,8 +24,6 @@ export default function SurveyController() {
         type: itemType,
       } as SurveyRadio);
     }
-
-    trigger("items");
   };
 
   return (

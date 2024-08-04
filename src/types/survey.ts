@@ -40,7 +40,10 @@ export type SurveyText = {
 export type SurveyRadio = {
   id: number;
   label: string;
-  options?: { [key in string]: string }[];
+  options?: {
+    idx: number;
+    value: string;
+  }[];
 } & SurveyType;
 
 //설문조사 Default

@@ -1,6 +1,6 @@
 "use client";
 
-import SurveyItemList from "@/app/survey/template/[template]/_component/DefaultSurvey/SurveyItemList";
+import DefaultSurveyList from "@/app/survey/template/[template]/_component/DefaultSurvey/DefaultSurveyList";
 import SurveyTypeText from "@/app/survey/template/[template]/_component/SurveyTypeText";
 import SurveyController from "@/app/survey/template/[template]/_component/SurveyController";
 import { AddSurveyFormProps } from "@/types/survey";
@@ -51,8 +51,8 @@ export default function DefaultSurvey() {
         />
 
         <FormProvider {...formState}>
-          {/* Survey Edit Form */}
-          <SurveyItemList />
+          {/* Survey Edit Form + List*/}
+          <DefaultSurveyList />
 
           {/* Survey Controller */}
           <SurveyController />
