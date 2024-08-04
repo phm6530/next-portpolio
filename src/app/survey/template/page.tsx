@@ -1,3 +1,4 @@
+import NotYet from "@/app/_components/NotYet";
 import Link from "next/link";
 
 export default function templatePage() {
@@ -5,9 +6,10 @@ export default function templatePage() {
 
   return (
     <>
-      <h1>템플릿 페이지</h1>
+      <h1>만드실 템플릿을 선택해주세요</h1>
       <Link href={`${PATH}/default`}>Survey</Link>
-      <Link href={`${PATH}/rank`}>Rank</Link>
+      <NotYet>Rank</NotYet>
+      <NotYet>Rank</NotYet>
     </>
   );
 }

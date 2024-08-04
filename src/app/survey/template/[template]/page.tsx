@@ -19,12 +19,8 @@ export default function SelectTemplate({
   //Rank
   if (template === "rank") {
     return <RankSurvey />;
-  }
-
-  //10문 10답
-  if (template === "rank") {
-    return <RankSurvey />;
   } else {
+    //기타 Error 처리
     notFound();
   }
 }

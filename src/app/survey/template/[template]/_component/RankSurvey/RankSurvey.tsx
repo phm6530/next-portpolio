@@ -1,3 +1,5 @@
 export default function RankSurvey() {
-  return <>Ranking</>;
+  const deving = true;
+
+  return <>{deving ? "아직 개발중입니다." : "Ranking"}</>;
 }
