@@ -10,13 +10,13 @@
 # 사용 패키지
 
 - Client
-  npm install react-hook-form
-  npm install @tanstack@query
-  npm install axios
+  npm install react-hook-form<br>
+  npm install @tanstack@query<br>
+  npm install axios<br>
   npm install sass
 
 - Servey
-  npm install next-auth
+  npm install next-auth<br>
   npm install mysql2
 
 # 진행
