@@ -1,4 +1,4 @@
-# survey Portpolio
+# SURVEY Portpolio
 
 설문조사 웹 플렛폼 포트폴리오입니다.
 
@@ -7,15 +7,15 @@
 - 인증 인가 된 사용자는 설문조사 생성가능,
 - Admin Page에서 유입 확인
 
-# 사용 패키지
+# PACKAGE
 
 - Client
   npm install react-hook-form<br>
+  npm install zod @hookform/resolvers<br>
   npm install @tanstack@query<br>
   npm install axios<br>
-  npm install sass
-
-- Servey
+  npm install sass<br><br>
+- Server
   npm install next-auth<br>
   npm install mysql2
 

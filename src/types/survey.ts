@@ -23,3 +23,29 @@ export interface SurveyItemProps {
     event?: boolean;
   };
 }
+
+//현재는 text랑 select만 만들거임
+export type SurveyType = {
+  type: "text" | "select";
+};
+
+//주관식
+export type SurveyText = {
+  id: number;
+  label: string;
+  options?: never; // 주관식은 필요없음
+} & SurveyType;
+
+//객관식
+export type SurveyRadio = {
+  id: number;
+  label: string;
+  options?: { [key in string]: string }[];
+} & SurveyType;
+
+//설문조사 Default
+export interface AddSurveyFormProps {
+  title: string;
+  description: string;
+  items: (SurveyText | SurveyRadio)[];
+}
