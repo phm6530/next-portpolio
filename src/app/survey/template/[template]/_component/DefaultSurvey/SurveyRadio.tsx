@@ -1,6 +1,10 @@
 import { AddSurveyFormProps } from "@/types/survey";
 import { ChangeEvent, useRef, useState } from "react";
-import { FieldErrors, useFormContext } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFieldArrayRemove,
+  useFormContext,
+} from "react-hook-form";
 import Image from "next/image";
 import classes from "./DefaultSurvey.module.scss";
 
@@ -8,15 +12,17 @@ export default function SurveyRadio({
   fieldCnt,
   surveyIdx,
   optionIdx,
+  itemRemove,
 }: {
   fieldCnt: number;
   surveyIdx: number;
   optionIdx: number; // survey 항목 안의 Array Idx 임
+  itemRemove: UseFieldArrayRemove;
 }) {
   const {
     getValues,
     setValue,
-    trigger,
+
     register,
     formState: { errors },
   } = useFormContext<AddSurveyFormProps>();
@@ -25,13 +31,9 @@ export default function SurveyRadio({
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
-  const removeOptions = (idx: number, optionIdx: number): void => {
+  const removeOptions = (idx: number): void => {
     if (fieldCnt > 2) {
-      const curOptions = getValues(`items.${surveyIdx}.options`) || [];
-      const newOptions = curOptions.filter((_, i) => i !== optionIdx); // 옵션 인덱스를 기준으로 필터링
-
-      setValue(`items.${idx}.options`, newOptions);
-      trigger(`items.${idx}.options`);
+      itemRemove(idx);
     } else {
       alert("2개 이상 항목으로 줄일 수 없음");
       return;
@@ -89,7 +91,7 @@ export default function SurveyRadio({
       <button type="button" onClick={imgHandler}>
         사진
       </button>
-      <button type="button" onClick={() => removeOptions(surveyIdx, optionIdx)}>
+      <button type="button" onClick={() => removeOptions(optionIdx)}>
         삭제!
       </button>
       {/* Error  */}

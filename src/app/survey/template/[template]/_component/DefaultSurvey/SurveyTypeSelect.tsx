@@ -1,23 +1,34 @@
 import SurveyRadio from "@/app/survey/template/[template]/_component/DefaultSurvey/SurveyRadio";
-import { AddSurveyFormProps, SurveyRadioProps } from "@/types/survey";
-import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
+import { AddSurveyFormProps } from "@/types/survey";
+import {
+  useFieldArray,
+  UseFieldArrayRemove,
+  useFormContext,
+} from "react-hook-form";
 
 export default function SurveyTypeSelect({
-  handleAddOption,
-  fieldOption,
-  remove,
+  surveyDelete,
   surveyIdx,
 }: {
-  handleAddOption: (idx: number) => void;
-  fieldOption: Pick<SurveyRadioProps, "options">["options"];
-  remove: UseFieldArrayRemove;
+  surveyDelete: UseFieldArrayRemove;
   surveyIdx: number;
 }) {
   //FormContext
   const {
+    control,
     register,
     formState: { errors },
   } = useFormContext<AddSurveyFormProps>();
+
+  //항목 컨트롤러
+  const {
+    fields,
+    append,
+    remove: itemRemove,
+  } = useFieldArray({
+    control,
+    name: `items.${surveyIdx}.options`,
+  });
 
   //숫자 2~20
   //   const validateNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -30,6 +41,12 @@ export default function SurveyTypeSelect({
   //       return;
   //     }
   //   };
+
+  const handleArrAppend = () => {
+    console.log(fields);
+
+    append({ idx: fields[fields.length - 1].idx + 1, value: "" });
+  };
 
   return (
     <>
@@ -56,21 +73,24 @@ export default function SurveyTypeSelect({
         </> */}
       </div>
       {/* Radio - List */}
-      {fieldOption!.map((_, optionIdx) => {
+      {fields!.map((_, optionIdx) => {
         return (
           <div key={`option-${optionIdx}`}>
             <SurveyRadio
-              fieldCnt={fieldOption?.length!}
+              fieldCnt={fields?.length!}
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}
+              itemRemove={itemRemove}
             />
           </div>
         );
       })}
-      <button type="button" onClick={() => handleAddOption(surveyIdx)}>
+      {/* 항목추가 */}
+      <button type="button" onClick={handleArrAppend}>
         Add
       </button>
-      <button type="button" onClick={() => remove(surveyIdx)}>
+      {/* Radio 전체삭제  */}
+      <button type="button" onClick={() => surveyDelete(surveyIdx)}>
         삭제
       </button>
     </>

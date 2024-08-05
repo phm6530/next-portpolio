@@ -37,6 +37,7 @@ export default function DefaultSurveyList() {
           return (
             <div key={surveyIdx}>
               <h1> Q.{surveyIdx + 1}</h1>
+
               <input
                 type="text"
                 {...register(`items.${surveyIdx}.label`, {
@@ -54,27 +55,27 @@ export default function DefaultSurveyList() {
           );
         } else if (field.type === "select") {
           //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
-          const handleAddOption = (idx: number, cnt: number = 1) => {
-            const newOption = [...Array(cnt)].map((_, idx) => {
-              return {
-                idx,
-                value: "",
-              };
-            });
+          // const handleAddOption = (idx: number, cnt: number = 1) => {
+          //   const newOption = [...Array(cnt)].map((_, idx) => {
 
-            const curOptions = getValues(`items.${idx}.options`) || [];
-            setValue(`items.${idx}.options`, [...curOptions, ...newOption]);
-            trigger(`items.${idx}.options`);
-          };
+          //     return {
+          //       idx,
+          //       value: "",
+          //     };
+          //   });
+
+          //   const curOptions = getValues(`items.${idx}.options`) || [];
+          //   setValue(`items.${idx}.options`, [...curOptions, ...newOption]);
+          //   trigger(`items.${idx}.options`);
+          // };
 
           return (
             <div key={surveyIdx}>
               <h1> Q.{surveyIdx + 1} </h1>
 
               <SurveyTypeSelect
-                handleAddOption={handleAddOption}
-                fieldOption={field.options}
-                remove={remove}
+                // handleAddOption={handleAddOption}
+                surveyDelete={remove}
                 surveyIdx={surveyIdx}
               />
             </div>
