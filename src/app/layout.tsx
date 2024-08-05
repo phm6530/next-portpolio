@@ -14,6 +14,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="body">
+        <div id="backdrop-portal"></div>
+        <div id="modal-portal"></div>
         <ProviderContext>
           <GlobalNav isLogin={!!auths} />
           <main className="container">{children}</main>

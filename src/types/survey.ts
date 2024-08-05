@@ -37,7 +37,7 @@ export type SurveyText = {
 } & SurveyType;
 
 //객관식
-export type SurveyRadio = {
+export type SurveyRadioProps = {
   id: number;
   label: string;
   options?: {
@@ -50,5 +50,5 @@ export type SurveyRadio = {
 export interface AddSurveyFormProps {
   title: string;
   description: string;
-  items: (SurveyText | SurveyRadio)[];
+  items: (SurveyText | SurveyRadioProps)[];
 }

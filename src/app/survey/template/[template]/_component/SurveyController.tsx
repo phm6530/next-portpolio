@@ -1,6 +1,10 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { AddSurveyFormProps, SurveyText, SurveyRadio } from "@/types/survey";
+import {
+  AddSurveyFormProps,
+  SurveyText,
+  SurveyRadioProps,
+} from "@/types/survey";
 
 export default function SurveyController() {
   const { control, trigger } = useFormContext<AddSurveyFormProps>();
@@ -17,12 +21,22 @@ export default function SurveyController() {
         type: itemType,
       } as SurveyText);
     } else if (itemType === "select") {
+      //라디오니까 무조건 Default 2개
       append({
         id: fields.length + 1,
         label: "",
-        options: [],
         type: itemType,
-      } as SurveyRadio);
+        options: [
+          {
+            idx: 0,
+            value: "",
+          },
+          {
+            idx: 1,
+            value: "",
+          },
+        ],
+      } as SurveyRadioProps);
     }
   };
 

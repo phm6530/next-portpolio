@@ -5,6 +5,7 @@ import SurveyTypeText from "@/app/survey/template/[template]/_component/SurveyTy
 import SurveyController from "@/app/survey/template/[template]/_component/SurveyController";
 import { AddSurveyFormProps } from "@/types/survey";
 import { FormProvider, useForm } from "react-hook-form";
+import usePreview from "@/app/survey/template/[template]/_component/Preview/usePreview";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -12,13 +13,14 @@ const initialFormState: AddSurveyFormProps = {
   items: [],
 };
 
-export default function DefaultSurvey() {
+export default function DefaultSurveyPage() {
+  const { setView, RenderPreview } = usePreview();
+
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
 
   const surveyForm = (data: AddSurveyFormProps) => {
-    console.log(data);
     console.log("제출완료!");
   };
 
@@ -30,11 +32,16 @@ export default function DefaultSurvey() {
     }
   };
 
+  const previewSurvey = () => {
+    setView(true);
+  };
+
   return (
     <>
+      <RenderPreview>프리뷰</RenderPreview>
       <button onClick={() => resetField()}>설문조사 초기화</button>
       <form onSubmit={formState.handleSubmit(surveyForm)}>
-        {/* 제목 */}
+        {/* 공통 제목 */}
         <SurveyTypeText
           label={"title"}
           error={formState.formState.errors.title}
@@ -42,7 +49,7 @@ export default function DefaultSurvey() {
           register={formState.register}
         />
 
-        {/* 설명 적기 */}
+        {/* 공통 설명 적기 */}
         <SurveyTypeText
           label={"description"}
           error={formState.formState.errors.description}
@@ -59,6 +66,9 @@ export default function DefaultSurvey() {
         </FormProvider>
 
         <button type="submit">제출</button>
+        <button type="button" onClick={previewSurvey}>
+          미리보기
+        </button>
       </form>
     </>
   );
