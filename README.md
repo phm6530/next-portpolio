@@ -22,19 +22,29 @@
   npm i mysql2<br>
   npm i @types/multer & multer
 
-# 진행
+# 진척도
 
-~ 7/30
+7/30 ~ 8/4
 
 - next-Auth 이용한 admin + 사용자 OAuth2 인증
 - mysql2 트랜잭션 추상화 로직 생성
 - RQ + SSR hydurateboundary 로직 확인
-
-~ 8/7
-
 - 1차 기획
 - figma 시안
 - 권한생성
+
+~ 8/5
+
+- Default 템플릿 생성 FRONT 로직 생성
+- ImgUploader 기능
+
+~8/6
+
+- 임시저장 기능완료
+- \*survey Default + List + Detail 관계 DB 설계
+
+--미완성
+
 - 1안 템플릿 생성 및 관계 DB 설계
 
 ~ 8/11
