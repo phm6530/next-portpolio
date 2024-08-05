@@ -17,7 +17,8 @@
   npm install sass<br><br>
 - Server
   npm install next-auth<br>
-  npm install mysql2
+  npm install mysql2<br>
+  npm install @types/multer & multer
 
 # 진행
 

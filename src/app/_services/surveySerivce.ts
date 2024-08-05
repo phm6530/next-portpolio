@@ -27,7 +27,7 @@ export async function getSurveyItem(
 ): Promise<SurveyItemProps> {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/survey/${surveyId}`,
+      `${process.env.HOST_URL}/api/survey/${surveyId}`,
       {
         next: {
           revalidate: 10,

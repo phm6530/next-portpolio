@@ -20,9 +20,6 @@ export default function SurveyRadio({
   itemRemove: UseFieldArrayRemove;
 }) {
   const {
-    getValues,
-    setValue,
-
     register,
     formState: { errors },
   } = useFormContext<AddSurveyFormProps>();
@@ -48,19 +45,26 @@ export default function SurveyRadio({
   };
 
   //미리보기
-  const imgPreview = (e: ChangeEvent<HTMLInputElement>) => {
-    //Target
+  const imgPreview = async (
+    e: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
     const target = e.target.files;
     if (target) {
-      const reader = new FileReader();
-      reader.readAsDataURL(target[0]);
+      const file = target[0];
 
-      reader.onload = (e) => {
-        const result = e.target?.result;
-        if (typeof result === "string") {
-          setPreView(result);
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${surveyIdx}`,
+        {
+          method: "POST",
+          body: formData,
         }
-      };
+      );
+      const { imgUrl }: { imgUrl: string } = await response.json();
+
+      setPreView(`${process.env.NEXT_PUBLIC_THIS_URL}/${imgUrl}`);
     }
   };
 

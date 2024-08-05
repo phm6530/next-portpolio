@@ -7,7 +7,7 @@ import {
 } from "@/types/survey";
 
 export default function SurveyController() {
-  const { control, trigger } = useFormContext<AddSurveyFormProps>();
+  const { control } = useFormContext<AddSurveyFormProps>();
   const { fields, append } = useFieldArray({
     control,
     name: "items",

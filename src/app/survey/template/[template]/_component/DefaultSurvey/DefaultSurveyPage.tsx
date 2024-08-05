@@ -20,8 +20,13 @@ export default function DefaultSurveyPage() {
     defaultValues: initialFormState,
   });
 
-  const surveyForm = (data: AddSurveyFormProps) => {
-    console.log("제출완료!");
+  const surveyForm = async (data: AddSurveyFormProps) => {
+    if (formState.getValues("items").length !== 0) {
+      console.log(data);
+      console.log("제출완료!");
+    } else {
+      console.log("하나도없는데!");
+    }
   };
 
   const resetField = () => {

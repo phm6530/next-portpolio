@@ -1,4 +1,4 @@
-import { apiErrorhandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { SurveyItemProps } from "@/types/survey";
 import { NextResponse, NextRequest } from "next/server";
 
@@ -30,6 +30,6 @@ export async function GET(
     // JSON 응답
     return NextResponse.json(surveys);
   } catch (error) {
-    return apiErrorhandler(error);
+    return apiErrorHandler(error);
   }
 }

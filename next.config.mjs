@@ -9,7 +9,11 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   // reactStrictMode: false, // strict 모드
   images: {
-    domains: ["www.h-creations.com", "d33h8icwcso2tj.cloudfront.net"], // 내 포트폴리오
+    domains: [
+      "www.h-creations.com",
+      "d33h8icwcso2tj.cloudfront.net", //S3
+      "localhost", // dev
+    ], // 내 포트폴리오
   },
   sassOptions: {
     // 이거 이제 루트경로됨

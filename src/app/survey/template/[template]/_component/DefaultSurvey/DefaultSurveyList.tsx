@@ -7,9 +7,7 @@ export default function DefaultSurveyList() {
   const {
     control,
     getValues,
-    setValue,
     register,
-    trigger,
     formState: { errors },
   } = useFormContext<AddSurveyFormProps>();
 
