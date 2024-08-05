@@ -3,22 +3,61 @@
 import DefaultSurveyList from "@/app/survey/template/[template]/_component/DefaultSurvey/DefaultSurveyList";
 import SurveyTypeText from "@/app/survey/template/[template]/_component/SurveyTypeText";
 import SurveyController from "@/app/survey/template/[template]/_component/SurveyController";
+import usePreview from "@/app/survey/template/[template]/_component/Preview/usePreview";
+
 import { AddSurveyFormProps } from "@/types/survey";
 import { FormProvider, useForm } from "react-hook-form";
-import usePreview from "@/app/survey/template/[template]/_component/Preview/usePreview";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
   description: "",
   items: [],
 };
+type TemplateProps = "default" | "rank";
 
-export default function DefaultSurveyPage() {
-  const { setView, RenderPreview } = usePreview();
+export default function DefaultSurveyPage({
+  template,
+}: {
+  template: TemplateProps;
+}) {
+  const { RenderPreview } = usePreview();
 
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
+  const formattedDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
+
+  useEffect(() => {
+    const localData = localStorage.getItem(`${template}-${1}`);
+
+    setTimeout(() => {
+      if (localData) {
+        if (
+          confirm(`${formattedDate} 경에 임시저장된 글을 불러오시겠습니까?`)
+        ) {
+          formState.reset(JSON.parse(localData));
+        } else {
+          localStorage.removeItem(`${template}-${1}`);
+        }
+      }
+    }, 500);
+
+    return () => {
+      if (
+        JSON.stringify(initialFormState) ===
+        JSON.stringify(formState.getValues())
+      )
+        return;
+
+      console.log("실행하고있나?");
+      localStorage.setItem(
+        `${template}-${1}`,
+        JSON.stringify(formState.getValues())
+      );
+    };
+  }, []);
 
   const surveyForm = async (data: AddSurveyFormProps) => {
     if (formState.getValues("items").length !== 0) {
@@ -35,10 +74,6 @@ export default function DefaultSurveyPage() {
     } else {
       return;
     }
-  };
-
-  const previewSurvey = () => {
-    setView(true);
   };
 
   return (
@@ -71,9 +106,9 @@ export default function DefaultSurveyPage() {
         </FormProvider>
 
         <button type="submit">제출</button>
-        <button type="button" onClick={previewSurvey}>
-          미리보기
-        </button>
+        {/* <button type="button" onClick={previewSurvey}>
+          Preview
+        </button> */}
       </form>
     </>
   );

@@ -55,8 +55,20 @@ export default function SurveyRadio({
       const formData = new FormData();
       formData.append("image", file);
 
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"]; // 허용된 이미지 MIME 타입들
+      if (!allowedTypes.includes(file.type)) {
+        alert("이미지가 아닌거같음");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("5MB넘는 파일입니다.");
+        return;
+      }
+      const page = 1;
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${surveyIdx}`,
+        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${page}/${surveyIdx}`,
         {
           method: "POST",
           body: formData,

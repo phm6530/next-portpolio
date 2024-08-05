@@ -13,7 +13,7 @@ export default function SelectTemplate({
 
   //기본 Survey Page
   if (template === "default") {
-    return <DefaultSurveyPage />;
+    return <DefaultSurveyPage template={template} />;
   }
 
   //Rank

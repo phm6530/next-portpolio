@@ -7,8 +7,10 @@ import path from "path";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { surveyId: string } }
+  { params }: { params: { slug: [string, string] } }
 ) {
+  const [Id, surveyItem] = params.slug;
+
   try {
     const formData = await req.formData();
     const image = formData.get("image");
@@ -28,7 +30,8 @@ export async function POST(
         "public",
         PathSegments.Upload,
         PathSegments.Survey,
-        params.surveyId
+        Id, // survey Id
+        surveyItem // survey Id items
       );
       const savePath = path.join(saveDir, `${dateString}${ext}`);
 
@@ -39,7 +42,7 @@ export async function POST(
       await fs.writeFile(savePath, buffer);
 
       // 클라이언트에 제공할 URL
-      const imgUrl = `/${PathSegments.Upload}/${PathSegments.Survey}/${params.surveyId}/${dateString}${ext}`;
+      const imgUrl = `/${PathSegments.Upload}/${PathSegments.Survey}/${Id}/${surveyItem}/${dateString}${ext}`;
       return NextResponse.json({ imgUrl });
     }
   } catch (err) {

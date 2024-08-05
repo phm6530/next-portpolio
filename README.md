@@ -10,15 +10,17 @@
 # PACKAGE
 
 - Client
-  npm install react-hook-form<br>
-  npm install zod @hookform/resolvers<br>
-  npm install @tanstack@query<br>
-  npm install axios<br>
-  npm install sass<br><br>
+  npm i react-hook-form<br>
+  npm i zod @hookform/resolvers<br>
+  npm i @tanstack@query<br>
+  npm i axios<br>
+  npm i sass<br><br>
+  npm i dayjs
+
 - Server
-  npm install next-auth<br>
-  npm install mysql2<br>
-  npm install @types/multer & multer
+  npm i next-auth<br>
+  npm i mysql2<br>
+  npm i @types/multer & multer
 
 # 진행
 

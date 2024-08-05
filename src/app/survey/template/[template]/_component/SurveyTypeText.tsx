@@ -19,6 +19,7 @@ export default function InputTypeText({
         {...register(label, {
           required: requiredMsg,
         })}
+        autoComplete="off"
       />
       {error && error.message}
     </div>
