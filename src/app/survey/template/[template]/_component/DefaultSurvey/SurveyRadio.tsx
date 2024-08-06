@@ -1,35 +1,46 @@
 import { AddSurveyFormProps } from "@/types/survey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
+  FieldArrayWithId,
   FieldErrors,
   UseFieldArrayRemove,
+  UseFieldArrayUpdate,
   useFormContext,
 } from "react-hook-form";
 import Image from "next/image";
 import classes from "./DefaultSurvey.module.scss";
 
 export default function SurveyRadio({
-  fieldCnt,
+  fields,
   surveyIdx,
   optionIdx,
   itemRemove,
+  update,
 }: {
-  fieldCnt: number;
+  fields: FieldArrayWithId<AddSurveyFormProps, `items.${number}.options`>[];
   surveyIdx: number;
   optionIdx: number; // survey 항목 안의 Array Idx 임
   itemRemove: UseFieldArrayRemove;
+  update: UseFieldArrayUpdate<AddSurveyFormProps, `items.${number}.options`>;
 }) {
+  const page = 1;
+
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext<AddSurveyFormProps>();
 
-  const [preView, setPreView] = useState<string>("");
+  //데이터가져오기
+  const [preView, setPreView] = useState<string>(() => {
+    return fields[optionIdx].img || "";
+  });
+
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
   const removeOptions = (idx: number): void => {
-    if (fieldCnt > 2) {
+    if (fields.length > 2) {
       itemRemove(idx);
     } else {
       alert("2개 이상 항목으로 줄일 수 없음");
@@ -65,7 +76,6 @@ export default function SurveyRadio({
         alert("5MB넘는 파일입니다.");
         return;
       }
-      const page = 1;
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${page}/${surveyIdx}`,
@@ -77,6 +87,14 @@ export default function SurveyRadio({
       const { imgUrl }: { imgUrl: string } = await response.json();
 
       setPreView(`${process.env.NEXT_PUBLIC_THIS_URL}/${imgUrl}`);
+      const currentOption = getValues(
+        `items.${surveyIdx}.options.${optionIdx}`
+      );
+
+      update(optionIdx, {
+        ...currentOption,
+        img: imgUrl,
+      });
     }
   };
 

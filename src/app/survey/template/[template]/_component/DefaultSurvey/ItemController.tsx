@@ -6,7 +6,7 @@ import {
   SurveyRadioProps,
 } from "@/types/survey";
 
-export default function SurveyController() {
+export default function ItemController() {
   const { control } = useFormContext<AddSurveyFormProps>();
   const { fields, append } = useFieldArray({
     control,

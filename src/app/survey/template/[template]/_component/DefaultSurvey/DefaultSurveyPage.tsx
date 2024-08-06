@@ -2,7 +2,7 @@
 
 import DefaultSurveyList from "@/app/survey/template/[template]/_component/DefaultSurvey/DefaultSurveyList";
 import SurveyTypeText from "@/app/survey/template/[template]/_component/SurveyTypeText";
-import SurveyController from "@/app/survey/template/[template]/_component/SurveyController";
+import ItemController from "@/app/survey/template/[template]/_component/DefaultSurvey/ItemController";
 import usePreview from "@/app/survey/template/[template]/_component/Preview/usePreview";
 
 import { AddSurveyFormProps } from "@/types/survey";
@@ -27,11 +27,10 @@ export default function DefaultSurveyPage({
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
-  const formattedDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
 
+  const formattedDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
   useEffect(() => {
     const localData = localStorage.getItem(`${template}-${1}`);
-
     setTimeout(() => {
       if (localData) {
         if (
@@ -51,13 +50,12 @@ export default function DefaultSurveyPage({
       )
         return;
 
-      console.log("실행하고있나?");
       localStorage.setItem(
         `${template}-${1}`,
         JSON.stringify(formState.getValues())
       );
     };
-  }, []);
+  }, [template, formState, formattedDate]);
 
   const surveyForm = async (data: AddSurveyFormProps) => {
     if (formState.getValues("items").length !== 0) {
@@ -70,7 +68,8 @@ export default function DefaultSurveyPage({
 
   const resetField = () => {
     if (confirm("초기화 하시겠습니까?")) {
-      formState.reset();
+      formState.reset(initialFormState);
+      localStorage.removeItem(`${template}-${1}`);
     } else {
       return;
     }
@@ -102,7 +101,7 @@ export default function DefaultSurveyPage({
           <DefaultSurveyList />
 
           {/* Survey Controller */}
-          <SurveyController />
+          <ItemController />
         </FormProvider>
 
         <button type="submit">제출</button>

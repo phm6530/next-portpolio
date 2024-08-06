@@ -24,6 +24,7 @@ export default function SurveyTypeSelect({
   const {
     fields,
     append,
+    update,
     remove: itemRemove,
   } = useFieldArray({
     control,
@@ -43,8 +44,6 @@ export default function SurveyTypeSelect({
   //   };
 
   const handleArrAppend = () => {
-    console.log(fields);
-
     append({ idx: fields[fields.length - 1].idx + 1, value: "" });
   };
 
@@ -77,10 +76,11 @@ export default function SurveyTypeSelect({
         return (
           <div key={`option-${optionIdx}`}>
             <SurveyRadio
-              fieldCnt={fields?.length!}
+              fields={fields}
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}
               itemRemove={itemRemove}
+              update={update}
             />
           </div>
         );

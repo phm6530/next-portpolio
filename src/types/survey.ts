@@ -43,6 +43,7 @@ export type SurveyRadioProps = {
   options?: {
     idx: number;
     value: string;
+    img?: string;
   }[];
 } & SurveyType;
 
