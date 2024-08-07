@@ -1,56 +1,31 @@
-import { SurveyItemProps } from "@/types/survey";
+import { withFetch } from "@/app/lib/helperClient";
+import { SurveyItemProps, TemplateProps } from "@/types/survey";
 
-export async function getList(): Promise<SurveyItemProps[]> {
-  try {
-    const response = await fetch("http://localhost:3000/api/survey", {
+//getList
+export function getList(): Promise<SurveyItemProps[]> {
+  return withFetch<SurveyItemProps[]>(() => {
+    return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/template`, {
       next: {
         revalidate: 10,
       },
     });
-    if (!response.ok) {
-      throw new Error("서버 이상");
-    }
-
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    return response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    } else {
-      throw new Error("알 수 없는 에러");
-    }
-  }
+  });
 }
 
-export async function getSurveyItem(
-  surveyId: number
+//Template 디테일
+export function getTemplateDetail(
+  templateType: TemplateProps,
+  id: string
 ): Promise<SurveyItemProps> {
-  try {
-    const response = await fetch(
-      `${process.env.HOST_URL}/api/survey/${surveyId}`,
+  return withFetch<SurveyItemProps>(() => {
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/${templateType}/${id}`,
       {
         next: {
           revalidate: 10,
-          tags: ["surveyItem", surveyId + ""],
+          tags: ["surveyItem", id],
         },
       }
     );
-
-    if (!response.ok) {
-      throw new Error("서버 이상");
-    }
-
-    // const cacheStatus = response.headers.get("x-cache") ? "CACING" : "MISS";
-    // console.log(`Cache Status: ${cacheStatus}`);
-
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    return response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-      throw new Error(error.message);
-    } else {
-      throw new Error("알 수 없는 에러");
-    }
-  }
+  });
 }

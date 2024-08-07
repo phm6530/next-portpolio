@@ -8,20 +8,24 @@ interface TemplateMeta extends RowDataPacket {
 //Meta Data Post
 export const postTemplateMeta = async (
   conn: PoolConnection,
-  data: Omit<AddSurveyFormProps, "items"> & { template_id: number }
+  data: Omit<AddSurveyFormProps, "items"> & {
+    template_id: number;
+    imgKey: string;
+  }
 ): Promise<ResultSetHeader> => {
-  const { description, title, template_id } = data;
+  const { description, title, template_id, imgKey } = data;
 
   const insert_sql = `
     INSERT INTO
-        template_meta( title , description , template_id , created_at ) 
+        template_meta( title , description , template_id , created_at , imgKey) 
     VALUE 
-        (?,?,?,now());`;
+        (?,?,?,now(), ?);`;
 
   const [result] = await conn.execute<ResultSetHeader>(insert_sql, [
     title,
     description,
     template_id,
+    imgKey,
   ]);
   return result;
 };

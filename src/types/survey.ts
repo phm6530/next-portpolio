@@ -1,7 +1,7 @@
 import { userProps } from "./user";
 //page
 export type surveyParams = {
-  template: [TemplateProps, string];
+  type: string;
 };
 
 export enum ID_template {
@@ -28,9 +28,11 @@ export interface ParticipationMainProps {
 
 //설문조사 Props
 export interface SurveyItemProps {
-  surveyId: number;
+  id: number;
+  template: TemplateProps;
   img: string;
-  surveyTitle: string;
+  title: string;
+  description: string;
   createUser: userProps;
   ParticipationMain: ParticipationMainProps;
   ParticipationCnt: number;
@@ -68,4 +70,5 @@ export type AddSurveyFormProps = {
 
 export type templateMetaProps = {
   template: TemplateProps;
+  imgKey: string;
 };

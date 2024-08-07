@@ -1,7 +1,7 @@
 "use client";
 import { useFormContext, useFieldArray, FieldErrors } from "react-hook-form";
 import { AddSurveyFormProps, surveyParams, SurveyType } from "@/types/survey";
-import SurveyTypeSelect from "@/app/survey/template/[...template]/_component/DefaultSurvey/SurveyTypeSelect";
+import SurveyTypeSelect from "@/app/template/type/[type]/_component/DefaultSurvey/SurveyTypeSelect";
 import { useParams } from "next/navigation";
 
 export default function DefaultSurveyList() {
@@ -27,7 +27,7 @@ export default function DefaultSurveyList() {
 
   //img Params
   const params: surveyParams = useParams();
-  const [_, imgId] = params.template;
+  const [_, imgId] = params.type;
 
   return (
     <>

@@ -1,23 +1,24 @@
 import {
   postQuestion,
   postTemplateMeta,
-} from "@/app/api/survey/_dao/SurveyRepository";
+} from "@/app/api/_dao/SurveyRepository";
+
 import { getTemplateId } from "@/app/lib/utilFunc";
-import { withTransition } from "@/app/lib/withConnect";
+import { withTransition } from "@/app/lib/helperServer";
 import { AddSurveyFormProps, templateMetaProps } from "@/types/survey";
 
 //Survey Post Service
 export async function surveyService(
   data: AddSurveyFormProps & templateMetaProps
 ) {
-  const { title, description, items, template } = data;
+  const { title, description, items, template, imgKey } = data;
 
   //템플릿 ID Get
   const template_id = getTemplateId(template) as number;
 
   //meta Post
   await withTransition(async (conn) => {
-    const templateMetaData = { template_id, title, description };
+    const templateMetaData = { template_id, title, description, imgKey };
 
     //save metaData
     const savedMeta = await postTemplateMeta(conn, templateMetaData);

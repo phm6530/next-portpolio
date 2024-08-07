@@ -3,13 +3,18 @@
 
 import { AddSurveyFormProps, TemplateProps } from "@/types/survey";
 import { FormProvider, useForm } from "react-hook-form";
+import { v4 as uuid4 } from "uuid";
+
+import InputTypeText from "@/app/template/type/[type]/_component/InputTypeText";
+import DefaultSurveyList from "@/app/template/type/[type]/_component/DefaultSurvey/DefaultSurveyList";
+import ItemController from "@/app/template/type/[type]/_component/DefaultSurvey/ItemController";
+import usePreview from "@/app/template/type/[type]/_component/Preview/usePreview";
 import { useEffect } from "react";
 
 import dayjs from "dayjs";
-import usePreview from "@/app/survey/template/[...template]/_component/Preview/usePreview";
-import InputTypeText from "@/app/survey/template/[...template]/_component/InputTypeText";
-import DefaultSurveyList from "@/app/survey/template/[...template]/_component/DefaultSurvey/DefaultSurveyList";
-import ItemController from "@/app/survey/template/[...template]/_component/DefaultSurvey/ItemController";
+
+import useStore from "@/store/store";
+import { useRouter } from "next/navigation";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -22,50 +27,59 @@ export default function DefaultSurveyPage({
 }: {
   template: TemplateProps;
 }) {
-  const { RenderPreview } = usePreview();
-
-  const formState = useForm<AddSurveyFormProps>({
-    defaultValues: initialFormState,
-  });
-
-  const formattedDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
+  //zustand
+  const setImgKey = useStore((state) => state.setImgkey);
+  const removeImgKey = useStore((state) => state.removeImgkey);
+  const imgKey = useStore((state) => state.imgKey);
+  const router = useRouter();
 
   useEffect(() => {
-    const localData = localStorage.getItem(`${template}-${1}`);
+    setImgKey(uuid4());
+
+    return () => {
+      removeImgKey();
+    };
+  }, []);
+
+  //현재시간
+  const nowDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
+
+  //로컬 시간 데이터 임시저장
+  const tempSave = () => {
+    localStorage.setItem("savedTime", nowDate);
+    localStorage.setItem(template, JSON.stringify(formState.getValues()));
+
+    alert("저장완료");
+  };
+
+  useEffect(() => {
+    const localData = localStorage.getItem(template);
+    const savedTime = localStorage.getItem("savedTime");
+
     setTimeout(() => {
       if (localData) {
-        if (
-          confirm(`${formattedDate} 경에 임시저장된 글을 불러오시겠습니까?`)
-        ) {
+        if (confirm(`${savedTime} 경에 임시저장된 글을 불러오시겠습니까?`)) {
           formState.reset(JSON.parse(localData));
         } else {
-          localStorage.removeItem(`${template}-${1}`);
+          localStorage.removeItem(template);
         }
       }
     }, 500);
-
-    return () => {
-      if (
-        JSON.stringify(initialFormState) ===
-        JSON.stringify(formState.getValues())
-      )
-        return;
-
-      localStorage.setItem(
-        `${template}-${1}`,
-        JSON.stringify(formState.getValues())
-      );
-    };
   }, []);
+
+  const { RenderPreview } = usePreview();
+  const formState = useForm<AddSurveyFormProps>({
+    defaultValues: initialFormState,
+  });
 
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
     try {
       if (formState.getValues("items").length !== 0) {
-        const resultData = { ...data, template };
+        const resultData = { ...data, template, imgKey };
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_THIS_URL}/api/survey`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/survey`,
           {
             method: "POST",
             headers: {
@@ -78,7 +92,9 @@ export default function DefaultSurveyPage({
           throw new Error("Error..");
         }
 
-        console.log(await response.json());
+        router.replace("/survey");
+        localStorage.removeItem(template);
+        localStorage.removeItem("savedTime");
       } else {
         console.log("error!");
       }
@@ -90,7 +106,7 @@ export default function DefaultSurveyPage({
   const resetField = () => {
     if (confirm("초기화 하시겠습니까?")) {
       formState.reset(initialFormState);
-      localStorage.removeItem(`${template}-${1}`);
+      localStorage.removeItem(template);
     } else {
       return;
     }
@@ -126,7 +142,9 @@ export default function DefaultSurveyPage({
         </FormProvider>
 
         <button type="submit">제출</button>
-        <button type="button">미리보기</button>
+        <button type="button" onClick={tempSave}>
+          임시저장
+        </button>
         {/* <button type="button" onClick={previewSurvey}>
           Preview
         </button> */}

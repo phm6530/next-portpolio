@@ -1,4 +1,4 @@
-import { surveyService } from "@/app/api/survey/_service/surveySerivce";
+import { surveyService } from "@/app/api/_service/surveySerivce";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import {
   AddSurveyFormProps,
@@ -10,9 +10,11 @@ import { NextRequest, NextResponse } from "next/server";
 const getDatabase = async () => {
   const surveys: SurveyItemProps[] = [
     {
-      surveyId: 5,
+      id: 5,
+      template: "survey",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 안녕하세요 여러분의 안녕하세요 ",
+      title: "여러분의 안녕하세요 여러분의 안녕하세요 ",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },
@@ -23,9 +25,11 @@ const getDatabase = async () => {
       },
     },
     {
-      surveyId: 5,
+      id: 2,
+      template: "rank",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 fff",
+      title: "여러분의 fff",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },
@@ -36,9 +40,11 @@ const getDatabase = async () => {
       },
     },
     {
-      surveyId: 5,
+      id: 4,
+      template: "survey",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 fff",
+      title: "여러분의 fff",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },
@@ -49,9 +55,11 @@ const getDatabase = async () => {
       },
     },
     {
-      surveyId: 5,
+      id: 5,
+      template: "survey",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 fff",
+      title: "여러분의 fff",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },
@@ -62,9 +70,11 @@ const getDatabase = async () => {
       },
     },
     {
-      surveyId: 4,
+      id: 4,
+      template: "survey",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 평균 스펙은 어느 정도인가요?",
+      title: "여러분의 평균 스펙은 어느 정도인가요?",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },
@@ -75,9 +85,11 @@ const getDatabase = async () => {
       },
     },
     {
-      surveyId: 3,
+      id: 3,
+      template: "survey",
       img: "https://d33h8icwcso2tj.cloudfront.net/uploads/project/0cc22904-c448-4c48-935b-8b4b78eceea5/______2024-06-14_191238_20240616151843.jpg",
-      surveyTitle: "여러분의 평균 스펙은 어느 정도인가요?",
+      title: "여러분의 평균 스펙은 어느 정도인가요?",
+      description: "설명",
       createUser: {
         username: "리슨업",
       },

@@ -9,6 +9,7 @@ import {
 } from "react-hook-form";
 import Image from "next/image";
 import classes from "./DefaultSurvey.module.scss";
+import useStore from "@/store/store";
 
 export default function SurveyRadio({
   fields,
@@ -25,7 +26,8 @@ export default function SurveyRadio({
   update: UseFieldArrayUpdate<AddSurveyFormProps, `items.${number}.options`>;
   imgId: string;
 }) {
-  const page = 1;
+  //img Key
+  const imgKey = useStore((state) => state.imgKey);
 
   const {
     register,
@@ -80,7 +82,7 @@ export default function SurveyRadio({
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${imgId}/${surveyIdx}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/survey/${imgKey}/${surveyIdx}`,
         {
           method: "POST",
           body: formData,
@@ -88,7 +90,7 @@ export default function SurveyRadio({
       );
       const { imgUrl }: { imgUrl: string } = await response.json();
 
-      setPreView(`${process.env.NEXT_PUBLIC_THIS_URL}/${imgUrl}`);
+      setPreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
       const currentOption = getValues(
         `items.${surveyIdx}.options.${optionIdx}`
       );

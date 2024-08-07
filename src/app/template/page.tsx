@@ -1,9 +1,9 @@
-import SurveyList from "@/app/survey/_component/survey/surveyList";
+import SurveyList from "@/app/template/_component/survey/surveyList";
 import classes from "./surveyPage.modules.scss";
 import PageTitle from "@/app/_components/ui/PageTitle";
-import SurveyControler from "@/app/survey/_component/survey/SurveyControler";
+import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 import SearchInput from "@/app/_components/ui/SearchInput";
-import HotKeyword from "@/app/survey/_component/HotKeyWords";
+import HotKeyword from "@/app/template/_component/HotKeyWords";
 
 import Link from "next/link";
 
@@ -26,7 +26,7 @@ export default async function surveyPage() {
           다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
         </PageTitle>
 
-        <Link href={"/survey/template"}>설문조사 만들기</Link>
+        <Link href={"/template/type"}>설문조사 만들기</Link>
         {/* btn Area */}
         <SurveyControler />
         <HotKeyword />

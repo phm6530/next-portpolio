@@ -1,10 +1,10 @@
-import DefaultSurveyPage from "@/app/survey/template/[...template]/_component/DefaultSurvey/DefaultSurveyPage";
-import RankSurvey from "@/app/survey/template/[...template]/_component/RankSurvey/RankSurvey";
+import DefaultSurveyPage from "@/app/template/type/[type]/_component/DefaultSurvey/DefaultSurveyPage";
+import RankSurvey from "@/app/template/type/[type]/_component/RankSurvey/RankSurvey";
 import { surveyParams } from "@/types/survey";
 import { notFound } from "next/navigation";
 
 export default function SelectTemplate({ params }: { params: surveyParams }) {
-  const [template] = params.template;
+  const template = params.type;
 
   //기본 Survey Page
   if (template === "survey") {

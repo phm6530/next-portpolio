@@ -14,8 +14,11 @@
   npm i zod @hookform/resolvers<br>
   npm i @tanstack@query<br>
   npm i axios<br>
-  npm i sass<br><br>
-  npm i dayjs
+  npm i sass<br>
+  npm i dayjs<br>
+  npm i zustand
+
+  - ImgKey 공유에 사용
 
 - Server
   npm i next-auth<br>

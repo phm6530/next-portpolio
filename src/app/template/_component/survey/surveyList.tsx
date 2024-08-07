@@ -11,9 +11,9 @@ import PageGsap from "@/app/_aniPage/PageGsap";
 export default function SurveyList() {
   //하이듀레이션
   const { data, isLoading } = useQuery<SurveyItemProps[]>({
-    queryKey: ["list", "survey"],
+    queryKey: ["list", "surveylist"],
     queryFn: getList,
-    staleTime: 1000,
+    staleTime: 10000,
   });
 
   if (isLoading) {

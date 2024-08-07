@@ -11,7 +11,7 @@ export default function HotKeyword() {
         {hotKeywords.map((e, idx) => {
           return (
             <Link
-              href={`/survey?search=${e}`}
+              href={`/template?search=${e}`}
               className="hotKeywordList"
               key={idx}
             >

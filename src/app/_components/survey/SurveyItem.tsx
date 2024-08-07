@@ -13,20 +13,21 @@ export default function SurveyItem({
   refs?: ForwardedRef<HTMLDivElement[]>;
 }) {
   const {
-    surveyId,
-    surveyTitle,
+    id,
+    title,
     createUser,
     img,
     ParticipationCnt,
     ParticipationMain,
+    template,
   } = itemData;
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
 
   const gsapRef = useRef<gsap.core.Timeline | null>(null);
 
-  const onClickHandler = (e: Pick<SurveyItemProps, "surveyId">["surveyId"]) => {
-    router.push(`/survey/${e}`);
+  const onClickHandler = (e: Pick<SurveyItemProps, "id">["id"]) => {
+    router.push(`/template/${template}/${e}`);
   };
 
   const { contextSafe } = useGSAP(
@@ -55,7 +56,7 @@ export default function SurveyItem({
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
-      onClick={() => onClickHandler(surveyId)}
+      onClick={() => onClickHandler(id)}
       onMouseOver={onMouseHandler}
       onMouseLeave={onMouseReaver}
       ref={ref}
@@ -72,7 +73,7 @@ export default function SurveyItem({
       </div>
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
-        <div className={classes.surveyTitle}>{surveyTitle}</div>
+        <div className={classes.surveyTitle}>{title}</div>
         <div className={classes.groupParticipants}>
           {ParticipationMain.ageRange}대{" "}
           <span className={gender === "men" ? classes.male : classes.female}>

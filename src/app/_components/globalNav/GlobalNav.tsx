@@ -18,7 +18,7 @@ export default function GlobalNav({ isLogin: initialIsLogin }: GlobalNavProps) {
         <nav className={classes.nav}>
           <Link href={"/"}>Home</Link>
           <Link href={"/about"}>사용법</Link>
-          <Link href={"/survey"}>리스트</Link>
+          <Link href={"/template"}>리스트</Link>
           <Link href={"/admin"}>Admin</Link>
           <Link href={"/contact"}>contact</Link>
           {session ? (

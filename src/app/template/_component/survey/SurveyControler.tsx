@@ -37,7 +37,7 @@ export default function SurveyControler() {
 
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     setActive(e.currentTarget.value);
-    router.push(`/survey?sort=${e.currentTarget.value}`);
+    router.push(`/template?sort=${e.currentTarget.value}`);
   };
 
   return (
