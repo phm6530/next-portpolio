@@ -1,4 +1,4 @@
-import { AddSurveyFormProps, TemplateProps } from "@/types/survey";
+import { AddSurveyFormProps, TemplateProps } from "@/types/templateSurvey";
 import { useEffect, useState } from "react";
 
 const useLocalStorageForm = (surveyType: TemplateProps, page: number) => {

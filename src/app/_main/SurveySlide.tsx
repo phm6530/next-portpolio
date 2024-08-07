@@ -1,13 +1,13 @@
 "use client";
 
-import { SurveyItemProps } from "@/types/survey";
+import { templateItemProps } from "@/types/templateSurvey";
 import classes from "./SurveySlide.module.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
 import SurveyItem from "@/app/_components/survey/SurveyItem";
 
-const DUMMY_DATA: SurveyItemProps[] = [
+const DUMMY_DATA: templateItemProps[] = [
   {
     surveyId: 1,
     img: "/asset/2.png",

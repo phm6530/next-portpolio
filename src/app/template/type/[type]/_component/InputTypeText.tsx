@@ -1,4 +1,4 @@
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { FieldError, UseFormRegister } from "react-hook-form";
 
 export default function InputTypeText({

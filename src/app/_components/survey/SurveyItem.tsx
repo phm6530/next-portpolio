@@ -1,4 +1,4 @@
-import { SurveyItemProps } from "@/types/survey";
+import { templateItemProps } from "@/types/template";
 import classes from "./SurveyItem.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,24 +9,16 @@ import { useGSAP } from "@gsap/react";
 export default function SurveyItem({
   itemData,
 }: {
-  itemData: SurveyItemProps;
+  itemData: templateItemProps;
   refs?: ForwardedRef<HTMLDivElement[]>;
 }) {
-  const {
-    id,
-    title,
-    createUser,
-    img,
-    ParticipationCnt,
-    ParticipationMain,
-    template,
-  } = itemData;
+  const { id, title, description, created_at, img, template } = itemData;
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
 
   const gsapRef = useRef<gsap.core.Timeline | null>(null);
 
-  const onClickHandler = (e: Pick<SurveyItemProps, "id">["id"]) => {
+  const onClickHandler = (e: Pick<templateItemProps, "id">["id"]) => {
     router.push(`/template/${template}/${e}`);
   };
 
@@ -51,8 +43,6 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
-  const gender = ParticipationMain.gender;
-
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -61,32 +51,42 @@ export default function SurveyItem({
       onMouseLeave={onMouseReaver}
       ref={ref}
     >
-      <div className={classes.surveyThumbNail}>
-        <Image
-          alt="test"
-          src={img}
-          priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          fill
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      {img && (
+        <div className={classes.surveyThumbNail}>
+          <Image
+            alt="test"
+            src={img}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+      )}
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
         <div className={classes.surveyTitle}>{title}</div>
-        <div className={classes.groupParticipants}>
-          {ParticipationMain.ageRange}대{" "}
-          <span className={gender === "men" ? classes.male : classes.female}>
-            {gender === "men" ? "남자" : "여자"}
+        <div>{description}</div>
+        <div>{created_at}</div>
+        {/* <div className={classes.groupParticipants}>
+          {ParticipationMain && ParticipationMain.ageRange}대{" "}
+          <span
+            className={
+              ParticipationMain.gender === "men" ? classes.male : classes.female
+            }
+          >
+            {ParticipationMain && ParticipationMain.gender === "men"
+              ? "남자"
+              : "여자"}
           </span>
           의 참여율이 가장 높습니다.
-        </div>
-        <div className={classes.bottomWrap}>
+        </div> */}
+        {/* <div className={classes.bottomWrap}>
           <span className={classes.createUser}>by {createUser.username}</span>
           <span className={classes.Participation}>
             참여자 {ParticipationCnt}명
           </span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

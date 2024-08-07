@@ -4,7 +4,7 @@ import {
   AddSurveyFormProps,
   SurveyText,
   SurveyRadioProps,
-} from "@/types/survey";
+} from "@/types/templateSurvey";
 
 export default function ItemController() {
   const { control } = useFormContext<AddSurveyFormProps>();

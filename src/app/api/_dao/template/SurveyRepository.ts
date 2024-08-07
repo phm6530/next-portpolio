@@ -1,37 +1,8 @@
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
-interface TemplateMeta extends RowDataPacket {
-  id: number;
-}
-
-//Meta Data Post
-export const postTemplateMeta = async (
-  conn: PoolConnection,
-  data: Omit<AddSurveyFormProps, "items"> & {
-    template_id: number;
-    imgKey: string;
-  }
-): Promise<ResultSetHeader> => {
-  const { description, title, template_id, imgKey } = data;
-
-  const insert_sql = `
-    INSERT INTO
-        template_meta( title , description , template_id , created_at , imgKey) 
-    VALUE 
-        (?,?,?,now(), ?);`;
-
-  const [result] = await conn.execute<ResultSetHeader>(insert_sql, [
-    title,
-    description,
-    template_id,
-    imgKey,
-  ]);
-  return result;
-};
-
 //survey List  Insert
-export const postQuestion = async (
+export const insertQuestion = async (
   conn: PoolConnection,
   items: Pick<AddSurveyFormProps, "items">["items"],
   templateMetaId: number

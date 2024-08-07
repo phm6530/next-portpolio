@@ -1,3 +1,4 @@
+import { templateItemProps } from "@/types/template";
 import { userProps } from "./user";
 //page
 export type surveyParams = {
@@ -12,9 +13,6 @@ export enum ID_template {
 // Union 정의
 type Gender = "men" | "women";
 
-//Template Name
-export type TemplateProps = "survey" | "rank";
-
 //현재는 text랑 select만 만들거임
 export type SurveyType = {
   type: "text" | "select";
@@ -24,23 +22,6 @@ export type SurveyType = {
 export interface ParticipationMainProps {
   ageRange: number;
   gender: Gender;
-}
-
-//설문조사 Props
-export interface SurveyItemProps {
-  id: number;
-  template: TemplateProps;
-  img: string;
-  title: string;
-  description: string;
-  createUser: userProps;
-  ParticipationMain: ParticipationMainProps;
-  ParticipationCnt: number;
-  item?: {
-    hot?: boolean;
-    ing?: boolean;
-    event?: boolean;
-  };
 }
 
 //주관식
@@ -68,7 +49,4 @@ export type AddSurveyFormProps = {
   items: (SurveyText | SurveyRadioProps)[];
 };
 
-export type templateMetaProps = {
-  template: TemplateProps;
-  imgKey: string;
-};
+export type surveyDetailProps = {} & templateItemProps;

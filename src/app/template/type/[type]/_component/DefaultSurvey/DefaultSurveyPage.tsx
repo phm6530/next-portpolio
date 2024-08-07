@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { AddSurveyFormProps, TemplateProps } from "@/types/survey";
+import { AddSurveyFormProps } from "@/types/templateSurvey";
+import { TemplateProps } from "@/types/template";
 import { FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid4 } from "uuid";
 
@@ -79,7 +80,7 @@ export default function DefaultSurveyPage({
         const resultData = { ...data, template, imgKey };
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/survey`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/template`,
           {
             method: "POST",
             headers: {
@@ -92,7 +93,7 @@ export default function DefaultSurveyPage({
           throw new Error("Error..");
         }
 
-        router.replace("/survey");
+        router.push("/template");
         localStorage.removeItem(template);
         localStorage.removeItem("savedTime");
       } else {

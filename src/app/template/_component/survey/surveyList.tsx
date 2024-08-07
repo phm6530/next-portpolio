@@ -1,7 +1,7 @@
 "use client";
 
-import { getList } from "@/app/_services/surveySerivce";
-import { SurveyItemProps } from "@/types/survey";
+import { fetchList } from "@/app/_services/surveySerivce";
+import { templateItemProps } from "@/types/template";
 import { useQuery } from "@tanstack/react-query";
 
 import classes from "./SurveyList.module.scss";
@@ -10,15 +10,16 @@ import PageGsap from "@/app/_aniPage/PageGsap";
 
 export default function SurveyList() {
   //하이듀레이션
-  const { data, isLoading } = useQuery<SurveyItemProps[]>({
+  const { data, isLoading } = useQuery<templateItemProps[]>({
     queryKey: ["list", "surveylist"],
-    queryFn: getList,
+    queryFn: fetchList,
     staleTime: 10000,
   });
 
   if (isLoading) {
     return "Loading....";
   }
+  console.log(data);
 
   return (
     <PageGsap>
@@ -26,7 +27,8 @@ export default function SurveyList() {
         {data &&
           data.map((item, idx) => {
             return (
-              <div key={`${item}-${idx}`} className="tester autoAlpha">
+              <div key={`${item.id}-${idx}`} className="tester autoAlpha">
+                111
                 <SurveyItem itemData={item} />
               </div>
             );

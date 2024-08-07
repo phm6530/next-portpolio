@@ -9,12 +9,12 @@ import Link from "next/link";
 
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getList } from "@/app/_services/surveySerivce";
+import { fetchList } from "@/app/_services/surveySerivce";
 
 export default async function surveyPage() {
   await queryClient.prefetchQuery({
     queryKey: ["list", "survey"],
-    queryFn: getList,
+    queryFn: fetchList,
     staleTime: 1000,
   });
   const hydurateState = dehydrate(queryClient);

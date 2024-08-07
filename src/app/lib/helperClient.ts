@@ -5,7 +5,9 @@ export const withFetch = async <T>(
   try {
     const response = await callback();
     if (!response.ok) {
-      throw new Error("서버 이상");
+      const errorMsg = await response.json();
+      console.log(errorMsg);
+      throw new Error(errorMsg.message);
     }
     return response.json() as Promise<T>;
   } catch (error) {

@@ -1,4 +1,4 @@
-import { AddSurveyFormProps, surveyParams } from "@/types/survey";
+import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
   FieldArrayWithId,

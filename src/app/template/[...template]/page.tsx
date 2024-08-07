@@ -1,10 +1,13 @@
-import { getTemplateDetail } from "@/app/_services/surveySerivce";
+import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
+import SurveyTemplateDetail from "@/app/template/[...template]/SurveyTemplateDetail";
+import { templateItemProps, templateMetaProps } from "@/types/template";
+import { surveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-type templateDetailParams = { template: [string, string] };
 const vaildateTemplateType = ["survey", "rank"] as const;
-type TemplateUnionType = (typeof vaildateTemplateType)[number];
+export type TemplateUnionType = (typeof vaildateTemplateType)[number];
+type templateDetailParams = { template: [TemplateUnionType, string] };
 
 //Meta
 export async function generateMetadata({
@@ -14,16 +17,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const [templateType, id] = params.template;
 
-  if (!vaildateTemplateType.includes(templateType as TemplateUnionType)) {
+  if (!vaildateTemplateType.includes(templateType)) {
     notFound();
   }
 
   try {
-    const surveyItem = await getTemplateDetail(
-      templateType as TemplateUnionType,
-      id
+    const surveyItem = await fetchTemplateDetail<surveyDetailProps>(
+      templateType,
+      +id
     );
+
     if (!surveyItem) notFound();
+
+    console.log('""""', surveyItem);
 
     return {
       title: surveyItem.title,
@@ -31,13 +37,12 @@ export async function generateMetadata({
       openGraph: {
         images: [
           {
-            url: surveyItem.img,
+            url: surveyItem.img ? surveyItem.img : "",
           },
         ],
       },
     };
   } catch (error) {
-    console.error(error);
     notFound();
   }
 }
@@ -48,15 +53,10 @@ export default async function Page({
   params: templateDetailParams;
 }) {
   const [templateType, id] = params.template;
-  const surveyItem = await getTemplateDetail(
-    templateType as TemplateUnionType,
-    id
-  );
 
-  return (
-    <>
-      {id}
-      {surveyItem.title}
-    </>
-  );
+  if (templateType === "survey") {
+    return <SurveyTemplateDetail templateType={templateType} surveyId={+id} />;
+  }
+
+  return <></>;
 }

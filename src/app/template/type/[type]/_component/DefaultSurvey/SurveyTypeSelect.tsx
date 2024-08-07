@@ -1,5 +1,5 @@
 import SurveyRadio from "@/app/template/type/[type]/_component/DefaultSurvey/SurveyRadio";
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import {
   useFieldArray,

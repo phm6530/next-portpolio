@@ -1,4 +1,4 @@
-import { ID_template, TemplateProps } from "@/types/survey";
+import { ID_template, TemplateProps } from "@/types/templateSurvey";
 
 export function getTemplateId(template: TemplateProps) {
   if (template === "survey") {

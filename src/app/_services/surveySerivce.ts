@@ -1,9 +1,9 @@
 import { withFetch } from "@/app/lib/helperClient";
-import { SurveyItemProps, TemplateProps } from "@/types/survey";
+import { templateItemProps, TemplateProps } from "@/types/template";
 
 //getList
-export function getList(): Promise<SurveyItemProps[]> {
-  return withFetch<SurveyItemProps[]>(() => {
+export function fetchList(): Promise<templateItemProps[]> {
+  return withFetch<templateItemProps[]>(() => {
     return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/template`, {
       next: {
         revalidate: 10,
@@ -13,17 +13,17 @@ export function getList(): Promise<SurveyItemProps[]> {
 }
 
 //Template 디테일
-export function getTemplateDetail(
+export function fetchTemplateDetail<T>(
   templateType: TemplateProps,
-  id: string
-): Promise<SurveyItemProps> {
-  return withFetch<SurveyItemProps>(() => {
+  id: number
+): Promise<T> {
+  return withFetch<T>(() => {
     return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/${templateType}/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${id}`,
       {
         next: {
           revalidate: 10,
-          tags: ["surveyItem", id],
+          tags: ["surveyItem", id + ""],
         },
       }
     );

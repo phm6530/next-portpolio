@@ -1,6 +1,6 @@
 import DefaultSurveyPage from "@/app/template/type/[type]/_component/DefaultSurvey/DefaultSurveyPage";
 import RankSurvey from "@/app/template/type/[type]/_component/RankSurvey/RankSurvey";
-import { surveyParams } from "@/types/survey";
+import { surveyParams } from "@/types/templateSurvey";
 import { notFound } from "next/navigation";
 
 export default function SelectTemplate({ params }: { params: surveyParams }) {
