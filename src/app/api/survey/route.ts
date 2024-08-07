@@ -1,6 +1,11 @@
+import { surveyService } from "@/app/api/survey/_service/surveySerivce";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { SurveyItemProps } from "@/types/survey";
-import { NextResponse } from "next/server";
+import {
+  AddSurveyFormProps,
+  SurveyItemProps,
+  templateMetaProps,
+} from "@/types/survey";
+import { NextRequest, NextResponse } from "next/server";
 
 const getDatabase = async () => {
   const surveys: SurveyItemProps[] = [
@@ -94,6 +99,19 @@ export async function GET() {
 
     // JSON 응답
     return NextResponse.json(surveys);
+  } catch (error) {
+    return apiErrorHandler(error);
+  }
+}
+
+//Survey Post Controller
+export async function POST(req: NextRequest) {
+  try {
+    const data: AddSurveyFormProps & templateMetaProps = await req.json();
+
+    await surveyService(data);
+
+    return NextResponse.json({ message: "success" });
   } catch (error) {
     return apiErrorHandler(error);
   }

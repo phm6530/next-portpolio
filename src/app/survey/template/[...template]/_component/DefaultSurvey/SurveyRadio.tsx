@@ -1,4 +1,4 @@
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps, surveyParams } from "@/types/survey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
   FieldArrayWithId,
@@ -16,12 +16,14 @@ export default function SurveyRadio({
   optionIdx,
   itemRemove,
   update,
+  imgId,
 }: {
   fields: FieldArrayWithId<AddSurveyFormProps, `items.${number}.options`>[];
   surveyIdx: number;
   optionIdx: number; // survey 항목 안의 Array Idx 임
   itemRemove: UseFieldArrayRemove;
   update: UseFieldArrayUpdate<AddSurveyFormProps, `items.${number}.options`>;
+  imgId: string;
 }) {
   const page = 1;
 
@@ -78,7 +80,7 @@ export default function SurveyRadio({
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${page}/${surveyIdx}`,
+        `${process.env.NEXT_PUBLIC_THIS_URL}/api/upload/survey/${imgId}/${surveyIdx}`,
         {
           method: "POST",
           body: formData,

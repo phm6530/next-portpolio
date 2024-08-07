@@ -1,5 +1,6 @@
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { SurveyItemProps } from "@/types/survey";
+
 import { NextResponse, NextRequest } from "next/server";
 
 const DUMMY_ITEM: { [key: string]: SurveyItemProps } = {
@@ -18,13 +19,13 @@ const DUMMY_ITEM: { [key: string]: SurveyItemProps } = {
   },
 };
 
-// GET 메서드 처리
+// GET
 export async function GET(
   req: NextRequest,
-  { params }: { params: { surveyId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.surveyId;
+    const id = params.id;
     const surveys = DUMMY_ITEM[id] ? DUMMY_ITEM[id] : null;
 
     // JSON 응답

@@ -1,5 +1,6 @@
-import SurveyRadio from "@/app/survey/template/[template]/_component/DefaultSurvey/SurveyRadio";
+import SurveyRadio from "@/app/survey/template/[...template]/_component/DefaultSurvey/SurveyRadio";
 import { AddSurveyFormProps } from "@/types/survey";
+
 import {
   useFieldArray,
   UseFieldArrayRemove,
@@ -9,9 +10,11 @@ import {
 export default function SurveyTypeSelect({
   surveyDelete,
   surveyIdx,
+  imgId,
 }: {
   surveyDelete: UseFieldArrayRemove;
   surveyIdx: number;
+  imgId: string;
 }) {
   //FormContext
   const {
@@ -81,6 +84,7 @@ export default function SurveyTypeSelect({
               optionIdx={optionIdx}
               itemRemove={itemRemove}
               update={update}
+              imgId={imgId}
             />
           </div>
         );

@@ -1,7 +1,24 @@
 import { userProps } from "./user";
+//page
+export type surveyParams = {
+  template: [TemplateProps, string];
+};
 
-// 성별 타입 정의
+export enum ID_template {
+  Survey = 1,
+  Rank = 2,
+}
+
+// Union 정의
 type Gender = "men" | "women";
+
+//Template Name
+export type TemplateProps = "survey" | "rank";
+
+//현재는 text랑 select만 만들거임
+export type SurveyType = {
+  type: "text" | "select";
+};
 
 //주요 참여자
 export interface ParticipationMainProps {
@@ -24,11 +41,6 @@ export interface SurveyItemProps {
   };
 }
 
-//현재는 text랑 select만 만들거임
-export type SurveyType = {
-  type: "text" | "select";
-};
-
 //주관식
 export type SurveyText = {
   id: number;
@@ -48,8 +60,12 @@ export type SurveyRadioProps = {
 } & SurveyType;
 
 //설문조사 Default
-export interface AddSurveyFormProps {
+export type AddSurveyFormProps = {
   title: string;
   description: string;
   items: (SurveyText | SurveyRadioProps)[];
-}
+};
+
+export type templateMetaProps = {
+  template: TemplateProps;
+};

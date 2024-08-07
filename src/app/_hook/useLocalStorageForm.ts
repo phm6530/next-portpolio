@@ -1,7 +1,5 @@
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps, TemplateProps } from "@/types/survey";
 import { useEffect, useState } from "react";
-
-type TemplateProps = "default" | "rank";
 
 const useLocalStorageForm = (surveyType: TemplateProps, page: number) => {
   const [getValue, setGetValue] = useState<AddSurveyFormProps | null>(null);
@@ -12,7 +10,7 @@ const useLocalStorageForm = (surveyType: TemplateProps, page: number) => {
         localStorage.setItem(`${surveyType}-${page}`, JSON.stringify(getValue));
       }
     };
-  }, []);
+  }, [surveyType, getValue, page]);
 
   return {
     setGetValue,

@@ -1,21 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import DefaultSurveyList from "@/app/survey/template/[template]/_component/DefaultSurvey/DefaultSurveyList";
-import SurveyTypeText from "@/app/survey/template/[template]/_component/SurveyTypeText";
-import ItemController from "@/app/survey/template/[template]/_component/DefaultSurvey/ItemController";
-import usePreview from "@/app/survey/template/[template]/_component/Preview/usePreview";
-
-import { AddSurveyFormProps } from "@/types/survey";
+import { AddSurveyFormProps, TemplateProps } from "@/types/survey";
 import { FormProvider, useForm } from "react-hook-form";
 import { useEffect } from "react";
+
 import dayjs from "dayjs";
+import usePreview from "@/app/survey/template/[...template]/_component/Preview/usePreview";
+import InputTypeText from "@/app/survey/template/[...template]/_component/InputTypeText";
+import DefaultSurveyList from "@/app/survey/template/[...template]/_component/DefaultSurvey/DefaultSurveyList";
+import ItemController from "@/app/survey/template/[...template]/_component/DefaultSurvey/ItemController";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
   description: "",
   items: [],
 };
-type TemplateProps = "default" | "rank";
 
 export default function DefaultSurveyPage({
   template,
@@ -29,6 +29,7 @@ export default function DefaultSurveyPage({
   });
 
   const formattedDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
+
   useEffect(() => {
     const localData = localStorage.getItem(`${template}-${1}`);
     setTimeout(() => {
@@ -55,14 +56,34 @@ export default function DefaultSurveyPage({
         JSON.stringify(formState.getValues())
       );
     };
-  }, [template, formState, formattedDate]);
+  }, []);
 
-  const surveyForm = async (data: AddSurveyFormProps) => {
-    if (formState.getValues("items").length !== 0) {
-      console.log(data);
-      console.log("제출완료!");
-    } else {
-      console.log("하나도없는데!");
+  //submit
+  const onSubmitHandler = async (data: AddSurveyFormProps) => {
+    try {
+      if (formState.getValues("items").length !== 0) {
+        const resultData = { ...data, template };
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_THIS_URL}/api/survey`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(resultData), // data를 JSON 문자열로 변환하여 body에 전달
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Error..");
+        }
+
+        console.log(await response.json());
+      } else {
+        console.log("error!");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -79,9 +100,9 @@ export default function DefaultSurveyPage({
     <>
       <RenderPreview>프리뷰</RenderPreview>
       <button onClick={() => resetField()}>설문조사 초기화</button>
-      <form onSubmit={formState.handleSubmit(surveyForm)}>
+      <form onSubmit={formState.handleSubmit(onSubmitHandler)}>
         {/* 공통 제목 */}
-        <SurveyTypeText
+        <InputTypeText
           label={"title"}
           error={formState.formState.errors.title}
           requiredMsg={"제목은 필수 입니다!"}
@@ -89,7 +110,7 @@ export default function DefaultSurveyPage({
         />
 
         {/* 공통 설명 적기 */}
-        <SurveyTypeText
+        <InputTypeText
           label={"description"}
           error={formState.formState.errors.description}
           requiredMsg={"간단한 설명을 적어주세요!"}
@@ -105,6 +126,7 @@ export default function DefaultSurveyPage({
         </FormProvider>
 
         <button type="submit">제출</button>
+        <button type="button">미리보기</button>
         {/* <button type="button" onClick={previewSurvey}>
           Preview
         </button> */}
