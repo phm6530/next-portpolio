@@ -22,3 +22,8 @@ export type templateMetaProps = {
   template: TemplateProps;
   imgKey: string;
 };
+
+export type ResposetemplateDatas = {
+  result: templateItemProps[];
+  cnt: number;
+};

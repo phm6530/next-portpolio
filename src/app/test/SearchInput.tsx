@@ -16,7 +16,6 @@ const searchArr = [
 //서버라고 가정
 const fetch = async (value: string) => {
   try {
-    console.log("나실행");
     const filter = searchArr.filter((e) => {
       return e.includes(value);
     });

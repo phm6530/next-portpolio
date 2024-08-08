@@ -1,3 +1,4 @@
+import { CONST_PAGING } from "@/types/constans";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
@@ -31,8 +32,9 @@ export const selectTemplateList = async (
   conn: PoolConnection,
   page: number
 ) => {
-  const offset = (page - 1) * 10;
-  console.log(offset);
+  const offset = (page - 1) * CONST_PAGING.LIMIT;
+
+  console.log("offset", offset);
 
   const sql = `
         SELECT 
@@ -47,8 +49,11 @@ export const selectTemplateList = async (
           template t ON tm.template_type_id = t.id
         ORDER BY 
           tm.id DESC 
-        LIMIT 10 OFFSET ?;`;
-  const [row] = await conn.query<RowDataPacket[]>(sql, [offset]);
+        LIMIT ? OFFSET ?;`;
+  const [row] = await conn.query<RowDataPacket[]>(sql, [
+    CONST_PAGING.LIMIT,
+    offset,
+  ]);
   return row;
 };
 

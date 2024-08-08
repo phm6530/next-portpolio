@@ -1,14 +1,26 @@
 import { withFetch } from "@/app/lib/helperClient";
-import { templateItemProps, TemplateProps } from "@/types/template";
+import { ResposetemplateDatas, TemplateProps } from "@/types/template";
 
 //getList
-export function fetchList(): Promise<templateItemProps[]> {
-  return withFetch<templateItemProps[]>(() => {
-    return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/template`, {
-      next: {
-        revalidate: 10,
-      },
-    });
+export function fetchList(
+  page: string,
+  ftiler: string = "all"
+): Promise<ResposetemplateDatas> {
+  return withFetch<ResposetemplateDatas>(() => {
+    const queryParams = new URLSearchParams({
+      page,
+      ftiler,
+    }).toString();
+
+    return fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/template?${queryParams}`,
+      {
+        cache: "no-cache",
+        // next: {
+        //   revalidate: 10,
+        // },
+      }
+    );
   });
 }
 

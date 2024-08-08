@@ -11,11 +11,18 @@ import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { fetchList } from "@/app/_services/surveySerivce";
 
-export default async function surveyPage() {
+export default async function surveyPage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
+  const page = +searchParams.page || 1;
+  console.log(page);
+
   await queryClient.prefetchQuery({
-    queryKey: ["list", "survey"],
-    queryFn: fetchList,
-    staleTime: 1000,
+    queryKey: ["list", "survey", page],
+    queryFn: () => fetchList(page + ""),
+    staleTime: 10000,
   });
   const hydurateState = dehydrate(queryClient);
 
@@ -35,7 +42,7 @@ export default async function surveyPage() {
 
         {/* List */}
         <HydrationBoundary state={hydurateState}>
-          <SurveyList />
+          <SurveyList page={page} />
         </HydrationBoundary>
       </div>
     </>

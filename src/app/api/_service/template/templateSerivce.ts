@@ -8,6 +8,7 @@ import {
   selectTemplateList,
 } from "@/app/api/_dao/template/templateRepository";
 import { templateMetaProps } from "@/types/template";
+import { RowDataPacket } from "mysql2";
 
 //template Post Service
 export async function postAddTemplate(
@@ -34,5 +35,14 @@ export async function postAddTemplate(
 export async function getTemplateList(page: number = 1) {
   return withConnection(async (conn) => {
     return selectTemplateList(conn, page);
+  });
+}
+
+//template Get Service
+export async function getTemplateAllCnt(): Promise<number> {
+  return withConnection(async (conn) => {
+    const sql = "select count(*) as cnt from template_meta;";
+    const [templateAll] = await conn.query<RowDataPacket[]>(sql);
+    return templateAll[0].cnt;
   });
 }

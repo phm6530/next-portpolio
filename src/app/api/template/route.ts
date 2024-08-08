@@ -1,6 +1,7 @@
 import {
   postAddTemplate,
   getTemplateList,
+  getTemplateAllCnt,
 } from "@/app/api/_service/template/templateSerivce";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
@@ -9,15 +10,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 // template List Get
 export async function GET(req: NextRequest) {
+  console.log("요청!");
   try {
     const searchParams = req.nextUrl.searchParams;
     const pageParams = searchParams.get("page");
+
+    console.log(pageParams, searchParams);
+
     const page = pageParams !== null ? parseInt(pageParams, 10) : 1;
 
+    console.log("page::", page);
+
     const result = await getTemplateList(page);
+    const listCnt = await getTemplateAllCnt();
 
     // JSON 응답
-    return NextResponse.json(result);
+    return NextResponse.json({ result, cnt: listCnt });
   } catch (error) {
     return apiErrorHandler(error);
   }
@@ -27,12 +35,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const data: AddSurveyFormProps & templateMetaProps = await req.json();
-
     await postAddTemplate(data);
 
     return NextResponse.json({ message: "success" });
   } catch (error) {
-    console.log(error.message);
     return apiErrorHandler(error);
   }
 }

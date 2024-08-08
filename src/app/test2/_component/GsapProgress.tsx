@@ -28,7 +28,7 @@ export default function GsapProgress() {
 
   const updateFn = () => {
     const num = +animationRef.current!.progress().toFixed(2);
-    console.log(typeof num);
+
     if (typeof num === "number") {
       setRange(num * 100);
     }
