@@ -9,11 +9,11 @@ export async function GET(
   {
     params,
   }: {
-    params: { slug: [TemplateProps, string] };
+    params: { detail: [TemplateProps, string] };
   }
 ) {
   try {
-    const [templateType, DetailId] = params.slug;
+    const [templateType, DetailId] = params.detail;
     if (templateType === "survey") {
       const result = await getSurveyDetail(DetailId);
       // JSON 응답

@@ -18,6 +18,8 @@ export type SurveyType = {
   type: "text" | "select";
 };
 
+export type InferSurveyType<T> = T extends { type: infer U } ? U : never;
+
 //주요 참여자
 export interface ParticipationMainProps {
   ageRange: number;
@@ -49,4 +51,18 @@ export type AddSurveyFormProps = {
   items: (SurveyText | SurveyRadioProps)[];
 };
 
-export type surveyDetailProps = {} & templateItemProps;
+//Survey Type Detila
+export type surveyDetailProps = {
+  questions: {
+    id: number;
+    label: string;
+    type: InferSurveyType<SurveyType>;
+    options?: {
+      optionId: number;
+      option_idx: number;
+      label: string;
+      value: string;
+      optionPictrue: string | null;
+    }[];
+  }[];
+} & templateItemProps;

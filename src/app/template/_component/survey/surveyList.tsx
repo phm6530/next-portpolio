@@ -3,7 +3,6 @@
 import { fetchList } from "@/app/_services/surveySerivce";
 import { ResposetemplateDatas } from "@/types/template";
 import { useQuery } from "@tanstack/react-query";
-
 import classes from "./SurveyList.module.scss";
 import SurveyItem from "@/app/_components/survey/SurveyItem";
 import PageGsap from "@/app/_aniPage/PageGsap";

@@ -9,11 +9,10 @@ export default async function ProviderContext({
   children: ReactNode;
 }) {
   const session = await auth();
+
   return (
-    <>
-      <SessionProvider session={session}>
-        <RQProvider>{children}</RQProvider>
-      </SessionProvider>
-    </>
+    <SessionProvider session={session}>
+      <RQProvider>{children}</RQProvider>
+    </SessionProvider>
   );
 }

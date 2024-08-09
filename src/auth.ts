@@ -18,7 +18,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: "hyunmin@example.com",
           };
         } else {
-          console.log("에러??");
           return null;
         }
       },

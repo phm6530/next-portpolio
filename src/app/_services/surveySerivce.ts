@@ -1,4 +1,5 @@
 import { withFetch } from "@/app/lib/helperClient";
+import { TemplateDetailProps } from "@/app/template/[...detail]/page";
 import { ResposetemplateDatas, TemplateProps } from "@/types/template";
 
 //getList
@@ -29,14 +30,12 @@ export function fetchTemplateDetail<T>(
   templateType: TemplateProps,
   id: number
 ): Promise<T> {
+  console.log("요청~~~~~~~~");
   return withFetch<T>(() => {
     return fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${id}`,
       {
-        next: {
-          revalidate: 10,
-          tags: ["surveyItem", id + ""],
-        },
+        cache: "no-cache",
       }
     );
   });

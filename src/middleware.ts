@@ -6,10 +6,10 @@ export async function middleware(req: NextRequest) {
 
   const session = await auth(); // req를 전달하여 쿠키를 확인
 
-  const currentUrl = new URL(req.url);
-  const redirectPath = currentUrl.pathname;
-
   if (!session) {
+    const currentUrl = new URL(req.url);
+    const redirectPath = currentUrl.pathname;
+
     return NextResponse.redirect(
       new URL(`/auth/login?redirect=${redirectPath}`, currentUrl.origin)
     );
@@ -19,5 +19,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/contact/:path*"],
+  matcher: ["/admin/:path*"],
 };

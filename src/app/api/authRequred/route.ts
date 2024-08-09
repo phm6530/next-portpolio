@@ -4,11 +4,11 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const session = await auth();
+    // const session = await auth();
 
-    if (!session) {
-      throw new ApiError("인증 에러", 401);
-    }
+    // if (!session) {
+    //   throw new ApiError("인증 에러", 401);
+    // }
 
     // JSON 응답
     return NextResponse.json({ message: "success" });

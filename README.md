@@ -1,6 +1,6 @@
 # SURVEY Portpolio
 
-설문조사 웹 플렛폼 포트폴리오입니다.
+설문조사 웹 플랫폼 포트폴리오입니다.
 
 목표기능
 
@@ -23,7 +23,8 @@
 - Server
   npm i next-auth<br>
   npm i mysql2<br>
-  npm i @types/multer & multer
+  npm i @types/multer & multer<br>
+  npm install nodemailer
 
 # 진척도
 
@@ -60,5 +61,6 @@
 
 ~ 8/17
 
+- Ui 기능 확인
 - 퍼블리싱 + 디자인 수정
 - 서브도메인 생성 + vercel 베포하기

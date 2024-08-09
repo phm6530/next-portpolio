@@ -34,8 +34,6 @@ export const selectTemplateList = async (
 ) => {
   const offset = (page - 1) * CONST_PAGING.LIMIT;
 
-  console.log("offset", offset);
-
   const sql = `
         SELECT 
           tm.id, 
