@@ -43,8 +43,6 @@ export default function Page() {
       onStart: () => onStartFn(idx),
       duration: 2,
     });
-
-    console.log(ani);
   };
 
   return (

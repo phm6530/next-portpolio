@@ -10,19 +10,21 @@ export const insertTemplateMeta = async (
     imgKey: string;
   }
 ): Promise<ResultSetHeader> => {
-  const { description, title, template_id, imgKey } = data;
+  const { description, title, template_id, imgKey, genderChk, ageChk } = data;
 
   const insert_sql = `
     INSERT INTO
-        template_meta( title , description , template_type_id , created_at , imgKey) 
+        template_meta( title , description , template_type_id , created_at , imgKey , gender_chk , age_chk) 
     VALUE 
-        (?,?,?,now(), ?);`;
+        (?,?,?,now(), ?, ? , ?);`;
 
   const [result] = await conn.execute<ResultSetHeader>(insert_sql, [
     title,
     description,
     template_id,
     imgKey,
+    genderChk,
+    ageChk,
   ]);
 
   return result;

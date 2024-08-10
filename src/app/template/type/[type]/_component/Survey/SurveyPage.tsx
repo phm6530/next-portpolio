@@ -6,9 +6,9 @@ import { TemplateProps } from "@/types/template";
 import { FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid4 } from "uuid";
 
-import InputTypeText from "@/app/template/type/[type]/_component/InputTypeText";
-import DefaultSurveyList from "@/app/template/type/[type]/_component/DefaultSurvey/DefaultSurveyList";
-import ItemController from "@/app/template/type/[type]/_component/DefaultSurvey/ItemController";
+import SurveyText from "@/app/template/type/[type]/_component/Survey/SurveyText";
+import SurveyList from "@/app/template/type/[type]/_component/Survey/SurveyList";
+import QuestionAddController from "@/app/template/type/[type]/_component/Survey/QuestionAddController";
 import usePreview from "@/app/template/type/[type]/_component/Preview/usePreview";
 import { useEffect } from "react";
 
@@ -16,18 +16,18 @@ import dayjs from "dayjs";
 
 import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
+import AddAgeGroup from "@/app/template/type/[type]/_component/templateAddOptions/AddAgeGroup";
+import AddGender from "@/app/template/type/[type]/_component/templateAddOptions/AddGender";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
   description: "",
+  genderChk: "1",
+  ageChk: "1",
   items: [],
 };
 
-export default function DefaultSurveyPage({
-  template,
-}: {
-  template: TemplateProps;
-}) {
+export default function SurveyPage({ template }: { template: TemplateProps }) {
   //zustand
   const setImgKey = useStore((state) => state.setImgkey);
   const removeImgKey = useStore((state) => state.removeImgkey);
@@ -47,6 +47,7 @@ export default function DefaultSurveyPage({
 
   //로컬 시간 데이터 임시저장
   const tempSave = () => {
+    console.log(formState.getValues());
     localStorage.setItem("savedTime", nowDate);
     localStorage.setItem(template, JSON.stringify(formState.getValues()));
 
@@ -118,30 +119,33 @@ export default function DefaultSurveyPage({
       <RenderPreview>프리뷰</RenderPreview>
       <button onClick={() => resetField()}>설문조사 초기화</button>
       <form onSubmit={formState.handleSubmit(onSubmitHandler)}>
+        {/* 연령 별 체크*/}
+        <FormProvider {...formState}>
+          <AddAgeGroup />
+          {/* 성별 별 체크*/}
+          <AddGender />
+        </FormProvider>
         {/* 공통 제목 */}
-        <InputTypeText
+        <SurveyText
           label={"title"}
           error={formState.formState.errors.title}
           requiredMsg={"제목은 필수 입니다!"}
           register={formState.register}
         />
-
         {/* 공통 설명 적기 */}
-        <InputTypeText
+        <SurveyText
           label={"description"}
           error={formState.formState.errors.description}
           requiredMsg={"간단한 설명을 적어주세요!"}
           register={formState.register}
         />
-
         <FormProvider {...formState}>
           {/* Survey Edit Form + List*/}
-          <DefaultSurveyList />
+          <SurveyList />
 
           {/* Survey Controller */}
-          <ItemController />
+          <QuestionAddController />
         </FormProvider>
-
         <button type="submit">제출</button>
         <button type="button" onClick={tempSave}>
           임시저장

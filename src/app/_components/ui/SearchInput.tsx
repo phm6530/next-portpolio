@@ -27,6 +27,7 @@ export default function SearchInput() {
           value={searchText}
           onChange={onChangeText}
           placeholder="검색어를 기재해주세요"
+          autoComplete="off"
         />
         <button type="button">검색</button>
       </form>

@@ -1,5 +1,6 @@
 //Template Name
 export type TemplateProps = "survey" | "rank";
+export type IuputBoolean = "1" | "0";
 
 export interface templateItemProps {
   id: number;
@@ -8,14 +9,6 @@ export interface templateItemProps {
   created_at: string;
   template: TemplateProps;
   img?: string;
-  // createUser: userProps;
-  // ParticipationMain?: ParticipationMainProps;
-  // ParticipationCnt?: number;
-  // item?: {
-  //   hot?: boolean;
-  //   ing?: boolean;
-  //   event?: boolean;
-  // };
 }
 
 export type templateMetaProps = {

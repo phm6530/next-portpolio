@@ -8,7 +8,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 import Image from "next/image";
-import classes from "./DefaultSurvey.module.scss";
+import classes from "./survey.module.scss";
 import useStore from "@/store/store";
 
 export default function SurveyRadio({

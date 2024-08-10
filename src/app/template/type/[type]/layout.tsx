@@ -1,4 +1,4 @@
-import { surveyParams, TemplateProps } from "@/types/templateSurvey";
+import { surveyParams } from "@/types/templateSurvey";
 import { ReactNode } from "react";
 
 export default function layOut({
@@ -8,7 +8,7 @@ export default function layOut({
   params: surveyParams;
   children: ReactNode;
 }) {
-  const template = params.template;
+  const template = params.type;
 
   return (
     <>

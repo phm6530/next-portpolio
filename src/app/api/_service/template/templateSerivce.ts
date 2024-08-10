@@ -14,17 +14,15 @@ import { RowDataPacket } from "mysql2";
 export async function postAddTemplate(
   data: AddSurveyFormProps & templateMetaProps
 ) {
-  const { title, description, items, template, imgKey } = data;
+  const { items, template, ...rest } = data;
 
   //템플릿 ID Get
   const template_id = getTemplateId(template) as number;
 
   //meta Post
   await withTransition(async (conn) => {
-    const templateMetaData = { template_id, title, description, imgKey };
-
     //save metaData
-    const savedMeta = await insertTemplateMeta(conn, templateMetaData);
+    const savedMeta = await insertTemplateMeta(conn, { template_id, ...rest });
 
     //save Questions
     await insertQuestion(conn, items, savedMeta.insertId);

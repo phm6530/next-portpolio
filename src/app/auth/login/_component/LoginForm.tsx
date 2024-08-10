@@ -43,12 +43,12 @@ export default function LoginForm({
       <form onSubmit={onSubmitHandler}>
         <label>
           Username:
-          <input type="text" name="username" />
+          <input type="text" name="username" autoComplete="off" />
         </label>
         <br />
         <label>
           Password:
-          <input type="password" name="password" />
+          <input type="password" name="password" autoComplete="off" />
         </label>
         <br />
         <button type="submit">Login</button>

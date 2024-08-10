@@ -1,14 +1,18 @@
-import DefaultSurveyPage from "@/app/template/type/[type]/_component/DefaultSurvey/DefaultSurveyPage";
+import SurveyPage from "@/app/template/type/[type]/_component/Survey/SurveyPage";
 import RankSurvey from "@/app/template/type/[type]/_component/RankSurvey/RankSurvey";
 import { surveyParams } from "@/types/templateSurvey";
 import { notFound } from "next/navigation";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "나만의 설문조사를 만들어보세요",
+  description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
+};
 export default function SelectTemplate({ params }: { params: surveyParams }) {
   const template = params.type;
 
   //기본 Survey Page
   if (template === "survey") {
-    return <DefaultSurveyPage template={template} />;
+    return <SurveyPage template={template} />;
   }
 
   //Rank

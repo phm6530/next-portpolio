@@ -1,5 +1,6 @@
-import { templateItemProps } from "@/types/template";
-import { userProps } from "./user";
+import { InferObj } from "@/types/common";
+import { IuputBoolean, templateItemProps } from "@/types/template";
+
 //page
 export type surveyParams = {
   type: string;
@@ -18,22 +19,20 @@ export type SurveyType = {
   type: "text" | "select";
 };
 
-export type InferSurveyType<T> = T extends { type: infer U } ? U : never;
-
 //주요 참여자
 export interface ParticipationMainProps {
   ageRange: number;
   gender: Gender;
 }
 
-//주관식
+//주관식 타입
 export type SurveyText = {
   id: number;
   label: string;
   options?: never; // 주관식은 필요없음
 } & SurveyType;
 
-//객관식
+//객관식 타입
 export type SurveyRadioProps = {
   id: number;
   label: string;
@@ -48,6 +47,8 @@ export type SurveyRadioProps = {
 export type AddSurveyFormProps = {
   title: string;
   description: string;
+  genderChk: IuputBoolean;
+  ageChk: IuputBoolean;
   items: (SurveyText | SurveyRadioProps)[];
 };
 
@@ -56,7 +57,7 @@ export type surveyDetailProps = {
   questions: {
     id: number;
     label: string;
-    type: InferSurveyType<SurveyType>;
+    type: InferObj<SurveyType>;
     options?: {
       optionId: number;
       option_idx: number;
