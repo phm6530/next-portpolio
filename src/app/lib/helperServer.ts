@@ -16,6 +16,7 @@ export const withTransition = async <T>(
     if (conn) await conn.rollback();
     throw error;
   } finally {
+    console.log("finally !!!!!!!!!!!!!!!!!!");
     if (conn) conn.release();
   }
 };

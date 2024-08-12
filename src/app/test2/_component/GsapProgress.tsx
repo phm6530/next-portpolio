@@ -18,7 +18,7 @@ export default function GsapProgress() {
         ease: "power4.inOut",
         onUpdate: updateFn,
         onComplete: () => {
-          console.log("끝");
+          // console.log("끝");
         },
       });
       animationRef.current = animaiton;

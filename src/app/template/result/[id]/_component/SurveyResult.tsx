@@ -19,8 +19,8 @@ export default function SurveyResult({ id }: { id: string }) {
     notFound();
   }
 
-  console.log("test");
   if (data) {
+    // console.log(data!.result!.newRestData);
     return <>11</>;
   }
 }

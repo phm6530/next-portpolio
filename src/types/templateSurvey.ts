@@ -58,6 +58,7 @@ export type AddsurveyDetailProps = {
     id: number;
     label: string;
     type: InferObj<SurveyType>;
+
     options?: {
       optionId: number;
       option_idx: number;

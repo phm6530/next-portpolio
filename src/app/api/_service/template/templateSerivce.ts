@@ -5,10 +5,11 @@ import { withConnection, withTransition } from "@/app/lib/helperServer";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import {
   insertTemplateMeta,
-  selectTemplateList,
+  selectTemplateMetaData,
 } from "@/app/api/_dao/template/templateRepository";
 import { templateMetaProps } from "@/types/template";
 import { RowDataPacket } from "mysql2";
+import { CONST_PAGING } from "@/types/constans";
 
 //template Post Service
 export async function postAddTemplate(
@@ -32,7 +33,17 @@ export async function postAddTemplate(
 //template Get Service
 export async function getTemplateList(page: number = 1) {
   return withConnection(async (conn) => {
-    return selectTemplateList(conn, page);
+    //List 가져올땐 True 아니면 false 하면 됨
+    const offset = (page - 1) * CONST_PAGING.LIMIT;
+
+    //페이징 파라미터
+    const parameter = {
+      conn,
+      usePagination: true, // 페이징 네이션 on
+      offset,
+    };
+
+    return selectTemplateMetaData(parameter);
   });
 }
 
