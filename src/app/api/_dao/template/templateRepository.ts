@@ -38,17 +38,32 @@ export const selectTemplateList = async (
 
   const sql = `
         SELECT 
-          tm.id, 
-          tm.title,
-          tm.description,
-          tm.created_at,
-          t.template as template
+            tm.id, 
+            tm.title,
+            tm.description,
+            tm.created_at,
+            t.template AS template,
+            pr_stats.age_group,
+            pr_stats.gender as gender_group,
+            pr_stats.total_cnt
         FROM 
-          template_meta tm
+            template_meta tm
         JOIN 
-          template t ON tm.template_type_id = t.id
+            template t ON tm.template_type_id = t.id
+        LEFT JOIN (
+            SELECT 
+                pr.template_id,
+                pr.age_group,
+                pr.gender,
+                (SELECT COUNT(*) FROM participants_recodes WHERE template_id = pr.template_id) AS total_cnt,
+                ROW_NUMBER() OVER (PARTITION BY pr.template_id ORDER BY COUNT(*) DESC) AS rn
+            FROM 
+                participants_recodes pr
+            GROUP BY 
+                pr.template_id, pr.age_group, pr.gender
+        ) pr_stats ON tm.id = pr_stats.template_id AND pr_stats.rn = 1
         ORDER BY 
-          tm.id DESC 
+            tm.id DESC 
         LIMIT ? OFFSET ?;`;
   const [row] = await conn.query<RowDataPacket[]>(sql, [
     CONST_PAGING.LIMIT,
@@ -68,6 +83,8 @@ export const selectTemlateDetail = async (
       tm.title,
       tm.description,
       t.template,
+      tm.gender_chk,
+      tm.age_chk,
       tm.created_at,
       sq.id AS question_id,
       sq.question_type_id,
@@ -94,3 +111,12 @@ export const selectTemlateDetail = async (
   const [rows] = await conn.query<RowDataPacket[]>(sql, [page]);
   return rows;
 };
+
+export async function selectTotalCnt(
+  conn: PoolConnection,
+  id: string
+): Promise<RowDataPacket> {
+  const sql = `SELECT COUNT(*) as user_cnt FROM participants_recodes WHERE template_id = ?`;
+  const [rows] = await conn.query<RowDataPacket[]>(sql, [id]);
+  return rows[0];
+}

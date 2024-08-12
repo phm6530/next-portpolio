@@ -15,7 +15,7 @@ export default function SearchInput() {
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(
-      searchText.length !== 0 ? `/template?search=${searchText}` : "/survey "
+      searchText.length !== 0 ? `/template?search=${searchText}` : "/template "
     );
   };
 

@@ -3,10 +3,15 @@
 import LoadingSpier from "@/app/_components/ui/loading/LoadingSpiner";
 import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { TemplateUnionType } from "@/app/template/[...detail]/page";
-import { surveyDetailProps } from "@/types/templateSurvey";
+import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
+import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
+import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import Image from "next/image";
+
+import { FieldError, FormProvider, useForm } from "react-hook-form";
+import classes from "./template.module.scss";
+import { useRouter } from "next/navigation";
 
 interface Option {
   label: string;
@@ -23,42 +28,67 @@ export default function SurveyTemplateDetail({
   const { isLoading, data } = useQuery({
     queryKey: [templateType, surveyId],
     queryFn: () =>
-      fetchTemplateDetail<surveyDetailProps>(templateType, +surveyId),
+      fetchTemplateDetail<AddsurveyDetailProps>(templateType, +surveyId),
     staleTime: 10000,
     enabled: !!surveyId,
   });
+  const formMethod = useForm();
+  const router = useRouter();
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm();
+  // useEffect(() => {
+  //   if (data) {
+  //     const defaultValues = data.questions.reduce<Record<string, string>>(
+  //       (acc, qs) => {
+  //         if (qs.type === "text") {
+  //           acc[`${qs.id}`] = "";
+  //           return acc;
+  //         }
+  //         return acc;
+  //       },
+  //       {}
+  //     );
 
-  useEffect(() => {
-    if (data) {
-      const defaultValues = data.questions.reduce<Record<string, string>>(
-        (acc, qs, idx) => {
-          if (qs.type === "text") {
-            acc[`question-${idx + 1}`] = "";
-            return acc;
-          } else {
-            return acc;
-          }
-        },
-        {}
-      );
-
-      reset(defaultValues);
-    }
-  }, [data, reset]);
+  //     console.log(defaultValues);
+  //     formMethod.reset(defaultValues);
+  //   }
+  // }, [data, formMethod]);
 
   if (isLoading) {
     return <LoadingSpier />;
   }
 
-  const onSubmitHandler = (data: Record<string, string | Option[]>) => {
-    console.log("제출!");
+  console.log(data);
+
+  //Submit
+  const onSubmitHandler = async (data: Record<string, string | Option[]>) => {
+    console.log({ surveyId, ...data });
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      if (confirm("제출완료 되었습니다 결과페이지로 가실꺼?")) {
+        router.push(`/template/result/${surveyId}`);
+      } else {
+        router.push("/template");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
   };
 
   if (data) {
@@ -66,7 +96,16 @@ export default function SurveyTemplateDetail({
       <>
         <h1>{data.title}</h1>
         <h2>{data.description}</h2>
-        {data.questions.map((qs, qsIdx) => {
+
+        {/* Option  */}
+        <FormProvider {...formMethod}>
+          {Boolean(Number(data.templateOption!.genderChk)) && (
+            <OptionGenderGroup />
+          )}
+          {Boolean(Number(data.templateOption!.ageChk)) && <OptionAgeGroup />}
+        </FormProvider>
+
+        {data.questions.map((qs) => {
           return (
             <div key={`question-${qs.id}`}>
               <div>{qs.label}</div>
@@ -74,12 +113,12 @@ export default function SurveyTemplateDetail({
                 <div>
                   <input
                     type="text"
-                    {...register(`question-${qsIdx + 1}`, {
+                    {...formMethod.register(`${qs.id}`, {
                       required: "필수 항목입니다.",
                     })}
                     autoComplete="off"
                   />
-                  {errors[`question-${qsIdx + 1}`]?.message && "에러"}
+                  {formMethod.formState.errors[`${qs.id}`]?.message && "에러"}
                 </div>
               ) : (
                 <div>
@@ -90,22 +129,42 @@ export default function SurveyTemplateDetail({
                           type="radio"
                           key={idx}
                           value={e.value}
-                          {...register(`option-${qsIdx + 1}`, {
+                          {...formMethod.register(`${qs.id}`, {
                             required: "필수 항목입니다.",
                           })}
                         />
+                        {e.optionPictrue && (
+                          <div className={classes.previewContainer}>
+                            <Image
+                              src={e.optionPictrue}
+                              layout="responsive"
+                              width={16}
+                              height={9}
+                              style={{ maxWidth: 700, objectFit: "cover" }}
+                              alt="preview"
+                              priority
+                            />
+                          </div>
+                        )}
+
                         {e.label}
                       </label>
                     );
-                  })}{" "}
-                  {errors[`option-${qsIdx + 1}`]?.message && "에러"}
+                  })}
+                  {
+                    (formMethod.formState.errors[`${qs.id}`] as FieldError)
+                      ?.message
+                  }
                 </div>
               )}
             </div>
           );
         })}
 
-        <button type="button" onClick={handleSubmit(onSubmitHandler)}>
+        <button
+          type="button"
+          onClick={formMethod.handleSubmit(onSubmitHandler)}
+        >
           submit
         </button>
       </>

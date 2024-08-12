@@ -1,22 +1,22 @@
 import { InferObj } from "@/types/common";
 import { IuputBoolean, templateItemProps } from "@/types/template";
 
-//page
-export type surveyParams = {
-  type: string;
-};
-
 export enum ID_template {
   Survey = 1,
   Rank = 2,
 }
 
 // Union 정의
-type Gender = "men" | "women";
+export type Gender = "female" | "male";
 
 //현재는 text랑 select만 만들거임
 export type SurveyType = {
   type: "text" | "select";
+};
+
+//page
+export type surveyParams = {
+  type: string;
 };
 
 //주요 참여자
@@ -53,7 +53,7 @@ export type AddSurveyFormProps = {
 };
 
 //Survey Type Detila
-export type surveyDetailProps = {
+export type AddsurveyDetailProps = {
   questions: {
     id: number;
     label: string;

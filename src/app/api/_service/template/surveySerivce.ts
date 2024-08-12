@@ -1,21 +1,25 @@
 import { selectTemlateDetail } from "@/app/api/_dao/template/templateRepository";
-import { withConnection } from "@/app/lib/helperServer";
-import { templateItemProps, TemplateProps } from "@/types/template";
+import { withConnection, withTransition } from "@/app/lib/helperServer";
+import { InferObj } from "@/types/common";
 import {
-  InferSurveyType,
-  surveyDetailProps,
-  SurveyType,
-} from "@/types/templateSurvey";
+  PostAddsurveyDetailProps,
+  templateItemProps,
+  TemplateProps,
+} from "@/types/template";
+import { AddsurveyDetailProps, SurveyType } from "@/types/templateSurvey";
+import { ResultSetHeader } from "mysql2";
 
-//return 값
+//Data Base ROWS 타입
 type RowDataSurvey = {
   id: number;
   title: string;
   description: string;
   template: TemplateProps;
+  gender_chk: number;
+  age_chk: number;
   created_at: string;
   question_id: number;
-  question_type_id: InferSurveyType<SurveyType>;
+  question_type_id: InferObj<SurveyType>;
   question_label: string;
   option_id: number | null;
   option_idx: number | null;
@@ -26,7 +30,7 @@ type RowDataSurvey = {
 
 export async function getSurveyDetail(
   DetailId: string
-): Promise<surveyDetailProps> {
+): Promise<AddsurveyDetailProps> {
   const rowData = await withConnection<RowDataSurvey[]>(async (conn) => {
     return selectTemlateDetail(conn, DetailId) as Promise<RowDataSurvey[]>;
   });
@@ -38,10 +42,16 @@ export async function getSurveyDetail(
     description: rowData[0].description,
     created_at: rowData[0].created_at,
     template: rowData[0].template,
+
+    //Template Option 여부
+    templateOption: {
+      genderChk: rowData[0].gender_chk === 1 ? "1" : "0",
+      ageChk: rowData[0].age_chk === 1 ? "1" : "0",
+    },
   };
 
   const questionMade = () => {
-    const arr: surveyDetailProps["questions"] = [];
+    const arr: AddsurveyDetailProps["questions"] = [];
 
     rowData.forEach((q) => {
       // 같은 Id는 Push 안 함
@@ -71,11 +81,55 @@ export async function getSurveyDetail(
     return arr;
   };
 
-  const resultData: surveyDetailProps = {
+  const resultData: AddsurveyDetailProps = {
     ...metaData,
     questions: questionMade(),
   };
-  // console.log(returnData);
-
   return resultData;
+}
+
+//Post Detail Answer
+export async function postSurveyDetail(
+  data: PostAddsurveyDetailProps,
+  DetailId: string
+) {
+  const { surveyId, gender, ageGroup, ...rest } = data;
+  return withTransition<ResultSetHeader>(async (conn) => {
+    //참여자 Insert Return값은 Id
+    const insertUser_Sql = `
+      INSERT INTO 
+          participants_recodes 
+          (gender, age_group , template_id) 
+      VALUES
+        (? , ? , ?);
+    `;
+
+    //query의 제네릭은 쿼리 결과 타입을 나타냄
+    //[row]의 타입은 resultSetHeader와 FieldPacket[] 임
+    const [insertUser] = await conn.query<ResultSetHeader>(insertUser_Sql, [
+      gender,
+      ageGroup,
+      DetailId,
+    ]);
+    const Questionkeys = Object.keys({ ...rest });
+    const question = { ...rest };
+
+    const answerValues = Questionkeys.map((_) => `( ?, ?, ?, ? ) `).join(", ");
+
+    const insertAnswer_Sql = `
+      INSERT INTO survey_answers
+        (template_meta_id, question_id, participants_id, answer_value)
+      VALUES ${answerValues};
+    `;
+
+    const test = Questionkeys.reduce((acc, key) => {
+      acc.push(DetailId, key, insertUser.insertId, question[key]);
+      return acc;
+    }, [] as any[]);
+
+    const [result] = await conn.query<ResultSetHeader>(insertAnswer_Sql, [
+      ...test,
+    ]);
+    return result;
+  });
 }

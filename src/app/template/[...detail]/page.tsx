@@ -1,7 +1,8 @@
-import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import RankTemplateDetail from "@/app/template/[...detail]/RankTemplateDetail";
 import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
-import { surveyDetailProps } from "@/types/templateSurvey";
+
+import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
+import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { queryClient } from "@/app/config/queryClient";
@@ -13,7 +14,7 @@ type templateDetailParams = { detail: [TemplateUnionType, string] };
 
 //템플릿 타입
 export type TemplateDetailProps<T extends TemplateUnionType> =
-  T extends "survey" ? surveyDetailProps : T extends "rank" ? never : never;
+  T extends "survey" ? AddsurveyDetailProps : T extends "rank" ? never : never;
 
 //Meta
 export async function generateMetadata({
@@ -69,7 +70,7 @@ export default async function Page({
 
   await queryClient.prefetchQuery({
     queryKey: [templateType, +id],
-    queryFn: () => fetchTemplateDetail<surveyDetailProps>(templateType, +id),
+    queryFn: () => fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id),
     staleTime: 10000,
   });
 

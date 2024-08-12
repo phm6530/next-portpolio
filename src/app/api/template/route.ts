@@ -15,11 +15,7 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const pageParams = searchParams.get("page");
 
-    console.log(pageParams, searchParams);
-
     const page = pageParams !== null ? parseInt(pageParams, 10) : 1;
-
-    console.log("page::", page);
 
     const result = await getTemplateList(page);
     const listCnt = await getTemplateAllCnt();

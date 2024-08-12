@@ -1,4 +1,4 @@
-import { templateItemProps } from "@/types/template";
+import { GetTemplateDetail, templateItemProps } from "@/types/template";
 import classes from "./SurveyItem.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,10 +9,21 @@ import { useGSAP } from "@gsap/react";
 export default function SurveyItem({
   itemData,
 }: {
-  itemData: templateItemProps;
+  itemData: GetTemplateDetail;
   refs?: ForwardedRef<HTMLDivElement[]>;
 }) {
-  const { id, title, description, created_at, img, template } = itemData;
+  const {
+    id,
+    title,
+    description,
+    created_at,
+    img,
+    template,
+    age_group,
+    gender_group,
+    total_cnt,
+  } = itemData;
+
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -43,6 +54,8 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
+  console.log(itemData);
+
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -68,25 +81,31 @@ export default function SurveyItem({
         <div className={classes.surveyTitle}>{title}</div>
         <div>{description}</div>
         <div>{created_at}</div>
-        {/* <div className={classes.groupParticipants}>
-          {ParticipationMain && ParticipationMain.ageRange}대{" "}
-          <span
-            className={
-              ParticipationMain.gender === "men" ? classes.male : classes.female
-            }
-          >
-            {ParticipationMain && ParticipationMain.gender === "men"
-              ? "남자"
-              : "여자"}
-          </span>
-          의 참여율이 가장 높습니다.
-        </div> */}
-        {/* <div className={classes.bottomWrap}>
-          <span className={classes.createUser}>by {createUser.username}</span>
+
+        <div className={classes.groupParticipants}>
+          {age_group && `${age_group}대`}
+
+          {gender_group ? (
+            <>
+              <span
+                className={
+                  gender_group === "male" ? classes.male : classes.female
+                }
+              >
+                {gender_group === "male" ? "남성" : "여성"}
+              </span>
+              의 참여율이 가장 높습니다.`
+            </>
+          ) : (
+            "참여해주세요!"
+          )}
+        </div>
+
+        <div className={classes.bottomWrap}>
           <span className={classes.Participation}>
-            참여자 {ParticipationCnt}명
+            참여자 {total_cnt || 0}명
           </span>
-        </div> */}
+        </div>
       </div>
     </div>
   );

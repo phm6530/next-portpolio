@@ -3,16 +3,12 @@ import { useFormContext } from "react-hook-form";
 
 export default function AddAgeGroup() {
   const booleanRadio = ["1", "0"];
-
-  const { register, watch } = useFormContext<AddSurveyFormProps>();
-  const ageChk = watch("ageChk");
+  const { register } = useFormContext<AddSurveyFormProps>();
 
   return (
     <div>
       연령 별 집계를 하시겠습니까?
       {booleanRadio.map((e, idx) => {
-        console.log(`${e}::: `, ageChk === e);
-
         return (
           <label key={`boolean-${idx}`}>
             <input
@@ -28,6 +24,7 @@ export default function AddAgeGroup() {
           </label>
         );
       })}
+      <p>연령별 체크리스트가 생성됩니다.</p>
     </div>
   );
 }
