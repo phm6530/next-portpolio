@@ -2,36 +2,10 @@ import { selectTemplateMetaData } from "@/app/api/_dao/template/templateReposito
 import { selectTemplateResult } from "@/app/api/_dao/template/templateRepository";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { withTransition } from "@/app/lib/helperServer";
+import { Gender } from "@/types/template";
+import { ResultQuestion } from "@/types/templateSurvey";
 import { PoolConnection } from "mysql2/promise";
 import { NextRequest, NextResponse } from "next/server";
-
-interface Question {
-  id: number;
-  question: string;
-  template_id: number;
-  total_participants?: number;
-
-  type: string;
-  options?: Option[];
-  values?: string[];
-}
-
-interface Option {
-  idx: number;
-  label: string;
-  picture: string | null;
-  [key: string]: any;
-}
-
-// 초기 acc의 타입 정의
-interface Accumulator {
-  questions: Question[];
-}
-
-interface Statistics {
-  male: { [ageGroup: string]: number };
-  female: { [ageGroup: string]: number };
-}
 
 export async function GET(req: NextRequest) {
   try {
@@ -44,78 +18,9 @@ export async function GET(req: NextRequest) {
     }
 
     //Transtion
-    const result = await withTransition(async (conn) => {
+    const { data, templateMeta } = await withTransition(async (conn) => {
       //Detail
       const data = await selectTemplateResult(conn, templateId);
-
-      const result = data.reduce<Accumulator>(
-        (acc, cur) => {
-          const {
-            option_idx,
-            option_label,
-            option_pictrue,
-            question,
-            question_id,
-            template_id,
-            total_participants,
-            type,
-            value,
-            ...rest
-          } = cur;
-
-          // 현재 question_id에 해당하는 질문이 이미 acc.questions에 있는지 확인
-          let questionEntry = acc.questions.find((e) => e.id === question_id);
-
-          if (!questionEntry) {
-            // 만약 없으면 새로 추가
-            questionEntry = {
-              id: question_id,
-              question,
-              template_id,
-              type,
-            };
-
-            questionEntry =
-              type === "text"
-                ? { ...questionEntry, values: [] }
-                : { ...questionEntry, options: [] };
-
-            acc.questions.push(questionEntry);
-          }
-
-          // // 해당 question에 option 추가
-          questionEntry.options &&
-            questionEntry.options.push({
-              idx: option_idx,
-              label: option_label,
-              picture: option_pictrue,
-              user: {},
-            });
-
-          const restUserdata = { ...rest };
-
-          if (type === "text") {
-            questionEntry.values?.push(value);
-            return acc;
-          } else {
-            //gender + age 추출
-            const gender_age = Object.keys(restUserdata);
-            const value = Object.values(restUserdata);
-
-            gender_age.forEach((e, idx) => {
-              const [gender, age] = e.split("_");
-              console.log(gender, +age.slice(0, -1), value[idx]);
-            });
-
-            return acc;
-          }
-        },
-
-        { questions: [] } //initale
-      );
-
-      // console.log(result);
-
       //페이징 파라미터
       const parameter: {
         conn: PoolConnection;
@@ -126,14 +31,109 @@ export async function GET(req: NextRequest) {
         usePagination: false, // 페이징 네이션 on
         template_id: +templateId,
       };
-
       const templateMeta = await selectTemplateMetaData(parameter);
-      return { newRestData: result, templateMeta };
+      return { data, templateMeta };
     });
 
-    console.log(result.newRestData.questions);
+    const questionList = data.reduce<{ questions: ResultQuestion[] }>(
+      (acc, cur) => {
+        const {
+          option_idx,
+          option_label,
+          option_pictrue,
+          question,
+          question_id,
+          total_participants,
+          type, // select | text
+          text_answer, //text Answer
+          ...rest
+        } = cur;
 
-    return NextResponse.json({ result });
+        // 현재 question_id에 해당하는 질문이 이미 acc.questions에 있는지 확인
+        let questionEntry = acc.questions.find((e) => e.id === question_id);
+
+        if (!questionEntry) {
+          // 만약 없으면 새로 추가
+          questionEntry = {
+            id: question_id,
+            question,
+            type,
+          };
+
+          questionEntry =
+            type === "text"
+              ? { ...questionEntry, values: [] }
+              : { ...questionEntry, options: [] };
+
+          //tempalte metaData Push..
+          acc.questions.push(questionEntry);
+        }
+
+        //gender + age 추출
+        const gender_age = Object.keys({ ...rest });
+        const value = Object.values({ ...rest });
+
+        if (type === "text") {
+          const target = gender_age.find((_, idx) => {
+            // const [gender, age] = e.split("_") as [Gender, string];
+            return value[idx] === "1";
+          });
+
+          const [gender, age] = target?.split("_") as [Gender, string];
+
+          questionEntry.values?.push({
+            gender,
+            age: +age.slice(0, -1) as 10 | 20 | 30 | 40 | 50 | 60,
+            value: text_answer,
+          });
+          return acc;
+        } else {
+          // // 해당 question에 option 추가
+          questionEntry.options &&
+            questionEntry.options.push({
+              idx: option_idx, // 옵션 매핑 기준
+              label: option_label,
+              picture: option_pictrue,
+              user: {
+                female: {
+                  "10s": 0,
+                  "20s": 0,
+                  "30s": 0,
+                  "40s": 0,
+                  "50s": 0,
+                  "60s": 0,
+                },
+                male: {
+                  "10s": 0,
+                  "20s": 0,
+                  "30s": 0,
+                  "40s": 0,
+                  "50s": 0,
+                  "60s": 0,
+                },
+              },
+            });
+
+          gender_age.forEach((e, idx) => {
+            const [gender, age] = e.split("_") as ["male" | "female", string];
+
+            if (questionEntry.options) {
+              const option = questionEntry.options.find(
+                (opt) => opt.idx === option_idx
+              );
+              if (option && option.user[gender]) {
+                option.user[gender][age as string] = value[idx];
+              }
+            }
+          });
+
+          return acc;
+        }
+      },
+      { questions: [] } //initale
+    );
+
+    return NextResponse.json({ templateResult: questionList, templateMeta });
   } catch (error) {
     return apiErrorHandler(error);
   }

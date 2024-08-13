@@ -1,4 +1,9 @@
-import { Gender } from "@/types/templateSurvey";
+// Union 정의
+export type Gender = "female" | "male";
+//현재는 text랑 select만 만들거임
+export type SurveyType = {
+  type: "text" | "select";
+};
 
 //Template Name
 export type TemplateProps = "survey" | "rank";

@@ -160,8 +160,8 @@ SELECT
     sq.id as question_id,
     sq.question_type_id as type,
     sq.label as question,
-    sa.answer_value as value,
-    sq.template_meta_id as template_id,
+    sa.answer_value as text_answer,
+    so.label as option_label,
     so.idx as option_idx,
     so.option_pictrue,
 
@@ -196,7 +196,7 @@ SELECT
     WHERE 
         sq.template_meta_id = ?
     GROUP BY 
-        sq.id, sq.question_type_id, sq.label, sq.template_meta_id, so.idx, so.option_pictrue , sa.answer_value
+        sq.id, sq.question_type_id, sq.label, sq.template_meta_id, so.idx, so.option_pictrue , sa.answer_value  , so.label
     ORDER BY 
         sq.id, so.idx;
   `;

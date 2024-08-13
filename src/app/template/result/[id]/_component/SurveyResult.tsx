@@ -20,7 +20,7 @@ export default function SurveyResult({ id }: { id: string }) {
   }
 
   if (data) {
-    // console.log(data!.result!.newRestData);
+    console.log(data);
     return <>11</>;
   }
 }

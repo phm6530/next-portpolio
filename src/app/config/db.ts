@@ -5,7 +5,9 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  connectionLimit: 10,
+  connectionLimit: 150, // 동시 연결을 처리하기 위해 connectionLimit을 50으로 증가
+  waitForConnections: true, // 연결이 가득 찬 경우 대기하도록 설정
+  idleTimeout: 60000, // 1분(60초) 이상 유휴 상태일 때 연결 해제
 });
 
 export const dbConnectTest = async () => {
