@@ -73,14 +73,11 @@ export async function GET(req: NextRequest) {
           acc.questions.push(questionEntry);
         }
 
-        console.log(value);
-
         if (type === "text") {
-          const target = gender_age.find((_, idx) => {
-            // const [gender, age] = e.split("_") as [Gender, string];
-            return value[idx];
+          const target = gender_age.find((e, idx) => {
+            console.log(value[idx]);
+            return value[idx] === "1";
           });
-
           const [gender, age] = target?.split("_") as [Gender, string];
 
           questionEntry.values?.push({

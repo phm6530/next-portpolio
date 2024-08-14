@@ -25,6 +25,10 @@ const FILTER_GENDER = [
 
 const FILTER_Age = [
   {
+    label: "전체보기",
+    val: "all",
+  },
+  {
     label: "10대",
     val: 10,
   },
@@ -110,6 +114,8 @@ export default function SurveyResult({ id }: { id: string }) {
       }
     };
 
+    const filterData = () => {};
+
     return (
       <>
         <div className={classes.summeryDetail}>
@@ -152,25 +158,42 @@ export default function SurveyResult({ id }: { id: string }) {
           })}
         </div>
 
+        {/* Test */}
         {questions.map((q, idx) => {
           if (q.type === "text") {
+            const filterData = q.values?.filter((e) => {
+              if (filter === "all") {
+                return ageGroup === "all" || e.age === ageGroup;
+              }
+              return (
+                e.gender === filter &&
+                (ageGroup === "all" || e.age === ageGroup)
+              );
+            });
             return (
               <div key={idx} className={classes.questionItem}>
                 <div className={classes.questionTitle}>{q.question}</div>
                 <div>
-                  {q.values
-                    ?.filter((e) => filter === "all" || e.gender === filter)
-                    .map((e, txtIdx) => (
-                      <div key={txtIdx}>
-                        {e.value} / {e.gender} {e.age}
-                      </div>
-                    ))}
+                  {filterData && filterData?.length > 0
+                    ? filterData.map((e, txtIdx) => (
+                        <div key={txtIdx}>
+                          {e.value} / {e.gender} {e.age}
+                        </div>
+                      ))
+                    : `${ageGroup}대${
+                        filter === "all"
+                          ? "는 참여자가 없네요.."
+                          : ` ${
+                              filter === "female" ? "여성" : "남성"
+                            }은 참여자가 없네요...`
+                      }`}
                 </div>
               </div>
             );
           } else {
             return (
               <div key={idx} className={classes.questionItem}>
+                {/* Select */}
                 <div className={classes.questionTitle}>{q.question}</div>
                 {q.options?.map((e, idx) => {
                   let cnt = 0;
