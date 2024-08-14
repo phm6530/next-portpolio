@@ -1,8 +1,9 @@
-import { FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import classes from "./Reply.module.scss";
 
 export default function ReplyForm() {
+  const [rows, setRows] = useState(4);
   const {
     handleSubmit,
     register,
@@ -15,6 +16,13 @@ export default function ReplyForm() {
 
   const test = Object.values(errors);
   const errorMessage = test[0]?.message;
+
+  //rows 커스텀
+  const rowsHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.currentTarget.value;
+    const newLineCount = value.split("\n").length - 1;
+    newLineCount > 4 ? setRows(newLineCount) : 4;
+  };
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={classes.replyForm}>
@@ -44,15 +52,16 @@ export default function ReplyForm() {
 
       <textarea
         className={classes.textArea}
-        rows={3}
+        rows={rows}
         {...register("reply", { required: "필수.." })}
+        onChange={rowsHandler}
         placeholder="욕설이나 비하 댓글을 삭제 될 수 있습니다. 타인에게 상처주는 말은 하지 말아주세요!"
       />
       {typeof errorMessage === "string" ? (
         <div className={classes.errorBoundary}>{errorMessage}</div>
       ) : null}
 
-      <button type="submit">제출입니다.</button>
+      <button type="submit">제출</button>
     </form>
   );
 }

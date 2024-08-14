@@ -7,7 +7,7 @@ import classes from "./SurveyResult.module.scss";
 import { useState } from "react";
 import { Gender } from "@/types/template";
 import Image from "next/image";
-import ReplyList from "@/app/_components/Reply/ReplyList";
+import ReplyContainer from "@/app/_components/Reply/ReplyContainer";
 
 const FILTER_GENDER = [
   {
@@ -254,7 +254,7 @@ export default function SurveyResult({ id }: { id: string }) {
           }
         })}
 
-        <ReplyList />
+        <ReplyContainer />
       </>
     );
   }

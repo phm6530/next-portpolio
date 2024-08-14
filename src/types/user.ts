@@ -1,6 +1,7 @@
 // User
 export type userProps = {
   username: string;
-  //   id: string;
+  userId?: string | null;
+  rule?: "visitor" | "admin";
   //   userProfileImg: string;
 };
