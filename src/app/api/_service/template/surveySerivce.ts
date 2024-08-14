@@ -3,10 +3,11 @@ import { withConnection, withTransition } from "@/app/lib/helperServer";
 import { InferObj } from "@/types/common";
 import {
   PostAddsurveyDetailProps,
+  SurveyType,
   templateItemProps,
   TemplateProps,
 } from "@/types/template";
-import { AddsurveyDetailProps, SurveyType } from "@/types/templateSurvey";
+import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { ResultSetHeader } from "mysql2";
 
 //Data Base ROWS 타입

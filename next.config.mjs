@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // reactStrictMode: false, // strict 모드
+  reactStrictMode: false, // strict 모드
   images: {
     domains: [
       "www.h-creations.com",

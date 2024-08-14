@@ -1,12 +1,12 @@
 import { withFetch } from "@/app/lib/helperClient";
-import { ResposetemplateDatas, TemplateProps } from "@/types/template";
+import { GetTemplateLists, TemplateProps } from "@/types/template";
 
 //getList
 export function fetchList(
   page: string,
   ftiler: string = "all"
-): Promise<ResposetemplateDatas> {
-  return withFetch<ResposetemplateDatas>(() => {
+): Promise<GetTemplateLists> {
+  return withFetch<GetTemplateLists>(() => {
     const queryParams = new URLSearchParams({
       page,
       ftiler,

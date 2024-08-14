@@ -13,7 +13,7 @@ export const withTransition = async <T>(
     await conn.commit();
     return result;
   } catch (error) {
-    console.error("Transaction failed: ", error);
+    // console.error("Transaction failed: ", error);
     if (conn) await conn.rollback();
     throw error;
   } finally {

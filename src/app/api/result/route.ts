@@ -52,6 +52,10 @@ export async function GET(req: NextRequest) {
         // 현재 question_id에 해당하는 질문이 이미 acc.questions에 있는지 확인
         let questionEntry = acc.questions.find((e) => e.id === question_id);
 
+        //gender + age 추출
+        const gender_age = Object.keys({ ...rest });
+        const value = Object.values({ ...rest });
+
         if (!questionEntry) {
           // 만약 없으면 새로 추가
           questionEntry = {
@@ -69,14 +73,12 @@ export async function GET(req: NextRequest) {
           acc.questions.push(questionEntry);
         }
 
-        //gender + age 추출
-        const gender_age = Object.keys({ ...rest });
-        const value = Object.values({ ...rest });
+        console.log(value);
 
         if (type === "text") {
           const target = gender_age.find((_, idx) => {
             // const [gender, age] = e.split("_") as [Gender, string];
-            return value[idx] === "1";
+            return value[idx];
           });
 
           const [gender, age] = target?.split("_") as [Gender, string];
@@ -86,6 +88,7 @@ export async function GET(req: NextRequest) {
             age: +age.slice(0, -1) as 10 | 20 | 30 | 40 | 50 | 60,
             value: text_answer,
           });
+
           return acc;
         } else {
           // // 해당 question에 option 추가

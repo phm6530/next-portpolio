@@ -30,7 +30,7 @@ export type templateMetaProps = {
   imgKey: string;
 };
 
-export type ResposetemplateDatas = {
+export type GetTemplateLists = {
   result: GetTemplateDetail[];
   cnt: number;
 };
