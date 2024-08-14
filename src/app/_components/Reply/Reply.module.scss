@@ -1,0 +1,25 @@
+@import "mixin";
+
+.replyForm {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3개의 동일한 너비의 칸 */
+  gap: 10px; /* 요소 간의 간격을 위해 추가 */
+
+  input,
+  .textArea {
+    @include inputStyles;
+  }
+
+  .textArea {
+    grid-column: 1 / -1; /* 전체 열을 차지 */
+  }
+
+  .errorBoundary {
+    grid-column: 1 / 4; /* 전체 3칸을 차지 */
+    color: $color-error-1;
+  }
+
+  button {
+    grid-column: 4 / 5; /* 버튼은 마지막 칸에 위치 */
+  }
+}

@@ -7,6 +7,7 @@ import classes from "./SurveyResult.module.scss";
 import { useState } from "react";
 import { Gender } from "@/types/template";
 import Image from "next/image";
+import ReplyList from "@/app/_components/Reply/ReplyList";
 
 const FILTER_GENDER = [
   {
@@ -51,7 +52,7 @@ const FILTER_Age = [
 ];
 
 export default function SurveyResult({ id }: { id: string }) {
-  const [filter, setFilter] = useState<"all" | Gender>("all");
+  const [genderGroup, setGenderGroup] = useState<"all" | Gender>("all");
   const [ageGroup, setAgeGroup] = useState<"all" | 10 | 20 | 30 | 40 | 50 | 60>(
     "all"
   );
@@ -89,7 +90,7 @@ export default function SurveyResult({ id }: { id: string }) {
     const filterGenderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
       const btnVal = e.currentTarget.value;
       if (btnVal === "all" || btnVal === "female" || btnVal === "male") {
-        setFilter(btnVal);
+        setGenderGroup(btnVal);
       }
     };
 
@@ -113,8 +114,6 @@ export default function SurveyResult({ id }: { id: string }) {
         );
       }
     };
-
-    const filterData = () => {};
 
     return (
       <>
@@ -162,11 +161,11 @@ export default function SurveyResult({ id }: { id: string }) {
         {questions.map((q, idx) => {
           if (q.type === "text") {
             const filterData = q.values?.filter((e) => {
-              if (filter === "all") {
+              if (genderGroup === "all") {
                 return ageGroup === "all" || e.age === ageGroup;
               }
               return (
-                e.gender === filter &&
+                e.gender === genderGroup &&
                 (ageGroup === "all" || e.age === ageGroup)
               );
             });
@@ -181,10 +180,10 @@ export default function SurveyResult({ id }: { id: string }) {
                         </div>
                       ))
                     : `${ageGroup}대${
-                        filter === "all"
+                        genderGroup === "all"
                           ? "는 참여자가 없네요.."
                           : ` ${
-                              filter === "female" ? "여성" : "남성"
+                              genderGroup === "female" ? "여성" : "남성"
                             }은 참여자가 없네요...`
                       }`}
                 </div>
@@ -195,29 +194,38 @@ export default function SurveyResult({ id }: { id: string }) {
               <div key={idx} className={classes.questionItem}>
                 {/* Select */}
                 <div className={classes.questionTitle}>{q.question}</div>
-                {q.options?.map((e, idx) => {
-                  let cnt = 0;
 
-                  if (filter === "all") {
-                    const femaleCnt = Object.values(e.user.female).reduce(
-                      (acc, cur) => acc + +cur,
-                      0
-                    );
-                    const maleCnt = Object.values(e.user.male).reduce(
-                      (acc, cur) => acc + +cur,
-                      0
-                    );
-                    cnt = maleCnt + femaleCnt;
-                  } else if (filter === "female") {
-                    cnt = Object.values(e.user.female).reduce(
-                      (acc, cur) => acc + +cur,
-                      0
-                    );
-                  } else if (filter === "male") {
-                    cnt = Object.values(e.user.male).reduce(
-                      (acc, cur) => acc + +cur,
-                      0
-                    );
+                {q.options?.map((e, idx) => {
+                  let cnt: number = 0;
+                  if (genderGroup === "all") {
+                    if (ageGroup !== "all") {
+                      const female = e.user.female[`${ageGroup}s`];
+                      const male = e.user.male[`${ageGroup}s`];
+
+                      cnt = Number(female) + Number(male);
+                    } else {
+                      const femaleCnt = Object.values(e.user.female).reduce(
+                        (acc, cur) => acc + +cur,
+                        0
+                      );
+                      const maleCnt = Object.values(e.user.male).reduce(
+                        (acc, cur) => acc + +cur,
+                        0
+                      );
+                      cnt = maleCnt + femaleCnt;
+                    }
+                  } else {
+                    // 특정 성별을 대상으로 함
+                    const genderData = e.user[genderGroup];
+
+                    if (ageGroup === "all") {
+                      cnt = Object.values(genderData).reduce(
+                        (acc, cur) => acc + +cur,
+                        0
+                      );
+                    } else {
+                      cnt = genderData[`${ageGroup}s`] || 0;
+                    }
                   }
 
                   return (
@@ -245,6 +253,8 @@ export default function SurveyResult({ id }: { id: string }) {
             );
           }
         })}
+
+        <ReplyList />
       </>
     );
   }

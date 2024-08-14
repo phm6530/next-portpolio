@@ -19,3 +19,14 @@
     background: darken($color, 10%);
   }
 }
+
+//Input Style
+@mixin inputStyles {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 1rem;
+  &:focus {
+    outline: none;
+  }
+}
