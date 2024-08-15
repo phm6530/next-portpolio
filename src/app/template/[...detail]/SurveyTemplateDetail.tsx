@@ -57,11 +57,8 @@ export default function SurveyTemplateDetail({
     return <LoadingSpier />;
   }
 
-  console.log(data);
-
   //Submit
   const onSubmitHandler = async (data: Record<string, string | Option[]>) => {
-    console.log({ surveyId, ...data });
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,

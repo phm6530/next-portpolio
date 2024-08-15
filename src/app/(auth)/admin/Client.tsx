@@ -10,7 +10,6 @@ export default function ClientTester() {
         throw new Error(errorData.message);
       }
       const data = await response.json();
-      console.log(data);
     } catch (error) {
       if (error instanceof Error) {
         console.error("API 호출 중 에러 발생:", error.message);

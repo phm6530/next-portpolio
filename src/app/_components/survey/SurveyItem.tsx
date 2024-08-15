@@ -54,8 +54,6 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
-  console.log(itemData);
-
   return (
     <div
       className={`tdd ${classes.surveyBox}`}

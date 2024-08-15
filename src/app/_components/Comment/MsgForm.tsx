@@ -1,6 +1,10 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+"use client";
+
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import classes from "./Reply.module.scss";
+import { useMutation } from "@tanstack/react-query";
+import { withFetch } from "@/app/lib/helperClient";
 
 export default function MsgForm() {
   const [rows, setRows] = useState(4);
@@ -10,8 +14,25 @@ export default function MsgForm() {
     formState: { errors },
   } = useForm();
 
+  const { mutate } = useMutation({
+    mutationFn: (data) =>
+      withFetch(async () => {
+        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      }),
+    onError: () => {
+      console.log("error!");
+    },
+  });
+
   const submitHandler = (data: any) => {
-    console.log("제출!!", data);
+    console.log("제출!");
+    mutate({ ...data, templateId: 1 });
   };
 
   const test = Object.values(errors);
@@ -32,8 +53,8 @@ export default function MsgForm() {
         className={classes.input}
         autoComplete="off"
         {...register("name", {
-          required: "필수..",
-          minLength: { value: 5, message: "최소 2글자" },
+          required: "이름은 필수입니다.",
+          minLength: { value: 2, message: "이름은 최소 2글자로 설정해주세요" },
         })}
       />
       <input
@@ -53,8 +74,14 @@ export default function MsgForm() {
       <textarea
         className={classes.textArea}
         rows={rows}
-        {...register("reply", { required: "필수.." })}
-        onChange={rowsHandler}
+        {...register("msg", {
+          required: "남기실 말은 필수입니다.",
+          onChange: rowsHandler,
+          minLength: {
+            value: 4,
+            message: "최소 4글자 남겨주세요!",
+          },
+        })}
         placeholder="욕설이나 비하 댓글을 삭제 될 수 있습니다. 타인에게 상처주는 말은 하지 말아주세요!"
       />
       {typeof errorMessage === "string" ? (

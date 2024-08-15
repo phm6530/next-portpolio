@@ -1,8 +1,8 @@
 import { withFetch } from "@/app/lib/helperClient";
-import { GetTemplateDetail, GetTemplateLists } from "@/types/template";
+import { GetTemplateDetail } from "@/types/template";
 import { ResultQuestion } from "@/types/templateSurvey";
 
-export async function fetchDetailResult(id: string) {
+export async function fetchDetailResult(id: number) {
   return withFetch<{
     templateResult: { questions: ResultQuestion[] };
     templateMeta: GetTemplateDetail;

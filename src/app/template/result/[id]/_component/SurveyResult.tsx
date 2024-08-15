@@ -2,12 +2,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { fetchDetailResult } from "@/app/_services/client/templateResult";
-import LoadingSpier from "@/app/_components/ui/loading/LoadingSpiner";
-import classes from "./SurveyResult.module.scss";
 import { useState } from "react";
 import { Gender } from "@/types/template";
+
+import LoadingSpier from "@/app/_components/ui/loading/LoadingSpiner";
+import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
-import CommentContainer from "@/app/_components/Comment/CommentContainer";
 import CommentSection from "@/app/_components/Comment/CommentSection";
 
 const FILTER_GENDER = [
@@ -52,7 +52,7 @@ const FILTER_Age = [
   },
 ];
 
-export default function SurveyResult({ id }: { id: string }) {
+export default function SurveyResult({ id }: { id: number }) {
   const [genderGroup, setGenderGroup] = useState<"all" | Gender>("all");
   const [ageGroup, setAgeGroup] = useState<"all" | 10 | 20 | 30 | 40 | 50 | 60>(
     "all"
@@ -254,9 +254,6 @@ export default function SurveyResult({ id }: { id: string }) {
             );
           }
         })}
-
-        {/* 댓글 */}
-        <CommentSection />
       </>
     );
   }

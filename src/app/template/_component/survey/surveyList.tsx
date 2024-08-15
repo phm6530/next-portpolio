@@ -16,8 +16,6 @@ export default function SurveyList({ page }: { page: number }) {
     staleTime: 10000,
   });
 
-  console.log(data);
-
   if (isLoading) {
     return "Loading....";
   }

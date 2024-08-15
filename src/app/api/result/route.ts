@@ -74,8 +74,7 @@ export async function GET(req: NextRequest) {
         }
 
         if (type === "text") {
-          const target = gender_age.find((e, idx) => {
-            console.log(value[idx]);
+          const target = gender_age.find((_, idx) => {
             return value[idx] === "1";
           });
           const [gender, age] = target?.split("_") as [Gender, string];

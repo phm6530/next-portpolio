@@ -10,7 +10,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 // template List Get
 export async function GET(req: NextRequest) {
-  console.log("요청!");
   try {
     const searchParams = req.nextUrl.searchParams;
     const pageParams = searchParams.get("page");

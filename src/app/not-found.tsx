@@ -6,10 +6,6 @@ import { useEffect } from "react";
 export default function NotFound() {
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(window.history);
-  }, []);
-
   const handleBack = () => {
     router.back();
   };

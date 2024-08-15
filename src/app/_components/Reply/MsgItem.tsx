@@ -10,7 +10,7 @@ dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 export default function MsgItem({
-  idx,
+  id,
   userId,
   username,
   create_at,
@@ -21,7 +21,6 @@ export default function MsgItem({
   return (
     <div className={classes.MsgWrap}>
       <div>
-        {userId}
         {username} {rule === "admin" && "M"}
         <span>{dayjs(create_at).fromNow()}</span>
         <button type="button">삭제</button>

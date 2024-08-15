@@ -47,7 +47,6 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
 
   //로컬 시간 데이터 임시저장
   const tempSave = () => {
-    console.log(formState.getValues());
     localStorage.setItem("savedTime", nowDate);
     localStorage.setItem(template, JSON.stringify(formState.getValues()));
 

@@ -19,8 +19,7 @@ export async function GET(
     const [templateType, DetailId] = params.detail;
     if (templateType === "survey") {
       const result = await getSurveyDetail(DetailId);
-      // JSON 응답
-      console.log("응답");
+
       return NextResponse.json(result);
     } else {
       throw new Error("잘못된 경로 입니다.");
