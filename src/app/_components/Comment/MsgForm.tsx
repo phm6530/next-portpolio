@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import classes from "./Reply.module.scss";
 
-export default function ReplyForm() {
+export default function MsgForm() {
   const [rows, setRows] = useState(4);
   const {
     handleSubmit,
