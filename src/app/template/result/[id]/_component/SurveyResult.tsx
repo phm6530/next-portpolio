@@ -5,10 +5,8 @@ import { fetchDetailResult } from "@/app/_services/client/templateResult";
 import { useState } from "react";
 import { Gender } from "@/types/template";
 
-import LoadingSpier from "@/app/_components/ui/loading/LoadingSpiner";
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
-import CommentSection from "@/app/_components/Comment/CommentSection";
 
 const FILTER_GENDER = [
   {
@@ -58,7 +56,7 @@ export default function SurveyResult({ id }: { id: number }) {
     "all"
   );
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["default", id],
     queryFn: () => fetchDetailResult(id),
     staleTime: 10000,
@@ -66,10 +64,6 @@ export default function SurveyResult({ id }: { id: number }) {
       return data;
     },
   });
-
-  if (isLoading) {
-    return <LoadingSpier />;
-  }
 
   if (isError) {
     notFound();

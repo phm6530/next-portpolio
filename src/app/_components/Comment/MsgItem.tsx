@@ -1,28 +1,55 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import classes from "./Reply.module.scss";
-import "dayjs/locale/ko";
+
 import { userProps } from "@/types/user";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
+import { useMutation } from "@tanstack/react-query";
+import { withFetch } from "@/app/lib/helperClient";
+
+import "dayjs/locale/ko";
 
 //import
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 export default function MsgItem({
-  id,
+  comment_id,
+  reply_id,
   userId,
   username,
   create_at,
   msg,
   role,
 }: Omit<MessageProps, "user" | "reply"> & userProps) {
+  const { mutate } = useMutation({
+    mutationFn: (data) =>
+      withFetch(async () => {
+        const url = "";
+        return fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      }),
+  });
+
+  const deleteMessage = () => {
+    console.log("comment", comment_id);
+    console.log("reply", reply_id);
+    alert("!!");
+  };
+
   return (
     <div className={classes.MsgWrap}>
       <div>
         {username} {role === "admin" ? "M" : null}
         <span>{dayjs(create_at).fromNow()}</span>
-        <button type="button">삭제</button>
+        <button type="button" onClick={deleteMessage}>
+          삭제
+        </button>
       </div>
       <div className={classes.msgContents}>{msg}</div>
     </div>

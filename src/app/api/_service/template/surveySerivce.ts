@@ -1,5 +1,5 @@
 import { selectTemlateDetail } from "@/app/api/_dao/template/templateRepository";
-import { withConnection, withTransition } from "@/app/lib/helperServer";
+import { withConnection, withTransaction } from "@/app/lib/helperServer";
 import { InferObj } from "@/types/common";
 import {
   PostAddsurveyDetailProps,
@@ -95,7 +95,7 @@ export async function postSurveyDetail(
   DetailId: string
 ) {
   const { surveyId, gender, ageGroup, ...rest } = data;
-  return withTransition<ResultSetHeader>(async (conn) => {
+  return withTransaction<ResultSetHeader>(async (conn) => {
     //참여자 Insert Return값은 Id
     const insertUser_Sql = `
       INSERT INTO 

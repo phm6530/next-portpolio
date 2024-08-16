@@ -1,7 +1,7 @@
 import { selectTemplateMetaData } from "@/app/api/_dao/template/templateRepository";
 import { selectTemplateResult } from "@/app/api/_dao/template/templateRepository";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { withTransition } from "@/app/lib/helperServer";
+import { withTransaction } from "@/app/lib/helperServer";
 import { Gender } from "@/types/template";
 import { ResultQuestion } from "@/types/templateSurvey";
 import { PoolConnection } from "mysql2/promise";
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     }
 
     //Transtion
-    const { data, templateMeta } = await withTransition(async (conn) => {
+    const { data, templateMeta } = await withTransaction(async (conn) => {
       //Detail
       const data = await selectTemplateResult(conn, templateId);
       //페이징 파라미터

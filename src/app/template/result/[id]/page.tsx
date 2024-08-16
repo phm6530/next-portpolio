@@ -45,13 +45,13 @@ export default async function resultPage({
   const templateId = +params.id;
 
   await queryClient.prefetchQuery({
-    queryKey: ["default", params.id],
+    queryKey: ["default", templateId],
     queryFn: () => fetchDetailResult(templateId),
     staleTime: 10000,
   });
 
   await queryClient.prefetchQuery({
-    queryKey: ["Comment"],
+    queryKey: ["comment"],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(

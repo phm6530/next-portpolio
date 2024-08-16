@@ -2,7 +2,7 @@ import pool from "@/app/config/db";
 import { PoolConnection } from "mysql2/promise";
 
 //트랜잭션 생성
-export const withTransition = async <T>(
+export const withTransaction = async <T>(
   callback: (conn: PoolConnection) => Promise<T>
 ): Promise<T> => {
   const conn = await pool.getConnection();

@@ -20,6 +20,8 @@ export async function GET(req: NextRequest) {
 
     const result = await getCommentList(+templateId);
 
+    console.log(result);
+
     return NextResponse.json(result);
   } catch (error) {
     return apiErrorHandler(error);
@@ -39,7 +41,6 @@ export async function POST(req: NextRequest) {
       //익명 댓글
       await postComment(data);
     }
-
     return NextResponse.json({ message: "success" });
   } catch (error) {
     return apiErrorHandler(error);

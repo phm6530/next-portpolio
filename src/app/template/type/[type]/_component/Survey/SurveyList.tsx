@@ -1,12 +1,9 @@
 "use client";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import {
-  AddSurveyFormProps,
-  surveyParams,
-  SurveyType,
-} from "@/types/templateSurvey";
+import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import SurveyTypeSelect from "@/app/template/type/[type]/_component/Survey/SurveyTypeSelect";
 import { useParams } from "next/navigation";
+import { SurveyType } from "@/types/template";
 
 export default function SurveyList() {
   const {

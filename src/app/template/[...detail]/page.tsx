@@ -1,5 +1,5 @@
-import RankTemplateDetail from "@/app/template/[...detail]/RankTemplateDetail";
-import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
+// import RankTemplateDetail from "@/app/template/[...detail]/RankTemplateDetail";
+// import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
 
 import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
@@ -7,6 +7,18 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
+
+// Dynamic import of components
+const DynamicSurveyTemplateDetail = dynamic(
+  () => import("@/app/template/[...detail]/SurveyTemplateDetail"),
+  { ssr: false, loading: () => <p>Loading Survey Template...</p> } // This makes sure it's only loaded on the client side
+);
+
+const DynamicRankTemplateDetail = dynamic(
+  () => import("@/app/template/[...detail]/RankTemplateDetail"),
+  { ssr: false, loading: () => <p>Loading Survey Template...</p> } // This makes sure it's only loaded on the client side
+);
 
 const vaildateTemplateType = ["survey", "rank"] as const;
 export type TemplateUnionType = (typeof vaildateTemplateType)[number];
@@ -80,14 +92,14 @@ export default async function Page({
         {(() => {
           if (templateType === "survey") {
             return (
-              <SurveyTemplateDetail
+              <DynamicSurveyTemplateDetail
                 templateType={templateType}
                 surveyId={+id}
               />
             );
           }
           if (templateType === "rank") {
-            return <RankTemplateDetail />;
+            return <DynamicRankTemplateDetail />;
           }
         })()}
       </HydrationBoundary>

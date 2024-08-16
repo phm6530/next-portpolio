@@ -1,7 +1,7 @@
 import { insertQuestion } from "@/app/api/_dao/template/SurveyRepository";
 
 import { getTemplateId } from "@/app/lib/utilFunc";
-import { withConnection, withTransition } from "@/app/lib/helperServer";
+import { withConnection, withTransaction } from "@/app/lib/helperServer";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import {
   insertTemplateMeta,
@@ -21,7 +21,7 @@ export async function postAddTemplate(
   const template_id = getTemplateId(template) as number;
 
   //meta Post
-  await withTransition(async (conn) => {
+  await withTransaction(async (conn) => {
     //save metaData
     const savedMeta = await insertTemplateMeta(conn, { template_id, ...rest });
 

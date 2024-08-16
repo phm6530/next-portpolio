@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/app/lib/helperClient";
 import { queryClient } from "@/app/config/queryClient";
+
 export default function MsgForm({
   templateId,
   commentId,
@@ -35,7 +36,7 @@ export default function MsgForm({
       }),
     onSuccess: () => {
       reset(); //폼 초기화
-      queryClient.invalidateQueries({ queryKey: ["Comment"] });
+      queryClient.invalidateQueries({ queryKey: ["comment"] });
     },
     onError: () => {
       console.log("error!");

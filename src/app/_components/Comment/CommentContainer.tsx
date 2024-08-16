@@ -5,13 +5,13 @@ import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import ReplyContainer from "@/app/_components/Comment/ReplyContainer";
 
 export default function CommentContainer({
-  commentId,
+  comment_id,
   comment,
   commentIdx,
   replyIdx,
   setReplyIdx,
 }: {
-  commentId: number;
+  comment_id?: number;
   comment: MessageProps;
   commentIdx: number;
   replyIdx: null | number;
@@ -20,15 +20,17 @@ export default function CommentContainer({
   const [viewReply, setViewReply] = useState(true);
 
   const formHandler = () => {
+    setViewReply(true); // 글쓰기 누르면 댓글 List 펼치기
     setReplyIdx((prev) => {
-      return prev === commentIdx ? null : commentIdx;
+      return !viewReply ? commentIdx : prev === commentIdx ? null : commentIdx;
     });
   };
 
   return (
     <div className={classes.commentWrapper}>
       <MsgItem
-        id={comment.id}
+        //commentId만 전달.
+        comment_id={comment_id}
         userId={comment.user.userId}
         username={comment.user.username}
         create_at={comment.create_at}
@@ -49,7 +51,7 @@ export default function CommentContainer({
       </div>
       {viewReply && (
         <ReplyContainer
-          commentId={commentId}
+          comment_id={comment_id}
           commentIdx={commentIdx}
           replys={comment.reply}
           replyIdx={replyIdx}

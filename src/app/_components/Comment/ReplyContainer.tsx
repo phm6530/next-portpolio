@@ -4,18 +4,22 @@ import MsgForm from "@/app/_components/Comment/MsgForm";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 
 export default function ReplyContainer({
-  commentId,
+  comment_id,
   commentIdx,
   replys,
   replyIdx,
   formHandler,
 }: {
-  commentId: number;
+  comment_id?: number;
   commentIdx: number;
   replys: MessageProps["reply"];
   replyIdx: null | number;
   formHandler: () => void;
 }) {
+  if (!replys) {
+    return null; // replys가 없는 경우, 빈 상태를 명확히 처리
+  }
+
   return (
     <>
       <div
@@ -28,7 +32,7 @@ export default function ReplyContainer({
             return (
               <MsgItem
                 key={`reply-${idx}`}
-                id={e.id}
+                reply_id={e.reply_id}
                 userId={e.user.userId}
                 username={e.user.username}
                 create_at={e.create_at}
@@ -40,7 +44,7 @@ export default function ReplyContainer({
         {replys!.length === 0 ? null : (
           <button onClick={formHandler}>답글 쓰기 </button>
         )}
-        {commentIdx === replyIdx && <MsgForm commentId={commentId} />}
+        {commentIdx === replyIdx && <MsgForm commentId={comment_id} />}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import selectCommentList from "@/app/api/_dao/commentRepositroy";
-import { withConnection, withTransition } from "@/app/lib/helperServer";
+import { withConnection, withTransaction } from "@/app/lib/helperServer";
 import { userProps } from "@/types/user";
 import bcrypt from "bcrypt";
 import { ResultSetHeader } from "mysql2";
@@ -40,7 +40,7 @@ export async function postComment(data: postCommentProps) {
 
   // Id Check
   if (commentId || templateId) {
-    await withTransition(async (conn) => {
+    await withTransaction(async (conn) => {
       // 사용자 정보 삽입
       const insertUserSql = `
         INSERT INTO 
@@ -54,7 +54,7 @@ export async function postComment(data: postCommentProps) {
         role,
       ]);
 
-      // 댓글인지 대댓글인지에 따라 다른 테이블에 삽입
+      // 댓글인지 대댓글인지
       const insertCommentSql = commentId
         ? `
           INSERT INTO 
@@ -67,13 +67,19 @@ export async function postComment(data: postCommentProps) {
           VALUES (now(), ?, ?, ?);
         `;
 
+      console.log(insertCommentSql);
+
       const whereId = commentId || templateId;
 
-      await conn.query<ResultSetHeader>(insertCommentSql, [
+      console.log("whereId::", whereId);
+
+      const [row] = await conn.query<ResultSetHeader>(insertCommentSql, [
         msg,
         whereId,
         visitorResult.insertId,
       ]);
+
+      console.log(row);
     });
   } else {
     throw new Error("요청이 잘못 되었습니다.");
@@ -90,10 +96,11 @@ export async function getCommentList(templateId: number) {
 
   //구조 변경
   const comment = data.reduce<MessageProps[]>((acc, cur) => {
-    const find = acc.find((e) => e.id === cur.comment_id);
+    const find = acc.find((e) => e.comment_id === cur.comment_id);
+
     if (!find) {
       acc.push({
-        id: cur.comment_id,
+        comment_id: cur.comment_id,
         create_at: cur.comment_created_at,
         msg: cur.comment_message,
         user: {
@@ -101,25 +108,39 @@ export async function getCommentList(templateId: number) {
           userId: cur.comment_user_id,
           role: cur.comment_user_role,
         },
-        reply: [],
+        reply: cur.reply_id
+          ? [
+              {
+                reply_id: cur.reply_id,
+                create_at: cur.reply_created_at,
+                msg: cur.reply_message,
+                user: {
+                  username: cur.reply_user_nick,
+                  userId: cur.reply_user_id,
+                  role: cur.reply_user_role,
+                },
+              },
+            ]
+          : [],
       });
     } else {
-      find.reply.push({
-        id: cur.reply_id,
-        create_at: cur.reply_created_at,
-        msg: cur.reply_message,
-        user: {
-          username: cur.reply_user_nick,
-          userId: cur.reply_user_id,
-          role: cur.reply_user_role,
-        },
-      });
+      if (cur.reply_id) {
+        // reply_id가 존재할 경우에만 push
+        find.reply.push({
+          reply_id: cur.reply_id,
+          create_at: cur.reply_created_at,
+          msg: cur.reply_message,
+          user: {
+            username: cur.reply_user_nick,
+            userId: cur.reply_user_id,
+            role: cur.reply_user_role,
+          },
+        });
+      }
     }
 
     return acc;
   }, []);
-
-  console.log("1 호출");
 
   return comment;
 }

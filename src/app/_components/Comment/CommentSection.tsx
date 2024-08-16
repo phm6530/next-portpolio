@@ -9,7 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export type MessageProps = {
-  id: number;
+  //각 Id로 분기처리
+  comment_id?: number;
+  reply_id?: number;
+
   msg: string;
   user: Required<userProps>;
   create_at: string;
@@ -19,7 +22,7 @@ export type MessageProps = {
 export default function CommentSection({ templateId }: { templateId: number }) {
   const [replyIdx, setReplyIdx] = useState<number | null>(null);
   const { data, isError } = useQuery({
-    queryKey: ["Comment"],
+    queryKey: ["comment"],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(
@@ -54,7 +57,7 @@ export default function CommentSection({ templateId }: { templateId: number }) {
                 >
                   {/* Comment */}
                   <CommentContainer
-                    commentId={comment.id}
+                    comment_id={comment.comment_id}
                     comment={comment}
                     commentIdx={CommentIdx}
                     replyIdx={replyIdx}
