@@ -9,6 +9,7 @@ import { withFetch } from "@/app/lib/helperClient";
 
 import "dayjs/locale/ko";
 import { queryClient } from "@/app/config/queryClient";
+import { useSession } from "next-auth/react";
 
 //import
 dayjs.extend(relativeTime);
@@ -23,6 +24,12 @@ export default function MsgItem({
   msg,
   role,
 }: Omit<MessageProps, "user" | "reply"> & userProps) {
+  const { data: session } = useSession(); // 세션
+  const { user } = session as {
+    user: { id: string; nickName: string; role: string };
+  };
+  const isOwner = userId === user.id;
+
   const { mutate } = useMutation<
     unknown,
     Error,
@@ -60,9 +67,11 @@ export default function MsgItem({
       <div>
         {username} {role === "admin" ? "M" : null}
         <span>{dayjs(create_at).fromNow()}</span>
-        <button type="button" onClick={deleteMessage}>
-          삭제
-        </button>
+        {(role === "visitor" || isOwner) && (
+          <button type="button" onClick={deleteMessage}>
+            삭제
+          </button>
+        )}
       </div>
       <div className={classes.msgContents}>{msg}</div>
     </div>
