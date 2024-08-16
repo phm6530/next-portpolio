@@ -1,12 +1,16 @@
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import selectCommentList from "@/app/api/_dao/commentRepositroy";
-import { withConnection } from "@/app/lib/helperServer";
+import { withConnection, withTransition } from "@/app/lib/helperServer";
 import { userProps } from "@/types/user";
+import bcrypt from "bcrypt";
+import { ResultSetHeader } from "mysql2";
 
 type postCommentProps = {
   name: string;
   password: string;
-  reply: string;
+  msg: string;
+  templateId?: number;
+  commentId?: number;
 };
 
 //CommentList + Reply
@@ -14,19 +18,66 @@ export type GetCommentListProps = {
   // comment
   comment_id: number;
   comment_created_at: string;
-  comment: string;
-  comment_user: Required<userProps>;
+  comment_message: string;
+  comment_user_role: userProps["role"];
+  comment_user_id: string;
+  comment_user_nick: string;
 
   //Reply
   reply_id: number;
-  reply_message: string;
-  reply_user: Required<userProps>;
   reply_created_at: string;
+  reply_message: string;
+  reply_user_role: userProps["role"];
+  reply_user_id: string;
+  reply_user_nick: string;
 };
 
 export async function postComment(data: postCommentProps) {
-  console.log(data);
-  return 1;
+  const { name: nickName, password, msg, templateId, commentId } = data;
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const role = "visitor"; // 익명 사용자
+
+  // Id Check
+  if (commentId || templateId) {
+    await withTransition(async (conn) => {
+      // 사용자 정보 삽입
+      const insertUserSql = `
+        INSERT INTO 
+          user_visitor (nick_name, password, role) 
+        VALUES (?, ?, ?);
+      `;
+
+      const [visitorResult] = await conn.query<ResultSetHeader>(insertUserSql, [
+        nickName,
+        hashedPassword,
+        role,
+      ]);
+
+      // 댓글인지 대댓글인지에 따라 다른 테이블에 삽입
+      const insertCommentSql = commentId
+        ? `
+          INSERT INTO 
+            result_reply (created_at, message, comment_id, visitor_id) 
+          VALUES (now(), ?, ?, ?);
+        `
+        : `
+          INSERT INTO 
+            result_comment (created_at, message, template_id, visitor_id) 
+          VALUES (now(), ?, ?, ?);
+        `;
+
+      const whereId = commentId || templateId;
+
+      await conn.query<ResultSetHeader>(insertCommentSql, [
+        msg,
+        whereId,
+        visitorResult.insertId,
+      ]);
+    });
+  } else {
+    throw new Error("요청이 잘못 되었습니다.");
+  }
 }
 
 export async function getCommentList(templateId: number) {
@@ -44,11 +95,11 @@ export async function getCommentList(templateId: number) {
       acc.push({
         id: cur.comment_id,
         create_at: cur.comment_created_at,
-        msg: cur.comment,
+        msg: cur.comment_message,
         user: {
-          username: "리슨업",
-          userId: "squirrel309",
-          rule: "admin",
+          username: cur.comment_user_nick,
+          userId: cur.comment_user_id,
+          role: cur.comment_user_role,
         },
         reply: [],
       });
@@ -58,15 +109,17 @@ export async function getCommentList(templateId: number) {
         create_at: cur.reply_created_at,
         msg: cur.reply_message,
         user: {
-          username: "리슨업",
-          userId: "squirrel309",
-          rule: "admin",
+          username: cur.reply_user_nick,
+          userId: cur.reply_user_id,
+          role: cur.reply_user_role,
         },
       });
     }
 
     return acc;
   }, []);
+
+  console.log("1 호출");
 
   return comment;
 }

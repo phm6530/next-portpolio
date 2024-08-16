@@ -15,13 +15,12 @@ export default function MsgItem({
   username,
   create_at,
   msg,
-  rule,
-}: Omit<MessageProps, "user" | "reply"> &
-  userProps & { rule: "visitor" | "admin" }) {
+  role,
+}: Omit<MessageProps, "user" | "reply"> & userProps) {
   return (
     <div className={classes.MsgWrap}>
       <div>
-        {username} {rule === "admin" && "M"}
+        {username} {role === "admin" ? "M" : null}
         <span>{dayjs(create_at).fromNow()}</span>
         <button type="button">삭제</button>
       </div>

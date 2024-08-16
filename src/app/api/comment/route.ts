@@ -3,7 +3,7 @@ import {
   postComment,
 } from "@/app/api/_service/template/commentService";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 //초기 Comment 가져오기
@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
     if (!templateId) {
       throw new Error("template 값 누락");
     }
+
     const result = await getCommentList(+templateId);
 
     return NextResponse.json(result);
@@ -27,12 +28,18 @@ export async function GET(req: NextRequest) {
 
 // Post 가져오기
 export async function POST(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
-  const pageParams = searchParams.get("templateId");
-
   try {
+    const session = await auth();
+
     const data = await req.json();
-    postComment(data);
+
+    if (session) {
+      // 아직 미 개발, ,,
+    } else {
+      //익명 댓글
+      await postComment(data);
+    }
+
     return NextResponse.json({ message: "success" });
   } catch (error) {
     return apiErrorHandler(error);

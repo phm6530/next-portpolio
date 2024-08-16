@@ -23,7 +23,10 @@ export default function CommentSection({ templateId }: { templateId: number }) {
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
+          {
+            cache: "no-cache",
+          }
         );
       }),
     staleTime: 10000,
@@ -40,7 +43,7 @@ export default function CommentSection({ templateId }: { templateId: number }) {
         <h1>댓글 {data.length} 개</h1>
 
         {/* Msg - Form */}
-        <MsgForm />
+        <MsgForm templateId={templateId} />
 
         {data.length > 0
           ? data.map((comment, CommentIdx) => {
@@ -51,8 +54,9 @@ export default function CommentSection({ templateId }: { templateId: number }) {
                 >
                   {/* Comment */}
                   <CommentContainer
+                    commentId={comment.id}
                     comment={comment}
-                    CommentIdx={CommentIdx}
+                    commentIdx={CommentIdx}
                     replyIdx={replyIdx}
                     setReplyIdx={setReplyIdx}
                   />

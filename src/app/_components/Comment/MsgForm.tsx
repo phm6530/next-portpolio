@@ -1,20 +1,28 @@
 "use client";
 
+import classes from "./Reply.module.scss";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import classes from "./Reply.module.scss";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/app/lib/helperClient";
-
-export default function MsgForm() {
+import { queryClient } from "@/app/config/queryClient";
+export default function MsgForm({
+  templateId,
+  commentId,
+}: {
+  templateId?: number;
+  commentId?: number;
+}) {
   const [rows, setRows] = useState(4);
+
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data) =>
       withFetch(async () => {
         return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`, {
@@ -25,14 +33,23 @@ export default function MsgForm() {
           body: JSON.stringify(data),
         });
       }),
+    onSuccess: () => {
+      reset(); //폼 초기화
+      queryClient.invalidateQueries({ queryKey: ["Comment"] });
+    },
     onError: () => {
       console.log("error!");
     },
   });
 
   const submitHandler = (data: any) => {
-    console.log("제출!");
-    mutate({ ...data, templateId: 1 });
+    if (templateId) {
+      mutate({ ...data, templateId, type: "comment" });
+    } else if (commentId) {
+      mutate({ ...data, commentId, type: "reply" });
+    } else {
+      return 0 as never;
+    }
   };
 
   const test = Object.values(errors);
@@ -88,7 +105,9 @@ export default function MsgForm() {
         <div className={classes.errorBoundary}>{errorMessage}</div>
       ) : null}
 
-      <button type="submit">제출</button>
+      <button type="submit" disabled={isPending}>
+        제출
+      </button>
     </form>
   );
 }

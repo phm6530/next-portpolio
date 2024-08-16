@@ -5,13 +5,15 @@ import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import ReplyContainer from "@/app/_components/Comment/ReplyContainer";
 
 export default function CommentContainer({
+  commentId,
   comment,
-  CommentIdx,
+  commentIdx,
   replyIdx,
   setReplyIdx,
 }: {
+  commentId: number;
   comment: MessageProps;
-  CommentIdx: number;
+  commentIdx: number;
   replyIdx: null | number;
   setReplyIdx: React.Dispatch<SetStateAction<number | null>>;
 }) {
@@ -19,7 +21,7 @@ export default function CommentContainer({
 
   const formHandler = () => {
     setReplyIdx((prev) => {
-      return prev === CommentIdx ? null : CommentIdx;
+      return prev === commentIdx ? null : commentIdx;
     });
   };
 
@@ -31,7 +33,7 @@ export default function CommentContainer({
         username={comment.user.username}
         create_at={comment.create_at}
         msg={comment.msg}
-        rule={comment.user.rule}
+        role={comment.user.role}
       />
       <div className={classes.commentBtnWrap}>
         {comment.reply && comment.reply.length > 0 && (
@@ -47,7 +49,8 @@ export default function CommentContainer({
       </div>
       {viewReply && (
         <ReplyContainer
-          CommentIdx={CommentIdx}
+          commentId={commentId}
+          commentIdx={commentIdx}
           replys={comment.reply}
           replyIdx={replyIdx}
           formHandler={formHandler}

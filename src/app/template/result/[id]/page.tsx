@@ -55,7 +55,10 @@ export default async function resultPage({
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
+          {
+            cache: "no-cache",
+          }
         );
       }),
     staleTime: 10000,

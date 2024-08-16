@@ -24,7 +24,10 @@
   npm i next-auth<br>
   npm i mysql2<br>
   npm i @types/multer & multer<br>
-  npm install nodemailer
+  npm install nodemailer <br><br>
+- 암호화
+  npm install bcrypt<br>
+  npm install @types/bcrypt --save-dev
 
 # 진척도
 

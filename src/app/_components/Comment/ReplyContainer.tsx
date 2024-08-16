@@ -4,12 +4,14 @@ import MsgForm from "@/app/_components/Comment/MsgForm";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 
 export default function ReplyContainer({
-  CommentIdx,
+  commentId,
+  commentIdx,
   replys,
   replyIdx,
   formHandler,
 }: {
-  CommentIdx: number;
+  commentId: number;
+  commentIdx: number;
   replys: MessageProps["reply"];
   replyIdx: null | number;
   formHandler: () => void;
@@ -31,14 +33,14 @@ export default function ReplyContainer({
                 username={e.user.username}
                 create_at={e.create_at}
                 msg={e.msg}
-                rule={e.user.rule}
+                role={e.user.role}
               />
             );
           })}
         {replys!.length === 0 ? null : (
           <button onClick={formHandler}>답글 쓰기 </button>
         )}
-        {CommentIdx === replyIdx && <MsgForm />}
+        {commentIdx === replyIdx && <MsgForm commentId={commentId} />}
       </div>
     </>
   );

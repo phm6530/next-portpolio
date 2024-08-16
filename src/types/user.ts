@@ -2,6 +2,6 @@
 export type userProps = {
   username: string;
   userId?: string | null;
-  rule?: "visitor" | "admin";
+  role: "visitor" | "admin";
   //   userProfileImg: string;
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { signIn, SignInResponse } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function LoginForm({
@@ -10,7 +9,6 @@ export default function LoginForm({
   redirectPath: string;
 }) {
   const [error, setError] = useState<string>("");
-  const router = useRouter();
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
