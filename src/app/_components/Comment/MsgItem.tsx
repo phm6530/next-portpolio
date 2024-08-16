@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/app/lib/helperClient";
 
 import "dayjs/locale/ko";
+import { queryClient } from "@/app/config/queryClient";
 
 //import
 dayjs.extend(relativeTime);
@@ -22,10 +23,10 @@ export default function MsgItem({
   msg,
   role,
 }: Omit<MessageProps, "user" | "reply"> & userProps) {
-  const { mutate, data } = useMutation<
+  const { mutate } = useMutation<
     unknown,
     Error,
-    Pick<MessageProps, "comment_id" | "reply_id">
+    Pick<MessageProps, "comment_id" | "reply_id"> & { msgPassword: string }
   >({
     mutationFn: (data) =>
       withFetch(async () => {
@@ -38,12 +39,18 @@ export default function MsgItem({
           body: JSON.stringify(data),
         });
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["comment"],
+      });
+    },
   });
 
   const deleteMessage = () => {
-    if (confirm("삭제하시겠습니까?")) {
+    const msgPassword = prompt("비밀번호를 입력해주세요");
+    if (msgPassword) {
       if (comment_id || reply_id) {
-        mutate({ comment_id, reply_id });
+        mutate({ comment_id, reply_id, msgPassword });
       }
     }
   };
