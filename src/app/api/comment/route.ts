@@ -46,3 +46,11 @@ export async function POST(req: NextRequest) {
     return apiErrorHandler(error);
   }
 }
+
+export async function DELETE() {
+  try {
+    return NextResponse.json({ message: "success" });
+  } catch (error) {
+    return apiErrorHandler(error);
+  }
+}

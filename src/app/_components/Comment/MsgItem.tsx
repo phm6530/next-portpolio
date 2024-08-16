@@ -22,12 +22,16 @@ export default function MsgItem({
   msg,
   role,
 }: Omit<MessageProps, "user" | "reply"> & userProps) {
-  const { mutate } = useMutation({
+  const { mutate, data } = useMutation<
+    unknown,
+    Error,
+    Pick<MessageProps, "comment_id" | "reply_id">
+  >({
     mutationFn: (data) =>
       withFetch(async () => {
-        const url = "";
+        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`;
         return fetch(url, {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -37,9 +41,11 @@ export default function MsgItem({
   });
 
   const deleteMessage = () => {
-    console.log("comment", comment_id);
-    console.log("reply", reply_id);
-    alert("!!");
+    if (confirm("삭제하시겠습니까?")) {
+      if (comment_id || reply_id) {
+        mutate({ comment_id, reply_id });
+      }
+    }
   };
 
   return (
