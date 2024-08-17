@@ -1,6 +1,6 @@
 "use client";
 
-import classes from "./Reply.module.scss";
+import classes from "./Msg.module.scss";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";

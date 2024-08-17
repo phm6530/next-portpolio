@@ -1,12 +1,14 @@
 "use client";
 
 import MsgForm from "@/app/_components/Comment/MsgForm";
-import { userProps } from "@/types/user";
-import classes from "./Reply.module.scss";
+import classes from "./Msg.module.scss";
 import CommentContainer from "@/app/_components/Comment/CommentContainer";
+
+import { userProps } from "@/types/user";
 import { withFetch } from "@/app/lib/helperClient";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { queryClient } from "@/app/config/queryClient";
 
 export type MessageProps = {
   //각 Id로 분기처리
@@ -21,7 +23,7 @@ export type MessageProps = {
 
 export default function CommentSection({ templateId }: { templateId: number }) {
   const [replyIdx, setReplyIdx] = useState<number | null>(null);
-  const { data, isError } = useQuery({
+  const { data, isError, isLoading } = useQuery<MessageProps[]>({
     queryKey: ["comment"],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
@@ -33,10 +35,15 @@ export default function CommentSection({ templateId }: { templateId: number }) {
         );
       }),
     staleTime: 10000,
+    enabled: !!templateId, // templateId가 있을 때만 쿼리 실행
+    initialData: queryClient.getQueryData(["comment"]),
   });
 
   if (isError) {
     return "Error!!";
+  }
+  if (isLoading) {
+    return "loading...";
   }
 
   if (data) {

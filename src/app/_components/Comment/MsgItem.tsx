@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import classes from "./Reply.module.scss";
+import classes from "./Msg.module.scss";
 
 import { userProps } from "@/types/user";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
@@ -25,15 +25,11 @@ export default function MsgItem({
   role,
 }: Omit<MessageProps, "user" | "reply"> & userProps) {
   const { data: session } = useSession(); // 세션
-  const { user } = session as {
-    user: { id: string; nickName: string; role: string };
-  };
-  const isOwner = userId === user.id;
 
   const { mutate } = useMutation<
     unknown,
     Error,
-    Pick<MessageProps, "comment_id" | "reply_id"> & { msgPassword: string }
+    Pick<MessageProps, "comment_id" | "reply_id"> & { msgPassword?: string }
   >({
     mutationFn: (data) =>
       withFetch(async () => {
@@ -53,7 +49,14 @@ export default function MsgItem({
     },
   });
 
+  console.log(userId);
+
   const deleteMessage = () => {
+    if (session && role === "admin") {
+      confirm("삭제하시겠습니까?") && mutate({ comment_id, reply_id });
+      return;
+    }
+
     const msgPassword = prompt("비밀번호를 입력해주세요");
     if (msgPassword) {
       if (comment_id || reply_id) {
@@ -65,9 +68,10 @@ export default function MsgItem({
   return (
     <div className={classes.MsgWrap}>
       <div>
-        {username} {role === "admin" ? "M" : null}
+        {username}
+        {role === "admin" ? <span className="admin_icon">M</span> : null}
         <span>{dayjs(create_at).fromNow()}</span>
-        {(role === "visitor" || isOwner) && (
+        {(role === "visitor" || userId === session?.user.id) && (
           <button type="button" onClick={deleteMessage}>
             삭제
           </button>

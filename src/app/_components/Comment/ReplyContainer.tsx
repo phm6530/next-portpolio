@@ -1,5 +1,5 @@
 import MsgItem from "@/app/_components/Comment/MsgItem";
-import classes from "./Reply.module.scss";
+import classes from "./Msg.module.scss";
 import MsgForm from "@/app/_components/Comment/MsgForm";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 

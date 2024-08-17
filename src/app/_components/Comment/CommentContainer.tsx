@@ -1,5 +1,5 @@
 import MsgItem from "@/app/_components/Comment/MsgItem";
-import classes from "./Reply.module.scss";
+import classes from "./Msg.module.scss";
 import { SetStateAction, useState } from "react";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import ReplyContainer from "@/app/_components/Comment/ReplyContainer";

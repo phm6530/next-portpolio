@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnectTest } from "@/app/config/db";
 
@@ -35,23 +35,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      // 사용자가 로그인할 때, user 객체가 존재할 때 실행됩니다.
+      console.log("usdre ::", user);
+      // 사용자가 로그인한 경우에만 실행
       if (user) {
-        // token 객체에 사용자 정보를 추가합니다.
-        token.id = user.id;
+        token.id = user.id as string;
         token.nickName = user.nickName;
         token.role = user.role;
       }
 
-      // 이후 이 정보를 session 콜백에서 사용하게 됩니다.
       return token;
     },
-
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id; // 세션에 사용자 ID 추가
-        session.user.nickName = token.nickName; // 세션에 사용자 닉네임 추가
-        session.user.role = token.role; // 세션에 사용자 역할 추가
+        session.user.id = token.id;
+        session.user.nickName = token.nickName;
+        session.user.role = token.role;
       }
       return session;
     },
