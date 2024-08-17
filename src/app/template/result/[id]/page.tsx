@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: { params: { id: number } }) {
     }
 
     const metaData = data.templateMeta;
+
     return {
       title: `결과보기 - ${metaData.title}`,
       description: metaData.description,

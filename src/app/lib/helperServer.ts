@@ -1,5 +1,7 @@
 import pool from "@/app/config/db";
+import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { PoolConnection } from "mysql2/promise";
+import { NextResponse } from "next/server";
 
 //트랜잭션 생성
 export const withTransaction = async <T>(
@@ -32,5 +34,15 @@ export const withConnection = async <T>(
     throw error;
   } finally {
     if (conn) conn.release();
+  }
+};
+
+//server Controller 보일러 플레이트
+export const withRequest = async (cb: () => Promise<any>) => {
+  try {
+    const result = await cb();
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    return apiErrorHandler(error);
   }
 };

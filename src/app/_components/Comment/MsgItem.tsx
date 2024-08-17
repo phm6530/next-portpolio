@@ -49,10 +49,8 @@ export default function MsgItem({
     },
   });
 
-  console.log(userId);
-
   const deleteMessage = () => {
-    if (session && role === "admin") {
+    if (session) {
       confirm("삭제하시겠습니까?") && mutate({ comment_id, reply_id });
       return;
     }

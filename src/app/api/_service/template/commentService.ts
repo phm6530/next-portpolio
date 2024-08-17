@@ -3,7 +3,8 @@ import selectCommentList from "@/app/api/_dao/commentRepositroy";
 import { withConnection, withTransaction } from "@/app/lib/helperServer";
 import { userProps } from "@/types/user";
 import bcrypt from "bcrypt";
-import { ResultSetHeader } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Pool, PoolConnection } from "mysql2/promise";
 
 type postCommentProps = {
   name: string;
@@ -40,7 +41,7 @@ export async function postComment(data: postCommentProps) {
 
   // Id Check
   if (commentId || templateId) {
-    await withTransaction(async (conn) => {
+    return withTransaction<ResultSetHeader>(async (conn) => {
       // 사용자 정보 삽입
       const insertUserSql = `
         INSERT INTO 
@@ -67,19 +68,14 @@ export async function postComment(data: postCommentProps) {
           VALUES (now(), ?, ?, ?);
         `;
 
-      console.log(insertCommentSql);
-
       const whereId = commentId || templateId;
 
-      console.log("whereId::", whereId);
-
-      const [row] = await conn.query<ResultSetHeader>(insertCommentSql, [
+      const [test] = await conn.query<ResultSetHeader>(insertCommentSql, [
         msg,
         whereId,
         visitorResult.insertId,
       ]);
-
-      console.log(row);
+      return test;
     });
   } else {
     throw new Error("요청이 잘못 되었습니다.");
@@ -144,3 +140,63 @@ export async function getCommentList(templateId: number) {
 
   return comment;
 }
+
+export const chkUserMessage = async (
+  targetTable: string,
+  user_id: string,
+  msgId: string
+) => {
+  return withConnection<boolean>(async (conn) => {
+    const sql = `
+    SELECT rc.id FROM ${targetTable} rc
+      JOIN 
+        user
+      ON
+        user.id = rc.user_id
+      WHERE
+        user.user_id = ? AND rc.id = ?;
+    `;
+    const [result] = await conn.query<RowDataPacket[]>(sql, [user_id, msgId]);
+    return result.length > 0 ? true : false;
+  });
+};
+
+export const chkPasswordMatch = async (
+  targetTable: string,
+  password: string,
+  msgId: string
+) => {
+  const { password: getPassword } = await withConnection<RowDataPacket>(
+    async (conn) => {
+      const sql = `
+    SELECT password FROM ${targetTable} rc
+    JOIN 
+      user_visitor uv
+    ON 
+      rc.visitor_id = uv.id
+    where 
+      rc.id = ?;
+  `;
+      const [rows] = await conn.query<RowDataPacket[]>(sql, [msgId]);
+      return rows[0];
+    }
+  );
+
+  if (!getPassword || !password) {
+    throw new Error("비밀번호 또는 저장된 비밀번호가 없습니다.");
+  }
+
+  //비밀번호 매치 확인
+  return bcrypt.compare(password, getPassword);
+};
+
+export const removeMessage = async (targetTable: string, msgId: string) => {
+  const [result] = await withConnection(async (conn) => {
+    const sql = `
+    DELETE FROM ${targetTable} where id = ?;
+  `;
+    return conn.query<ResultSetHeader>(sql, [msgId]);
+  });
+
+  return result;
+};

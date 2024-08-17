@@ -35,7 +35,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log("usdre ::", user);
       // 사용자가 로그인한 경우에만 실행
       if (user) {
         token.id = user.id as string;

@@ -1,55 +1,50 @@
 import bcrypt from "bcrypt";
 import {
+  chkPasswordMatch,
+  chkUserMessage,
   getCommentList,
   postComment,
+  removeMessage,
 } from "@/app/api/_service/template/commentService";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { withConnection } from "@/app/lib/helperServer";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { withRequest } from "@/app/lib/helperServer";
 
 //초기 Comment 가져오기
 export async function GET(req: NextRequest) {
-  try {
+  return withRequest(async () => {
     const searchParams = req.nextUrl.searchParams;
 
     //get할 template Id
     const templateId = searchParams.get("templateId");
-
     if (!templateId) {
       throw new Error("template 값 누락");
     }
-
-    const result = await getCommentList(+templateId);
-
-    console.log(result);
-
-    return NextResponse.json(result);
-  } catch (error) {
-    return apiErrorHandler(error);
-  }
+    return getCommentList(+templateId);
+  });
 }
 
 // Post 가져오기
 export async function POST(req: NextRequest) {
-  try {
+  return withRequest(async () => {
     const session = await auth();
-
     const data = await req.json();
 
     if (session) {
       // 아직 미 개발, ,,
+      console.log("세션 존재 ");
     } else {
       //익명 댓글
-      await postComment(data);
+
+      const rows = await postComment(data);
+
+      return { message: "success" };
     }
-    return NextResponse.json({ message: "success" });
-  } catch (error) {
-    return apiErrorHandler(error);
-  }
+  });
 }
 
+//Reply 삭제로직
 export async function DELETE(req: NextRequest) {
   try {
     const { comment_id, reply_id, msgPassword: password } = await req.json();
@@ -60,46 +55,37 @@ export async function DELETE(req: NextRequest) {
       ? "result_reply"
       : (null as never);
 
-    const { password: getPassword } = await withConnection<RowDataPacket>(
-      async (conn) => {
-        const sql = `
-        SELECT password FROM ${targetTable} rc
-        JOIN 
-          user_visitor uv
-        ON 
-          rc.visitor_id = uv.id
-        where 
-          rc.id = ?;
-      `;
-        const [rows] = await conn.query<RowDataPacket[]>(sql, [
-          comment_id || reply_id,
-        ]);
-        return rows[0];
+    //세션 유무
+    const session = await auth();
+
+    if (session) {
+      const { id: user_id } = session.user;
+
+      //세션의 오너가 맞는지 확인
+      const isOnwer = await chkUserMessage(
+        targetTable,
+        user_id,
+        comment_id || reply_id
+      );
+      if (!isOnwer) throw new Error("잘못된 요청입니다.");
+    } else {
+      //익명 비밀번호 확인
+      const match = await chkPasswordMatch(
+        targetTable,
+        password,
+        comment_id || reply_id
+      );
+      if (!match) {
+        throw new Error("비밀번호가 일치하지 않습니다.");
       }
-    );
-
-    if (!getPassword || !password) {
-      throw new Error("비밀번호 또는 저장된 비밀번호가 없습니다.");
     }
 
-    //비밀번호 매치 확인
-    const match = await bcrypt.compare(password, getPassword);
-
-    if (!match) {
-      throw new Error("비밀번호가 일치하지 않습니다.");
-    }
-
-    const [result] = await withConnection(async (conn) => {
-      const sql = `
-        DELETE FROM ${targetTable} where id = ?;
-      `;
-      return conn.query<ResultSetHeader>(sql, [comment_id || reply_id]);
-    });
+    const result = await removeMessage(targetTable, comment_id || reply_id);
     if (result.affectedRows === 0) {
       throw new Error("이미 삭제 되었거나 존재하지 않는 댓글입니다.");
     }
 
-    return NextResponse.json({ message: "success" });
+    return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
     return apiErrorHandler(error);
   }
