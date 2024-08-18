@@ -7,6 +7,7 @@ import { Gender } from "@/types/template";
 
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const FILTER_GENDER = [
   {
@@ -47,6 +48,10 @@ const FILTER_Age = [
   {
     label: "50대",
     val: 50,
+  },
+  {
+    label: "60대",
+    val: 60,
   },
 ];
 

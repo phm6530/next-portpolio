@@ -6,15 +6,18 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/app/lib/helperClient";
 import { queryClient } from "@/app/config/queryClient";
+import { useSession } from "next-auth/react";
 
 export default function MsgForm({
-  templateId,
-  commentId,
+  template_id,
+  comment_id,
 }: {
-  templateId?: number;
-  commentId?: number;
+  template_id?: number;
+  comment_id?: number;
 }) {
   const [rows, setRows] = useState(4);
+
+  const { data: session } = useSession();
 
   const {
     handleSubmit,
@@ -38,23 +41,21 @@ export default function MsgForm({
       reset(); //폼 초기화
       queryClient.invalidateQueries({ queryKey: ["comment"] });
     },
-    onError: () => {
-      console.log("error!");
-    },
   });
 
   const submitHandler = (data: any) => {
-    if (templateId) {
-      mutate({ ...data, templateId, type: "comment" });
-    } else if (commentId) {
-      mutate({ ...data, commentId, type: "reply" });
+    if (template_id) {
+      mutate({ ...data, template_id, type: "comment" });
+    } else if (comment_id) {
+      mutate({ ...data, comment_id, type: "reply" });
     } else {
       return 0 as never;
     }
   };
 
-  const test = Object.values(errors);
-  const errorMessage = test[0]?.message;
+  //에러 메세지
+  const errorArr = Object.values(errors);
+  const errorMessage = errorArr[0]?.message;
 
   //rows 커스텀
   const rowsHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -65,29 +66,38 @@ export default function MsgForm({
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={classes.replyForm}>
-      <input
-        type="text"
-        placeholder="이름"
-        className={classes.input}
-        autoComplete="off"
-        {...register("name", {
-          required: "이름은 필수입니다.",
-          minLength: { value: 2, message: "이름은 최소 2글자로 설정해주세요" },
-        })}
-      />
-      <input
-        type="password"
-        {...register("password", {
-          required: "비밀번호는 필수입니다.",
-          minLength: {
-            value: 4,
-            message: "비밀번호는 최소 4글자로 설정해주세요",
-          },
-        })}
-        placeholder="password"
-        autoComplete="off"
-        className={classes.input}
-      />
+      {session ? (
+        "로그인 중임"
+      ) : (
+        <>
+          <input
+            type="text"
+            placeholder="이름"
+            className={classes.input}
+            autoComplete="off"
+            {...register("name", {
+              required: "이름은 필수입니다.",
+              minLength: {
+                value: 2,
+                message: "이름은 최소 2글자로 설정해주세요",
+              },
+            })}
+          />
+          <input
+            type="password"
+            {...register("password", {
+              required: "비밀번호는 필수입니다.",
+              minLength: {
+                value: 4,
+                message: "비밀번호는 최소 4글자로 설정해주세요",
+              },
+            })}
+            placeholder="password"
+            autoComplete="off"
+            className={classes.input}
+          />
+        </>
+      )}
 
       <textarea
         className={classes.textArea}

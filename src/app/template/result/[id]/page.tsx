@@ -62,7 +62,6 @@ export default async function resultPage({
           }
         );
       }),
-    staleTime: 10000,
   });
 
   return (

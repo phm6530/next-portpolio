@@ -44,7 +44,7 @@ export default function ReplyContainer({
         {replys!.length === 0 ? null : (
           <button onClick={formHandler}>답글 쓰기 </button>
         )}
-        {commentIdx === replyIdx && <MsgForm commentId={comment_id} />}
+        {commentIdx === replyIdx && <MsgForm comment_id={comment_id} />}
       </div>
     </>
   );

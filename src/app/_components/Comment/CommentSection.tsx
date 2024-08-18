@@ -53,7 +53,7 @@ export default function CommentSection({ templateId }: { templateId: number }) {
         <h1>댓글 {data.length} 개</h1>
 
         {/* Msg - Form */}
-        <MsgForm templateId={templateId} />
+        <MsgForm template_id={templateId} />
 
         {data.length > 0
           ? data.map((comment, CommentIdx) => {

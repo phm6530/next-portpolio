@@ -1,57 +1,83 @@
 "use client";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "next-auth/react";
 
-import { signIn, SignInResponse } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import classes from "./login.module.scss";
+
+type LoginFormProps = {
+  user_id: string;
+  user_password: string;
+};
 
 export default function LoginForm({
   redirectPath = "/",
 }: {
   redirectPath: string;
 }) {
-  const [error, setError] = useState<string>("");
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: LoginFormProps) => {
+      const result = await signIn("credentials", {
+        redirect: false,
+        user_id: data.user_id,
+        user_password: data.user_password,
+      });
 
-  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-
-    if (!username || !password) {
-      setError("Please enter both username and password.");
-      return;
-    }
-
-    const res = (await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-    })) as SignInResponse;
-
-    if (!res.error) {
+      if (result?.error) {
+        throw new Error(
+          "존재하지 않는 회원이거나 패스워드가 일치하지 않습니다."
+        );
+      }
+      return result;
+    },
+    onSuccess: () => {
       window.location.href = redirectPath;
-      return;
-    } else {
-      setError("비밀번호나 아이디가 일치하지 않습니다.");
-    }
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormProps>();
+
+  const onSubmitHandler = async (data: LoginFormProps) => {
+    mutate(data);
   };
+
+  const errorMessages = Object.values(errors);
+  const firstErrorMeg = errorMessages[0]?.message;
 
   return (
     <>
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={handleSubmit(onSubmitHandler)}>
         <label>
           Username:
-          <input type="text" name="username" autoComplete="off" />
+          <input
+            type="text"
+            {...register("user_id", { required: "아이디는 필수 입니다." })}
+            autoComplete="off"
+          />
         </label>
         <br />
         <label>
           Password:
-          <input type="password" name="password" autoComplete="off" />
+          <input
+            type="password"
+            {...register("user_password", {
+              required: "비밀번호는 필수 입니다.",
+            })}
+            autoComplete="off"
+          />
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isPending}>
+          Login
+        </button>
+        {firstErrorMeg && (
+          <div className={classes.errorMsg}>{firstErrorMeg}</div>
+        )}
       </form>
-      {error && <p>{error}</p>}
     </>
   );
 }

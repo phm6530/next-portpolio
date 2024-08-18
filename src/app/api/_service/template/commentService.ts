@@ -1,17 +1,19 @@
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
-import selectCommentList from "@/app/api/_dao/commentRepositroy";
+import { comparePassword } from "@/app/lib/comparePassword";
 import { withConnection, withTransaction } from "@/app/lib/helperServer";
+import { auth } from "@/auth";
 import { userProps } from "@/types/user";
-import bcrypt from "bcrypt";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { Pool, PoolConnection } from "mysql2/promise";
+
+import selectCommentList from "@/app/api/_dao/commentRepositroy";
+import bcrypt from "bcrypt";
 
 type postCommentProps = {
   name: string;
   password: string;
   msg: string;
-  templateId?: number;
-  commentId?: number;
+  template_id?: number;
+  comment_id?: number;
 };
 
 //CommentList + Reply
@@ -34,51 +36,92 @@ export type GetCommentListProps = {
 };
 
 export async function postComment(data: postCommentProps) {
-  const { name: nickName, password, msg, templateId, commentId } = data;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const session = (await auth()) as {
+    user: {
+      user_id: string;
+      user_name: string;
+      user_nickname: string;
+      role: "admin" | "visitor";
+    };
+  };
 
-  const role = "visitor"; // 익명 사용자
+  const { name: nickName, password, msg, template_id, comment_id } = data;
 
-  // Id Check
-  if (commentId || templateId) {
+  // table 매핑
+  const targetTable = template_id
+    ? "result_comment"
+    : comment_id
+    ? "result_reply"
+    : (null as never);
+
+  //Column 매핑
+  const targetColumn = template_id
+    ? "template_id"
+    : comment_id
+    ? "comment_id"
+    : (null as never);
+
+  //template or comment id
+  const whereId = comment_id || template_id;
+
+  if (session) {
+    // 로그인한 사용자 처리 로직
+    const userId = session.user.user_id;
+
+    // 댓글인지 대댓글인지에 따라 처리
     return withTransaction<ResultSetHeader>(async (conn) => {
-      // 사용자 정보 삽입
-      const insertUserSql = `
+      const getUserId = `SELECT id FROM user where user_id = ?;`;
+      const [rows] = await conn.query<RowDataPacket[]>(getUserId, [userId]);
+
+      const insertCommentSql = `
+        INSERT INTO 
+          ${targetTable} (created_at, message, ${targetColumn}, user_id) 
+        VALUES (now(), ?, ?, ?);
+      `;
+
+      const [result] = await conn.query<ResultSetHeader>(insertCommentSql, [
+        msg,
+        whereId,
+        rows[0].id,
+      ]);
+      return result;
+    });
+  } else {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const ROLE = "visitor"; // 익명 사용자 role
+    // Id Check
+    if (comment_id || template_id) {
+      return withTransaction<ResultSetHeader>(async (conn) => {
+        // 사용자 정보 삽입
+        const insertUserSql = `
         INSERT INTO 
           user_visitor (nick_name, password, role) 
         VALUES (?, ?, ?);
       `;
 
-      const [visitorResult] = await conn.query<ResultSetHeader>(insertUserSql, [
-        nickName,
-        hashedPassword,
-        role,
-      ]);
+        const [visitorResult] = await conn.query<ResultSetHeader>(
+          insertUserSql,
+          [nickName, hashedPassword, ROLE]
+        );
 
-      // 댓글인지 대댓글인지
-      const insertCommentSql = commentId
-        ? `
-          INSERT INTO 
-            result_reply (created_at, message, comment_id, visitor_id) 
-          VALUES (now(), ?, ?, ?);
-        `
-        : `
-          INSERT INTO 
-            result_comment (created_at, message, template_id, visitor_id) 
-          VALUES (now(), ?, ?, ?);
-        `;
+        // 댓글인지 대댓글인지
+        const insertCommentSql = `
+        INSERT INTO 
+          ${targetTable} (created_at, message, ${targetColumn}, visitor_id) 
+        VALUES (now(), ?, ?, ?);
+    `;
 
-      const whereId = commentId || templateId;
-
-      const [test] = await conn.query<ResultSetHeader>(insertCommentSql, [
-        msg,
-        whereId,
-        visitorResult.insertId,
-      ]);
-      return test;
-    });
-  } else {
-    throw new Error("요청이 잘못 되었습니다.");
+        const [test] = await conn.query<ResultSetHeader>(insertCommentSql, [
+          msg,
+          whereId,
+          visitorResult.insertId,
+        ]);
+        return test;
+      });
+    } else {
+      throw new Error("요청이 잘못 되었습니다.");
+    }
   }
 }
 
@@ -181,13 +224,7 @@ export const chkPasswordMatch = async (
       return rows[0];
     }
   );
-
-  if (!getPassword || !password) {
-    throw new Error("비밀번호 또는 저장된 비밀번호가 없습니다.");
-  }
-
-  //비밀번호 매치 확인
-  return bcrypt.compare(password, getPassword);
+  return comparePassword(getPassword, password);
 };
 
 export const removeMessage = async (targetTable: string, msgId: string) => {

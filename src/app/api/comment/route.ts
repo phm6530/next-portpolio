@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import {
   chkPasswordMatch,
   chkUserMessage,
@@ -28,26 +27,27 @@ export async function GET(req: NextRequest) {
 // Post 가져오기
 export async function POST(req: NextRequest) {
   return withRequest(async () => {
-    const session = await auth();
     const data = await req.json();
 
-    if (session) {
-      // 아직 미 개발, ,,
-      console.log("세션 존재 ");
-    } else {
-      //익명 댓글
+    // 댓글
+    const rows = await postComment(data);
 
-      const rows = await postComment(data);
-
-      return { message: "success" };
+    if (rows.affectedRows === 0) {
+      throw new Error("서버 오류");
     }
+    return { message: "success" };
   });
 }
 
 //Reply 삭제로직
 export async function DELETE(req: NextRequest) {
   try {
-    const { comment_id, reply_id, msgPassword: password } = await req.json();
+    const {
+      comment_id,
+      reply_id,
+      msgPassword: password,
+      msgRole,
+    } = await req.json();
 
     const targetTable = comment_id
       ? "result_comment"
@@ -58,8 +58,8 @@ export async function DELETE(req: NextRequest) {
     //세션 유무
     const session = await auth();
 
-    if (session) {
-      const { id: user_id } = session.user;
+    if (session && msgRole !== "visitor") {
+      const { user_id } = session.user;
 
       //세션의 오너가 맞는지 확인
       const isOnwer = await chkUserMessage(
@@ -67,17 +67,11 @@ export async function DELETE(req: NextRequest) {
         user_id,
         comment_id || reply_id
       );
+      console.log(isOnwer);
       if (!isOnwer) throw new Error("잘못된 요청입니다.");
     } else {
       //익명 비밀번호 확인
-      const match = await chkPasswordMatch(
-        targetTable,
-        password,
-        comment_id || reply_id
-      );
-      if (!match) {
-        throw new Error("비밀번호가 일치하지 않습니다.");
-      }
+      await chkPasswordMatch(targetTable, password, comment_id || reply_id);
     }
 
     const result = await removeMessage(targetTable, comment_id || reply_id);

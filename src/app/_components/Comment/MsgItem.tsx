@@ -29,7 +29,10 @@ export default function MsgItem({
   const { mutate } = useMutation<
     unknown,
     Error,
-    Pick<MessageProps, "comment_id" | "reply_id"> & { msgPassword?: string }
+    Pick<MessageProps, "comment_id" | "reply_id"> & {
+      msgPassword?: string;
+      msgRole: userProps["role"];
+    }
   >({
     mutationFn: (data) =>
       withFetch(async () => {
@@ -43,6 +46,8 @@ export default function MsgItem({
         });
       }),
     onSuccess: () => {
+      alert("삭제되었습니다.");
+
       queryClient.invalidateQueries({
         queryKey: ["comment"],
       });
@@ -50,15 +55,16 @@ export default function MsgItem({
   });
 
   const deleteMessage = () => {
-    if (session) {
-      confirm("삭제하시겠습니까?") && mutate({ comment_id, reply_id });
+    if (session && userId === session?.user.user_id) {
+      confirm("삭제하시겠습니까?") &&
+        mutate({ comment_id, reply_id, msgRole: role });
       return;
     }
 
     const msgPassword = prompt("비밀번호를 입력해주세요");
     if (msgPassword) {
       if (comment_id || reply_id) {
-        mutate({ comment_id, reply_id, msgPassword });
+        mutate({ comment_id, reply_id, msgPassword, msgRole: role });
       }
     }
   };
@@ -69,7 +75,7 @@ export default function MsgItem({
         {username}
         {role === "admin" ? <span className="admin_icon">M</span> : null}
         <span>{dayjs(create_at).fromNow()}</span>
-        {(role === "visitor" || userId === session?.user.id) && (
+        {(role === "visitor" || userId === session?.user.user_id) && (
           <button type="button" onClick={deleteMessage}>
             삭제
           </button>

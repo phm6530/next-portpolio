@@ -84,7 +84,6 @@ export async function GET(req: NextRequest) {
             age: +age.slice(0, -1) as 10 | 20 | 30 | 40 | 50 | 60,
             value: text_answer,
           });
-
           return acc;
         } else {
           // // 해당 question에 option 추가

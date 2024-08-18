@@ -1,28 +1,41 @@
-import NextAuth, { User } from "next-auth";
+import { getUserDataProps } from "@/app/api/auth/login/route";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { dbConnectTest } from "@/app/config/db";
+
+type LoginFormProps = {
+  user_id: string;
+  user_password: string;
+};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
       authorize: async (credentials) => {
-        if (
-          credentials.username === "squirrel309" &&
-          credentials.password === "1"
-        ) {
-          await dbConnectTest();
-          return {
-            id: "squirrel309",
-            nickName: "리슨업",
-            role: "admin",
-          };
-        } else {
-          return null;
+        const userData = credentials as LoginFormProps;
+
+        //login Api
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+          }
+        );
+        if (!response.ok) {
+          const errorResult = await response.json();
+          throw new Error(errorResult.message);
         }
+        const resultUserData: getUserDataProps = await response.json();
+
+        return {
+          user_id: resultUserData.user_id,
+          user_name: resultUserData.name,
+          user_nickname: resultUserData.nick_name,
+          role: resultUserData.role,
+        };
       },
     }),
   ],
@@ -37,8 +50,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       // 사용자가 로그인한 경우에만 실행
       if (user) {
-        token.id = user.id as string;
-        token.nickName = user.nickName;
+        token.user_id = user.user_id as string;
+        token.user_name = user.user_name;
+        token.user_nickname = user.user_nickname;
         token.role = user.role;
       }
 
@@ -46,8 +60,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.nickName = token.nickName;
+        session.user.user_id = token.user_id;
+        session.user.user_name = token.user_name;
+        session.user.user_nickname = token.user_nickname;
         session.user.role = token.role;
       }
       return session;
