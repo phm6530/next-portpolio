@@ -67,7 +67,7 @@ export default function LoginForm({
             {...register("user_password", {
               required: "비밀번호는 필수 입니다.",
             })}
-            autoComplete="off"
+            autoComplete="new-password"
           />
         </label>
         <br />

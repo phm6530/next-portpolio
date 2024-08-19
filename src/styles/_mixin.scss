@@ -20,6 +20,13 @@
   }
 }
 
+@mixin font-color-hover($color: #333) {
+  color: $color;
+  &:hover {
+    color: ligten($color, 10%);
+  }
+}
+
 //Input Style
 @mixin inputStyles {
   border: 1px solid #ccc;

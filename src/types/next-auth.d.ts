@@ -6,15 +6,15 @@ declare module "next-auth" {
     user: {
       id: string;
       nickName: string;
-      role: "admin" | "visitor";
+      role: "admin" | "visitor" | "anonymous";
     } & DefaultSession["user"];
   }
 
-  interface User extends DefaultUser {
-    user_id: string;
-    user_name: string;
-    user_nickname: string;
-    role: "admin" | "visitor";
+  interface User {
+    user_id?: string;
+    user_name?: string;
+    user_nickname?: string;
+    role: "admin" | "visitor" | "anonymous"; // 사용자 역할
   }
 }
 
@@ -22,6 +22,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     nickName: string;
-    role: "admin" | "visitor";
+    role: "admin" | "visitor" | "anonymous";
   }
 }

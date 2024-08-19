@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
 interface zustandState {
-  imgKey: string | null;
-  setImgkey: (key: string) => void;
-  removeImgkey: () => void;
+  template_key: string | null;
+  settemplate_key: (key: string) => void;
+  removetemplate_key: () => void;
 }
 
 const useStore = create<zustandState>((set) => ({
-  imgKey: null,
-  setImgkey: (key) => set({ imgKey: key }),
-  removeImgkey: () => set({ imgKey: null }),
+  template_key: null,
+  settemplate_key: (key) => set({ template_key: key }),
+  removetemplate_key: () => set({ template_key: null }),
 }));
 
 export default useStore;

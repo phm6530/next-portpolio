@@ -27,7 +27,7 @@ export interface templateItemProps {
 
 export type templateMetaProps = {
   template: TemplateProps;
-  imgKey: string;
+  template_key: string;
 };
 
 export type GetTemplateLists = {

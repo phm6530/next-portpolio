@@ -47,6 +47,8 @@ export type AddSurveyFormProps = {
   genderChk: IuputBoolean;
   ageChk: IuputBoolean;
   items: (SurveyText | SurveyRadioProps)[];
+  access_email: string;
+  access_email_agreed: boolean;
 };
 
 //Survey Type Detila

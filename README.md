@@ -18,7 +18,7 @@
   npm i dayjs<br>
   npm i zustand
 
-  - ImgKey 공유에 사용
+  - template_key 공유에 사용
 
 - Server
   npm i next-auth<br>

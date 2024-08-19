@@ -1,29 +1,61 @@
-import { InferObj } from "@/types/common";
+import { bcryptHash } from "@/app/lib/brycptHash";
 import { CONST_PAGING, LIST_SORT } from "@/types/constans";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+
+export const insertAnonymous = async (
+  conn: PoolConnection,
+  accessEmail: string,
+  accessEmailAgreed: boolean,
+  pin: number,
+  template_id: number
+) => {
+  const sql = `
+    INSERT INTO 
+      user_anonymous(access_email , access_email_agreed, access_pin , template_id) 
+    VALUE(? , ? , ? , ?);
+  `;
+  const hashPin = await bcryptHash(pin + "");
+
+  //이메일 + 이메일 동의 유무 , PIN 값
+  const [result] = await conn.query<ResultSetHeader>(sql, [
+    accessEmail,
+    accessEmailAgreed,
+    hashPin,
+    template_id,
+  ]);
+
+  return result;
+};
 
 //Meta Data Post
 export const insertTemplateMeta = async (
   conn: PoolConnection,
   data: Omit<AddSurveyFormProps, "items"> & {
-    template_id: number;
-    imgKey: string;
+    template_type_id: number;
+    template_key: string;
   }
 ): Promise<ResultSetHeader> => {
-  const { description, title, template_id, imgKey, genderChk, ageChk } = data;
+  const {
+    description,
+    title,
+    template_type_id,
+    template_key,
+    genderChk,
+    ageChk,
+  } = data;
 
   const insert_sql = `
     INSERT INTO
-        template_meta( title , description , template_type_id , created_at , imgKey , gender_chk , age_chk) 
+        template_meta( title , description , template_type_id , created_at , template_key , gender_chk , age_chk ) 
     VALUE 
         (?,?,?,now(), ?, ? , ?);`;
 
   const [result] = await conn.execute<ResultSetHeader>(insert_sql, [
     title,
     description,
-    template_id,
-    imgKey,
+    template_type_id,
+    template_key,
     genderChk,
     ageChk,
   ]);
@@ -83,7 +115,7 @@ export const selectTemplateMetaData = async (
     WHERE tm.title LIKE ?
   `;
 
-  let queryParams: (number | string | undefined)[] = [`%${search}%`];
+  let queryParams: (number | string | undefined)[] = [`%${search || ""}%`];
 
   //list Get인지  Detail GEt인지 유무
   if (usePagination) {
@@ -117,13 +149,18 @@ export const selectTemplateMetaData = async (
     queryParams.push(limit, offset);
   } else {
     const { template_id } = props as FalsePageNation;
+
     if (template_id) {
-      sql += ` WHERE tm.id = ?`;
+      sql += ` AND tm.id = ?`;
       queryParams.push(template_id);
     }
   }
 
+  console.log(queryParams);
+
   const [rows] = await conn.query<RowDataPacket[]>(sql, queryParams);
+
+  console.log("rows::::", rows);
 
   return usePagination ? rows : rows[0];
 };

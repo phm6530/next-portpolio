@@ -15,9 +15,12 @@ import { useEffect } from "react";
 import dayjs from "dayjs";
 
 import useStore from "@/store/store";
-import { useRouter } from "next/navigation";
 import AddAgeGroup from "@/app/template/type/[type]/_component/templateAddOptions/AddAgeGroup";
 import AddGender from "@/app/template/type/[type]/_component/templateAddOptions/AddGender";
+import TemplateAccess from "@/app/template/type/[type]/_component/TemplateAccess";
+import { withFetch } from "@/app/lib/helperClient";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -25,20 +28,20 @@ const initialFormState: AddSurveyFormProps = {
   genderChk: "1",
   ageChk: "1",
   items: [],
+  access_email: "",
+  access_email_agreed: false,
 };
 
 export default function SurveyPage({ template }: { template: TemplateProps }) {
   //zustand
-  const setImgKey = useStore((state) => state.setImgkey);
-  const removeImgKey = useStore((state) => state.removeImgkey);
-  const imgKey = useStore((state) => state.imgKey);
+  const settemplate_key = useStore((state) => state.settemplate_key);
+  const removetemplate_key = useStore((state) => state.removetemplate_key);
+  const template_key = useStore((state) => state.template_key);
   const router = useRouter();
-
   useEffect(() => {
-    setImgKey(uuid4());
-
+    settemplate_key(uuid4());
     return () => {
-      removeImgKey();
+      removetemplate_key();
     };
   }, []);
 
@@ -73,29 +76,40 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
     defaultValues: initialFormState,
   });
 
+  const { mutate } = useMutation<
+    unknown,
+    Error,
+    AddSurveyFormProps & { template: string; template_key: string }
+  >({
+    mutationFn: (data) =>
+      withFetch(async () => {
+        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/template`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      }),
+    onSuccess: () => {
+      router.replace("/template");
+      alert("성공");
+    },
+  });
+
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
     try {
       if (formState.getValues("items").length !== 0) {
-        const resultData = { ...data, template, imgKey };
+        const resultData = {
+          ...data,
+          template,
+          template_key: template_key as string,
+        };
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/template`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(resultData), // data를 JSON 문자열로 변환하여 body에 전달
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Error..");
-        }
+        console.log(resultData);
 
-        router.push("/template");
-        localStorage.removeItem(template);
-        localStorage.removeItem("savedTime");
+        mutate(resultData);
       } else {
         console.log("error!");
       }
@@ -124,6 +138,7 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
           {/* 성별 별 체크*/}
           <AddGender />
         </FormProvider>
+
         {/* 공통 제목 */}
         <SurveyText
           label={"title"}
@@ -131,6 +146,7 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
           requiredMsg={"제목은 필수 입니다!"}
           register={formState.register}
         />
+
         {/* 공통 설명 적기 */}
         <SurveyText
           label={"description"}
@@ -144,6 +160,9 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
 
           {/* Survey Controller */}
           <QuestionAddController />
+
+          {/* 익명 사용자 - Email 정보동의  */}
+          <TemplateAccess />
         </FormProvider>
         <button type="submit">제출</button>
         <button type="button" onClick={tempSave}>

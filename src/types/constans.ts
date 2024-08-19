@@ -10,6 +10,12 @@ export enum QUERY_STRING {
 
 export enum QUERY_KEY {
   TEMPLATE_LIST = "template-list",
+  TEMPLATE_RESULT_USER_ADMIN = "anonymous",
+}
+
+export enum NEXTAUTH_ID {
+  CREDENTIALS = "credentials",
+  ANONYMOUS = "anonymous",
 }
 
 export enum LIST_SORT {

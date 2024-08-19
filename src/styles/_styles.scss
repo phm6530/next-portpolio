@@ -26,3 +26,10 @@ button {
 .hidden {
   display: none;
 }
+
+.cursor {
+  cursor: pointer;
+  &:hover {
+    @include font-color-hover();
+  }
+}

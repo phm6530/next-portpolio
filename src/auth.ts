@@ -10,6 +10,7 @@ type LoginFormProps = {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
+      id: "credentials",
       authorize: async (credentials) => {
         const userData = credentials as LoginFormProps;
 
@@ -24,10 +25,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             body: JSON.stringify(userData),
           }
         );
+
         if (!response.ok) {
           const errorResult = await response.json();
           throw new Error(errorResult.message);
         }
+
         const resultUserData: getUserDataProps = await response.json();
 
         return {
@@ -35,6 +38,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           user_name: resultUserData.name,
           user_nickname: resultUserData.nick_name,
           role: resultUserData.role,
+        };
+      },
+    }),
+    CredentialsProvider({
+      id: "anonymous",
+      authorize: async (anonymous) => {
+        const anonymousEmail = anonymous as { email: string };
+
+        // 익명 사용자로 최소한의 정보만 반환
+        return {
+          role: "anonymous",
         };
       },
     }),

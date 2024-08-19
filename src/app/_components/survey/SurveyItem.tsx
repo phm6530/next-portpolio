@@ -91,7 +91,7 @@ export default function SurveyItem({
               >
                 {gender_group === "male" ? "남성" : "여성"}
               </span>
-              의 참여율이 가장 높습니다.`
+              의 참여율이 가장 높습니다.
             </>
           ) : (
             "참여해주세요!"

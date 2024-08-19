@@ -118,7 +118,7 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
-          <p>참여자 : {templateMeta.total_cnt} 명</p>
+          <p>참여자 : {templateMeta.user_cnt} 명</p>
           <p>
             이 {templateName}은/는 {templateMeta.age_group}대
             {templateMeta.gender_group}이 가장 많이 참여하였습니다.

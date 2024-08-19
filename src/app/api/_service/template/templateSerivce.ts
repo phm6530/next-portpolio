@@ -4,29 +4,57 @@ import { getTemplateId } from "@/app/lib/utilFunc";
 import { withConnection, withTransaction } from "@/app/lib/helperServer";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import {
+  insertAnonymous,
   insertTemplateMeta,
   selectTemplateMetaData,
 } from "@/app/api/_dao/template/templateRepository";
 import { templateMetaProps } from "@/types/template";
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
+import { sendEmail } from "@/app/lib/nodeMailer";
+import addPin from "@/app/lib/addPin";
 
 //template Post Service
 export async function postAddTemplate(
   data: AddSurveyFormProps & templateMetaProps
 ) {
-  const { items, template, ...rest } = data;
+  const { items, template, template_key, ...rest } = data;
+
+  //4핀 생성
+  const pin = addPin(4);
 
   //템플릿 ID Get
-  const template_id = getTemplateId(template) as number;
+  const template_type_id = getTemplateId(template) as number;
+  const restData = { ...rest };
 
   //meta Post
   await withTransaction(async (conn) => {
     //save metaData
-    const savedMeta = await insertTemplateMeta(conn, { template_id, ...rest });
+    const savedMeta = await insertTemplateMeta(conn, {
+      template_type_id,
+      template_key,
+      ...rest,
+    });
+
+    //email + Pin 저장
+    await insertAnonymous(
+      conn,
+      restData.access_email,
+      restData.access_email_agreed,
+      pin,
+      savedMeta.insertId
+    );
 
     //save Questions
     await insertQuestion(conn, items, savedMeta.insertId);
+
+    //메일 책임 트랜지션으로 전가
+    await sendEmail(
+      restData.access_email,
+      template_key,
+      restData.title,
+      savedMeta.insertId
+    );
   });
 }
 

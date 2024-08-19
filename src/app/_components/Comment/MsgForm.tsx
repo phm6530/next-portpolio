@@ -93,7 +93,7 @@ export default function MsgForm({
               },
             })}
             placeholder="password"
-            autoComplete="off"
+            autoComplete="new-password"
             className={classes.input}
           />
         </>

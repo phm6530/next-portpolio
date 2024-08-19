@@ -27,7 +27,7 @@ export default function SurveyRadio({
   imgId: string;
 }) {
   //img Key
-  const imgKey = useStore((state) => state.imgKey);
+  const template_key = useStore((state) => state.template_key);
 
   const {
     register,
@@ -82,7 +82,7 @@ export default function SurveyRadio({
       }
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/survey/${imgKey}/${surveyIdx}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/survey/${template_key}/${surveyIdx}`,
         {
           method: "POST",
           body: formData,

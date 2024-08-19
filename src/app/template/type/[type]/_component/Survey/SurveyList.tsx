@@ -87,6 +87,7 @@ export default function SurveyList() {
           );
         }
       })}
+      {surveyList.length === 0 && "하나이상의 질문을 하셔야합니다."}
     </>
   );
 }

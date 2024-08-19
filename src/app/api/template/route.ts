@@ -8,6 +8,7 @@ import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { templateMetaProps } from "@/types/template";
 import { NextRequest, NextResponse } from "next/server";
 import { QUERY_STRING } from "@/types/constans";
+import { auth } from "@/auth";
 
 // template List Get
 export async function GET(req: NextRequest) {
@@ -32,9 +33,13 @@ export async function GET(req: NextRequest) {
 
 //Template Post Controller
 export async function POST(req: NextRequest) {
+  const session = await auth();
   try {
     const data: AddSurveyFormProps & templateMetaProps = await req.json();
-    await postAddTemplate(data);
+
+    if (!session) {
+      await postAddTemplate(data);
+    }
 
     return NextResponse.json({ message: "success" });
   } catch (error) {
