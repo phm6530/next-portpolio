@@ -50,7 +50,7 @@ export default async function surveyPage({
         <SurveyControler />
         <HotKeyword />
 
-        <SearchInput />
+        <SearchInput search={search} />
 
         {/* List */}
         <HydrationBoundary state={hydurateState}>

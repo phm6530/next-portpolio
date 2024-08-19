@@ -1,12 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import classes from "./searchArea.module.scss";
+import { QUERY_STRING } from "@/types/constans";
 
-export default function SearchInput() {
-  const [searchText, setSearchText] = useState<string>("");
+export default function SearchInput({ search }: { search?: string }) {
+  const [searchText, setSearchText] = useState<string>(search || "");
   const router = useRouter();
+
+  const qs = useSearchParams();
+
+  useEffect(() => {
+    const search = qs.get(QUERY_STRING.SEARCH);
+    if (!search) {
+      setSearchText("");
+    }
+  }, [qs]);
 
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -14,9 +24,7 @@ export default function SearchInput() {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(
-      searchText.length !== 0 ? `/template?search=${searchText}` : "/template "
-    );
+    router.push(searchText ? `/template?search=${searchText}` : "/template ");
   };
 
   return (

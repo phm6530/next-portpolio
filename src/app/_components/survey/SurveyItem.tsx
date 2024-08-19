@@ -26,7 +26,6 @@ export default function SurveyItem({
 
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
-
   const gsapRef = useRef<gsap.core.Timeline | null>(null);
 
   const onClickHandler = (e: Pick<templateItemProps, "id">["id"]) => {

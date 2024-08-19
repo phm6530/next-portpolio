@@ -16,18 +16,12 @@ export async function GET(req: NextRequest) {
     const pageParams = searchParams.get(QUERY_STRING.PAGE);
 
     const page = pageParams !== null ? parseInt(pageParams, 10) : 1;
-    console.log(QUERY_STRING.SEARCH);
 
     const search = searchParams.get(QUERY_STRING.SEARCH) || "";
-
     const sort = searchParams.get(QUERY_STRING.SORT) || null;
-
-    console.log("server : ", search);
 
     const result = await getTemplateList(page, search, sort);
     const listCnt = await getTemplateAllCnt(search, sort);
-
-    // console.log("result:::", result);
 
     // JSON 응답
     return NextResponse.json({ result, cnt: listCnt });

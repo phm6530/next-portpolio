@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
-
+import { CONST_PAGING, QUERY_STRING } from "@/types/constans";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+
 import classes from "./Paging.module.scss";
-import { CONST_PAGING } from "@/types/constans";
 
 interface PagingProps {
   cnt: number;
@@ -10,7 +10,7 @@ interface PagingProps {
 
 type PagingType = "next" | "prev";
 
-export default function Paging({ cnt }: PagingProps) {
+export default function Paging({ cnt = 1 }: PagingProps) {
   const searchParams = useSearchParams();
 
   const params = useMemo(() => {
@@ -21,15 +21,16 @@ export default function Paging({ cnt }: PagingProps) {
   const router = useRouter();
   const url = usePathname();
 
-  const pageString = params.get("page");
+  const pageString = params.get(QUERY_STRING.PAGE);
   const pageNumber = pageString ? +pageString : 1; //현재 페이지
+  const pageLength = Math.ceil(cnt / CONST_PAGING.LIMIT) || 1; //전체 페이지
 
-  const pageLength = Math.ceil(cnt / CONST_PAGING.LIMIT); //전체 페이지
+  console.log(pageNumber, pageLength);
 
   useEffect(() => {
     //오류보단 replace로
     //filter 오류는 Server Component에서 notFound() 처리
-    if (pageNumber <= 0 || pageNumber > pageLength) {
+    if (pageNumber <= 0 || pageLength < pageNumber) {
       router.replace("/template");
     }
   }, [pageNumber]);
@@ -76,7 +77,6 @@ export default function Paging({ cnt }: PagingProps) {
   };
 
   const pages = pageArr();
-  const lastPage = pages.at(-1);
 
   return (
     <div className={classes.pagingWrap}>
@@ -104,7 +104,7 @@ export default function Paging({ cnt }: PagingProps) {
       })}
       <button
         onClick={() => pagingHandler("next")}
-        disabled={pageNumber >= (lastPage as number)}
+        disabled={pageNumber >= pageLength}
         aria-label="nextNav"
       >
         Next

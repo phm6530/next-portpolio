@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classes from "./surveyControler.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LIST_SORT } from "@/types/constans";
+import { LIST_SORT, QUERY_STRING } from "@/types/constans";
 
 const btnArr = [
   {
@@ -25,16 +25,25 @@ const btnArr = [
 ];
 
 export default function SurveyControler() {
+  const qs = useSearchParams();
   const router = useRouter();
-  const queryString = useSearchParams();
 
-  const [active, setActive] = useState(() => {
-    return queryString.get("sort") || "all";
-  });
+  const [active, setActive] = useState("all");
+
+  useEffect(() => {
+    const sortValue = qs.get("sort") || "all";
+    setActive(sortValue);
+  }, [qs]);
 
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setActive(e.currentTarget.value);
-    router.push(`/template?sort=${e.currentTarget.value}`);
+    const newSortValue = e.currentTarget.value;
+    const newParams = new URLSearchParams(qs.toString()); // 쿼리 파라미터 복사
+
+    newParams.set("sort", newSortValue);
+
+    setActive(newSortValue);
+
+    router.push(`/template?${newParams.toString()}`);
   };
 
   return (
