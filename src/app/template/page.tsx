@@ -29,6 +29,8 @@ export default async function surveyPage({
   const sort = searchParams.sort;
   const search = searchParams.search;
 
+  console.log("client: ", search);
+
   await queryClient.prefetchQuery({
     queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
     queryFn: () => fetchList(page + "", sort, search),
@@ -52,7 +54,7 @@ export default async function surveyPage({
 
         {/* List */}
         <HydrationBoundary state={hydurateState}>
-          <SurveyList page={page} sort={sort} />
+          <SurveyList page={page} sort={sort} search={search} />
         </HydrationBoundary>
       </div>
     </>

@@ -14,14 +14,16 @@ import { QUERY_KEY } from "@/types/constans";
 export default function SurveyList({
   page,
   sort,
+  search,
 }: {
   page: number;
   sort?: string;
+  search?: string;
 }) {
   //하이듀레이션
   const { data, isLoading } = useQuery<GetTemplateLists>({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort],
-    queryFn: () => fetchList(page + "", sort),
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
+    queryFn: () => fetchList(page + "", sort, search),
     staleTime: 10000,
   });
 

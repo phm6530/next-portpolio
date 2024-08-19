@@ -7,17 +7,27 @@ import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { templateMetaProps } from "@/types/template";
 import { NextRequest, NextResponse } from "next/server";
+import { QUERY_STRING } from "@/types/constans";
 
 // template List Get
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
-    const pageParams = searchParams.get("page");
+    const pageParams = searchParams.get(QUERY_STRING.PAGE);
 
     const page = pageParams !== null ? parseInt(pageParams, 10) : 1;
+    console.log(QUERY_STRING.SEARCH);
 
-    const result = await getTemplateList(page);
-    const listCnt = await getTemplateAllCnt();
+    const search = searchParams.get(QUERY_STRING.SEARCH) || "";
+
+    const sort = searchParams.get(QUERY_STRING.SORT) || null;
+
+    console.log("server : ", search);
+
+    const result = await getTemplateList(page, search, sort);
+    const listCnt = await getTemplateAllCnt(search, sort);
+
+    // console.log("result:::", result);
 
     // JSON 응답
     return NextResponse.json({ result, cnt: listCnt });

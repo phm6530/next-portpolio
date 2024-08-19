@@ -21,7 +21,7 @@ export default function SurveyItem({
     template,
     age_group,
     gender_group,
-    total_cnt,
+    user_cnt,
   } = itemData;
 
   const router = useRouter();
@@ -101,7 +101,7 @@ export default function SurveyItem({
 
         <div className={classes.bottomWrap}>
           <span className={classes.Participation}>
-            참여자 {total_cnt || 0}명
+            참여자 {user_cnt || 0}명
           </span>
         </div>
       </div>

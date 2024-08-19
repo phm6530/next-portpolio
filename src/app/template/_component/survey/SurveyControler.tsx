@@ -3,23 +3,24 @@
 import { useState } from "react";
 import classes from "./surveyControler.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LIST_SORT } from "@/types/constans";
 
 const btnArr = [
   {
     label: "전체보기",
-    value: "all",
+    value: LIST_SORT.ALL,
   },
   {
     label: "참여자 높은 순",
-    value: "participantHigh",
+    value: LIST_SORT.USER,
   },
   {
     label: "남자 선호가 높은",
-    value: "maleHigh",
+    value: LIST_SORT.MALE,
   },
   {
     label: "여자 선호가 높은",
-    value: "femailHigh",
+    value: LIST_SORT.FEMALE,
   },
 ];
 

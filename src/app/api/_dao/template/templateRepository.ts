@@ -1,5 +1,5 @@
 import { InferObj } from "@/types/common";
-import { CONST_PAGING } from "@/types/constans";
+import { CONST_PAGING, LIST_SORT } from "@/types/constans";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
@@ -48,7 +48,9 @@ type GetTemplateMeta = {
 };
 
 export const selectTemplateMetaData = async (
-  props: GetTemplateMeta & (TruePageNation | FalsePageNation)
+  props: GetTemplateMeta & (TruePageNation | FalsePageNation),
+  search?: string | null,
+  sort?: string | null
 ): Promise<RowDataPacket[] | RowDataPacket> => {
   const { conn, usePagination } = props;
 
@@ -61,7 +63,7 @@ export const selectTemplateMetaData = async (
         t.template AS template,
         pr_stats.age_group,
         pr_stats.gender as gender_group,
-        pr_stats.total_cnt
+        pr_stats.total_cnt as user_cnt
     FROM 
         template_meta tm
     JOIN 
@@ -77,16 +79,41 @@ export const selectTemplateMetaData = async (
             participants_recodes pr
         GROUP BY 
             pr.template_id, pr.age_group, pr.gender
-    ) pr_stats ON tm.id = pr_stats.template_id AND pr_stats.rn = 1
+    ) pr_stats ON tm.id = pr_stats.template_id AND pr_stats.rn = 1 
+    WHERE tm.title LIKE ?
   `;
 
-  let queryParams: (number | undefined)[] = [];
+  let queryParams: (number | string | undefined)[] = [`%${search}%`];
 
+  //list Get인지  Detail GEt인지 유무
   if (usePagination) {
     const { offset = 0 } = props as TruePageNation;
-
     const limit = CONST_PAGING.LIMIT;
-    sql += ` ORDER BY tm.id DESC LIMIT ? OFFSET ?`;
+
+    // 성별 정렬 조건
+    if (sort === LIST_SORT.FEMALE || sort === LIST_SORT.MALE) {
+      const genderOrder =
+        sort === LIST_SORT.FEMALE
+          ? [LIST_SORT.FEMALE, LIST_SORT.MALE]
+          : [LIST_SORT.MALE, LIST_SORT.FEMALE];
+
+      sql += `
+        ORDER BY 
+          CASE 
+            WHEN pr_stats.gender = '${genderOrder[0]}' THEN 1
+            WHEN pr_stats.gender = '${genderOrder[1]}' THEN 2
+            ELSE 3
+          END,
+          pr_stats.total_cnt DESC
+        LIMIT ? OFFSET ?;
+      `;
+    } else if (sort === LIST_SORT.USER) {
+      // 사용자 순
+      sql += "ORDER BY pr_stats.total_cnt DESC LIMIT 12 OFFSET 0;";
+    } else {
+      sql += ` ORDER BY tm.id DESC LIMIT ? OFFSET ?`;
+    }
+    //push
     queryParams.push(limit, offset);
   } else {
     const { template_id } = props as FalsePageNation;
@@ -97,6 +124,7 @@ export const selectTemplateMetaData = async (
   }
 
   const [rows] = await conn.query<RowDataPacket[]>(sql, queryParams);
+
   return usePagination ? rows : rows[0];
 };
 

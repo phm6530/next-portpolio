@@ -31,7 +31,11 @@ export async function postAddTemplate(
 }
 
 //template Get Service
-export async function getTemplateList(page: number = 1) {
+export async function getTemplateList(
+  page: number,
+  search?: string | null,
+  sort?: string | null
+) {
   return withConnection(async (conn) => {
     //List 가져올땐 True 아니면 false 하면 됨
     const offset = (page - 1) * CONST_PAGING.LIMIT;
@@ -43,15 +47,25 @@ export async function getTemplateList(page: number = 1) {
       offset,
     };
 
-    return selectTemplateMetaData(parameter);
+    const result = await selectTemplateMetaData(parameter, search, sort);
+    return result;
   });
 }
 
 //template Get Service
-export async function getTemplateAllCnt(): Promise<number> {
+export async function getTemplateAllCnt(
+  search: string | null,
+  sort: string | null
+): Promise<number> {
   return withConnection(async (conn) => {
-    const sql = "select count(*) as cnt from template_meta;";
-    const [templateAll] = await conn.query<RowDataPacket[]>(sql);
+    //검색 유무
+    const sql = search
+      ? `select count(*) as cnt from template_meta where template_meta.title like ?;`
+      : "select count(*) as cnt from template_meta;";
+
+    const keyWord = `%${search}%`;
+
+    const [templateAll] = await conn.query<RowDataPacket[]>(sql, [keyWord]);
     return templateAll[0].cnt;
   });
 }

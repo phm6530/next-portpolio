@@ -11,3 +11,10 @@ export enum QUERY_STRING {
 export enum QUERY_KEY {
   TEMPLATE_LIST = "template-list",
 }
+
+export enum LIST_SORT {
+  ALL = "all",
+  MALE = "male",
+  FEMALE = "female",
+  USER = "user",
+}

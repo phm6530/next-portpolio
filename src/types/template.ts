@@ -46,5 +46,5 @@ export type PostAddsurveyDetailProps = {
 export type GetTemplateDetail = {
   age_group: string;
   gender_group: Gender;
-  total_cnt: number;
+  user_cnt: number;
 } & Omit<templateItemProps, "templateOption">;
