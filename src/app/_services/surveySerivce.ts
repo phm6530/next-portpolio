@@ -1,24 +1,31 @@
 import { withFetch } from "@/app/lib/helperClient";
+import { QUERY_STRING } from "@/types/constans";
 import { GetTemplateLists, TemplateProps } from "@/types/template";
 
-//getList
+//get-List
 export function fetchList(
   page: string,
-  ftiler: string = "all"
+  sort?: string,
+  search?: string
 ): Promise<GetTemplateLists> {
   return withFetch<GetTemplateLists>(() => {
     const queryParams = new URLSearchParams({
       page,
-      ftiler,
-    }).toString();
+    });
+
+    //정렬
+    if (sort) {
+      queryParams.append(QUERY_STRING.SORT, sort);
+    }
+    //서치 키워드
+    if (search) {
+      queryParams.append(QUERY_STRING.SEARCH, search);
+    }
 
     return fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/template?${queryParams}`,
       {
         cache: "no-cache",
-        // next: {
-        //   revalidate: 10,
-        // },
       }
     );
   });

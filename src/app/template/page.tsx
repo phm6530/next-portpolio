@@ -11,6 +11,7 @@ import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { fetchList } from "@/app/_services/surveySerivce";
 import { Metadata } from "next";
+import { QUERY_KEY } from "@/types/constans";
 
 //메타설정
 export const metadata: Metadata = {
@@ -21,14 +22,16 @@ export const metadata: Metadata = {
 export default async function surveyPage({
   searchParams,
 }: {
-  searchParams: { page: string };
+  searchParams: { page: string; sort?: string; search?: string };
 }) {
+  // search
   const page = +searchParams.page || 1;
-  console.log(page);
+  const sort = searchParams.sort;
+  const search = searchParams.search;
 
   await queryClient.prefetchQuery({
-    queryKey: ["list", "survey", page],
-    queryFn: () => fetchList(page + ""),
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
+    queryFn: () => fetchList(page + "", sort, search),
     staleTime: 10000,
   });
   const hydurateState = dehydrate(queryClient);
@@ -49,7 +52,7 @@ export default async function surveyPage({
 
         {/* List */}
         <HydrationBoundary state={hydurateState}>
-          <SurveyList page={page} />
+          <SurveyList page={page} sort={sort} />
         </HydrationBoundary>
       </div>
     </>

@@ -1,18 +1,27 @@
 "use client";
 
-import { fetchList } from "@/app/_services/surveySerivce";
-import { GetTemplateLists } from "@/types/template";
-import { useQuery } from "@tanstack/react-query";
 import classes from "./SurveyList.module.scss";
 import SurveyItem from "@/app/_components/survey/SurveyItem";
 import PageGsap from "@/app/_aniPage/PageGsap";
 import Paging from "@/app/_components/ui/Paging";
 
-export default function SurveyList({ page }: { page: number }) {
+import { fetchList } from "@/app/_services/surveySerivce";
+import { GetTemplateLists } from "@/types/template";
+import { useQuery } from "@tanstack/react-query";
+
+import { QUERY_KEY } from "@/types/constans";
+
+export default function SurveyList({
+  page,
+  sort,
+}: {
+  page: number;
+  sort?: string;
+}) {
   //하이듀레이션
   const { data, isLoading } = useQuery<GetTemplateLists>({
-    queryKey: ["list", "survey", page],
-    queryFn: () => fetchList(page + ""),
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort],
+    queryFn: () => fetchList(page + "", sort),
     staleTime: 10000,
   });
 

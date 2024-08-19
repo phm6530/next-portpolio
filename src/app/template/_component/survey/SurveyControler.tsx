@@ -14,16 +14,12 @@ const btnArr = [
     value: "participantHigh",
   },
   {
-    label: "좋아요 높은 순",
-    value: "likeHigh",
-  },
-  {
     label: "남자 선호가 높은",
-    value: "MenPreference",
+    value: "maleHigh",
   },
   {
     label: "여자 선호가 높은",
-    value: "femailPreference",
+    value: "femailHigh",
   },
 ];
 

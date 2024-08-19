@@ -44,7 +44,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 15 * 60,
+    maxAge: 30 * 60, //세션 30분 설정
+    updateAge: 15 * 60, //15분 갱신
   },
   callbacks: {
     async jwt({ token, user }) {
