@@ -156,11 +156,7 @@ export const selectTemplateMetaData = async (
     }
   }
 
-  console.log(queryParams);
-
   const [rows] = await conn.query<RowDataPacket[]>(sql, queryParams);
-
-  console.log("rows::::", rows);
 
   return usePagination ? rows : rows[0];
 };

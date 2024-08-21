@@ -55,7 +55,13 @@ export default function MsgItem({
   });
 
   const deleteMessage = () => {
-    if (session && userId === session?.user.user_id) {
+    if (session?.user && userId === session?.user.user_id) {
+      confirm("삭제하시겠습니까?") &&
+        mutate({ comment_id, reply_id, msgRole: role });
+      return;
+    }
+
+    if (session && session.user.role === "admin") {
       confirm("삭제하시겠습니까?") &&
         mutate({ comment_id, reply_id, msgRole: role });
       return;

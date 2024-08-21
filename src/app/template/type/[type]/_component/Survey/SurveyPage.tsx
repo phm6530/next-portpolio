@@ -30,6 +30,7 @@ const initialFormState: AddSurveyFormProps = {
   items: [],
   access_email: "",
   access_email_agreed: false,
+  access_pin: null,
 };
 
 export default function SurveyPage({ template }: { template: TemplateProps }) {
@@ -75,6 +76,8 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
+  console.log("watch : ", formState.watch());
+  console.log("err : ", formState.formState.errors);
 
   const { mutate } = useMutation<
     unknown,
@@ -93,21 +96,22 @@ export default function SurveyPage({ template }: { template: TemplateProps }) {
       }),
     onSuccess: () => {
       router.replace("/template");
-      alert("성공");
+      alert("설문조사 개설 완료되었습니다. ");
     },
   });
 
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
     try {
-      if (formState.getValues("items").length !== 0) {
+      if (
+        formState.getValues("items").length !== 0 &&
+        formState.getValues("access_pin") !== null
+      ) {
         const resultData = {
           ...data,
           template,
           template_key: template_key as string,
         };
-
-        console.log(resultData);
 
         mutate(resultData);
       } else {

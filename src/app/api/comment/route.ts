@@ -55,10 +55,15 @@ export async function DELETE(req: NextRequest) {
       ? "result_reply"
       : (null as never);
 
+    console.log(msgRole);
+
     //세션 유무
     const session = await auth();
+    if (session && session.user.role === "admin") {
+      console.log("어드민임");
+    }
 
-    if (session && msgRole !== "visitor") {
+    if (session?.user.role === "user" && msgRole !== "visitor") {
       const { user_id } = session.user;
 
       //세션의 오너가 맞는지 확인
@@ -67,7 +72,6 @@ export async function DELETE(req: NextRequest) {
         user_id,
         comment_id || reply_id
       );
-      console.log(isOnwer);
       if (!isOnwer) throw new Error("잘못된 요청입니다.");
     } else {
       //익명 비밀번호 확인

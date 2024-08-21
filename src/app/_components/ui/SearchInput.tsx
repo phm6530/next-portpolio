@@ -13,9 +13,7 @@ export default function SearchInput({ search }: { search?: string }) {
 
   useEffect(() => {
     const search = qs.get(QUERY_STRING.SEARCH);
-    if (!search) {
-      setSearchText("");
-    }
+    setSearchText(!search ? "" : search);
   }, [qs]);
 
   const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {

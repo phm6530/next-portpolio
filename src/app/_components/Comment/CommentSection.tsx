@@ -8,7 +8,6 @@ import { userProps } from "@/types/user";
 import { withFetch } from "@/app/lib/helperClient";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { queryClient } from "@/app/config/queryClient";
 
 export type MessageProps = {
   //각 Id로 분기처리
@@ -35,8 +34,7 @@ export default function CommentSection({ templateId }: { templateId: number }) {
         );
       }),
     staleTime: 10000,
-    enabled: !!templateId, // templateId가 있을 때만 쿼리 실행
-    initialData: queryClient.getQueryData(["comment"]),
+    enabled: !!templateId,
   });
 
   if (isError) {

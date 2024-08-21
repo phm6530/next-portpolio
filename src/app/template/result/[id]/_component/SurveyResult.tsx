@@ -7,7 +7,6 @@ import { Gender } from "@/types/template";
 
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 
 const FILTER_GENDER = [
   {
@@ -118,10 +117,11 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
-          <p>참여자 : {templateMeta.user_cnt} 명</p>
+          <p>참여자 : {templateMeta.user_cnt || 0} 명</p>
           <p>
-            이 {templateName}은/는 {templateMeta.age_group}대
-            {templateMeta.gender_group}이 가장 많이 참여하였습니다.
+            {templateMeta.user_cnt < 10
+              ? "집계하기엔 아직 참여자가 너무 적습니다."
+              : `이 ${templateName}은/는 ${templateMeta.age_group}대 ${templateMeta.gender_group}이 가장 많이 참여하였습니다.`}
           </p>
         </div>
 

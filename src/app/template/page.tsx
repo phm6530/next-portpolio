@@ -29,8 +29,6 @@ export default async function surveyPage({
   const sort = searchParams.sort;
   const search = searchParams.search;
 
-  console.log("client: ", search);
-
   await queryClient.prefetchQuery({
     queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
     queryFn: () => fetchList(page + "", sort, search),

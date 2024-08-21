@@ -3,6 +3,7 @@ import classes from "./home.module.scss";
 
 import dynamic from "next/dynamic";
 import SurveySlide from "@/app/_main/SurveySlide";
+import { auth } from "@/auth";
 
 //메타 데이터
 export const metadata: Metadata = {

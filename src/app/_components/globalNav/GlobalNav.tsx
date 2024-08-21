@@ -1,9 +1,8 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import classes from "./GlobalNav.module.scss";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface GlobalNavProps {
   isLogin: boolean;
@@ -11,6 +10,8 @@ interface GlobalNavProps {
 
 export default function GlobalNav({ isLogin: initialIsLogin }: GlobalNavProps) {
   const { data: session } = useSession();
+
+  const pathname = usePathname();
 
   return (
     <>
@@ -21,10 +22,10 @@ export default function GlobalNav({ isLogin: initialIsLogin }: GlobalNavProps) {
           <Link href={"/template"}>리스트</Link>
           <Link href={"/admin"}>Admin</Link>
           <Link href={"/contact"}>contact</Link>
-          {session ? (
+          {session?.user.role === "admin" ? (
             <button onClick={() => signOut()}>로그아웃</button>
           ) : (
-            <Link href={"/auth/login"}>로그인</Link>
+            <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
           )}
         </nav>
       </header>

@@ -1,7 +1,7 @@
 "use client";
 
 import classes from "./Msg.module.scss";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/app/lib/helperClient";
@@ -22,6 +22,7 @@ export default function MsgForm({
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
     reset,
   } = useForm();
@@ -39,7 +40,10 @@ export default function MsgForm({
       }),
     onSuccess: () => {
       reset(); //폼 초기화
-      queryClient.invalidateQueries({ queryKey: ["comment"] });
+
+      queryClient.invalidateQueries({
+        queryKey: ["comment"],
+      });
     },
   });
 
@@ -64,10 +68,17 @@ export default function MsgForm({
     newLineCount > 4 ? setRows(newLineCount) : 4;
   };
 
+  const anonymous = session?.user.role === "anonymous";
+  useEffect(() => {
+    if (anonymous) {
+      setValue("name", "작성자");
+    }
+  }, [anonymous, setValue]);
+
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={classes.replyForm}>
-      {session ? (
-        "로그인 중임"
+      {session?.user.role === "admin" ? (
+        session?.user.user_id
       ) : (
         <>
           <input
@@ -82,6 +93,7 @@ export default function MsgForm({
                 message: "이름은 최소 2글자로 설정해주세요",
               },
             })}
+            readOnly={anonymous}
           />
           <input
             type="password"

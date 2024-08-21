@@ -7,6 +7,10 @@ declare module "next-auth" {
       id: string;
       nickName: string;
       role: "admin" | "visitor" | "anonymous";
+
+      //익명
+      access_email?: string;
+      template_key?: string;
     } & DefaultSession["user"];
   }
 
@@ -14,6 +18,8 @@ declare module "next-auth" {
     user_id?: string;
     user_name?: string;
     user_nickname?: string;
+    access_email?: string;
+    template_key?: string;
     role: "admin" | "visitor" | "anonymous"; // 사용자 역할
   }
 }

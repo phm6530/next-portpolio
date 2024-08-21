@@ -12,16 +12,12 @@ import { templateMetaProps } from "@/types/template";
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
 import { sendEmail } from "@/app/lib/nodeMailer";
-import addPin from "@/app/lib/addPin";
 
 //template Post Service
 export async function postAddTemplate(
   data: AddSurveyFormProps & templateMetaProps
 ) {
   const { items, template, template_key, ...rest } = data;
-
-  //4핀 생성
-  const pin = addPin(4);
 
   //템플릿 ID Get
   const template_type_id = getTemplateId(template) as number;
@@ -41,7 +37,7 @@ export async function postAddTemplate(
       conn,
       restData.access_email,
       restData.access_email_agreed,
-      pin,
+      restData.access_pin,
       savedMeta.insertId
     );
 
@@ -53,7 +49,9 @@ export async function postAddTemplate(
       restData.access_email,
       template_key,
       restData.title,
-      savedMeta.insertId
+      savedMeta.insertId,
+      template,
+      restData.access_pin
     );
   });
 }

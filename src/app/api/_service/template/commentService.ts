@@ -64,10 +64,10 @@ export async function postComment(data: postCommentProps) {
   //template or comment id
   const whereId = comment_id || template_id;
 
-  if (session) {
+  if (session && session.user.role === "admin") {
+    console.log("진입");
     // 로그인한 사용자 처리 로직
     const userId = session.user.user_id;
-
     // 댓글인지 대댓글인지에 따라 처리
     return withTransaction<ResultSetHeader>(async (conn) => {
       const getUserId = `SELECT id FROM user where user_id = ?;`;
@@ -84,11 +84,13 @@ export async function postComment(data: postCommentProps) {
         whereId,
         rows[0].id,
       ]);
+
       return result;
     });
   } else {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("진입");
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     const ROLE = "visitor"; // 익명 사용자 role
     // Id Check
     if (comment_id || template_id) {

@@ -1,6 +1,12 @@
 import { getUserDataProps } from "@/app/api/auth/login/route";
+import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { withFetch } from "@/app/lib/helperClient";
+import { withConnection } from "@/app/lib/helperServer";
+import { compare } from "bcrypt";
+import { RowDataPacket } from "mysql2";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { ApiError } from "next/dist/server/api-utils";
 
 type LoginFormProps = {
   user_id: string;
@@ -44,10 +50,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     CredentialsProvider({
       id: "anonymous",
       authorize: async (anonymous) => {
-        const anonymousEmail = anonymous as { email: string };
+        const anonymousAuth = anonymous as {
+          pin: string;
+          template_key: string;
+        };
+
+        const result = await withFetch<{
+          template_key: string;
+          access_email: string;
+        }>(async () => {
+          return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/pin`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(anonymousAuth),
+          });
+        });
 
         // 익명 사용자로 최소한의 정보만 반환
         return {
+          access_email: result.access_email,
+          template_key: result.template_key,
           role: "anonymous",
         };
       },
@@ -63,22 +87,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      // 사용자가 로그인한 경우에만 실행
       if (user) {
-        token.user_id = user.user_id as string;
-        token.user_name = user.user_name;
-        token.user_nickname = user.user_nickname;
-        token.role = user.role;
-      }
+        //관리자
+        console.log(user);
 
+        if (user.role === "admin") {
+          token.user_id = user.user_id as string;
+          token.user_name = user.user_name;
+          token.user_nickname = user.user_nickname;
+          token.role = user.role;
+        }
+        //익명
+        else if (user.role === "anonymous") {
+          token.user_email = user.access_email;
+          token.user_template_key = user.template_key;
+          token.role = user.role;
+        }
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.user_id = token.user_id;
-        session.user.user_name = token.user_name;
-        session.user.user_nickname = token.user_nickname;
-        session.user.role = token.role;
+      // 관리자
+      if (token.role === "admin") {
+        session.user = {
+          user_id: token.user_id,
+          user_name: token.user_name,
+          user_nickname: token.user_nickname,
+          role: token.role,
+        };
+      }
+      // 익명 사용자
+      else if (token.role === "anonymous") {
+        session.user = {
+          access_email: token.user_email,
+          template_key: token.user_template_key,
+          role: token.role,
+        };
       }
       return session;
     },
