@@ -6,7 +6,7 @@ export type SurveyType = {
 };
 
 //Template Name
-export type TemplateProps = "survey" | "rank";
+export type TemplateTypeProps = "survey" | "rank";
 export type IuputBoolean = "1" | "0";
 
 export type TotalCntProps = { total_cnt: null | number };
@@ -16,7 +16,7 @@ export interface templateItemProps {
   title: string;
   description: string;
   created_at: string;
-  template: TemplateProps;
+  template: TemplateTypeProps;
   img?: string;
 
   templateOption: {
@@ -26,7 +26,7 @@ export interface templateItemProps {
 }
 
 export type templateMetaProps = {
-  template: TemplateProps;
+  template: TemplateTypeProps;
   template_key: string;
 };
 

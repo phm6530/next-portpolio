@@ -11,8 +11,6 @@ const Login = async ({
   const { redirect: redirectPath } = searchParams;
   const session = await auth();
 
-  console.log(redirectPath);
-
   if (session?.user.role === "admin") {
     redirect(redirectPath || "/");
   }

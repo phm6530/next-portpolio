@@ -37,6 +37,8 @@ export default function MsgItem({
     mutationFn: (data) =>
       withFetch(async () => {
         const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`;
+        console.log(data);
+
         return fetch(url, {
           method: "DELETE",
           headers: {
@@ -55,18 +57,20 @@ export default function MsgItem({
   });
 
   const deleteMessage = () => {
-    if (session?.user && userId === session?.user.user_id) {
-      confirm("삭제하시겠습니까?") &&
-        mutate({ comment_id, reply_id, msgRole: role });
-      return;
+    //
+    if (session) {
+      if (session.user.role === "user" && userId === session?.user.user_id) {
+        confirm("삭제하시겠습니까?") &&
+          mutate({ comment_id, reply_id, msgRole: role });
+        return;
+      } else if (session.user.role === "admin") {
+        confirm("삭제하시겠습니까?") &&
+          mutate({ comment_id, reply_id, msgRole: role });
+        return;
+      }
     }
 
-    if (session && session.user.role === "admin") {
-      confirm("삭제하시겠습니까?") &&
-        mutate({ comment_id, reply_id, msgRole: role });
-      return;
-    }
-
+    //익명
     const msgPassword = prompt("비밀번호를 입력해주세요");
     if (msgPassword) {
       if (comment_id || reply_id) {

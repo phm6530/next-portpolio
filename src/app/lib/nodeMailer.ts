@@ -1,5 +1,5 @@
 import { ApiError } from "@/app/lib/apiErrorHandler";
-import { TemplateProps } from "@/types/template";
+import { TemplateTypeProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import nodemailer from "nodemailer";
 
@@ -49,7 +49,7 @@ export const sendEmail = async (
   template_key: string,
   title: string,
   anonymouseId: number,
-  template: TemplateProps,
+  template: TemplateTypeProps,
   pin: AddSurveyFormProps["access_pin"]
 ) => {
   try {

@@ -7,6 +7,7 @@ import { Gender } from "@/types/template";
 
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const FILTER_GENDER = [
   {
@@ -60,6 +61,8 @@ export default function SurveyResult({ id }: { id: number }) {
     "all"
   );
 
+  const router = useRouter();
+
   const { data, isError } = useQuery({
     queryKey: ["default", id],
     queryFn: () => fetchDetailResult(id),
@@ -96,7 +99,6 @@ export default function SurveyResult({ id }: { id: number }) {
     // Age Filter
     const filterAgeHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
       const btnVal = e.currentTarget.value;
-
       if (
         btnVal === "all" ||
         btnVal === "10" ||
@@ -117,7 +119,11 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
+          <button onClick={() => router.push(`/template/${template}/${id}`)}>
+            참여하기
+          </button>
           <p>참여자 : {templateMeta.user_cnt || 0} 명</p>
+
           <p>
             {templateMeta.user_cnt < 10
               ? "집계하기엔 아직 참여자가 너무 적습니다."

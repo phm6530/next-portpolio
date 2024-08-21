@@ -5,7 +5,7 @@ import {
   PostAddsurveyDetailProps,
   SurveyType,
   templateItemProps,
-  TemplateProps,
+  TemplateTypeProps,
 } from "@/types/template";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { ResultSetHeader } from "mysql2";
@@ -15,7 +15,7 @@ type RowDataSurvey = {
   id: number;
   title: string;
   description: string;
-  template: TemplateProps;
+  template: TemplateTypeProps;
   gender_chk: number;
   age_chk: number;
   created_at: string;

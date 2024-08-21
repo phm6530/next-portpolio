@@ -6,12 +6,16 @@ import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import classes from "./template.module.scss";
 import { useRouter } from "next/navigation";
+
+import { withFetch } from "@/app/lib/helperClient";
+import { localStorageHandler } from "@/app/lib/localStorageHandler";
+import { useEffect, useState } from "react";
 
 interface Option {
   label: string;
@@ -25,6 +29,11 @@ export default function SurveyTemplateDetail({
   templateType: TemplateUnionType;
   surveyId: number;
 }) {
+  const formMethod = useForm();
+  const router = useRouter();
+
+  const [participatedAt, setParticipatedAt] = useState<string | null>(null);
+
   const { isLoading, data } = useQuery({
     queryKey: [templateType, surveyId],
     queryFn: () =>
@@ -32,65 +41,77 @@ export default function SurveyTemplateDetail({
     staleTime: 10000,
     enabled: !!surveyId,
   });
-  const formMethod = useForm();
-  const router = useRouter();
 
-  // useEffect(() => {
-  //   if (data) {
-  //     const defaultValues = data.questions.reduce<Record<string, string>>(
-  //       (acc, qs) => {
-  //         if (qs.type === "text") {
-  //           acc[`${qs.id}`] = "";
-  //           return acc;
-  //         }
-  //         return acc;
-  //       },
-  //       {}
-  //     );
+  useEffect(() => {
+    if (data) {
+      const localParticipation = localStorageHandler({
+        templateId: data.id,
+        templateType: data.template,
+      }).getter();
+      setParticipatedAt(localParticipation.participatedAt);
+    }
+  }, [data]);
 
-  //     console.log(defaultValues);
-  //     formMethod.reset(defaultValues);
-  //   }
-  // }, [data, formMethod]);
+  //제출
+  const { mutate } = useMutation<
+    unknown,
+    Error,
+    Record<string, string | Option[]>
+  >({
+    mutationFn: (formData) =>
+      withFetch(async () => {
+        return fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+      }),
+
+    onSuccess: () => {
+      if (confirm("제출완료 되었습니다 결과페이지로 가실꺼?")) {
+        router.push(`/template/result/${surveyId}`);
+
+        if (data) {
+          localStorageHandler({
+            templateId: data.id,
+            templateType: data.template,
+          }).setter();
+        }
+      } else {
+        router.push("/template");
+      }
+    },
+  });
 
   if (isLoading) {
     return <LoadingSpier />;
   }
 
+  //template명 + template id
+
   //Submit
-  const onSubmitHandler = async (data: Record<string, string | Option[]>) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message);
-      }
-
-      if (confirm("제출완료 되었습니다 결과페이지로 가실꺼?")) {
-        router.push(`/template/result/${surveyId}`);
-      } else {
-        router.push("/template");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-      }
-    }
+  const onSubmitHandler = async (
+    formData: Record<string, string | Option[]>
+  ) => {
+    mutate(formData);
   };
 
   if (data) {
     return (
       <>
+        {!!participatedAt && (
+          <>
+            이미 {participatedAt}에 참여하셨어요!
+            <button onClick={() => router.push(`/template/result/${surveyId}`)}>
+              결과 보기
+            </button>
+          </>
+        )}
         <h1>{data.title}</h1>
         <h2>{data.description}</h2>
 

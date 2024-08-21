@@ -2,7 +2,7 @@
 "use client";
 
 import { AddSurveyFormProps } from "@/types/templateSurvey";
-import { TemplateProps } from "@/types/template";
+import { TemplateTypeProps } from "@/types/template";
 import { FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid4 } from "uuid";
 
@@ -33,7 +33,11 @@ const initialFormState: AddSurveyFormProps = {
   access_pin: null,
 };
 
-export default function SurveyPage({ template }: { template: TemplateProps }) {
+export default function SurveyPage({
+  template,
+}: {
+  template: TemplateTypeProps;
+}) {
   //zustand
   const settemplate_key = useStore((state) => state.settemplate_key);
   const removetemplate_key = useStore((state) => state.removetemplate_key);

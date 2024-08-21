@@ -94,7 +94,7 @@ export default function SurveyItem({
               의 참여율이 가장 높습니다.
             </>
           ) : (
-            "참여해주세요!"
+            user_cnt < 10 && "참여해주세요!"
           )}
         </div>
 

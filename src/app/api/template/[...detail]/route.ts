@@ -3,7 +3,7 @@ import {
   postSurveyDetail,
 } from "@/app/api/_service/template/surveySerivce";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { PostAddsurveyDetailProps, TemplateProps } from "@/types/template";
+import { PostAddsurveyDetailProps, TemplateTypeProps } from "@/types/template";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET Detail Survey
@@ -12,7 +12,7 @@ export async function GET(
   {
     params,
   }: {
-    params: { detail: [TemplateProps, string] };
+    params: { detail: [TemplateTypeProps, string] };
   }
 ) {
   try {
@@ -34,7 +34,7 @@ export async function POST(
   {
     params,
   }: {
-    params: { detail: [TemplateProps, string] };
+    params: { detail: [TemplateTypeProps, string] };
   }
 ) {
   const [templateType, DetailId] = params.detail;

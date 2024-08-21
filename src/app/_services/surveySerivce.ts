@@ -1,6 +1,6 @@
 import { withFetch } from "@/app/lib/helperClient";
 import { QUERY_STRING } from "@/types/constans";
-import { GetTemplateLists, TemplateProps } from "@/types/template";
+import { GetTemplateLists, TemplateTypeProps } from "@/types/template";
 
 //get-List
 export function fetchList(
@@ -33,7 +33,7 @@ export function fetchList(
 
 //Template 디테일
 export function fetchTemplateDetail<T>(
-  templateType: TemplateProps,
+  templateType: TemplateTypeProps,
   id: number
 ): Promise<T> {
   return withFetch<T>(() => {

@@ -49,7 +49,7 @@ export type AddSurveyFormProps = {
   items: (SurveyText | SurveyRadioProps)[];
   access_email: string;
   access_email_agreed: boolean;
-  access_pin: number;
+  access_pin?: number | null;
 };
 
 //Survey Type Detila

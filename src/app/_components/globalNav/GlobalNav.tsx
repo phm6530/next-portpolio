@@ -21,7 +21,7 @@ export default function GlobalNav({ isLogin: initialIsLogin }: GlobalNavProps) {
           <Link href={"/about"}>사용법</Link>
           <Link href={"/template"}>리스트</Link>
           <Link href={"/admin"}>Admin</Link>
-          <Link href={"/contact"}>contact</Link>
+          <Link href={"/contact"}>문의하기</Link>
           {session?.user.role === "admin" ? (
             <button onClick={() => signOut()}>로그아웃</button>
           ) : (
