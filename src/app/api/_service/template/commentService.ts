@@ -65,7 +65,6 @@ export async function postComment(data: postCommentProps) {
   const whereId = comment_id || template_id;
 
   if (session && session.user.role === "admin") {
-    console.log("진입");
     // 로그인한 사용자 처리 로직
     const userId = session.user.user_id;
     // 댓글인지 대댓글인지에 따라 처리
@@ -88,8 +87,6 @@ export async function postComment(data: postCommentProps) {
       return result;
     });
   } else {
-    console.log("진입");
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const ROLE = "visitor"; // 익명 사용자 role
     // Id Check

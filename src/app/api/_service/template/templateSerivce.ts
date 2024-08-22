@@ -2,21 +2,28 @@ import { insertQuestion } from "@/app/api/_dao/template/SurveyRepository";
 
 import { getTemplateId } from "@/app/lib/utilFunc";
 import { withConnection, withTransaction } from "@/app/lib/helperServer";
-import { AddSurveyFormProps } from "@/types/templateSurvey";
+import {
+  AddSurveyFormProps,
+  RequestSurveyFormProps,
+} from "@/types/templateSurvey";
 import {
   insertAnonymous,
   insertTemplateMeta,
   selectTemplateMetaData,
 } from "@/app/api/_dao/template/templateRepository";
-import { templateMetaProps } from "@/types/template";
+
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
 import { sendEmail } from "@/app/lib/nodeMailer";
+import {
+  GetTemplateDetail,
+  SelectTEmplateDetailProps,
+  templateItemProps,
+} from "@/types/template";
+import { ApiError } from "@/app/lib/apiErrorHandler";
 
 //template Post Service
-export async function postAddTemplate(
-  data: AddSurveyFormProps & templateMetaProps
-) {
+export async function postAddTemplate(data: RequestSurveyFormProps) {
   const { items, template, template_key, ...rest } = data;
 
   //템플릿 ID Get
@@ -37,7 +44,7 @@ export async function postAddTemplate(
       conn,
       restData.access_email,
       restData.access_email_agreed,
-      restData.access_pin,
+      restData.access_pin!,
       savedMeta.insertId
     );
 
@@ -74,7 +81,25 @@ export async function getTemplateList(
     };
 
     const result = await selectTemplateMetaData(parameter, search, sort);
-    return result;
+
+    if (Array.isArray(result)) {
+      const reducedResult = result.reduce(
+        (acc: GetTemplateDetail[], cur: SelectTEmplateDetailProps) => {
+          const { start_date, end_date, ...rest } = cur;
+          const newCur = {
+            ...rest,
+            dateRange: [start_date, end_date],
+          };
+          acc.push(newCur);
+          return acc;
+        },
+        []
+      );
+
+      return reducedResult;
+    } else {
+      throw new ApiError("잘못된 요청입니다.", 401);
+    }
   });
 }
 

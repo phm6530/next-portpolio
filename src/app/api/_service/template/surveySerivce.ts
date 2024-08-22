@@ -37,7 +37,7 @@ export async function getSurveyDetail(
   });
 
   //Meta Data
-  const metaData: templateItemProps = {
+  const metaData: Omit<templateItemProps, "template_key"> = {
     id: rowData[0].id,
     title: rowData[0].title,
     description: rowData[0].description,

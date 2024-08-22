@@ -1,12 +1,7 @@
 import { getUserDataProps } from "@/app/api/auth/login/route";
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { withFetch } from "@/app/lib/helperClient";
-import { withConnection } from "@/app/lib/helperServer";
-import { compare } from "bcrypt";
-import { RowDataPacket } from "mysql2";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { ApiError } from "next/dist/server/api-utils";
 
 type LoginFormProps = {
   user_id: string;
@@ -89,7 +84,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         //관리자
-        console.log(user);
 
         if (user.role === "admin") {
           token.user_id = user.user_id as string;

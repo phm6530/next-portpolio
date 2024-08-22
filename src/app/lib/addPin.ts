@@ -3,5 +3,5 @@ export default function addPin(length: number) {
   const startNum = Math.pow(10, length - 1);
   const endNum = Math.pow(10, length) - 1;
 
-  return Math.floor(startNum + Math.random() * endNum);
+  return Math.floor(startNum + Math.random() * (endNum - startNum + 1));
 }

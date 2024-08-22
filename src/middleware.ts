@@ -3,26 +3,25 @@ import { auth } from "@/auth";
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const session = await auth(); // req를 전달하여 쿠키를 확인
   const urlKey = url.pathname.split("/").pop();
 
-  // /auth/pin 페이지로의 무한 루프를 방지
-  if (url.pathname.startsWith("/auth/pin")) {
-    return NextResponse.next();
-  }
+  const session = await auth(); // req를 전달하여 쿠키를 확인
 
   // 어드민일 때는 인증 절차를 건너뜀
   if (session && session.user.role === "admin") {
     return NextResponse.next();
   }
 
+  //로그인할떄
   if (url.pathname.startsWith("/admin")) {
     if (!session || session.user.role !== "admin") {
       return NextResponse.redirect(
         new URL(`/auth/login?redirect=${url.pathname}`, url.origin)
       );
     }
-  } else if (url.pathname.startsWith("/template/admin")) {
+  }
+  //핀번호 리다이렉트
+  else if (url.pathname.startsWith("/template/admin")) {
     if (!session) {
       return NextResponse.redirect(
         new URL(`/auth/pin?redirect=${url.pathname}`, url.origin)
@@ -30,7 +29,10 @@ export async function middleware(req: NextRequest) {
     }
 
     // 현재 URL의 key와 세션의 template_key가 일치하지 않으면 리디렉션
-    if (urlKey !== session.user.template_key) {
+    if (
+      session.user.role === "anonymous" &&
+      urlKey !== session.user.template_key
+    ) {
       return NextResponse.redirect(
         new URL(`/auth/pin?redirect=${url.pathname}`, url.origin)
       );

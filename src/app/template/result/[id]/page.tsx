@@ -9,6 +9,8 @@ import CommentSection, {
   MessageProps,
 } from "@/app/_components/Comment/CommentSection";
 import { withFetch } from "@/app/lib/helperClient";
+import AdminController from "@/app/template/admin/_component/AdminController";
+import { auth } from "@/auth";
 
 interface TemplateData {
   templateMeta: templateItemProps;
@@ -44,8 +46,9 @@ export default async function resultPage({
 }) {
   //Id
   const templateId = +params.id;
+  const session = await auth();
 
-  await queryClient.prefetchQuery({
+  const prefetchMetaData = await queryClient.fetchQuery({
     queryKey: ["default", templateId],
     queryFn: () => fetchDetailResult(templateId),
     staleTime: 10000,
@@ -67,6 +70,12 @@ export default async function resultPage({
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
+        {session?.user.role === "admin" && (
+          <AdminController
+            user={session?.user}
+            curTemplateKey={prefetchMetaData.templateMeta.template_key}
+          />
+        )}
         {/* Result */}
         <SurveyResult id={templateId} />
 

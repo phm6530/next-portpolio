@@ -19,21 +19,16 @@ export default async function adminResult({
   params: { template_key: string };
 }) {
   const session = await auth();
-
-  console.log(session?.user);
-
   const [rows] = await withConnection(async (conn) => {
     const sql = `SELECT id FROM template_meta where template_key = ?;`;
     return conn.query<RowDataPacket[]>(sql, [params.template_key]);
   });
 
-  const templateId = +rows[0].id;
-
   //쿼리문 결과가 없으면
   if (!rows[0]) {
     notFound();
   }
-
+  const templateId = +rows[0].id;
   await queryClient.prefetchQuery({
     queryKey: ["default", templateId],
     queryFn: () => fetchDetailResult(rows[0].id),

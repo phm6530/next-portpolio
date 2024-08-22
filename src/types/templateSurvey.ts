@@ -4,6 +4,7 @@ import {
   IuputBoolean,
   SurveyType,
   templateItemProps,
+  templateMetaProps,
 } from "@/types/template";
 
 export enum ID_template {
@@ -47,10 +48,18 @@ export type AddSurveyFormProps = {
   genderChk: IuputBoolean;
   ageChk: IuputBoolean;
   items: (SurveyText | SurveyRadioProps)[];
+  //기한
+  dateRange: Date[] | null;
+
   access_email: string;
   access_email_agreed: boolean;
   access_pin?: number | null;
 };
+
+export type RequestSurveyFormProps = {
+  dateRange: string[] | null;
+} & Omit<AddSurveyFormProps, "dateRange"> &
+  templateMetaProps;
 
 //Survey Type Detila
 export type AddsurveyDetailProps = {

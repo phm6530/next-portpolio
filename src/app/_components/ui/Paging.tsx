@@ -25,15 +25,13 @@ export default function Paging({ cnt = 1 }: PagingProps) {
   const pageNumber = pageString ? +pageString : 1; //현재 페이지
   const pageLength = Math.ceil(cnt / CONST_PAGING.LIMIT) || 1; //전체 페이지
 
-  console.log(pageNumber, pageLength);
-
   useEffect(() => {
     //오류보단 replace로
     //filter 오류는 Server Component에서 notFound() 처리
     if (pageNumber <= 0 || pageLength < pageNumber) {
       router.replace("/template");
     }
-  }, [pageNumber]);
+  }, [pageNumber, pageLength, router]);
 
   const updateQuertString = (page: number) => {
     params.set("page", page + "");

@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { withFetch } from "@/app/lib/helperClient";
 import { localStorageHandler } from "@/app/lib/localStorageHandler";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface Option {
   label: string;
@@ -48,7 +49,8 @@ export default function SurveyTemplateDetail({
         templateId: data.id,
         templateType: data.template,
       }).getter();
-      setParticipatedAt(localParticipation.participatedAt);
+      localParticipation &&
+        setParticipatedAt(localParticipation.participatedAt);
     }
   }, [data]);
 
@@ -92,8 +94,6 @@ export default function SurveyTemplateDetail({
     return <LoadingSpier />;
   }
 
-  //template명 + template id
-
   //Submit
   const onSubmitHandler = async (
     formData: Record<string, string | Option[]>
@@ -106,7 +106,7 @@ export default function SurveyTemplateDetail({
       <>
         {!!participatedAt && (
           <>
-            이미 {participatedAt}에 참여하셨어요!
+            이미 {participatedAt}에 참여하신 이력이 있어요!
             <button onClick={() => router.push(`/template/result/${surveyId}`)}>
               결과 보기
             </button>

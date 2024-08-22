@@ -81,7 +81,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // 세션이 있거나 세션이 있어도 익명자는 패스워드 넣어야함
-    else if (!session || session.user.role !== "anonymous") {
+    else if (!session || session.user.role === "anonymous") {
       //익명이면 password 받음
       await chkPasswordMatch(targetTable, password, comment_id || reply_id);
     }

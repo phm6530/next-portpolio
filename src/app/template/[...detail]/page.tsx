@@ -8,12 +8,16 @@ import { notFound } from "next/navigation";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
+import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
+
+import { auth } from "@/auth";
+import AdminButton from "@/app/template/_component/AdminButton";
 
 // Dynamic import of components
-const DynamicSurveyTemplateDetail = dynamic(
-  () => import("@/app/template/[...detail]/SurveyTemplateDetail"),
-  { ssr: false, loading: () => <p>Loading Survey Template...</p> } // This makes sure it's only loaded on the client side
-);
+// const DynamicSurveyTemplateDetail = dynamic(
+//   () => import("@/app/template/[...detail]/SurveyTemplateDetail"),
+//   { ssr: false, loading: () => <p>Loading Survey Template...</p> } // This makes sure it's only loaded on the client side
+// );
 
 const DynamicRankTemplateDetail = dynamic(
   () => import("@/app/template/[...detail]/RankTemplateDetail"),
@@ -57,9 +61,11 @@ export async function generateMetadata({
     //Error
     if (!surveyItem) notFound();
 
+    console.log(surveyItem);
+
     return {
-      title: "tet",
-      description: "wetwet",
+      title: surveyItem.title,
+      description: surveyItem.description,
       openGraph: {
         images: [
           {
@@ -80,6 +86,8 @@ export default async function Page({
 }) {
   const [templateType, id] = params.detail;
 
+  const session = await auth();
+
   await queryClient.prefetchQuery({
     queryKey: [templateType, +id],
     queryFn: () => fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id),
@@ -89,10 +97,14 @@ export default async function Page({
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
+        {session && session.user.role === "admin" && (
+          <AdminButton id={id} /> // 클라이언트 컴포넌트 사용
+        )}
+
         {(() => {
           if (templateType === "survey") {
             return (
-              <DynamicSurveyTemplateDetail
+              <SurveyTemplateDetail
                 templateType={templateType}
                 surveyId={+id}
               />

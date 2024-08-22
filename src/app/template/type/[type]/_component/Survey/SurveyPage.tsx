@@ -21,13 +21,16 @@ import TemplateAccess from "@/app/template/type/[type]/_component/TemplateAccess
 import { withFetch } from "@/app/lib/helperClient";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import AddDateRange from "@/app/template/type/[type]/_component/templateAddOptions/AddDateRange";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
   description: "",
   genderChk: "1",
   ageChk: "1",
+  dateRange: null,
   items: [],
+
   access_email: "",
   access_email_agreed: false,
   access_pin: null,
@@ -43,6 +46,7 @@ export default function SurveyPage({
   const removetemplate_key = useStore((state) => state.removetemplate_key);
   const template_key = useStore((state) => state.template_key);
   const router = useRouter();
+
   useEffect(() => {
     settemplate_key(uuid4());
     return () => {
@@ -80,13 +84,15 @@ export default function SurveyPage({
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
-  console.log("watch : ", formState.watch());
-  console.log("err : ", formState.formState.errors);
 
   const { mutate } = useMutation<
     unknown,
     Error,
-    AddSurveyFormProps & { template: string; template_key: string }
+    Omit<AddSurveyFormProps, "dateRange"> & {
+      template: string;
+      template_key: string;
+      dateRange: string[] | null;
+    }
   >({
     mutationFn: (data) =>
       withFetch(async () => {
@@ -111,10 +117,19 @@ export default function SurveyPage({
         formState.getValues("items").length !== 0 &&
         formState.getValues("access_pin") !== null
       ) {
+        //기간 설정
+
+        const dateformatting = data.dateRange
+          ? data.dateRange.map((e) => {
+              return dayjs(e).format("YYYY-MM-DD");
+            })
+          : null;
+
         const resultData = {
           ...data,
           template,
           template_key: template_key as string,
+          dateRange: dateformatting,
         };
 
         mutate(resultData);
@@ -143,8 +158,12 @@ export default function SurveyPage({
         {/* 연령 별 체크*/}
         <FormProvider {...formState}>
           <AddAgeGroup />
+
           {/* 성별 별 체크*/}
           <AddGender />
+
+          {/* 기간 */}
+          <AddDateRange />
         </FormProvider>
 
         {/* 공통 제목 */}

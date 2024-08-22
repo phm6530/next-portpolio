@@ -1,10 +1,12 @@
 import { GetTemplateDetail, templateItemProps } from "@/types/template";
-import classes from "./SurveyItem.module.scss";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ForwardedRef, useRef } from "react";
-import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+
+import classes from "./SurveyItem.module.scss";
+import Image from "next/image";
+import gsap from "gsap";
+import dayjs from "dayjs";
 
 export default function SurveyItem({
   itemData,
@@ -22,6 +24,7 @@ export default function SurveyItem({
     age_group,
     gender_group,
     user_cnt,
+    dateRange,
   } = itemData;
 
   const router = useRouter();
@@ -53,6 +56,9 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
+  // dateRange[0];
+  const today = dayjs(); // 현재 날짜 생성
+
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -75,6 +81,18 @@ export default function SurveyItem({
       )}
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
+        <div>
+          {dateRange.some((e) => e === null)
+            ? "기한 없음"
+            : today.isBefore(dateRange[0], "day")
+            ? "진행전"
+            : today.isAfter(dateRange[1], "day")
+            ? "종료"
+            : "진행 중"}
+          <div>
+            {dateRange[0]} = {dateRange[1]}
+          </div>
+        </div>
         <div className={classes.surveyTitle}>{title}</div>
         <div>{description}</div>
         <div>{created_at}</div>

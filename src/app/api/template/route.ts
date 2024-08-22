@@ -4,8 +4,7 @@ import {
   getTemplateAllCnt,
 } from "@/app/api/_service/template/templateSerivce";
 import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { AddSurveyFormProps } from "@/types/templateSurvey";
-import { templateMetaProps } from "@/types/template";
+import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import { NextRequest, NextResponse } from "next/server";
 import { QUERY_STRING } from "@/types/constans";
 import { auth } from "@/auth";
@@ -35,7 +34,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await auth();
   try {
-    const data: AddSurveyFormProps & templateMetaProps = await req.json();
+    const data: RequestSurveyFormProps = await req.json();
 
     if (!session) {
       await postAddTemplate(data);

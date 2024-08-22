@@ -11,28 +11,9 @@ export type IuputBoolean = "1" | "0";
 
 export type TotalCntProps = { total_cnt: null | number };
 
-export interface templateItemProps {
-  id: number;
-  title: string;
-  description: string;
-  created_at: string;
-  template: TemplateTypeProps;
-  img?: string;
-
-  templateOption: {
-    genderChk: IuputBoolean;
-    ageChk: IuputBoolean;
-  };
-}
-
 export type templateMetaProps = {
   template: TemplateTypeProps;
   template_key: string;
-};
-
-export type GetTemplateLists = {
-  result: GetTemplateDetail[];
-  cnt: number;
 };
 
 export type PostAddsurveyDetailProps = {
@@ -43,8 +24,37 @@ export type PostAddsurveyDetailProps = {
   [key: string]: string;
 };
 
-export type GetTemplateDetail = {
-  age_group: string;
-  gender_group: Gender;
+//결과임
+export interface templateItemProps {
+  id: number;
+  title: string;
+  description: string;
+  created_at: string;
+  template: TemplateTypeProps;
+  img?: string;
+  template_key: string;
+  dateRange: string[] | null[];
   user_cnt: number;
-} & Omit<templateItemProps, "templateOption">;
+  age_group: string | null;
+  gender_group: Gender | null;
+
+  templateOption: {
+    genderChk: IuputBoolean;
+    ageChk: IuputBoolean;
+  };
+}
+
+//DB에서 가져옴 ok
+export type SelectTEmplateDetailProps = {
+  start_date: string;
+  end_date: string;
+} & Omit<templateItemProps, "templateOption" | "dateRange">;
+
+//결과
+export type GetTemplateDetail = {} & Omit<templateItemProps, "templateOption">; // 일관성 유지
+
+//가공전
+export type GetTemplateMetaLists = {
+  result: GetTemplateDetail[];
+  cnt: number;
+};

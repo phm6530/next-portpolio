@@ -1,14 +1,14 @@
 import { withFetch } from "@/app/lib/helperClient";
 import { QUERY_STRING } from "@/types/constans";
-import { GetTemplateLists, TemplateTypeProps } from "@/types/template";
+import { GetTemplateMetaLists, TemplateTypeProps } from "@/types/template";
 
 //get-List
 export function fetchList(
   page: string,
   sort?: string,
   search?: string
-): Promise<GetTemplateLists> {
-  return withFetch<GetTemplateLists>(() => {
+): Promise<GetTemplateMetaLists> {
+  return withFetch<GetTemplateMetaLists>(() => {
     const queryParams = new URLSearchParams({
       page,
     });

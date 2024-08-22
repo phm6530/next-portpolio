@@ -1,5 +1,6 @@
 import { bcryptHash } from "@/app/lib/brycptHash";
 import { CONST_PAGING, LIST_SORT } from "@/types/constans";
+import { GetTemplateDetail, SelectTEmplateDetailProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
@@ -31,11 +32,13 @@ export const insertAnonymous = async (
 //Meta Data Post
 export const insertTemplateMeta = async (
   conn: PoolConnection,
-  data: Omit<AddSurveyFormProps, "items"> & {
+  data: Omit<AddSurveyFormProps, "items" | "dateRange"> & {
     template_type_id: number;
     template_key: string;
+    dateRange: string[] | null;
   }
 ): Promise<ResultSetHeader> => {
+  //data
   const {
     description,
     title,
@@ -43,22 +46,37 @@ export const insertTemplateMeta = async (
     template_key,
     genderChk,
     ageChk,
+    dateRange,
   } = data;
 
-  const insert_sql = `
-    INSERT INTO
-        template_meta( title , description , template_type_id , created_at , template_key , gender_chk , age_chk ) 
-    VALUE 
-        (?,?,?,now(), ?, ? , ?);`;
-
-  const [result] = await conn.execute<ResultSetHeader>(insert_sql, [
-    title,
+  const parmas = [
     description,
+    title,
     template_type_id,
     template_key,
     genderChk,
     ageChk,
-  ]);
+  ];
+
+  let values = "";
+  let column = "";
+
+  if (dateRange !== null) {
+    column = `title , description , template_type_id , created_at , template_key , gender_chk , age_chk ,start_date , end_date`;
+    values = `(?,?,?,now(), ?, ? , ? , ? , ? ) `;
+    parmas.push(dateRange[0], dateRange[1]);
+  } else {
+    column = `title , description , template_type_id , created_at , template_key , gender_chk , age_chk `;
+    values = `(?,?,?,now(), ?, ? , ?)`;
+  }
+
+  const insert_sql = `
+    INSERT INTO
+        template_meta(${column}) 
+    VALUE 
+        ${values};`;
+
+  const [result] = await conn.execute<ResultSetHeader>(insert_sql, parmas);
 
   return result;
 };
@@ -83,7 +101,7 @@ export const selectTemplateMetaData = async (
   props: GetTemplateMeta & (TruePageNation | FalsePageNation),
   search?: string | null,
   sort?: string | null
-): Promise<RowDataPacket[] | RowDataPacket> => {
+): Promise<SelectTEmplateDetailProps[] | SelectTEmplateDetailProps> => {
   const { conn, usePagination } = props;
 
   let sql = `
@@ -92,10 +110,14 @@ export const selectTemplateMetaData = async (
         tm.title,
         tm.description,
         tm.created_at,
+        tm.template_key,
         t.template AS template,
         pr_stats.age_group,
         pr_stats.gender as gender_group,
-        pr_stats.total_cnt as user_cnt
+        COALESCE(pr_stats.total_cnt, 0) as user_cnt,
+        tm.start_date ,
+        tm.end_date
+
     FROM 
         template_meta tm
     JOIN 
@@ -158,7 +180,9 @@ export const selectTemplateMetaData = async (
 
   const [rows] = await conn.query<RowDataPacket[]>(sql, queryParams);
 
-  return usePagination ? rows : rows[0];
+  return usePagination
+    ? (rows as SelectTEmplateDetailProps[])
+    : (rows[0] as SelectTEmplateDetailProps);
 };
 
 //Detail Return;

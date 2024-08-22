@@ -1,5 +1,9 @@
 "use client";
 
+import { withFetch } from "@/app/lib/helperClient";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
 export default function AdminController({
   user,
   curTemplateKey,
@@ -22,14 +26,55 @@ export default function AdminController({
     (user.role === "anonymous" && curTemplateKey === user.template_key) ||
     user.role === "admin";
 
-  console.log(isTemplateAuth);
+  // useEffect(() => {
+  //   //익명 관리자는 해당 페이지 나가면 세션 OFF 해버리기
+  //   return () => {
+  //     if (session?.user.role === "anonymous") {
+  //       signOut();
+  //     }
+  //   };
+  // }, []);
+
+  const anonyMouseUser = user.role === "anonymous";
+  const admin = user.role === "admin";
+
+  const router = useRouter();
+
+  const { mutate } = useMutation({
+    mutationFn: () =>
+      withFetch(async () => {
+        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${curTemplateKey}`;
+        return fetch(url, {
+          method: "DELETE",
+        });
+      }),
+    onSuccess: () => {
+      alert("삭제 성공!");
+      router.replace("/template");
+    },
+  });
+
+  const deleteTemplate = () => {
+    if (!isTemplateAuth) return;
+
+    if (confirm("삭제하시겠습니까?")) {
+      mutate();
+    }
+  };
 
   return (
     <>
       <h1>안녕하세요</h1>
-      {user.role === "anonymous" && `${user.access_email} 님`}
-      {user.role === "admin" && `${user.user_id} 님`}
-      <button>삭제</button>
+      {anonyMouseUser && `${user.access_email} 님`}
+      {admin && `${user.user_id} M 님`}
+
+      {anonyMouseUser && (
+        <>
+          <p>익명 관리자는 페이지를 이탈하면 재 접속해야합니다!</p>
+        </>
+      )}
+
+      <button onClick={deleteTemplate}>삭제</button>
       <button>수정</button>
     </>
   );

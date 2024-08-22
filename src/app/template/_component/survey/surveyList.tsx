@@ -6,7 +6,7 @@ import PageGsap from "@/app/_aniPage/PageGsap";
 import Paging from "@/app/_components/ui/Paging";
 
 import { fetchList } from "@/app/_services/surveySerivce";
-import { GetTemplateLists } from "@/types/template";
+import { GetTemplateMetaLists } from "@/types/template";
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEY, QUERY_STRING } from "@/types/constans";
@@ -22,7 +22,7 @@ export default function SurveyList({
   search?: string;
 }) {
   //하이듀레이션
-  const { data, isLoading } = useQuery<GetTemplateLists>({
+  const { data, isLoading } = useQuery<GetTemplateMetaLists>({
     queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
     queryFn: () => fetchList(page + "", sort, search),
     staleTime: 10000,

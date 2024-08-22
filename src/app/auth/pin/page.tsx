@@ -2,6 +2,12 @@ import PinPage from "@/app/auth/pin/_component/PinPage";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
+type SessionAnanonymous = {
+  access_email: string;
+  template_key: string;
+  role: "anonymous";
+};
+
 const Page = async ({
   searchParams,
 }: {
@@ -19,7 +25,11 @@ const Page = async ({
 
   return (
     <>
-      <PinPage template_key={template_key} redirectPath={redirectPath} />
+      <PinPage
+        template_key={template_key}
+        redirectPath={redirectPath}
+        session={session as SessionAnanonymous | null}
+      />
     </>
   );
 };

@@ -37,7 +37,6 @@ export default function MsgItem({
     mutationFn: (data) =>
       withFetch(async () => {
         const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`;
-        console.log(data);
 
         return fetch(url, {
           method: "DELETE",
