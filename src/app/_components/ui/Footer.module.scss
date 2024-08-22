@@ -1,0 +1,7 @@
+@import "mixin";
+
+.footer {
+  padding: 4rem 0;
+  @include grid-center;
+  line-height: 1.4rem;
+}

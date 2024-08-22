@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { withFetch } from "@/app/lib/helperClient";
 import { localStorageHandler } from "@/app/lib/localStorageHandler";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
+import helperDateCompare from "@/app/lib/helperDateCompare";
 
 interface Option {
   label: string;
@@ -32,6 +33,7 @@ export default function SurveyTemplateDetail({
 }) {
   const formMethod = useForm();
   const router = useRouter();
+  const dayCompare = helperDateCompare(); //날짜 비교 lib
 
   const [participatedAt, setParticipatedAt] = useState<string | null>(null);
 
@@ -94,14 +96,29 @@ export default function SurveyTemplateDetail({
     return <LoadingSpier />;
   }
 
-  //Submit
-  const onSubmitHandler = async (
-    formData: Record<string, string | Option[]>
-  ) => {
-    mutate(formData);
-  };
-
   if (data) {
+    const { dateRange, title, description, questions, templateOption } = data;
+
+    //Submit
+    const onSubmitHandler = async () => {
+      //둘다 true면
+      if (dateRange.every((e) => e !== null)) {
+        const [start, end] = dateRange;
+        if (dayCompare.isBefore(start)) {
+          alert("아직 시작 전인데요..");
+          return;
+        }
+        if (dayCompare.isAfter(end)) {
+          alert("종료됐어요 ");
+          return;
+        }
+      }
+      formMethod.handleSubmit((data) => {
+        mutate(data);
+      });
+      //null이면 무기한이니까 넘기기
+    };
+
     return (
       <>
         {!!participatedAt && (
@@ -112,18 +129,22 @@ export default function SurveyTemplateDetail({
             </button>
           </>
         )}
-        <h1>{data.title}</h1>
-        <h2>{data.description}</h2>
+
+        <h1>{title}</h1>
+        <h2>{description}</h2>
+
+        <TemplateStatus dateRange={dateRange} />
 
         {/* Option  */}
         <FormProvider {...formMethod}>
-          {Boolean(Number(data.templateOption!.genderChk)) && (
-            <OptionGenderGroup />
-          )}
-          {Boolean(Number(data.templateOption!.ageChk)) && <OptionAgeGroup />}
+          {/**
+           * gender는 DB 1,0으로 저장때문에 Boolean으로 바꾸기로 했음
+           */}
+          {Boolean(Number(templateOption.genderChk)) && <OptionGenderGroup />}
+          {Boolean(Number(templateOption.ageChk)) && <OptionAgeGroup />}
         </FormProvider>
 
-        {data.questions.map((qs) => {
+        {questions.map((qs) => {
           return (
             <div key={`question-${qs.id}`}>
               <div>{qs.label}</div>
@@ -179,11 +200,8 @@ export default function SurveyTemplateDetail({
           );
         })}
 
-        <button
-          type="button"
-          onClick={formMethod.handleSubmit(onSubmitHandler)}
-        >
-          submit
+        <button type="button" onClick={onSubmitHandler}>
+          제출하기
         </button>
       </>
     );

@@ -3,7 +3,7 @@ import {
   getTemplateList,
   getTemplateAllCnt,
 } from "@/app/api/_service/template/templateSerivce";
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import { NextRequest, NextResponse } from "next/server";
 import { QUERY_STRING } from "@/types/constans";
@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
 
     if (!session) {
       await postAddTemplate(data);
+    } else if (session && session.user.role === "admin") {
+      throw new ApiError("아직 미완료", 400);
     }
 
     return NextResponse.json({ message: "success" });

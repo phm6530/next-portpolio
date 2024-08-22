@@ -3,8 +3,9 @@ import {
   Gender,
   IuputBoolean,
   SurveyType,
-  templateItemProps,
+  GetTemplateItemProps,
   templateMetaProps,
+  GetQuestionMetaProps,
 } from "@/types/template";
 
 export enum ID_template {
@@ -61,8 +62,8 @@ export type RequestSurveyFormProps = {
 } & Omit<AddSurveyFormProps, "dateRange"> &
   templateMetaProps;
 
-//Survey Type Detila
-export type AddsurveyDetailProps = {
+// 객관식 option 타입
+export type GetSurveyQuestions = {
   questions: {
     id: number;
     label: string;
@@ -76,7 +77,15 @@ export type AddsurveyDetailProps = {
       optionPictrue: string | null;
     }[];
   }[];
-} & templateItemProps;
+};
+
+//각 템플릿 문제 및 메타 데이터 타입
+export type GetSurveyDetailProps = {} & GetSurveyQuestions &
+  GetQuestionMetaProps;
+
+//Survey Type Detila
+export type AddsurveyDetailProps = {} & GetTemplateItemProps &
+  GetSurveyQuestions;
 
 // Survey Result
 export interface ResultQuestion {

@@ -4,14 +4,13 @@ import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import SurveyTypeSelect from "@/app/template/type/[type]/_component/Survey/SurveyTypeSelect";
 import { useParams } from "next/navigation";
 import { SurveyType } from "@/types/template";
+import { ChangeEvent, useRef, useState } from "react";
+import useStore from "@/store/store";
+import { imgUploader } from "@/app/lib/uploaderHanlder";
+import SurveyTypeText from "@/app/template/type/[type]/_component/Survey/SurveyTypeText";
 
 export default function SurveyList() {
-  const {
-    control,
-    getValues,
-    register,
-    formState: { errors },
-  } = useFormContext<AddSurveyFormProps>();
+  const { control, getValues } = useFormContext<AddSurveyFormProps>();
 
   const { remove } = useFieldArray({
     control,
@@ -39,23 +38,11 @@ export default function SurveyList() {
       {surveyList.map((field, surveyIdx) => {
         if (field.type === "text") {
           return (
-            <div key={surveyIdx}>
-              <h1> Q.{surveyIdx + 1}</h1>
-
-              <input
-                type="text"
-                {...register(`items.${surveyIdx}.label`, {
-                  required: "질문 제목은 필수항목 입니다.",
-                })}
-              />
-              {/* delete */}
-              <button type="button" onClick={() => remove(surveyIdx)}>
-                삭제
-              </button>
-              <div>
-                {errors.items?.[surveyIdx]?.label?.message as string | null}
-              </div>
-            </div>
+            <SurveyTypeText
+              key={`typeText-${surveyIdx}`}
+              surveyIdx={surveyIdx}
+              remove={remove}
+            />
           );
         } else if (field.type === "select") {
           //리스트 만들기 - Props으로 넘겨서 메모리 아끼기

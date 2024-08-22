@@ -24,16 +24,27 @@ export type PostAddsurveyDetailProps = {
   [key: string]: string;
 };
 
-//결과임
-export interface templateItemProps {
+export type CommentTemplateProps = {
   id: number;
   title: string;
   description: string;
   created_at: string;
   template: TemplateTypeProps;
   img?: string;
-  template_key: string;
-  dateRange: string[] | null[];
+  template_key?: string;
+  dateRange: [string, string] | [null, null];
+
+  templateOption: {
+    genderChk: IuputBoolean;
+    ageChk: IuputBoolean;
+  };
+};
+
+//Template Questions Type
+export type GetQuestionMetaProps = {} & CommentTemplateProps;
+
+//템플릿 Item 타입
+export type GetTemplateItemProps = {
   user_cnt: number;
   age_group: string | null;
   gender_group: Gender | null;
@@ -42,19 +53,22 @@ export interface templateItemProps {
     genderChk: IuputBoolean;
     ageChk: IuputBoolean;
   };
-}
+} & CommentTemplateProps;
 
-//DB에서 가져옴 ok
-export type SelectTEmplateDetailProps = {
-  start_date: string;
-  end_date: string;
-} & Omit<templateItemProps, "templateOption" | "dateRange">;
-
-//결과
-export type GetTemplateDetail = {} & Omit<templateItemProps, "templateOption">; // 일관성 유지
-
-//가공전
+//템플릿 리스트 타입
 export type GetTemplateMetaLists = {
   result: GetTemplateDetail[];
   cnt: number;
 };
+
+//DAO
+export type SelectTEmplateDetailProps = {
+  start_date: string;
+  end_date: string;
+} & Omit<GetTemplateItemProps, "templateOption" | "dateRange">;
+
+//템플릿 결과 디테일 타입
+export type GetTemplateDetail = {} & Omit<
+  GetTemplateItemProps,
+  "templateOption"
+>; // 일관성 유지

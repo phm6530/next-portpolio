@@ -2,7 +2,9 @@
 
 import { withFetch } from "@/app/lib/helperClient";
 import { useMutation } from "@tanstack/react-query";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function AdminController({
   user,
@@ -26,14 +28,16 @@ export default function AdminController({
     (user.role === "anonymous" && curTemplateKey === user.template_key) ||
     user.role === "admin";
 
-  // useEffect(() => {
-  //   //익명 관리자는 해당 페이지 나가면 세션 OFF 해버리기
-  //   return () => {
-  //     if (session?.user.role === "anonymous") {
-  //       signOut();
-  //     }
-  //   };
-  // }, []);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    //익명 관리자는 해당 페이지 나가면 세션 OFF 해버리기
+    return () => {
+      if (session?.user.role === "anonymous") {
+        signOut();
+      }
+    };
+  }, []);
 
   const anonyMouseUser = user.role === "anonymous";
   const admin = user.role === "admin";

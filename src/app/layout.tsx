@@ -1,4 +1,5 @@
 import GlobalNav from "@/app/_components/globalNav/GlobalNav";
+import Footer from "@/app/_components/ui/Footer";
 import ProviderContext from "@/app/_provider";
 import { auth } from "@/auth";
 
@@ -19,6 +20,7 @@ export default async function RootLayout({
         <ProviderContext>
           <GlobalNav isLogin={!!auths} />
           <main className="container">{children}</main>
+          <Footer />
         </ProviderContext>
       </body>
     </html>

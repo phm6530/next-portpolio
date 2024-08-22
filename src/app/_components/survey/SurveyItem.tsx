@@ -1,4 +1,4 @@
-import { GetTemplateDetail, templateItemProps } from "@/types/template";
+import { GetTemplateDetail, GetTemplateItemProps } from "@/types/template";
 import { useRouter } from "next/navigation";
 import { ForwardedRef, useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -6,7 +6,9 @@ import { useGSAP } from "@gsap/react";
 import classes from "./SurveyItem.module.scss";
 import Image from "next/image";
 import gsap from "gsap";
-import dayjs from "dayjs";
+
+import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
+import helperDateCompare from "@/app/lib/helperDateCompare";
 
 export default function SurveyItem({
   itemData,
@@ -30,8 +32,25 @@ export default function SurveyItem({
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Timeline | null>(null);
+  const dayCompare = helperDateCompare();
 
-  const onClickHandler = (e: Pick<templateItemProps, "id">["id"]) => {
+  const onClickHandler = (e: GetTemplateItemProps["id"]) => {
+    if (dateRange.every((e) => e !== null)) {
+      const [start, end] = dateRange;
+      if (dayCompare.isBefore(start)) {
+        alert("아직 시작 전인데요..");
+        return;
+      }
+      if (dayCompare.isAfter(end)) {
+        if (
+          confirm("해당 설문조사는 종료 되었습니다. 결과페이지로 가시겠습니까?")
+        ) {
+          router.push(`/template/result/${id}`);
+        }
+        return;
+      }
+    }
+
     router.push(`/template/${template}/${e}`);
   };
 
@@ -56,9 +75,6 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
-  // dateRange[0];
-  const today = dayjs(); // 현재 날짜 생성
-
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -81,18 +97,8 @@ export default function SurveyItem({
       )}
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
-        <div>
-          {dateRange.some((e) => e === null)
-            ? "기한 없음"
-            : today.isBefore(dateRange[0], "day")
-            ? "진행전"
-            : today.isAfter(dateRange[1], "day")
-            ? "종료"
-            : "진행 중"}
-          <div>
-            {dateRange[0]} = {dateRange[1]}
-          </div>
-        </div>
+        {/* 템플릿 상태 보여주기 */}
+        <TemplateStatus dateRange={dateRange} />
         <div className={classes.surveyTitle}>{title}</div>
         <div>{description}</div>
         <div>{created_at}</div>

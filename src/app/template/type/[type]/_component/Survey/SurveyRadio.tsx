@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import classes from "./survey.module.scss";
 import useStore from "@/store/store";
+import { imgUploader } from "@/app/lib/uploaderHanlder";
 
 export default function SurveyRadio({
   fields,
@@ -17,7 +18,6 @@ export default function SurveyRadio({
   optionIdx,
   itemRemove,
   update,
-  imgId,
 }: {
   fields: FieldArrayWithId<AddSurveyFormProps, `items.${number}.options`>[];
   surveyIdx: number;
@@ -64,33 +64,11 @@ export default function SurveyRadio({
     e: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const target = e.target.files;
-    if (target) {
-      const file = target[0];
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const allowedTypes = ["image/jpeg", "image/png", "image/gif"]; // 허용된 이미지 MIME 타입들
-      if (!allowedTypes.includes(file.type)) {
-        alert("이미지가 아닌거같음");
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        alert("5MB넘는 파일입니다.");
-        return;
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/survey/${template_key}/${surveyIdx}`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      const { imgUrl }: { imgUrl: string } = await response.json();
+    if (target && template_key) {
+      const imgUrl = await imgUploader(target[0], { template_key, surveyIdx });
 
       setPreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+
       const currentOption = getValues(
         `items.${surveyIdx}.options.${optionIdx}`
       );

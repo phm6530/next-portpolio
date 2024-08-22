@@ -77,15 +77,19 @@ export async function GET(req: NextRequest) {
           const target = gender_age.find((_, idx) => {
             return value[idx] === "1";
           });
-          const [gender, age] = target?.split("_") as [Gender, string];
+          //존재할떄만
+          if (target) {
+            const [gender, age] = target?.split("_") as [Gender, string];
 
-          questionEntry.values?.push({
-            gender,
-            age: +age.slice(0, -1) as 10 | 20 | 30 | 40 | 50 | 60,
-            value: text_answer,
-          });
+            questionEntry.values?.push({
+              gender,
+              age: +age.slice(0, -1) as 10 | 20 | 30 | 40 | 50 | 60,
+              value: text_answer,
+            });
+          }
+
           return acc;
-        } else {
+        } else if (type === "select") {
           // // 해당 question에 option 추가
           questionEntry.options &&
             questionEntry.options.push({
@@ -124,12 +128,13 @@ export async function GET(req: NextRequest) {
               }
             }
           });
-
-          return acc;
         }
+        return acc;
       },
       { questions: [] } //initale
     );
+
+    console.log(questionList);
 
     return NextResponse.json({ templateResult: questionList, templateMeta });
   } catch (error) {

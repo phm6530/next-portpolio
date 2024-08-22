@@ -15,11 +15,7 @@ import {
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
 import { sendEmail } from "@/app/lib/nodeMailer";
-import {
-  GetTemplateDetail,
-  SelectTEmplateDetailProps,
-  templateItemProps,
-} from "@/types/template";
+import { GetTemplateDetail, SelectTEmplateDetailProps } from "@/types/template";
 import { ApiError } from "@/app/lib/apiErrorHandler";
 
 //template Post Service
@@ -86,7 +82,7 @@ export async function getTemplateList(
       const reducedResult = result.reduce(
         (acc: GetTemplateDetail[], cur: SelectTEmplateDetailProps) => {
           const { start_date, end_date, ...rest } = cur;
-          const newCur = {
+          const newCur: GetTemplateDetail = {
             ...rest,
             dateRange: [start_date, end_date],
           };

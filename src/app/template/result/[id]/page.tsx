@@ -4,7 +4,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import { notFound } from "next/navigation";
-import { templateItemProps } from "@/types/template";
+import { GetTemplateItemProps } from "@/types/template";
 import CommentSection, {
   MessageProps,
 } from "@/app/_components/Comment/CommentSection";
@@ -13,7 +13,7 @@ import AdminController from "@/app/template/admin/_component/AdminController";
 import { auth } from "@/auth";
 
 interface TemplateData {
-  templateMeta: templateItemProps;
+  templateMeta: GetTemplateItemProps;
 }
 
 //Dynamic Meta

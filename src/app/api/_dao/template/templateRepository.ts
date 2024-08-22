@@ -163,7 +163,7 @@ export const selectTemplateMetaData = async (
       `;
     } else if (sort === LIST_SORT.USER) {
       // 사용자 순
-      sql += "ORDER BY pr_stats.total_cnt DESC LIMIT 12 OFFSET 0;";
+      sql += "ORDER BY pr_stats.total_cnt DESC LIMIT ? OFFSET ?;";
     } else {
       sql += ` ORDER BY tm.id DESC LIMIT ? OFFSET ?`;
     }
@@ -191,7 +191,7 @@ export const selectTemlateDetail = async (
   page: string
 ): Promise<RowDataPacket[]> => {
   const sql = `
-    SELECT 
+     SELECT 
       tm.id,
       tm.title,
       tm.description,
@@ -206,7 +206,9 @@ export const selectTemlateDetail = async (
       so.idx AS option_idx,
       so.label AS option_label,
       so.value AS option_value,
-      so.option_pictrue
+      so.option_pictrue,
+      tm.start_date,
+      tm.end_date
     FROM 
         template_meta tm
     JOIN 

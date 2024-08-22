@@ -4,10 +4,14 @@ import { InferObj } from "@/types/common";
 import {
   PostAddsurveyDetailProps,
   SurveyType,
-  templateItemProps,
   TemplateTypeProps,
+  GetQuestionMetaProps,
 } from "@/types/template";
-import { AddsurveyDetailProps } from "@/types/templateSurvey";
+import {
+  AddsurveyDetailProps,
+  GetSurveyDetailProps,
+  GetSurveyQuestions,
+} from "@/types/templateSurvey";
 import { ResultSetHeader } from "mysql2";
 
 //Data Base ROWS 타입
@@ -19,9 +23,14 @@ type RowDataSurvey = {
   gender_chk: number;
   age_chk: number;
   created_at: string;
+  template_key: string;
+  start_date: string | null;
+  end_date: string | null;
+
   question_id: number;
   question_type_id: InferObj<SurveyType>;
   question_label: string;
+
   option_id: number | null;
   option_idx: number | null;
   option_label: string | null;
@@ -31,18 +40,23 @@ type RowDataSurvey = {
 
 export async function getSurveyDetail(
   DetailId: string
-): Promise<AddsurveyDetailProps> {
+): Promise<GetSurveyDetailProps> {
   const rowData = await withConnection<RowDataSurvey[]>(async (conn) => {
     return selectTemlateDetail(conn, DetailId) as Promise<RowDataSurvey[]>;
   });
 
   //Meta Data
-  const metaData: Omit<templateItemProps, "template_key"> = {
+  const metaData: GetQuestionMetaProps = {
     id: rowData[0].id,
     title: rowData[0].title,
     description: rowData[0].description,
     created_at: rowData[0].created_at,
     template: rowData[0].template,
+    template_key: rowData[0].template_key,
+    dateRange:
+      rowData[0].start_date && rowData[0].end_date
+        ? [rowData[0].start_date, rowData[0].end_date] // 둘 다 string인 경우
+        : [null, null], // 둘 다 null인 경우
 
     //Template Option 여부
     templateOption: {
@@ -52,7 +66,7 @@ export async function getSurveyDetail(
   };
 
   const questionMade = () => {
-    const arr: AddsurveyDetailProps["questions"] = [];
+    const arr: GetSurveyQuestions["questions"] = [];
 
     rowData.forEach((q) => {
       // 같은 Id는 Push 안 함
@@ -82,7 +96,7 @@ export async function getSurveyDetail(
     return arr;
   };
 
-  const resultData: AddsurveyDetailProps = {
+  const resultData: GetSurveyDetailProps = {
     ...metaData,
     questions: questionMade(),
   };

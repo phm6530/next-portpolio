@@ -84,7 +84,7 @@ export default function SurveyPage({
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
-
+  console.log(formState.watch());
   const { mutate } = useMutation<
     unknown,
     Error,

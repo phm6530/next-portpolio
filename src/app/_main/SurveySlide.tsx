@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
 import SurveyItem from "@/app/_components/survey/SurveyItem";
-import { templateItemProps } from "@/types/template";
+import { GetTemplateItemProps } from "@/types/template";
 
 export default function SurveySlide({ idx }: { idx: number }) {
   const gsapFn = useRef<gsap.core.Tween | null>(null);

@@ -40,6 +40,7 @@ export default function SurveyControler() {
     const newParams = new URLSearchParams(qs.toString()); // 쿼리 파라미터 복사
 
     newParams.set("sort", newSortValue);
+    newParams.delete("page");
 
     setActive(newSortValue);
 
