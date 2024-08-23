@@ -24,8 +24,11 @@ type RowDataSurvey = {
   age_chk: number;
   created_at: string;
   template_key: string;
+
   start_date: string | null;
   end_date: string | null;
+
+  text_picture: string | null;
 
   question_id: number;
   question_type_id: InferObj<SurveyType>;
@@ -65,7 +68,7 @@ export async function getSurveyDetail(
     },
   };
 
-  const questionMade = () => {
+  const getQuestions = () => {
     const arr: GetSurveyQuestions["questions"] = [];
 
     rowData.forEach((q) => {
@@ -76,6 +79,7 @@ export async function getSurveyDetail(
           id: q.question_id,
           label: q.question_label,
           type: q.question_type_id,
+          textImg: q.text_picture,
           ...(q.question_type_id === "select" && { options: [] }),
         };
         arr.push(initalQa);
@@ -98,7 +102,7 @@ export async function getSurveyDetail(
 
   const resultData: GetSurveyDetailProps = {
     ...metaData,
-    questions: questionMade(),
+    questions: getQuestions(),
   };
   return resultData;
 }

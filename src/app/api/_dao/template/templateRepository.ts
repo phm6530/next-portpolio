@@ -191,7 +191,7 @@ export const selectTemlateDetail = async (
   page: string
 ): Promise<RowDataPacket[]> => {
   const sql = `
-     SELECT 
+   SELECT 
       tm.id,
       tm.title,
       tm.description,
@@ -202,6 +202,7 @@ export const selectTemlateDetail = async (
       sq.id AS question_id,
       sq.question_type_id,
       sq.label AS question_label,
+      sq.text_picture,
       so.id AS option_id,
       so.idx AS option_idx,
       so.label AS option_label,

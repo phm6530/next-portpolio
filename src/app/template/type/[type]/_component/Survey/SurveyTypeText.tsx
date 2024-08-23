@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import {
   FieldError,
+  useFieldArray,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
@@ -22,6 +23,8 @@ export default function SurveyTypeText({
     register,
     formState: { errors },
     watch,
+    getValues,
+    setValue,
   } = useFormContext();
 
   const uploadClickTrigger = () => {
@@ -33,6 +36,13 @@ export default function SurveyTypeText({
     if (files && template_key) {
       const imgUrl = await imgUploader(files[0], { template_key, surveyIdx });
       setpreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+
+      const QuestionObj = getValues(`items.${surveyIdx}`);
+
+      setValue(`items.${surveyIdx}`, {
+        ...QuestionObj,
+        textImg: imgUrl,
+      });
     }
   };
 

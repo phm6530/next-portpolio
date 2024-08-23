@@ -36,6 +36,8 @@ export async function POST(req: NextRequest) {
   try {
     const data: RequestSurveyFormProps = await req.json();
 
+    console.log(data);
+
     if (!session) {
       await postAddTemplate(data);
     } else if (session && session.user.role === "admin") {

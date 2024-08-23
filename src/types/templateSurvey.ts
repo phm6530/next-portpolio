@@ -28,6 +28,7 @@ export interface ParticipationMainProps {
 export type SurveyText = {
   id: number;
   label: string;
+  textImg?: string;
   options?: never; // 주관식은 필요없음
 } & SurveyType;
 
@@ -35,7 +36,7 @@ export type SurveyText = {
 export type SurveyRadioProps = {
   id: number;
   label: string;
-  options?: {
+  options: {
     idx: number;
     value: string;
     img?: string;
@@ -49,6 +50,7 @@ export type AddSurveyFormProps = {
   genderChk: IuputBoolean;
   ageChk: IuputBoolean;
   items: (SurveyText | SurveyRadioProps)[];
+
   //기한
   dateRange: Date[] | null;
 
@@ -68,6 +70,7 @@ export type GetSurveyQuestions = {
     id: number;
     label: string;
     type: InferObj<SurveyType>;
+    textImg?: string;
 
     options?: {
       optionId: number;

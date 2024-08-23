@@ -5,7 +5,10 @@ import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
-import { AddsurveyDetailProps } from "@/types/templateSurvey";
+import {
+  AddsurveyDetailProps,
+  GetSurveyDetailProps,
+} from "@/types/templateSurvey";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
@@ -40,7 +43,7 @@ export default function SurveyTemplateDetail({
   const { isLoading, data } = useQuery({
     queryKey: [templateType, surveyId],
     queryFn: () =>
-      fetchTemplateDetail<AddsurveyDetailProps>(templateType, +surveyId),
+      fetchTemplateDetail<GetSurveyDetailProps>(templateType, +surveyId),
     staleTime: 10000,
     enabled: !!surveyId,
   });
@@ -98,10 +101,11 @@ export default function SurveyTemplateDetail({
 
   if (data) {
     const { dateRange, title, description, questions, templateOption } = data;
+    console.log(data);
 
     //Submit
-    const onSubmitHandler = async () => {
-      //둘다 true면
+    const onSubmitHandler = async (data: Record<string, string>) => {
+      // 둘 다 true면
       if (dateRange.every((e) => e !== null)) {
         const [start, end] = dateRange;
         if (dayCompare.isBefore(start)) {
@@ -113,12 +117,11 @@ export default function SurveyTemplateDetail({
           return;
         }
       }
-      formMethod.handleSubmit((data) => {
-        mutate(data);
-      });
-      //null이면 무기한이니까 넘기기
-    };
 
+      mutate(data);
+
+      // null이면 무기한이니까 넘기기
+    };
     return (
       <>
         {!!participatedAt && (
@@ -150,6 +153,20 @@ export default function SurveyTemplateDetail({
               <div>{qs.label}</div>
               {qs.type === "text" ? (
                 <div>
+                  {" "}
+                  {qs.textImg && (
+                    <div className={classes.previewContainer}>
+                      <Image
+                        src={qs.textImg}
+                        layout="responsive"
+                        width={16}
+                        height={9}
+                        style={{ maxWidth: 700, objectFit: "cover" }}
+                        alt="preview"
+                        priority
+                      />
+                    </div>
+                  )}
                   <input
                     type="text"
                     {...formMethod.register(`${qs.id}`, {
@@ -200,7 +217,10 @@ export default function SurveyTemplateDetail({
           );
         })}
 
-        <button type="button" onClick={onSubmitHandler}>
+        <button
+          type="button"
+          onClick={formMethod.handleSubmit(onSubmitHandler)}
+        >
           제출하기
         </button>
       </>

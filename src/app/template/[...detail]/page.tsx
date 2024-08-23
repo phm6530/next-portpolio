@@ -61,8 +61,6 @@ export async function generateMetadata({
     //Error
     if (!surveyItem) notFound();
 
-    console.log(surveyItem);
-
     return {
       title: surveyItem.title,
       description: surveyItem.description,
