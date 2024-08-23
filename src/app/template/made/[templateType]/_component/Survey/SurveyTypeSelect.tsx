@@ -1,4 +1,4 @@
-import SurveyRadio from "@/app/template/type/[type]/_component/Survey/SurveyRadio";
+import SurveyRadio from "@/app/template/made/[templateType]/_component/Survey/SurveyRadio";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import {

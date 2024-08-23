@@ -43,7 +43,7 @@ export default async function surveyPage({
           다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
         </PageTitle>
 
-        <Link href={"/template/type"}>설문조사 만들기</Link>
+        <Link href={"/template/made"}>설문조사 만들기</Link>
         {/* btn Area */}
         <SurveyControler />
         <HotKeyword />

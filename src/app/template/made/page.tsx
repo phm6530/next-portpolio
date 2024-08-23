@@ -2,7 +2,7 @@ import NotYet from "@/app/_components/NotYet";
 import Link from "next/link";
 
 export default function templatePage() {
-  const PATH = "/template/type";
+  const PATH = "/template/made";
 
   return (
     <>

@@ -6,22 +6,23 @@ import { TemplateTypeProps } from "@/types/template";
 import { FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid4 } from "uuid";
 
-import SurveyText from "@/app/template/type/[type]/_component/Survey/SurveyText";
-import SurveyList from "@/app/template/type/[type]/_component/Survey/SurveyList";
-import QuestionAddController from "@/app/template/type/[type]/_component/Survey/QuestionAddController";
-import usePreview from "@/app/template/type/[type]/_component/Preview/usePreview";
+import SurveyText from "@/app/template/made/[templateType]/_component/Survey/SurveyText";
+import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
+import QuestionAddController from "@/app/template/made/[templateType]/_component/Survey/QuestionAddController";
+import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { useEffect } from "react";
 
 import dayjs from "dayjs";
 
 import useStore from "@/store/store";
-import AddAgeGroup from "@/app/template/type/[type]/_component/templateAddOptions/AddAgeGroup";
-import AddGender from "@/app/template/type/[type]/_component/templateAddOptions/AddGender";
-import TemplateAccess from "@/app/template/type/[type]/_component/TemplateAccess";
+import AddAgeGroup from "@/app/template/made/[templateType]/_component/templateAddOptions/AddAgeGroup";
+import AddGender from "@/app/template/made/[templateType]/_component/templateAddOptions/AddGender";
+import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
 import { withFetch } from "@/app/lib/helperClient";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import AddDateRange from "@/app/template/type/[type]/_component/templateAddOptions/AddDateRange";
+import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";
+import ThumbNailUploader from "@/app/template/made/[templateType]/_component/ThumbNailUploader";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -81,10 +82,11 @@ export default function SurveyPage({
   }, []);
 
   const { RenderPreview } = usePreview();
+
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
-  console.log(formState.watch());
+  console.log("watch :", formState.watch());
   const { mutate } = useMutation<
     unknown,
     Error,
@@ -112,32 +114,25 @@ export default function SurveyPage({
 
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
-    try {
-      if (
-        formState.getValues("items").length !== 0 &&
-        formState.getValues("access_pin") !== null
-      ) {
-        //기간 설정
+    if (
+      formState.getValues("items").length !== 0 &&
+      formState.getValues("access_pin") !== null
+    ) {
+      //기간 설정
+      const dateformatting = data.dateRange
+        ? data.dateRange.map((e) => {
+            return dayjs(e).format("YYYY-MM-DD");
+          })
+        : null;
 
-        const dateformatting = data.dateRange
-          ? data.dateRange.map((e) => {
-              return dayjs(e).format("YYYY-MM-DD");
-            })
-          : null;
+      const resultData = {
+        ...data,
+        template,
+        template_key: template_key as string,
+        dateRange: dateformatting,
+      };
 
-        const resultData = {
-          ...data,
-          template,
-          template_key: template_key as string,
-          dateRange: dateformatting,
-        };
-
-        mutate(resultData);
-      } else {
-        console.log("error!");
-      }
-    } catch (error) {
-      console.log(error);
+      mutate(resultData);
     }
   };
 
@@ -155,33 +150,29 @@ export default function SurveyPage({
       <RenderPreview>프리뷰</RenderPreview>
       <button onClick={() => resetField()}>설문조사 초기화</button>
       <form onSubmit={formState.handleSubmit(onSubmitHandler)}>
-        {/* 연령 별 체크*/}
         <FormProvider {...formState}>
+          {/* 연령 별 체크*/}
           <AddAgeGroup />
-
           {/* 성별 별 체크*/}
           <AddGender />
-
           {/* 기간 */}
           <AddDateRange />
-        </FormProvider>
+          {/* 공통 제목 */}
+          <SurveyText
+            label={"title"}
+            error={formState.formState.errors.title}
+            requiredMsg={"제목은 필수 입니다!"}
+            register={formState.register}
+          />
+          <ThumbNailUploader />
+          {/* 공통 설명 적기 */}
+          <SurveyText
+            label={"description"}
+            error={formState.formState.errors.description}
+            requiredMsg={"간단한 설명을 적어주세요!"}
+            register={formState.register}
+          />
 
-        {/* 공통 제목 */}
-        <SurveyText
-          label={"title"}
-          error={formState.formState.errors.title}
-          requiredMsg={"제목은 필수 입니다!"}
-          register={formState.register}
-        />
-
-        {/* 공통 설명 적기 */}
-        <SurveyText
-          label={"description"}
-          error={formState.formState.errors.description}
-          requiredMsg={"간단한 설명을 적어주세요!"}
-          register={formState.register}
-        />
-        <FormProvider {...formState}>
           {/* Survey Edit Form + List*/}
           <SurveyList />
 

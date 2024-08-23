@@ -1,13 +1,13 @@
 "use client";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
-import SurveyTypeSelect from "@/app/template/type/[type]/_component/Survey/SurveyTypeSelect";
+import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeSelect";
 import { useParams } from "next/navigation";
 import { SurveyType } from "@/types/template";
 import { ChangeEvent, useRef, useState } from "react";
 import useStore from "@/store/store";
 import { imgUploader } from "@/app/lib/uploaderHanlder";
-import SurveyTypeText from "@/app/template/type/[type]/_component/Survey/SurveyTypeText";
+import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
 
 export default function SurveyList() {
   const { control, getValues } = useFormContext<AddSurveyFormProps>();
@@ -27,7 +27,7 @@ export default function SurveyList() {
 
   //img Params
   const params: surveyParams = useParams();
-  const [_, imgId] = params.type;
+  const [_, imgId] = params.templateType;
 
   return (
     <>

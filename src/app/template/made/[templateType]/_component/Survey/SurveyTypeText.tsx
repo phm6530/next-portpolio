@@ -52,7 +52,7 @@ export default function SurveyTypeText({
       imgRef.current.value = "";
     }
   };
-  console.log(watch());
+
   return (
     <>
       <div key={surveyIdx}>

@@ -15,7 +15,7 @@ export enum ID_template {
 
 //page
 export type surveyParams = {
-  type: string;
+  templateType: string;
 };
 
 //주요 참여자
