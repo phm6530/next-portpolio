@@ -47,6 +47,7 @@ export type SurveyRadioProps = {
 export type AddSurveyFormProps = {
   title: string;
   description: string;
+  thumbnail: string;
   genderChk: IuputBoolean;
   ageChk: IuputBoolean;
   items: (SurveyText | SurveyRadioProps)[];

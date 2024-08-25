@@ -13,6 +13,7 @@ const nextConfig = {
       "www.h-creations.com",
       "d33h8icwcso2tj.cloudfront.net", //S3
       "localhost", // dev
+      "images.unsplash.com",
     ], // 내 포트폴리오
   },
   sassOptions: {

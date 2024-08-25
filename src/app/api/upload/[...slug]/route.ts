@@ -7,9 +7,15 @@ import path from "path";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { slug: [string, string] } }
+  {
+    params,
+  }: {
+    params: {
+      slug: [PathSegments.ThumbNail | PathSegments.ThumbNail, string, string];
+    };
+  }
 ) {
-  const [Id, surveyItem] = params.slug;
+  const [template_type, templateKey] = params.slug;
 
   try {
     const formData = await req.formData();
@@ -22,16 +28,15 @@ export async function POST(
 
       // 확장자 추출
       const ext = path.extname(image.name);
-      const dateString = new Date().toISOString().replace(/:/g, "-");
+      const dateString = new Date().toISOString().replace(/:/g, "_");
 
       // 파일 시스템 경로
       const saveDir = path.join(
         process.cwd(),
         "public",
         PathSegments.Upload,
-        PathSegments.Survey,
-        Id, // survey Id
-        surveyItem // survey Id items
+        template_type,
+        templateKey // template Key
       );
       const savePath = path.join(saveDir, `${dateString}${ext}`);
 
@@ -42,7 +47,7 @@ export async function POST(
       await fs.writeFile(savePath, buffer);
 
       // 클라이언트에 제공할 URL
-      const imgUrl = `/${PathSegments.Upload}/${PathSegments.Survey}/${Id}/${surveyItem}/${dateString}${ext}`;
+      const imgUrl = `/${PathSegments.Upload}/${template_type}/${templateKey}/${dateString}${ext}`;
       return NextResponse.json({ imgUrl });
     }
   } catch (err) {

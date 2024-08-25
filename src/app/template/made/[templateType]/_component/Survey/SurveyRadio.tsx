@@ -11,6 +11,7 @@ import Image from "next/image";
 import classes from "./survey.module.scss";
 import useStore from "@/store/store";
 import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { PathSegments } from "@/types/upload";
 
 export default function SurveyRadio({
   fields,
@@ -65,7 +66,9 @@ export default function SurveyRadio({
   ): Promise<void> => {
     const target = e.target.files;
     if (target && template_key) {
-      const imgUrl = await imgUploader(target[0], { template_key, surveyIdx });
+      const imgUrl = await imgUploader(PathSegments.Survey, target[0], {
+        template_key,
+      });
 
       setPreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
 

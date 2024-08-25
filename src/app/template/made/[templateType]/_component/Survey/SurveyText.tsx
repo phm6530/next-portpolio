@@ -1,17 +1,18 @@
 import { AddSurveyFormProps } from "@/types/templateSurvey";
-import { FieldError, UseFormRegister } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 export default function SurveyText({
   label,
-  error,
   requiredMsg,
-  register,
 }: {
   label: keyof AddSurveyFormProps | keyof Pick<AddSurveyFormProps, "items">;
-  error?: FieldError;
   requiredMsg: string;
-  register: UseFormRegister<AddSurveyFormProps>;
 }) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div>
       <input
@@ -21,7 +22,8 @@ export default function SurveyText({
         })}
         autoComplete="off"
       />
-      {error && error.message}
+      {/* 에러존재하면 */}
+      {typeof errors?.[label]?.message === "string" && errors[label].message}
     </div>
   );
 }

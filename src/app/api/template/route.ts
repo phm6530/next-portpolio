@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
     const result = await getTemplateList(page, search, sort);
     const listCnt = await getTemplateAllCnt(search, sort);
 
+    console.log(result);
+
     // JSON 응답
     return NextResponse.json({ result, cnt: listCnt });
   } catch (error) {
@@ -35,8 +37,6 @@ export async function POST(req: NextRequest) {
   const session = await auth();
   try {
     const data: RequestSurveyFormProps = await req.json();
-
-    console.log(data);
 
     if (!session) {
       await postAddTemplate(data);

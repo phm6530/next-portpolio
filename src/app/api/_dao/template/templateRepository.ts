@@ -1,6 +1,6 @@
 import { bcryptHash } from "@/app/lib/brycptHash";
 import { CONST_PAGING, LIST_SORT } from "@/types/constans";
-import { GetTemplateDetail, SelectTEmplateDetailProps } from "@/types/template";
+import { SelectTEmplateDetailProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
@@ -47,6 +47,7 @@ export const insertTemplateMeta = async (
     genderChk,
     ageChk,
     dateRange,
+    thumbnail,
   } = data;
 
   const parmas = [
@@ -63,11 +64,17 @@ export const insertTemplateMeta = async (
 
   if (dateRange !== null) {
     column = `title , description , template_type_id , created_at , template_key , gender_chk , age_chk ,start_date , end_date`;
-    values = `(?,?,?,now(), ?, ? , ? , ? , ? ) `;
+    values = `(?,?,?,now(), ?, ? , ? , ? , ?) `;
     parmas.push(dateRange[0], dateRange[1]);
   } else {
     column = `title , description , template_type_id , created_at , template_key , gender_chk , age_chk `;
     values = `(?,?,?,now(), ?, ? , ?)`;
+  }
+
+  if (!!thumbnail) {
+    column += `, thumbnail`; //썸네일 있으면 추가
+    values = values.replace("?)", "?, ?)"); // 파라미터 리스트에 thumbnail 추가
+    parmas.push(thumbnail);
   }
 
   const insert_sql = `
@@ -116,7 +123,8 @@ export const selectTemplateMetaData = async (
         pr_stats.gender as gender_group,
         COALESCE(pr_stats.total_cnt, 0) as user_cnt,
         tm.start_date ,
-        tm.end_date
+        tm.end_date,
+        tm.thumbnail
 
     FROM 
         template_meta tm
@@ -135,6 +143,7 @@ export const selectTemplateMetaData = async (
             pr.template_id, pr.age_group, pr.gender
     ) pr_stats ON tm.id = pr_stats.template_id AND pr_stats.rn = 1 
     WHERE tm.title LIKE ?
+    
   `;
 
   let queryParams: (number | string | undefined)[] = [`%${search || ""}%`];

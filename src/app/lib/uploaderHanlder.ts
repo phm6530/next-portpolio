@@ -1,6 +1,7 @@
 export const imgUploader = async (
+  pathSegment: string,
   file: File,
-  { template_key, surveyIdx }: { template_key: string; surveyIdx: number }
+  { template_key }: { template_key: string }
 ): Promise<string | undefined> => {
   const formData = new FormData();
   formData.append("image", file);
@@ -17,7 +18,7 @@ export const imgUploader = async (
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/survey/${template_key}/${surveyIdx}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/${pathSegment}/${template_key}`,
     {
       method: "POST",
       body: formData,

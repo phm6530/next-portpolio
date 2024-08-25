@@ -23,10 +23,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";
 import ThumbNailUploader from "@/app/template/made/[templateType]/_component/ThumbNailUploader";
+import { PathSegments } from "@/types/upload";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
   description: "",
+  thumbnail: "",
   genderChk: "1",
   ageChk: "1",
   dateRange: null,
@@ -86,7 +88,7 @@ export default function SurveyPage({
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
-  console.log("watch :", formState.watch());
+
   const { mutate } = useMutation<
     unknown,
     Error,
@@ -153,24 +155,26 @@ export default function SurveyPage({
         <FormProvider {...formState}>
           {/* 연령 별 체크*/}
           <AddAgeGroup />
+
           {/* 성별 별 체크*/}
           <AddGender />
+
           {/* 기간 */}
           <AddDateRange />
+
           {/* 공통 제목 */}
-          <SurveyText
-            label={"title"}
-            error={formState.formState.errors.title}
-            requiredMsg={"제목은 필수 입니다!"}
-            register={formState.register}
-          />
-          <ThumbNailUploader />
+          <SurveyText label={"title"} requiredMsg={"제목은 필수 입니다!"} />
+
           {/* 공통 설명 적기 */}
           <SurveyText
             label={"description"}
-            error={formState.formState.errors.description}
             requiredMsg={"간단한 설명을 적어주세요!"}
-            register={formState.register}
+          />
+
+          {/* 썸네일 */}
+          <ThumbNailUploader
+            template_type={PathSegments.Survey}
+            template_key={template_key as string}
           />
 
           {/* Survey Edit Form + List*/}

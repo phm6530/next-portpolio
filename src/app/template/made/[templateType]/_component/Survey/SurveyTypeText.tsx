@@ -1,10 +1,10 @@
 import { imgUploader } from "@/app/lib/uploaderHanlder";
 import useStore from "@/store/store";
+import { PathSegments } from "@/types/upload";
 import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import {
   FieldError,
-  useFieldArray,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
@@ -22,7 +22,6 @@ export default function SurveyTypeText({
   const {
     register,
     formState: { errors },
-    watch,
     getValues,
     setValue,
   } = useFormContext();
@@ -34,7 +33,10 @@ export default function SurveyTypeText({
   const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
     if (files && template_key) {
-      const imgUrl = await imgUploader(files[0], { template_key, surveyIdx });
+      //임의로
+      const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
+        template_key,
+      });
       setpreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
 
       const QuestionObj = getValues(`items.${surveyIdx}`);
@@ -84,7 +86,7 @@ export default function SurveyTypeText({
         <button type="button" onClick={uploadClickTrigger}>
           사진
         </button>
-        <button>삭제</button>
+
         <input
           type="text"
           {...register(`items.${surveyIdx}.label`, {

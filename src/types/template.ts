@@ -30,8 +30,8 @@ export type CommentTemplateProps = {
   description: string;
   created_at: string;
   template: TemplateTypeProps;
-  img?: string;
   template_key?: string;
+  thumbnail: string | null;
   dateRange: [string, string] | [null, null];
 
   templateOption: {

@@ -8,7 +8,7 @@ export default function layOut({
   params: surveyParams;
   children: ReactNode;
 }) {
-  const template = params.type;
+  const template = params.templateType;
 
   return (
     <>

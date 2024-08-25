@@ -21,13 +21,15 @@ export default function SurveyItem({
     title,
     description,
     created_at,
-    img,
     template,
     age_group,
     gender_group,
     user_cnt,
     dateRange,
+    thumbnail,
   } = itemData;
+
+  console.log(thumbnail);
 
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
@@ -75,6 +77,16 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
+  // 절대경로 파악
+  const isAbsolutePath = (imgUrl: string) => {
+    if (/^(https?:)?\/\//.test(imgUrl)) {
+      return imgUrl;
+    } else {
+      console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+      return `${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`;
+    }
+  };
+
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -83,11 +95,11 @@ export default function SurveyItem({
       onMouseLeave={onMouseReaver}
       ref={ref}
     >
-      {img && (
+      {thumbnail && (
         <div className={classes.surveyThumbNail}>
           <Image
             alt="test"
-            src={img}
+            src={isAbsolutePath(thumbnail)}
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
