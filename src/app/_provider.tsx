@@ -11,7 +11,7 @@ export default async function ProviderContext({
   const session = await auth();
 
   return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
+    <SessionProvider session={session} refetchOnWindowFocus={true}>
       <RQProvider>{children}</RQProvider>
     </SessionProvider>
   );

@@ -5,10 +5,7 @@ import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
-import {
-  AddsurveyDetailProps,
-  GetSurveyDetailProps,
-} from "@/types/templateSurvey";
+import { GetSurveyDetailProps } from "@/types/templateSurvey";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
@@ -21,6 +18,7 @@ import { localStorageHandler } from "@/app/lib/localStorageHandler";
 import { useEffect, useState } from "react";
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
 import helperDateCompare from "@/app/lib/helperDateCompare";
+import { Session } from "next-auth";
 
 interface Option {
   label: string;
@@ -30,9 +28,11 @@ interface Option {
 export default function SurveyTemplateDetail({
   templateType,
   surveyId,
+  session,
 }: {
   templateType: TemplateUnionType;
   surveyId: number;
+  session: Session | null;
 }) {
   const formMethod = useForm();
   const router = useRouter();
@@ -100,8 +100,17 @@ export default function SurveyTemplateDetail({
   }
 
   if (data) {
-    const { dateRange, title, description, questions, templateOption } = data;
-    console.log(data);
+    const {
+      dateRange,
+      title,
+      description,
+      questions,
+      templateOption,
+      thumbnail,
+      user_nickname,
+      user_id,
+      user_role,
+    } = data;
 
     //Submit
     const onSubmitHandler = async (data: Record<string, string>) => {
@@ -122,6 +131,7 @@ export default function SurveyTemplateDetail({
 
       // null이면 무기한이니까 넘기기
     };
+
     return (
       <>
         {!!participatedAt && (
@@ -132,10 +142,13 @@ export default function SurveyTemplateDetail({
             </button>
           </>
         )}
-
+        {/* {thumbnail && <img src={thumbnail} alt="alrt" />} */}
         <h1>{title}</h1>
         <h2>{description}</h2>
-
+        <h3>
+          {user_nickname === "anonymous" ? "익명" : user_nickname}
+          {user_role === "admin" ? "M" : ""}
+        </h3>
         <TemplateStatus dateRange={dateRange} />
 
         {/* Option  */}

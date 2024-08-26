@@ -1,6 +1,25 @@
 import { AddSurveyFormProps, SurveyRadioProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 
+export const insertCreateUser = async (
+  conn: PoolConnection,
+  template_id: number,
+  user: {
+    user_id: string;
+    user_name: string;
+    user_nickname: string;
+    role: string;
+  }
+) => {
+  const [result] = await conn.query(
+    `
+      INSERT INTO user_made_template(user_id , template_id) values(? , ?)
+  `,
+    [user.user_id, template_id]
+  );
+  return result;
+};
+
 //survey List  Insert
 export const insertQuestion = async (
   conn: PoolConnection,

@@ -10,7 +10,7 @@ import SurveyText from "@/app/template/made/[templateType]/_component/Survey/Sur
 import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
 import QuestionAddController from "@/app/template/made/[templateType]/_component/Survey/QuestionAddController";
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import dayjs from "dayjs";
 
@@ -20,10 +20,12 @@ import AddGender from "@/app/template/made/[templateType]/_component/templateAdd
 import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
 import { withFetch } from "@/app/lib/helperClient";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";
 import ThumbNailUploader from "@/app/template/made/[templateType]/_component/ThumbNailUploader";
 import { PathSegments } from "@/types/upload";
+import { getSession, signOut, useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -34,22 +36,36 @@ const initialFormState: AddSurveyFormProps = {
   dateRange: null,
   items: [],
 
-  access_email: "",
-  access_email_agreed: false,
-  access_pin: null,
+  // access_email: "",
+  // access_email_agreed: false,
+  // access_pin: null,
 };
 
 export default function SurveyPage({
   template,
+  session,
 }: {
   template: TemplateTypeProps;
+  session: Session | null;
 }) {
   //zustand
   const settemplate_key = useStore((state) => state.settemplate_key);
   const removetemplate_key = useStore((state) => state.removetemplate_key);
   const template_key = useStore((state) => state.template_key);
+  const pathname = usePathname();
+
+  const { RenderPreview } = usePreview();
+
+  //초기 세션상태
+  const [isSession, setIsSession] = useState<boolean>(
+    session ? !!session : false
+  );
   const router = useRouter();
 
+  //현재시간
+  const nowDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
+
+  //생성할 이미지 Key + template_Key 생성
   useEffect(() => {
     settemplate_key(uuid4());
     return () => {
@@ -57,15 +73,10 @@ export default function SurveyPage({
     };
   }, []);
 
-  //현재시간
-  const nowDate = dayjs().format("YYYY. MM. DD. A HH:mm ");
-
   //로컬 시간 데이터 임시저장
   const tempSave = () => {
     localStorage.setItem("savedTime", nowDate);
     localStorage.setItem(template, JSON.stringify(formState.getValues()));
-
-    alert("저장완료");
   };
 
   useEffect(() => {
@@ -83,13 +94,11 @@ export default function SurveyPage({
     }, 500);
   }, []);
 
-  const { RenderPreview } = usePreview();
-
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
 
-  const { mutate } = useMutation<
+  const { mutate, isPending } = useMutation<
     unknown,
     Error,
     Omit<AddSurveyFormProps, "dateRange"> & {
@@ -116,10 +125,23 @@ export default function SurveyPage({
 
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
-    if (
-      formState.getValues("items").length !== 0 &&
-      formState.getValues("access_pin") !== null
-    ) {
+    /**
+     * 권한이 있는 요청이었지만, 만료되었을 경우는 로그인 페이지로 리다이렉트 해버림
+     */
+    const curSession = await getSession();
+    if (isSession && !curSession) {
+      //재로그인
+      alert("세션이 만료되었습니다....");
+      await signOut({ redirect: false });
+      if (confirm("작성한 내용을 임시 저장 하시겠습니까?")) {
+        tempSave();
+      }
+      router.push(`/auth/login?redirect=${pathname}`);
+      return;
+    }
+
+    //어드민일 경우
+    if (session?.user.role === "admin") {
       //기간 설정
       const dateformatting = data.dateRange
         ? data.dateRange.map((e) => {
@@ -135,6 +157,27 @@ export default function SurveyPage({
       };
 
       mutate(resultData);
+    } else {
+      if (
+        formState.getValues("items").length !== 0 &&
+        formState.getValues("access_pin") !== null
+      ) {
+        //기간 설정
+        const dateformatting = data.dateRange
+          ? data.dateRange.map((e) => {
+              return dayjs(e).format("YYYY-MM-DD");
+            })
+          : null;
+
+        const resultData = {
+          ...data,
+          template,
+          template_key: template_key as string,
+          dateRange: dateformatting,
+        };
+
+        mutate(resultData);
+      }
     }
   };
 
@@ -184,9 +227,11 @@ export default function SurveyPage({
           <QuestionAddController />
 
           {/* 익명 사용자 - Email 정보동의  */}
-          <TemplateAccess />
+          {!session && <TemplateAccess />}
         </FormProvider>
-        <button type="submit">제출</button>
+        <button type="submit" disabled={isPending}>
+          제출
+        </button>
         <button type="button" onClick={tempSave}>
           임시저장
         </button>

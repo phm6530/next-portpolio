@@ -11,7 +11,7 @@ const nextConfig = {
   images: {
     domains: [
       "www.h-creations.com",
-      "d33h8icwcso2tj.cloudfront.net", //S3
+      "pixabay.com",
       "localhost", // dev
       "images.unsplash.com",
     ], // 내 포트폴리오

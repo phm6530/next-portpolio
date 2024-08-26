@@ -1,6 +1,9 @@
 "use client";
 
+import { queryClient } from "@/app/config/queryClient";
 import { withFetch } from "@/app/lib/helperClient";
+import { QUERY_KEY } from "@/types/constans";
+import { TemplateTypeProps } from "@/types/template";
 import { useMutation } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -8,6 +11,7 @@ import { useEffect } from "react";
 
 export default function AdminController({
   user,
+  curTemplateType,
   curTemplateKey,
 }: {
   user:
@@ -22,6 +26,7 @@ export default function AdminController({
         user_nickname: string;
         role: "admin";
       };
+  curTemplateType: TemplateTypeProps;
   curTemplateKey: string;
 }) {
   const isTemplateAuth =
@@ -37,7 +42,7 @@ export default function AdminController({
         signOut();
       }
     };
-  }, []);
+  }, [session?.user.role]);
 
   const anonyMouseUser = user.role === "anonymous";
   const admin = user.role === "admin";
@@ -55,6 +60,7 @@ export default function AdminController({
     onSuccess: () => {
       alert("삭제 성공!");
       router.replace("/template");
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.TEMPLATE_LIST] });
     },
   });
 
@@ -79,7 +85,15 @@ export default function AdminController({
       )}
 
       <button onClick={deleteTemplate}>삭제</button>
-      <button>수정</button>
+      <button
+        onClick={() =>
+          router.push(
+            `/template/made/${curTemplateType}?edit=${curTemplateKey}`
+          )
+        }
+      >
+        수정
+      </button>
     </>
   );
 }

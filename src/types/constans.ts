@@ -11,6 +11,8 @@ export enum QUERY_STRING {
 export enum QUERY_KEY {
   TEMPLATE_LIST = "template-list",
   TEMPLATE_RESULT_USER_ADMIN = "anonymous",
+
+  UNSPLASH = "unspalsh",
 }
 
 export enum NEXTAUTH_ID {

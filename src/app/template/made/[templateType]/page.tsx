@@ -4,18 +4,35 @@ import RankSurvey from "@/app/template/made/[templateType]/_component/RankSurvey
 import { surveyParams } from "@/types/templateSurvey";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { queryClient } from "@/app/config/queryClient";
+import { withFetch } from "@/app/lib/helperClient";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "나만의 설문조사를 만들어보세요",
   description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
 };
 
-export default function SelectTemplate({ params }: { params: surveyParams }) {
+export default async function SelectTemplate({
+  params,
+}: {
+  params: surveyParams;
+}) {
   const template = params.templateType;
+
+  await queryClient.prefetchQuery({
+    queryKey: ["edit"],
+    queryFn: () =>
+      withFetch(async () => {
+        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`);
+      }),
+  });
+
+  const session = await auth();
 
   //기본 Survey Page
   if (template === "survey") {
-    return <SurveyPage template={template} />;
+    return <SurveyPage template={template} session={session} />;
   }
 
   //Rank

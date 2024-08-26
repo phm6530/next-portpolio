@@ -9,6 +9,7 @@ import gsap from "gsap";
 
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
 import helperDateCompare from "@/app/lib/helperDateCompare";
+import { getSession } from "next-auth/react";
 
 export default function SurveyItem({
   itemData,
@@ -27,32 +28,38 @@ export default function SurveyItem({
     user_cnt,
     dateRange,
     thumbnail,
+    user_id,
   } = itemData;
-
-  console.log(thumbnail);
 
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Timeline | null>(null);
-  const dayCompare = helperDateCompare();
 
-  const onClickHandler = (e: GetTemplateItemProps["id"]) => {
-    if (dateRange.every((e) => e !== null)) {
-      const [start, end] = dateRange;
-      if (dayCompare.isBefore(start)) {
-        alert("아직 시작 전인데요..");
-        return;
-      }
-      if (dayCompare.isAfter(end)) {
-        if (
-          confirm("해당 설문조사는 종료 되었습니다. 결과페이지로 가시겠습니까?")
-        ) {
-          router.push(`/template/result/${id}`);
-        }
-        return;
-      }
-    }
+  const onClickHandler = async (e: GetTemplateItemProps["id"]) => {
+    // const session = await getSession();
 
+    // //어드민은 다 진입 가능
+    // if (
+    //   !(session?.user.user_id === user_id || session?.user.role === "admin")
+    // ) {
+    //   if (dateRange.every((e) => e !== null)) {
+    //     const [start, end] = dateRange;
+    //     if (dayCompare.isBefore(start)) {
+    //       alert("아직 시작 전인데요..");
+    //       return;
+    //     }
+    //     if (dayCompare.isAfter(end)) {
+    //       if (
+    //         confirm(
+    //           "해당 설문조사는 종료 되었습니다. 결과페이지로 가시겠습니까?"
+    //         )
+    //       ) {
+    //         router.push(`/template/result/${id}`);
+    //       }
+    //       return;
+    //     }
+    //   }
+    // }
     router.push(`/template/${template}/${e}`);
   };
 

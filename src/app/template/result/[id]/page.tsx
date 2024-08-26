@@ -73,7 +73,8 @@ export default async function resultPage({
         {session?.user.role === "admin" && (
           <AdminController
             user={session?.user}
-            curTemplateKey={prefetchMetaData.templateMeta.template_key}
+            curTemplateType={prefetchMetaData.templateMeta.template}
+            curTemplateKey={prefetchMetaData.templateMeta.template_key!}
           />
         )}
         {/* Result */}

@@ -1,11 +1,11 @@
-import { insertQuestion } from "@/app/api/_dao/template/SurveyRepository";
+import {
+  insertCreateUser,
+  insertQuestion,
+} from "@/app/api/_dao/template/SurveyRepository";
 
 import { getTemplateId } from "@/app/lib/utilFunc";
 import { withConnection, withTransaction } from "@/app/lib/helperServer";
-import {
-  AddSurveyFormProps,
-  RequestSurveyFormProps,
-} from "@/types/templateSurvey";
+import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import {
   insertAnonymous,
   insertTemplateMeta,
@@ -17,9 +17,40 @@ import { CONST_PAGING } from "@/types/constans";
 import { sendEmail } from "@/app/lib/nodeMailer";
 import { GetTemplateDetail, SelectTEmplateDetailProps } from "@/types/template";
 import { ApiError } from "@/app/lib/apiErrorHandler";
+import { auth } from "@/auth";
 
 //template Post Service
-export async function postAddTemplate(data: RequestSurveyFormProps) {
+export async function postUser(data: RequestSurveyFormProps) {
+  const { items, template, template_key, ...rest } = data;
+
+  //템플릿 ID Get
+  const template_type_id = getTemplateId(template) as number;
+
+  //meta Post
+  await withTransaction(async (conn) => {
+    //save metaData
+    const savedMeta = await insertTemplateMeta(conn, {
+      template_type_id,
+      template_key,
+      ...rest,
+    });
+
+    //세션가드
+    const session = await auth();
+    if (!session) {
+      throw new ApiError("세션이 만료되었습니다.", 503);
+    }
+
+    //User templateMade Insert Data
+    await insertCreateUser(conn, savedMeta.insertId, session.user);
+
+    //save Questions
+    await insertQuestion(conn, items, savedMeta.insertId);
+  });
+}
+
+//template Post Service
+export async function postAnonymouse(data: RequestSurveyFormProps) {
   const { items, template, template_key, ...rest } = data;
 
   //템플릿 ID Get
@@ -34,22 +65,21 @@ export async function postAddTemplate(data: RequestSurveyFormProps) {
       template_key,
       ...rest,
     });
+    //save Questions
+    await insertQuestion(conn, items, savedMeta.insertId);
 
     //email + Pin 저장
     await insertAnonymous(
       conn,
-      restData.access_email,
-      restData.access_email_agreed,
-      restData.access_pin!,
+      restData.access_email as string,
+      restData.access_email_agreed as boolean,
+      restData.access_pin as number,
       savedMeta.insertId
     );
 
-    //save Questions
-    await insertQuestion(conn, items, savedMeta.insertId);
-
     //메일 책임 트랜지션으로 전가
     await sendEmail(
-      restData.access_email,
+      restData.access_email as string,
       template_key,
       restData.title,
       savedMeta.insertId,

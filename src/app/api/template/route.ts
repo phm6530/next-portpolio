@@ -1,7 +1,8 @@
 import {
-  postAddTemplate,
+  postAnonymouse,
   getTemplateList,
   getTemplateAllCnt,
+  postUser,
 } from "@/app/api/_service/template/templateSerivce";
 import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { RequestSurveyFormProps } from "@/types/templateSurvey";
@@ -23,8 +24,6 @@ export async function GET(req: NextRequest) {
     const result = await getTemplateList(page, search, sort);
     const listCnt = await getTemplateAllCnt(search, sort);
 
-    console.log(result);
-
     // JSON 응답
     return NextResponse.json({ result, cnt: listCnt });
   } catch (error) {
@@ -38,10 +37,15 @@ export async function POST(req: NextRequest) {
   try {
     const data: RequestSurveyFormProps = await req.json();
 
+    console.log(session);
+
     if (!session) {
-      await postAddTemplate(data);
-    } else if (session && session.user.role === "admin") {
-      throw new ApiError("아직 미완료", 400);
+      await postAnonymouse(data);
+    }
+    //세션의 role이 어드민이거나 user일떄만 허용
+    else if (session.user.role === "user" || session.user.role === "admin") {
+      console.log("!");
+      await postUser(data);
     }
 
     return NextResponse.json({ message: "success" });

@@ -1,11 +1,38 @@
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-
 import classes from "./ThumbNailUploader.module.scss";
-import jsonData from "./test.json";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { withFetch } from "@/app/lib/helperClient";
+import { QUERY_KEY } from "@/types/constans";
+import pixabayJson from "./pixabay.json";
+import { resolve } from "path";
+
+type UnsplashApi = {
+  total: number;
+  total_pages: number;
+  results: {
+    urls: {
+      regular: string;
+      raw: string;
+      small: string;
+    };
+    alternative_slugs: {
+      ko: string;
+    };
+  }[];
+};
+
+type PixabayApi = {
+  total: number;
+  totalHits: number;
+  hits: {
+    webformatURL: string;
+    largeImageURL: string;
+    tags: string;
+  }[];
+};
 
 /**
  * template_type : 템플릿 종류
@@ -21,16 +48,16 @@ export default function ThumbNailUploader({
   const [thumNailEditor, setThumNailEditor] = useState<Boolean>(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [imgKeyword, setImgKeyword] = useState<string>("");
+  const [imgSearch, setImgSearch] = useState<string | null>(null);
   const [touched, setTouched] = useState<boolean>(false);
   const [preView, setPreview] = useState<string | null>(null);
 
-  const { setValue, watch } = useFormContext();
-  console.log(watch());
+  const { setValue } = useFormContext();
 
   const [processedData, setProcessedData] = useState<
     {
-      regularImgUrl: string;
-      smallImageUrl: string;
+      largeImageURL: string;
+      webformatURL: string;
       alt: string;
     }[]
   >();
@@ -51,53 +78,39 @@ export default function ThumbNailUploader({
     }
   };
 
-  const { mutate, isPending } = useMutation<
-    {
-      total: number;
-      total_pages: number;
+  const { data, isPending, isSuccess } = useQuery<PixabayApi>({
+    queryKey: [QUERY_KEY.UNSPLASH, imgSearch],
+    queryFn: () => {
+      return withFetch(async () => {
+        if (imgSearch) {
+          const encodingText = encodeURI(imgSearch);
+          return fetch(
+            `https://pixabay.com/api/?key=${process.env.NEXT_PUBLIC_PIXABAY_API_KEY}&q=${encodingText}&image_type=photo&pretty=true&per_page=32`,
+            {
+              cache: "no-cache",
+            }
+          );
+        } else {
+          return 0 as never;
+        }
+      });
+    },
+    enabled: !!imgSearch,
+  });
 
-      results: {
-        urls: {
-          regular: string;
-          raw: string;
-          small: string;
-        };
-        alternative_slugs: {
-          ko: string;
-        };
-      }[];
-    },
-    Error,
-    { keyword: string }
-  >({
-    mutationFn: () => {
-      //프로미스 반환
-      const dater = new Promise<{
-        total: number;
-        total_pages: number;
-        results: {
-          urls: {
-            regular: string;
-            raw: string;
-            small: string;
-          };
-          alternative_slugs: {
-            ko: string;
-          };
-        }[];
-      }>((resolve) => setTimeout(() => resolve(jsonData), 0));
-      return dater;
-    },
-    onSuccess: (data) => {
-      const processedDataArr = data.results.map((item) => ({
-        regularImgUrl: item.urls.regular,
-        smallImageUrl: item.urls.small,
-        alt: item.alternative_slugs.ko,
+  console.log(data);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      const processedDataArr = data.hits.map((item) => ({
+        largeImageURL: item.largeImageURL,
+        webformatURL: item.webformatURL,
+        alt: item.tags,
       }));
 
       setProcessedData(processedDataArr);
-    },
-  });
+    }
+  }, [isSuccess, data]);
 
   const onSearchImg = () => {
     const keyword = imgKeyword.trim();
@@ -110,7 +123,7 @@ export default function ThumbNailUploader({
 
     // 검색 실행 로직
     setTouched(true); //touched
-    mutate({ keyword });
+    setImgSearch(keyword);
   };
 
   const clearPreview = () => {
@@ -136,6 +149,7 @@ export default function ThumbNailUploader({
             }}
           />
           <p>생성하실 썸네일의 키워드를 적어주세요, ex) 고양이 , 강아지 </p>
+          <p>영어로 검색하시면 더 정확한 검색이 가능합니다!</p>
           <button type="button" onClick={onSearchImg}>
             썸네일 검색
           </button>
@@ -152,10 +166,13 @@ export default function ThumbNailUploader({
                         <div
                           className={classes.unsplashItem}
                           key={`thumbnail-${idx}`}
-                          onClick={() => setValue("thumbnail", e.regularImgUrl)}
+                          onClick={() => {
+                            setValue("thumbnail", e.webformatURL);
+                            setPreview(e.webformatURL);
+                          }}
                         >
                           <Image
-                            src={e.smallImageUrl}
+                            src={e.webformatURL}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             style={{

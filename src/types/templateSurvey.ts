@@ -55,8 +55,8 @@ export type AddSurveyFormProps = {
   //기한
   dateRange: Date[] | null;
 
-  access_email: string;
-  access_email_agreed: boolean;
+  access_email?: string;
+  access_email_agreed?: boolean;
   access_pin?: number | null;
 };
 
@@ -71,7 +71,7 @@ export type GetSurveyQuestions = {
     id: number;
     label: string;
     type: InferObj<SurveyType>;
-    textImg?: string;
+    textImg: string | null;
 
     options?: {
       optionId: number;

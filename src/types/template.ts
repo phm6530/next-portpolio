@@ -32,6 +32,11 @@ export type CommentTemplateProps = {
   template: TemplateTypeProps;
   template_key?: string;
   thumbnail: string | null;
+
+  user_nickname: string;
+  user_id: string;
+  user_role: "admin" | "user" | "anonymous";
+
   dateRange: [string, string] | [null, null];
 
   templateOption: {

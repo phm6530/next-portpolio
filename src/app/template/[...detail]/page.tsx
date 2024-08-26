@@ -4,7 +4,7 @@
 import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
@@ -12,6 +12,9 @@ import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetai
 
 import { auth } from "@/auth";
 import AdminButton from "@/app/template/_component/AdminButton";
+import helperDateCompare from "@/app/lib/helperDateCompare";
+import TemplateUnavailable from "@/app/_components/templateUtill/TemplatePending";
+import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -21,7 +24,7 @@ import AdminButton from "@/app/template/_component/AdminButton";
 
 const DynamicRankTemplateDetail = dynamic(
   () => import("@/app/template/[...detail]/RankTemplateDetail"),
-  { ssr: false, loading: () => <p>Loading Survey Template...</p> } // This makes sure it's only loaded on the client side
+  { ssr: false, loading: () => <p>Loading Survey Template...</p> }
 );
 
 const vaildateTemplateType = ["survey", "rank"] as const;
@@ -67,7 +70,7 @@ export async function generateMetadata({
       openGraph: {
         images: [
           {
-            url: surveyItem.img ? surveyItem.img : "",
+            url: surveyItem.thumbnail ? surveyItem.thumbnail : "",
           },
         ],
       },
@@ -83,14 +86,38 @@ export default async function Page({
   params: templateDetailParams;
 }) {
   const [templateType, id] = params.detail;
-
   const session = await auth();
 
-  await queryClient.prefetchQuery({
+  const data = await queryClient.fetchQuery({
     queryKey: [templateType, +id],
     queryFn: () => fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id),
     staleTime: 10000,
   });
+  const dayCompare = helperDateCompare();
+
+  const { dateRange, user_id, thumbnail, title } = data;
+  if (!(session?.user.user_id === user_id || session?.user.role === "admin")) {
+    if (dateRange.every((e) => e !== null)) {
+      const [start, end] = dateRange;
+
+      const templateStatus = dayCompare.isBefore(start)
+        ? "pending"
+        : dayCompare.isAfter(end)
+        ? "after"
+        : (null as never);
+
+      if (templateStatus) {
+        return (
+          <TemplatePending
+            dateRange={dateRange}
+            thumbnail={thumbnail}
+            title={title}
+            templateStatus={templateStatus}
+          />
+        );
+      }
+    }
+  }
 
   return (
     <>
@@ -105,6 +132,7 @@ export default async function Page({
               <SurveyTemplateDetail
                 templateType={templateType}
                 surveyId={+id}
+                session={session}
               />
             );
           }

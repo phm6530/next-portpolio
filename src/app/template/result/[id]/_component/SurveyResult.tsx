@@ -78,14 +78,14 @@ export default function SurveyResult({ id }: { id: number }) {
 
   if (data) {
     const { templateResult, templateMeta } = data;
-    const { template } = templateMeta;
+    const { template: templateType } = templateMeta;
 
     const templateNames: { [key: string]: string } = {
       survey: "설문조사",
       rank: "랭킹",
     };
 
-    const templateName = templateNames[template] || "기본값";
+    const templateName = templateNames[templateType] || "기본값";
     const { questions } = templateResult;
 
     // Gender Filter
@@ -119,7 +119,9 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
-          <button onClick={() => router.push(`/template/${template}/${id}`)}>
+          <button
+            onClick={() => router.push(`/template/${templateType}/${id}`)}
+          >
             참여하기
           </button>
           <p>참여자 : {templateMeta.user_cnt || 0} 명</p>

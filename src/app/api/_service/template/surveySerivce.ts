@@ -24,6 +24,11 @@ type RowDataSurvey = {
   age_chk: number;
   created_at: string;
   template_key: string;
+  thumbnail: string | null;
+
+  user_nickname: string;
+  user_id: string;
+  user_role: "admin" | "user" | "anonymous";
 
   start_date: string | null;
   end_date: string | null;
@@ -48,6 +53,8 @@ export async function getSurveyDetail(
     return selectTemlateDetail(conn, DetailId) as Promise<RowDataSurvey[]>;
   });
 
+  console.log(rowData);
+
   //Meta Data
   const metaData: GetQuestionMetaProps = {
     id: rowData[0].id,
@@ -56,6 +63,13 @@ export async function getSurveyDetail(
     created_at: rowData[0].created_at,
     template: rowData[0].template,
     template_key: rowData[0].template_key,
+
+    //유저
+    user_nickname: rowData[0].user_nickname,
+    user_id: rowData[0].user_id,
+    user_role: rowData[0].user_role,
+
+    thumbnail: rowData[0].thumbnail,
     dateRange:
       rowData[0].start_date && rowData[0].end_date
         ? [rowData[0].start_date, rowData[0].end_date] // 둘 다 string인 경우
@@ -79,7 +93,7 @@ export async function getSurveyDetail(
           id: q.question_id,
           label: q.question_label,
           type: q.question_type_id,
-          textImg: q.text_picture,
+          textImg: q.text_picture ?? null,
           ...(q.question_type_id === "select" && { options: [] }),
         };
         arr.push(initalQa);

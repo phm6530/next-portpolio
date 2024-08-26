@@ -118,6 +118,9 @@ export const selectTemplateMetaData = async (
         tm.description,
         tm.created_at,
         tm.template_key,
+        COALESCE(umt.user_id , "anonymous") as user_id,
+        COALESCE(user.role , "anonymous") as user_role,
+        COALESCE(user.nick_name , "anonymous") as user_nickname,
         t.template AS template,
         pr_stats.age_group,
         pr_stats.gender as gender_group,
@@ -125,11 +128,13 @@ export const selectTemplateMetaData = async (
         tm.start_date ,
         tm.end_date,
         tm.thumbnail
-
     FROM 
         template_meta tm
     JOIN 
         template t ON tm.template_type_id = t.id
+	LEFT JOIN
+		user_made_template umt ON umt.template_id = tm.id
+	LEFT JOIN user ON user.user_id = umt.user_id
     LEFT JOIN (
         SELECT 
             pr.template_id,
@@ -143,7 +148,6 @@ export const selectTemplateMetaData = async (
             pr.template_id, pr.age_group, pr.gender
     ) pr_stats ON tm.id = pr_stats.template_id AND pr_stats.rn = 1 
     WHERE tm.title LIKE ?
-    
   `;
 
   let queryParams: (number | string | undefined)[] = [`%${search || ""}%`];
@@ -200,13 +204,17 @@ export const selectTemlateDetail = async (
   page: string
 ): Promise<RowDataPacket[]> => {
   const sql = `
-   SELECT 
+    SELECT 
       tm.id,
       tm.title,
       tm.description,
       t.template,
       tm.gender_chk,
       tm.age_chk,
+      COALESCE(user.nick_name , 'anonymous') as user_nickname,
+      COALESCE(user.user_id , 'anonymous') as user_id,
+	    COALESCE(user.role, 'anonymous') as user_role,
+      tm.thumbnail,
       tm.created_at,
       sq.id AS question_id,
       sq.question_type_id,
@@ -227,6 +235,10 @@ export const selectTemlateDetail = async (
         survey_question sq ON sq.template_meta_id = tm.id
     LEFT JOIN 
         survey_options so ON so.question_id = sq.id
+	LEFT JOIN 
+		user_anonymous ua ON ua.template_id = tm.id
+	LEFT JOIN user_made_template umt ON umt.template_id = tm.id
+    LEFT JOIN user ON umt.user_id = user.user_id
     WHERE 
         tm.id = ?
     ORDER BY 
