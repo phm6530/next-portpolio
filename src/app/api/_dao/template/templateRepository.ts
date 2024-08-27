@@ -1,6 +1,6 @@
 import { bcryptHash } from "@/app/lib/brycptHash";
 import { CONST_PAGING, LIST_SORT } from "@/types/constans";
-import { SelectTEmplateDetailProps } from "@/types/template";
+import { GetTemplateDetailMetaProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
@@ -108,7 +108,7 @@ export const selectTemplateMetaData = async (
   props: GetTemplateMeta & (TruePageNation | FalsePageNation),
   search?: string | null,
   sort?: string | null
-): Promise<SelectTEmplateDetailProps[] | SelectTEmplateDetailProps> => {
+): Promise<GetTemplateDetailMetaProps[] | GetTemplateDetailMetaProps> => {
   const { conn, usePagination } = props;
 
   let sql = `
@@ -194,8 +194,8 @@ export const selectTemplateMetaData = async (
   const [rows] = await conn.query<RowDataPacket[]>(sql, queryParams);
 
   return usePagination
-    ? (rows as SelectTEmplateDetailProps[])
-    : (rows[0] as SelectTEmplateDetailProps);
+    ? (rows as GetTemplateDetailMetaProps[])
+    : (rows[0] as GetTemplateDetailMetaProps);
 };
 
 //Detail Return;
@@ -204,7 +204,7 @@ export const selectTemlateDetail = async (
   page: string
 ): Promise<RowDataPacket[]> => {
   const sql = `
-    SELECT 
+SELECT 
       tm.id,
       tm.title,
       tm.description,
@@ -213,7 +213,8 @@ export const selectTemlateDetail = async (
       tm.age_chk,
       COALESCE(user.nick_name , 'anonymous') as user_nickname,
       COALESCE(user.user_id , 'anonymous') as user_id,
-	    COALESCE(user.role, 'anonymous') as user_role,
+	  COALESCE(user.role, 'anonymous') as user_role,
+	  tm.template_key,
       tm.thumbnail,
       tm.created_at,
       sq.id AS question_id,

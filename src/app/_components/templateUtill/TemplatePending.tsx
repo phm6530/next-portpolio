@@ -32,13 +32,16 @@ export default function TemplatePending({
       <p>
         기간 : {dateRange[0]} - {dateRange[1]}
       </p>
-      <p>{templateStatus && "아직 진행 날이 아닙니다.."}</p>
+      <p>{templateStatus === "pending" && "아직 진행 날이 아닙니다.."}</p>
+      <p>{templateStatus === "after" && "종료되었습니다."}</p>
       {templateStatus === "after" && (
         <>
           <button>결과보기</button>
         </>
       )}
-      <button onClick={() => router.back()}>뒤로가기</button>
+      <button onClick={() => router.replace("/template")}>
+        리스트로 돌아가기
+      </button>
     </>
   );
 }

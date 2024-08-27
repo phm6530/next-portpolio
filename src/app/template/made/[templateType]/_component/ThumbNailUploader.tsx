@@ -98,8 +98,6 @@ export default function ThumbNailUploader({
     enabled: !!imgSearch,
   });
 
-  console.log(data);
-
   useEffect(() => {
     if (isSuccess && data) {
       const processedDataArr = data.hits.map((item) => ({

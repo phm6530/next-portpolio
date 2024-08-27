@@ -15,7 +15,10 @@ import {
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
 import { sendEmail } from "@/app/lib/nodeMailer";
-import { GetTemplateDetail, SelectTEmplateDetailProps } from "@/types/template";
+import {
+  GetTemplateDetail,
+  GetTemplateDetailMetaProps,
+} from "@/types/template";
 import { ApiError } from "@/app/lib/apiErrorHandler";
 import { auth } from "@/auth";
 
@@ -110,7 +113,7 @@ export async function getTemplateList(
 
     if (Array.isArray(result)) {
       const reducedResult = result.reduce(
-        (acc: GetTemplateDetail[], cur: SelectTEmplateDetailProps) => {
+        (acc: GetTemplateDetail[], cur: GetTemplateDetailMetaProps) => {
           const { start_date, end_date, ...rest } = cur;
           const newCur: GetTemplateDetail = {
             ...rest,

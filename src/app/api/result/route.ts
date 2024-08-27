@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
     const { data, templateMeta } = await withTransaction(async (conn) => {
       //Detail
       const data = await selectTemplateResult(conn, templateId);
+
       //페이징 파라미터
       const parameter: {
         conn: PoolConnection;
@@ -134,7 +135,9 @@ export async function GET(req: NextRequest) {
       { questions: [] } //initale
     );
 
-    console.log(questionList);
+    // const templateMetaModify = {
+    //   id: templateMeta.id,
+    // };
 
     return NextResponse.json({ templateResult: questionList, templateMeta });
   } catch (error) {

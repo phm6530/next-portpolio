@@ -81,7 +81,6 @@ export const sendEmail = async (
     const info = await myMail.sendMail(mailOptions);
     console.log("Email sent:", info.response);
   } catch (error) {
-    console.log(error);
     throw new ApiError("이메일 전송 실패..", 401);
   }
 };

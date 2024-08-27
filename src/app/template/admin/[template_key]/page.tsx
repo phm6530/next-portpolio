@@ -29,7 +29,7 @@ export default async function adminResult({
     notFound();
   }
   const templateId = +rows[0].id;
-  await queryClient.prefetchQuery({
+  const prefetchData = await queryClient.fetchQuery({
     queryKey: ["default", templateId],
     queryFn: () => fetchDetailResult(rows[0].id),
     staleTime: 10000,
@@ -47,11 +47,13 @@ export default async function adminResult({
         );
       }),
   });
+  const { template } = prefetchData.templateMeta;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <AdminController
         user={session?.user}
+        curTemplateType={template}
         curTemplateKey={params.template_key}
       />
       <SurveyResult id={templateId} />

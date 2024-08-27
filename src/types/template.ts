@@ -67,7 +67,7 @@ export type GetTemplateMetaLists = {
 };
 
 //DAO
-export type SelectTEmplateDetailProps = {
+export type GetTemplateDetailMetaProps = {
   start_date: string;
   end_date: string;
 } & Omit<GetTemplateItemProps, "templateOption" | "dateRange">;

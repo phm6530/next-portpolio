@@ -53,8 +53,6 @@ export async function getSurveyDetail(
     return selectTemlateDetail(conn, DetailId) as Promise<RowDataSurvey[]>;
   });
 
-  console.log(rowData);
-
   //Meta Data
   const metaData: GetQuestionMetaProps = {
     id: rowData[0].id,
@@ -68,8 +66,9 @@ export async function getSurveyDetail(
     user_nickname: rowData[0].user_nickname,
     user_id: rowData[0].user_id,
     user_role: rowData[0].user_role,
-
     thumbnail: rowData[0].thumbnail,
+
+    //기간
     dateRange:
       rowData[0].start_date && rowData[0].end_date
         ? [rowData[0].start_date, rowData[0].end_date] // 둘 다 string인 경우
@@ -81,6 +80,8 @@ export async function getSurveyDetail(
       ageChk: rowData[0].age_chk === 1 ? "1" : "0",
     },
   };
+
+  console.log(metaData, "meta");
 
   const getQuestions = () => {
     const arr: GetSurveyQuestions["questions"] = [];

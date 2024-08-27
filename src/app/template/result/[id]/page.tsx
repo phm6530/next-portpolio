@@ -11,6 +11,8 @@ import CommentSection, {
 import { withFetch } from "@/app/lib/helperClient";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import { auth } from "@/auth";
+import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
+import helperDateCompare from "@/app/lib/helperDateCompare";
 
 interface TemplateData {
   templateMeta: GetTemplateItemProps;
@@ -54,6 +56,7 @@ export default async function resultPage({
     staleTime: 10000,
   });
 
+  //댓글리스트임
   await queryClient.prefetchQuery({
     queryKey: ["comment"],
     queryFn: () =>
@@ -67,6 +70,40 @@ export default async function resultPage({
       }),
   });
 
+  const { user_id, start_date, end_date, thumbnail, title, id } =
+    prefetchMetaData.templateMeta;
+
+  const dateRange = [start_date, end_date] as [string, string] | [null, null];
+
+  const dayCompare = helperDateCompare();
+
+  //template Gard
+  if (
+    !(session?.user.user_id !== user_id) ||
+    !(session?.user.role === "admin")
+  ) {
+    if (dateRange.every((e) => e !== null)) {
+      const [start, end] = dateRange;
+
+      const templateStatus = dayCompare.isBefore(start)
+        ? "pending"
+        : dayCompare.isAfter(end)
+        ? "after"
+        : (null as never);
+
+      if (templateStatus) {
+        return (
+          <TemplatePending
+            dateRange={dateRange}
+            thumbnail={thumbnail}
+            title={title}
+            templateStatus={templateStatus}
+          />
+        );
+      }
+    }
+  }
+
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
@@ -75,6 +112,8 @@ export default async function resultPage({
             user={session?.user}
             curTemplateType={prefetchMetaData.templateMeta.template}
             curTemplateKey={prefetchMetaData.templateMeta.template_key!}
+            startDate={prefetchMetaData.templateMeta.start_date}
+            endDate={prefetchMetaData.templateMeta.end_date}
           />
         )}
         {/* Result */}

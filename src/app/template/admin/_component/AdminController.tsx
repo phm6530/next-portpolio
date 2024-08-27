@@ -13,6 +13,9 @@ export default function AdminController({
   user,
   curTemplateType,
   curTemplateKey,
+  curTemplateId,
+  startDate,
+  endDate,
 }: {
   user:
     | {
@@ -28,6 +31,9 @@ export default function AdminController({
       };
   curTemplateType: TemplateTypeProps;
   curTemplateKey: string;
+  curTemplateId?: number;
+  startDate?: string;
+  endDate?: string;
 }) {
   const isTemplateAuth =
     (user.role === "anonymous" && curTemplateKey === user.template_key) ||
@@ -94,6 +100,13 @@ export default function AdminController({
       >
         수정
       </button>
+      {curTemplateId && (
+        <button
+          onClick={() => router.push(`/template/result/${curTemplateId}`)}
+        >
+          결과페이지 가기
+        </button>
+      )}
     </>
   );
 }

@@ -233,9 +233,11 @@ export default function SurveyTemplateDetail({
         <button
           type="button"
           onClick={formMethod.handleSubmit(onSubmitHandler)}
+          disabled={!!participatedAt}
         >
           제출하기
         </button>
+        {participatedAt && "이미 참여하셨네요!"}
       </>
     );
   }

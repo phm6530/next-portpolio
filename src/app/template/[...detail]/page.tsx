@@ -15,6 +15,7 @@ import AdminButton from "@/app/template/_component/AdminButton";
 import helperDateCompare from "@/app/lib/helperDateCompare";
 import TemplateUnavailable from "@/app/_components/templateUtill/TemplatePending";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
+import AdminController from "@/app/template/admin/_component/AdminController";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -95,7 +96,17 @@ export default async function Page({
   });
   const dayCompare = helperDateCompare();
 
-  const { dateRange, user_id, thumbnail, title } = data;
+  const {
+    dateRange,
+    user_id,
+    thumbnail,
+    title,
+    template_key,
+    template,
+    id: template_id,
+  } = data;
+
+  //template Gard
   if (!(session?.user.user_id === user_id || session?.user.role === "admin")) {
     if (dateRange.every((e) => e !== null)) {
       const [start, end] = dateRange;
@@ -123,7 +134,13 @@ export default async function Page({
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
         {session && session.user.role === "admin" && (
-          <AdminButton id={id} /> // 클라이언트 컴포넌트 사용
+          <AdminController
+            user={session.user}
+            curTemplateKey={template_key as string}
+            curTemplateType={template}
+            curTemplateId={template_id}
+          />
+          // <AdminButton id={id} /> // 클라이언트 컴포넌트 사용
         )}
 
         {(() => {

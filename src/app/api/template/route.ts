@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
     }
     //세션의 role이 어드민이거나 user일떄만 허용
     else if (session.user.role === "user" || session.user.role === "admin") {
-      console.log("!");
       await postUser(data);
     }
 
