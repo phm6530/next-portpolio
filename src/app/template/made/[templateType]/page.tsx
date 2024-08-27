@@ -15,18 +15,23 @@ export const metadata: Metadata = {
 
 export default async function SelectTemplate({
   params,
+  searchParams,
 }: {
   params: surveyParams;
+  searchParams?: { edit: string }; //template_key
 }) {
   const template = params.templateType;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["edit"],
-    queryFn: () =>
-      withFetch(async () => {
-        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`);
-      }),
-  });
+  //수정일때만 데이터 패칭해오기
+  if (searchParams?.edit) {
+    await queryClient.prefetchQuery({
+      queryKey: ["edit"],
+      queryFn: () =>
+        withFetch(async () => {
+          return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`);
+        }),
+    });
+  }
 
   const session = await auth();
 

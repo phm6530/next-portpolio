@@ -8,8 +8,6 @@ import Image from "next/image";
 import gsap from "gsap";
 
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
-import helperDateCompare from "@/app/lib/helperDateCompare";
-import { getSession } from "next-auth/react";
 
 export default function SurveyItem({
   itemData,
@@ -22,7 +20,7 @@ export default function SurveyItem({
     title,
     description,
     created_at,
-    template,
+    template: templateType,
     age_group,
     gender_group,
     user_cnt,
@@ -60,7 +58,7 @@ export default function SurveyItem({
     //     }
     //   }
     // }
-    router.push(`/template/${template}/${e}`);
+    router.push(`/template/${templateType}/${e}`);
   };
 
   const { contextSafe } = useGSAP(
@@ -104,6 +102,7 @@ export default function SurveyItem({
     >
       {thumbnail && (
         <div className={classes.surveyThumbNail}>
+          <div className={classes.templateType}>{templateType}</div>
           <Image
             alt="test"
             src={isAbsolutePath(thumbnail)}
@@ -114,13 +113,16 @@ export default function SurveyItem({
           />
         </div>
       )}
+
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
         {/* 템플릿 상태 보여주기 */}
-        <TemplateStatus dateRange={dateRange} />
         <div className={classes.surveyTitle}>{title}</div>
+
         <div>{description}</div>
-        <div>{created_at}</div>
+
+        <TemplateStatus dateRange={dateRange} />
+        {/* <div>{created_at}</div> */}
 
         <div className={classes.groupParticipants}>
           {age_group && `${age_group}대`}

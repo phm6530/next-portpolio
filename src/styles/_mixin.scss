@@ -1,3 +1,6 @@
+//Template Mixin
+@import "./mixins/templateMixin.scss";
+
 //grid
 @mixin grid-center {
   max-width: 1300px;
@@ -37,3 +40,5 @@
     outline: none;
   }
 }
+
+//Template Type

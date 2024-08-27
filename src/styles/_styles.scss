@@ -2,10 +2,11 @@
 @import "./common/reset";
 @import "mixin";
 @import "user.scss";
+@import "font.scss";
 
 .body {
-  // background: #000;
-  // color: #fff;
+  font-family: "Pretendard-Regular";
+  color: $color-black;
 }
 
 .container {

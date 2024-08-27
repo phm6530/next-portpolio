@@ -51,8 +51,8 @@ export const insertTemplateMeta = async (
   } = data;
 
   const parmas = [
-    description,
     title,
+    description,
     template_type_id,
     template_key,
     genderChk,

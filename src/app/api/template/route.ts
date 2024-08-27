@@ -37,8 +37,6 @@ export async function POST(req: NextRequest) {
   try {
     const data: RequestSurveyFormProps = await req.json();
 
-    console.log(session);
-
     if (!session) {
       await postAnonymouse(data);
     }

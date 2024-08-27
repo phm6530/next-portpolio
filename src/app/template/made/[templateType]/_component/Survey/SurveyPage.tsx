@@ -57,9 +57,7 @@ export default function SurveyPage({
   const { RenderPreview } = usePreview();
 
   //초기 세션상태
-  const [isSession, setIsSession] = useState<boolean>(
-    session ? !!session : false
-  );
+  const [isSession] = useState<boolean>(session ? !!session : false);
   const router = useRouter();
 
   //현재시간
@@ -125,59 +123,37 @@ export default function SurveyPage({
 
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
-    /**
-     * 권한이 있는 요청이었지만, 만료되었을 경우는 로그인 페이지로 리다이렉트 해버림
-     */
     const curSession = await getSession();
+
     if (isSession && !curSession) {
-      //재로그인
       alert("세션이 만료되었습니다....");
       await signOut({ redirect: false });
+
       if (confirm("작성한 내용을 임시 저장 하시겠습니까?")) {
         tempSave();
       }
+
       router.push(`/auth/login?redirect=${pathname}`);
       return;
     }
 
-    //어드민일 경우
-    if (session?.user.role === "admin") {
-      //기간 설정
-      const dateformatting = data.dateRange
-        ? data.dateRange.map((e) => {
-            return dayjs(e).format("YYYY-MM-DD");
-          })
-        : null;
+    const dateformatting =
+      data.dateRange?.map((e) => dayjs(e).format("YYYY-MM-DD")) || null;
 
-      const resultData = {
-        ...data,
-        template,
-        template_key: template_key as string,
-        dateRange: dateformatting,
-      };
+    const resultData = {
+      ...data,
+      template,
+      template_key: template_key as string,
+      dateRange: dateformatting,
+    };
 
+    // 어드민이거나 필요한 필드가 채워졌을 경우 데이터 처리
+    if (
+      session?.user.role === "admin" ||
+      (formState.getValues("items").length !== 0 &&
+        formState.getValues("access_pin") !== null)
+    ) {
       mutate(resultData);
-    } else {
-      if (
-        formState.getValues("items").length !== 0 &&
-        formState.getValues("access_pin") !== null
-      ) {
-        //기간 설정
-        const dateformatting = data.dateRange
-          ? data.dateRange.map((e) => {
-              return dayjs(e).format("YYYY-MM-DD");
-            })
-          : null;
-
-        const resultData = {
-          ...data,
-          template,
-          template_key: template_key as string,
-          dateRange: dateformatting,
-        };
-
-        mutate(resultData);
-      }
     }
   };
 
@@ -206,9 +182,11 @@ export default function SurveyPage({
           <AddDateRange />
 
           {/* 공통 제목 */}
+          <p>title</p>
           <SurveyText label={"title"} requiredMsg={"제목은 필수 입니다!"} />
 
           {/* 공통 설명 적기 */}
+          <p>Description</p>
           <SurveyText
             label={"description"}
             requiredMsg={"간단한 설명을 적어주세요!"}

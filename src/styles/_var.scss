@@ -1,6 +1,9 @@
 //시그니처 Color
 $signiture-color: red;
 
+$color-white: #fff;
+$color-black: #333;
+
 //button Color
 $btn-submit-color: linear-gradient(90deg, #9a6ce7 0%, #829ee4 100%);
 $btn-submit-color-hover: linear-gradient(90deg, #7a4ce7 0%, #628ee4 100%);
@@ -9,11 +12,13 @@ $btn-submit-color-hover: linear-gradient(90deg, #7a4ce7 0%, #628ee4 100%);
 $border-color: rgba(0, 0, 0, 0.05);
 $border-box-color: rgba(0, 0, 0, 0.1);
 
+// backgrand
+$background-color-white: rgba(255, 255, 255, 0.3);
+
 //gender color
 $female-color: #c112ff;
 $male-color: #1254ff;
 
 //Point
 $color-on: #0ff1ff;
-
 $color-error-1: rgb(192, 67, 67);
