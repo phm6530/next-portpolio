@@ -28,6 +28,23 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  webpack(config) {
+    // SVG 파일을 React 컴포넌트로 사용할 수 있도록 설정
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            // 추가 옵션 설정 가능 (예: svgo, titleProp 등)
+            svgo: false, // SVGO 사용하지 않도록 설정
+          },
+        },
+      ],
+    });
+
+    return config;
+  },
 };
 
 export default nextConfig;

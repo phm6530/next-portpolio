@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import classes from "./surveyControler.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LIST_SORT, QUERY_STRING } from "@/types/constans";
+import { LIST_SORT } from "@/types/constans";
+import Image from "next/image";
+import FemaleIcon from "/public/asset/icon/female.svg";
 
 const btnArr = [
   {
@@ -27,13 +29,12 @@ const btnArr = [
 export default function SurveyControler() {
   const qs = useSearchParams();
   const router = useRouter();
-
-  const [active, setActive] = useState("all");
+  const sortValue = qs.get("sort") || "all";
+  const [active, setActive] = useState(sortValue || "all");
 
   useEffect(() => {
-    const sortValue = qs.get("sort") || "all";
     setActive(sortValue);
-  }, [qs]);
+  }, [qs, sortValue]);
 
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newSortValue = e.currentTarget.value;
@@ -59,6 +60,7 @@ export default function SurveyControler() {
             value={btn.value}
             onClick={onClickHandler}
           >
+            <FemaleIcon />
             {btn.label}
           </button>
         );

@@ -4,16 +4,14 @@
 import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
 
 import { auth } from "@/auth";
-import AdminButton from "@/app/template/_component/AdminButton";
 import helperDateCompare from "@/app/lib/helperDateCompare";
-import TemplateUnavailable from "@/app/_components/templateUtill/TemplatePending";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import AdminController from "@/app/template/admin/_component/AdminController";
 

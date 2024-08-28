@@ -18,7 +18,8 @@
   npm i dayjs<br>
   npm i zustand
 
-  - template_key 공유에 사용
+  - template_key 공유에 사용<br>
+    npm install @svgr/webpack --save-dev Svg 사용
 
 - Server
   npm i next-auth<br>

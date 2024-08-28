@@ -28,8 +28,6 @@ export default function SurveyList({
     staleTime: 10000,
   });
 
-  console.log(data);
-
   const qs = useSearchParams();
   const test = qs.get(QUERY_STRING.SEARCH);
 

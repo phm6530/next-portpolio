@@ -1,3 +1,4 @@
+import Grid from "@/app/_components/ui/Grid";
 import LoginForm from "@/app/auth/login/_component/LoginForm";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -16,9 +17,9 @@ const Login = async ({
   }
 
   return (
-    <>
+    <Grid.center>
       <LoginForm redirectPath={redirectPath} />
-    </>
+    </Grid.center>
   );
 };
 

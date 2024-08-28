@@ -5,13 +5,16 @@ import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 import SearchInput from "@/app/_components/ui/SearchInput";
 import HotKeyword from "@/app/template/_component/HotKeyWords";
 
-import Link from "next/link";
-
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { fetchList } from "@/app/_services/surveySerivce";
 import { Metadata } from "next";
 import { QUERY_KEY } from "@/types/constans";
+import Grid from "@/app/_components/ui/Grid";
+import Vanner from "@/app/_components/ui/Vanner";
+import Button from "@/app/_components/ui/button/Button";
+import girlCractor from "/public/asset/girl_template.png";
+import Image from "next/image";
 
 //메타설정
 export const metadata: Metadata = {
@@ -39,21 +42,36 @@ export default async function surveyPage({
   return (
     <>
       <div className={classes.wrap}>
-        <PageTitle>
-          다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
-        </PageTitle>
+        <Vanner>
+          <Grid.center>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div>
+                <PageTitle>
+                  다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
+                </PageTitle>
+                <p>평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!</p>
+                <Button.submit moveUrl={"/template/made"}>
+                  설문조사 만들기
+                </Button.submit>
+              </div>
+              <div>
+                <Image src={girlCractor} alt="girlCractor" priority />
+              </div>
+            </div>
+          </Grid.center>
+        </Vanner>
 
-        <Link href={"/template/made"}>설문조사 만들기</Link>
-        {/* btn Area */}
-        <SurveyControler />
-        <HotKeyword />
+        <Grid.center>
+          {/* btn Area */}
+          <SurveyControler />
 
-        <SearchInput search={search} />
-
-        {/* List */}
-        <HydrationBoundary state={hydurateState}>
-          <SurveyList page={page} sort={sort} search={search} />
-        </HydrationBoundary>
+          <SearchInput search={search} />
+          <HotKeyword />
+          {/* List */}
+          <HydrationBoundary state={hydurateState}>
+            <SurveyList page={page} sort={sort} search={search} />
+          </HydrationBoundary>
+        </Grid.center>
       </div>
     </>
   );

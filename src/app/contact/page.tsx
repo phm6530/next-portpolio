@@ -1,3 +1,5 @@
+import Grid from "@/app/_components/ui/Grid";
+
 export default function Page() {
-  return <>conTact </>;
+  return <Grid.center>conTact </Grid.center>;
 }

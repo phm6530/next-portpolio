@@ -82,16 +82,6 @@ export default function SurveyItem({
     gsapRef.current?.reverse();
   });
 
-  // 절대경로 파악
-  const isAbsolutePath = (imgUrl: string) => {
-    if (/^(https?:)?\/\//.test(imgUrl)) {
-      return imgUrl;
-    } else {
-      console.log(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
-      return `${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`;
-    }
-  };
-
   return (
     <div
       className={`tdd ${classes.surveyBox}`}
@@ -105,9 +95,13 @@ export default function SurveyItem({
           <div className={classes.templateType}>{templateType}</div>
           <Image
             alt="test"
-            src={isAbsolutePath(thumbnail)}
+            sizes="(max-width: 768px) 100vw, (min-width: 769px) 30vw"
+            src={
+              /^(https?:)?\/\//.test(thumbnail)
+                ? thumbnail
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/${thumbnail}`
+            }
             priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
             style={{ objectFit: "cover" }}
           />

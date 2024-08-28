@@ -1,3 +1,5 @@
+import Grid from "@/app/_components/ui/Grid";
+
 export default function AboutPage() {
-  return <>About 페이지</>;
+  return <Grid.center>About 페이지</Grid.center>;
 }
