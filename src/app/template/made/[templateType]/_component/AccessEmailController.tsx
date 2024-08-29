@@ -65,7 +65,7 @@ export default function AccessEmailController({
 
     // PIN 번호가 업데이트된 후 mutate 호출
     if (pinNumber !== null) {
-      mutate({ pin: pinNumber, userEmail });
+      mutate({ pin: pinNumber, userEmail: userEmail as string });
     }
   };
 

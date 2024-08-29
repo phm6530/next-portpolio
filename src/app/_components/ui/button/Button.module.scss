@@ -1,13 +1,21 @@
+@import "mixin";
+
 .importantButton {
-  padding: 1.2rem;
+  padding: 1.4rem 2rem;
   padding-right: 3rem;
   margin-top: 2rem;
   display: inline-block;
 
   background: linear-gradient(89.69deg, #ffffff 0.27%, #f0f6ff 161.39%);
   box-shadow: 0px 0px 30px rgba(51, 144, 202, 0.25);
+  span {
+    @include textGradient($gradient-main);
+    font-size: 20px;
+  }
+
   border-radius: 33.5px;
 }
+/* Rectangle 1079 */
 
 // position: absolute;
 // width: 139px;

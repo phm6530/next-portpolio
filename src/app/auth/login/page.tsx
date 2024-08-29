@@ -4,10 +4,8 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 const Login = async ({
   searchParams,
-  req,
 }: {
   searchParams: { redirect: string };
-  req: any;
 }) => {
   const { redirect: redirectPath } = searchParams;
   const session = await auth();

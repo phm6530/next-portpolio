@@ -1,0 +1,45 @@
+.templateCreactorWrap {
+  margin-right: 5rem;
+  position: relative;
+  width: 30%;
+
+  height: 390px;
+}
+
+.ageGroup10 {
+  top: 203px;
+  left: 200px;
+  z-index: 2;
+  position: absolute;
+}
+.ageGroup20 {
+  top: 122px;
+  left: 244px;
+  position: absolute;
+}
+.ageGroup30 {
+  top: 286px;
+  left: -43px;
+  z-index: 1;
+  position: absolute;
+}
+.ageGroup40 {
+  top: 195px;
+  left: -70px;
+  z-index: 0;
+  position: absolute;
+}
+.ageGroup50 {
+  position: absolute;
+  z-index: 0;
+  top: 48px;
+  left: 164px;
+}
+
+.CreactorWrap {
+  position: absolute;
+  bottom: -7px;
+  img {
+    filter: drop-shadow(32px 54px 16px rgba(0, 0, 0, 0.2));
+  }
+}

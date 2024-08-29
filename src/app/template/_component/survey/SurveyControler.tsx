@@ -45,11 +45,11 @@ export default function SurveyControler() {
 
     setActive(newSortValue);
 
-    router.push(`/template?${newParams.toString()}`);
+    router.push(`/template?${newParams.toString()}`, { scroll: false });
   };
 
   return (
-    <>
+    <div className="btnWrapper">
       {btnArr.map((btn, idx) => {
         return (
           <button
@@ -65,6 +65,6 @@ export default function SurveyControler() {
           </button>
         );
       })}
-    </>
+    </div>
   );
 }

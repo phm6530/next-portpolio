@@ -1,5 +1,5 @@
 import SurveyList from "@/app/template/_component/survey/surveyList";
-import classes from "./surveyPage.modules.scss";
+
 import PageTitle from "@/app/_components/ui/PageTitle";
 import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 import SearchInput from "@/app/_components/ui/SearchInput";
@@ -13,8 +13,9 @@ import { QUERY_KEY } from "@/types/constans";
 import Grid from "@/app/_components/ui/Grid";
 import Vanner from "@/app/_components/ui/Vanner";
 import Button from "@/app/_components/ui/button/Button";
-import girlCractor from "/public/asset/girl_template.png";
-import Image from "next/image";
+
+import classes from "./surveyPage.module.scss";
+import TemplateCractor from "@/app/_components/Cractor/TemplateCractor";
 
 //메타설정
 export const metadata: Metadata = {
@@ -44,29 +45,38 @@ export default async function surveyPage({
       <div className={classes.wrap}>
         <Vanner>
           <Grid.center>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <div>
                 <PageTitle>
-                  다른사람들은<br></br> 어떤 생각을 가졌는지 알고싶나요?
+                  다른사람들은<br></br> 어떤
+                  <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
                 </PageTitle>
-                <p>평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!</p>
+                <p className={classes.description}>
+                  평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
+                </p>
                 <Button.submit moveUrl={"/template/made"}>
                   설문조사 만들기
                 </Button.submit>
               </div>
-              <div>
-                <Image src={girlCractor} alt="girlCractor" priority />
-              </div>
+              <TemplateCractor />
             </div>
           </Grid.center>
         </Vanner>
 
         <Grid.center>
           {/* btn Area */}
-          <SurveyControler />
+          <div className={classes.searchFilterWrapper}>
+            <HotKeyword />
 
-          <SearchInput search={search} />
-          <HotKeyword />
+            <SearchInput search={search} />
+            <SurveyControler />
+          </div>
           {/* List */}
           <HydrationBoundary state={hydurateState}>
             <SurveyList page={page} sort={sort} search={search} />

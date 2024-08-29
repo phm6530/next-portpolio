@@ -3,6 +3,9 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ReactNode, useEffect, useRef } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PageGsap({
   page,
@@ -14,27 +17,39 @@ export default function PageGsap({
   const ref = useRef<HTMLDivElement>(null);
   const refs = useRef<gsap.core.Tween | null>(null);
 
-  useEffect(() => {
-    refs.current?.restart();
-  }, [page, refs]);
-
   useGSAP(
     () => {
       if (ref.current) {
-        gsap.set(".autoAlpha", { autoAlpha: 1 });
+        const tests = ref.current.querySelectorAll(".box");
+        gsap.defaults({ ease: "power3" });
+        gsap.set(tests, { y: 100 });
 
-        const test = gsap.from(".tester", {
-          y: 100,
-          duration: 1,
-          stagger: 0.07,
-          opacity: 0,
-          ease: "power3.out",
+        ScrollTrigger.batch(tests, {
+          //interval: 0.1, // time window (in seconds) for batching to occur.
+          //batchMax: 3,   // maximum batch size (targets)
+          onEnter: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              stagger: 0.2,
+              overwrite: true,
+            }),
+          onLeave: (batch) =>
+            gsap.set(batch, { opacity: 0, y: -100, overwrite: true }),
+          onEnterBack: (batch) =>
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              stagger: 0.15,
+              overwrite: true,
+            }),
+          onLeaveBack: (batch) =>
+            gsap.set(batch, { opacity: 0, y: 100, overwrite: true }),
+          // you can also define things like start, end, etc.
         });
-
-        refs.current = test;
       }
     },
-    { scope: ref }
+    { scope: ref, dependencies: [page] }
   );
 
   return <div ref={ref}>{children}</div>;

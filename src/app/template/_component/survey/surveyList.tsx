@@ -40,11 +40,11 @@ export default function SurveyList({
       {data && (
         <>
           <PageGsap page={page + ""}>
-            <div className={`autoAlpha ${classes.surveyItemWrapper}`}>
+            <div className={` ${classes.surveyItemWrapper}`}>
               {data.result.length > 0 ? (
                 data.result.map((item, idx) => {
                   return (
-                    <div key={`${item.id}-${idx}`} className="tester">
+                    <div key={`${item.id}-${idx}`} className="autoAlpha box">
                       <SurveyItem itemData={item} />
                     </div>
                   );

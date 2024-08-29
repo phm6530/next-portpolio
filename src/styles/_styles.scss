@@ -11,7 +11,7 @@
 
 .container {
   min-height: 100vh;
-  padding-top: 50px;
+  padding-top: 70px;
 }
 
 button {
@@ -19,9 +19,12 @@ button {
   transition: all 0.5s ease;
   border: 0;
 }
-
+.box {
+  will-change: transform;
+}
 .autoAlpha {
-  visibility: hidden;
+  // visibility: hidden;
+  opacity: 0;
 }
 
 .hidden {

@@ -26,17 +26,15 @@ export default function SearchInput({ search }: { search?: string }) {
   };
 
   return (
-    <div>
-      <form className={classes.searchForm} onSubmit={searchHandler}>
-        <input
-          type="text"
-          value={searchText}
-          onChange={onChangeText}
-          placeholder="검색어를 기재해주세요"
-          autoComplete="off"
-        />
-        <button type="button">검색</button>
-      </form>
-    </div>
+    <form className={classes.searchForm} onSubmit={searchHandler}>
+      <input
+        type="text"
+        value={searchText}
+        onChange={onChangeText}
+        placeholder="검색어를 기재해주세요"
+        autoComplete="off"
+      />
+      <button type="button">검색</button>
+    </form>
   );
 }

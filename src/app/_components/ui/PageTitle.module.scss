@@ -1,12 +1,31 @@
 .pageTitleText {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 40px;
+  letter-spacing: 1px;
   line-height: 1.5;
-  /* or 125% */
 
-  background: linear-gradient(90deg, #000000 0%, #a842b9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
+  .pointText {
+    background: linear-gradient(84.35deg, #9a6ce7 13.62%, #56b2f4 28.13%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: normal;
+    display: inline-block;
+
+    span {
+      font-size: 20;
+      &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 5px;
+        height: 5px;
+        background: red;
+        top: -5px;
+        left: 50%;
+        border-radius: 100%;
+        transform: translateX(-50%);
+      }
+    }
+  }
 }

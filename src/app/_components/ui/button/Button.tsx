@@ -4,7 +4,9 @@ import classes from "./Button.module.scss";
 function submit({ moveUrl, children }: { moveUrl: string; children: string }) {
   return (
     <Link href={moveUrl}>
-      <span className={classes.importantButton}>{children}</span>
+      <div className={classes.importantButton}>
+        <span>{children}</span>
+      </div>
     </Link>
   );
 }

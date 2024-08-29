@@ -14,7 +14,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="body">
+      <body className="body" suppressHydrationWarning>
         <div id="backdrop-portal"></div>
         <div id="modal-portal"></div>
         <ProviderContext>
