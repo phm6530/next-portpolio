@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEY, QUERY_STRING } from "@/types/constans";
 import { useSearchParams } from "next/navigation";
+import ErrorComponent from "@/app/_components/ErrorComponent";
 
 export default function SurveyList({
   page,
@@ -29,7 +30,7 @@ export default function SurveyList({
   });
 
   const qs = useSearchParams();
-  const test = qs.get(QUERY_STRING.SEARCH);
+  const keyword = qs.get(QUERY_STRING.SEARCH);
 
   if (isLoading) {
     return "Loading....";
@@ -40,21 +41,22 @@ export default function SurveyList({
       {data && (
         <>
           <PageGsap page={page + ""}>
-            <div className={` ${classes.surveyItemWrapper}`}>
-              {data.result.length > 0 ? (
-                data.result.map((item, idx) => {
+            {data.result.length > 0 ? (
+              <div className={` ${classes.surveyItemWrapper}`}>
+                {data.result.map((item, idx) => {
                   return (
                     <div key={`${item.id}-${idx}`} className="autoAlpha box">
                       <SurveyItem itemData={item} />
                     </div>
                   );
-                })
-              ) : (
-                <div className="tester">
-                  검색하신 &apos;{test}&apos; 일치하는 템플릿이 없네요..
-                </div>
-              )}
-            </div>
+                })}
+              </div>
+            ) : keyword ? (
+              <ErrorComponent.NotFoundSearch keyword={keyword as string} />
+            ) : (
+              "없네요"
+            )}
+
             {/* <PageGsap></PageGsap> */}
             <Paging cnt={data.cnt} />
           </PageGsap>

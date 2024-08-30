@@ -7,15 +7,18 @@
   font-size: 2rem;
   width: 50%;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
 
   input {
     border: 0;
     background: transparent;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     font-size: 1.2rem;
     &::placeholder {
       font-size: 1.2rem;
       opacity: 0.3;
+      font-family: "Pretendard-Regular";
     }
     &:focus {
       outline: none;

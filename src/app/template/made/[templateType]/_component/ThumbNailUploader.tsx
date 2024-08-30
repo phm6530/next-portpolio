@@ -160,12 +160,13 @@ export default function ThumbNailUploader({
                 ) : processedData && processedData.length > 0 ? (
                   <>
                     {processedData.map((e, idx) => {
+                      console.log(e);
                       return (
                         <div
                           className={classes.unsplashItem}
                           key={`thumbnail-${idx}`}
                           onClick={() => {
-                            setValue("thumbnail", e.webformatURL);
+                            setValue("thumbnail", e.largeImageURL);
                             setPreview(e.webformatURL);
                           }}
                         >

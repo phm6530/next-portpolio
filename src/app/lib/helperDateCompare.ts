@@ -13,5 +13,8 @@ export default function helperDateCompare() {
     isSame: (date: string): boolean => {
       return today.isSame(date, "day");
     },
+    isNew: (date: string): boolean => {
+      return today.diff(date, "day") < 7;
+    },
   };
 }

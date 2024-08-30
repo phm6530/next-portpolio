@@ -7,7 +7,36 @@
   overflow: hidden;
 }
 
-.dateRange {
+.statusIcon {
   font-size: 0.8rem;
-  opacity: 0.5;
+  display: flex;
+  gap: 5px;
+}
+
+.status {
+  display: inline-block;
+
+  padding: 4px 9px;
+  border-radius: 5rem;
+  font-size: 12px;
+}
+
+.end {
+  background: rgb(223 223 223);
+  color: #000000;
+  @extend .status;
+}
+
+.ing {
+  background: #e3fdff;
+  color: #4dc4ca;
+
+  @extend .status;
+}
+
+.new {
+  background: #ffe7e7;
+  color: #ff9494;
+
+  @extend .status;
 }

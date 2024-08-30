@@ -8,7 +8,7 @@ export function fetchList(
   sort?: string,
   search?: string
 ): Promise<GetTemplateMetaLists> {
-  return withFetch<GetTemplateMetaLists>(() => {
+  return withFetch<GetTemplateMetaLists>(async () => {
     const queryParams = new URLSearchParams({
       page,
     });
@@ -36,7 +36,8 @@ export function fetchTemplateDetail<T>(
   templateType: TemplateTypeProps,
   id: number
 ): Promise<T> {
-  return withFetch<T>(() => {
+  return withFetch<T>(async () => {
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     return fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${id}`,
       {

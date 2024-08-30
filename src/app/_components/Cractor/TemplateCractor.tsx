@@ -25,7 +25,7 @@ export default function TemplateCractor() {
         mainTimeline.from(carector, {
           x: 50,
           opacity: 0,
-          ease: "power4.out", // 원하는 애니메이션 설정
+          ease: "power3.inOut", // 원하는 애니메이션 설정
           direction: 5,
           delay: 0.3,
         });

@@ -1,0 +1,18 @@
+.errorDefault {
+  text-align: center;
+  padding: 5rem;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  span {
+    color: #5d6ac3;
+    font-size: 1.7rem;
+    display: inline-block;
+    margin-right: 1rem;
+  }
+
+  .iconWrap {
+    margin-right: 1rem;
+  }
+}

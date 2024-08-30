@@ -4,23 +4,29 @@ import classes from "./TemplateComponent.module.scss";
 
 export default function TemplateStatus({
   dateRange,
+  createdAt,
 }: {
   dateRange: CommentTemplateProps["dateRange"];
+  createdAt: string;
 }) {
   const todayCompare = helperDateCompare();
+
   return (
     <>
-      <div className={classes.dateRange}>
-        {dateRange.some((e) => e === null)
-          ? "기한 없음"
-          : dateRange[0] && todayCompare.isBefore(dateRange[0])
-          ? "진행 전"
-          : dateRange[1] && todayCompare.isAfter(dateRange[1])
-          ? "종료"
-          : "진행 중"}
-        <div>
-          {dateRange[0]} ~ {dateRange[1]}
-        </div>
+      <div className={classes.statusIcon}>
+        {todayCompare.isNew(createdAt) && (
+          <div className={classes.new}>New</div>
+        )}
+
+        {dateRange.some((e) => e === null) ? (
+          <div className={classes.ing}>무기한</div>
+        ) : dateRange[0] && todayCompare.isBefore(dateRange[0]) ? (
+          "진행 전"
+        ) : dateRange[1] && todayCompare.isAfter(dateRange[1]) ? (
+          <div className={classes.end}>종료</div>
+        ) : (
+          <div className={classes.ing}>진행중</div>
+        )}
       </div>
     </>
   );

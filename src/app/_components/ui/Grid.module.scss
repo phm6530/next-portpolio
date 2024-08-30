@@ -7,3 +7,10 @@
 .GridCenter {
   @include grid-center;
 }
+
+.GridSmallCenter {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 700px;
+  padding-top: 30px;
+}

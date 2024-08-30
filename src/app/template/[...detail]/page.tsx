@@ -14,6 +14,7 @@ import { auth } from "@/auth";
 import helperDateCompare from "@/app/lib/helperDateCompare";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import AdminController from "@/app/template/admin/_component/AdminController";
+import Grid from "@/app/_components/ui/Grid";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -129,7 +130,7 @@ export default async function Page({
   }
 
   return (
-    <>
+    <Grid.smallCenter>
       <HydrationBoundary state={dehydrate(queryClient)}>
         {session && session.user.role === "admin" && (
           <AdminController
@@ -156,6 +157,6 @@ export default async function Page({
           }
         })()}
       </HydrationBoundary>
-    </>
+    </Grid.smallCenter>
   );
 }

@@ -8,6 +8,8 @@ import Image from "next/image";
 import gsap from "gsap";
 
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
+import FemaleIcon from "/public/asset/icon/mdi_face-female.png";
+import MaleIcon from "/public/asset/icon/mdi_face-male.png";
 
 export default function SurveyItem({
   itemData,
@@ -110,15 +112,21 @@ export default function SurveyItem({
 
       {/* <Image src={img} fill /> */}
       <div className={classes.surveySummary}>
+        {" "}
+        <TemplateStatus dateRange={dateRange} createdAt={created_at} />
         {/* 템플릿 상태 보여주기 */}
         <div className={classes.surveyTitle}>{title}</div>
-
-        <div>{description}</div>
-
-        <TemplateStatus dateRange={dateRange} />
+        {/* <div>{description}</div> */}
         {/* <div>{created_at}</div> */}
-
         <div className={classes.groupParticipants}>
+          {gender_group === "female" ? (
+            <Image src={FemaleIcon} alt="femaleIcon" width={17} height={17} />
+          ) : gender_group === "male" ? (
+            <Image src={MaleIcon} alt="maleIcon" width={17} height={17} />
+          ) : (
+            ""
+          )}
+
           {age_group && `${age_group}대`}
 
           {gender_group ? (
@@ -136,7 +144,6 @@ export default function SurveyItem({
             user_cnt < 10 && "참여해주세요!"
           )}
         </div>
-
         <div className={classes.bottomWrap}>
           <span className={classes.Participation}>
             참여자 {user_cnt || 0}명

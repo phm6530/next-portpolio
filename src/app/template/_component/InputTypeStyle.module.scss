@@ -1,0 +1,46 @@
+.answerLabel {
+  input[type="radio"] {
+    display: none;
+  }
+  padding: 1rem;
+  display: block;
+  border-radius: 1rem;
+  margin-bottom: 0.7rem;
+  background-color: #f7f7f7;
+}
+
+.answer_active {
+  @extend .answerLabel;
+}
+
+.answer_noneActive {
+  @extend .answerLabel;
+}
+
+.radioLabel {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 4rem;
+  border: 1px solid;
+  margin-right: 0.5rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.2s ease;
+  input[type="radio"] {
+    display: none;
+  }
+}
+
+.active {
+  color: #fff;
+  background: rgb(93, 112, 235);
+
+  @extend .radioLabel;
+}
+
+.nonActive {
+  color: rgba(0, 0, 0, 0.5);
+  @extend .radioLabel;
+  opacity: 0.5;
+}

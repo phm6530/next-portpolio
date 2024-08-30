@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
 
     //get할 template Id
     const templateId = searchParams.get("templateId");
+
     if (!templateId) {
       throw new Error("template 값 누락");
     }

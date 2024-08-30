@@ -17,29 +17,32 @@
   height: 160px;
   border-radius: 1.2rem;
   overflow: hidden;
+  border: 1px solid lighten($color-font-signiture, 35);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .surveyTitle {
-  font-weight: bold;
   letter-spacing: -1px;
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 1.5rem;
   padding-top: 0.5rem;
   word-break: keep-all;
 
-  color: #000000;
-  margin-bottom: 1rem;
+  color: #333;
+
   text-shadow: 0px 4px 50px rgba(0, 0, 0, 0.53);
 }
 
 .groupParticipants {
-  font-size: 0.9rem;
-  letter-spacing: -1px;
+  font-size: 0.8rem;
+  letter-spacing: -0.4px;
   display: flex;
   align-items: center;
   padding: 1rem 0;
 
   opacity: 0.5;
+  gap: 5px;
   .male {
     color: $male-color;
   }

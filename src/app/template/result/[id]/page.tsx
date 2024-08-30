@@ -13,6 +13,7 @@ import AdminController from "@/app/template/admin/_component/AdminController";
 import { auth } from "@/auth";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import helperDateCompare from "@/app/lib/helperDateCompare";
+import Grid from "@/app/_components/ui/Grid";
 
 interface TemplateData {
   templateMeta: GetTemplateItemProps;
@@ -116,11 +117,12 @@ export default async function resultPage({
             endDate={prefetchMetaData.templateMeta.end_date}
           />
         )}
-        {/* Result */}
-        <SurveyResult id={templateId} />
-
-        {/* 댓글 */}
-        <CommentSection templateId={templateId} />
+        <Grid.center>
+          {/* Result */}
+          <SurveyResult id={templateId} />
+          {/* 댓글 */}
+          <CommentSection templateId={templateId} />{" "}
+        </Grid.center>
       </HydrationBoundary>
     </>
   );

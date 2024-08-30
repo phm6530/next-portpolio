@@ -4,6 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import classes from "./searchArea.module.scss";
 import { QUERY_STRING } from "@/types/constans";
+import SearchIcon from "/public/asset/icon/search.png";
+import Image from "next/image";
 
 export default function SearchInput({ search }: { search?: string }) {
   const [searchText, setSearchText] = useState<string>(search || "");
@@ -22,7 +24,9 @@ export default function SearchInput({ search }: { search?: string }) {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(searchText ? `/template?search=${searchText}` : "/template ");
+    router.push(searchText ? `/template?search=${searchText}` : "/template ", {
+      scroll: false,
+    });
   };
 
   return (
@@ -34,7 +38,12 @@ export default function SearchInput({ search }: { search?: string }) {
         placeholder="검색어를 기재해주세요"
         autoComplete="off"
       />
-      <button type="button">검색</button>
+      <button
+        type="button"
+        style={{ position: "relative", background: "#fff" }}
+      >
+        <Image src={SearchIcon} width={30} height={30} alt="searchIcon" />
+      </button>
     </form>
   );
 }

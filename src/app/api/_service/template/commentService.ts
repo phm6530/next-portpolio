@@ -89,6 +89,7 @@ export async function postComment(data: postCommentProps) {
   } else {
     const hashedPassword = await bcrypt.hash(password, 10);
     const ROLE = "visitor"; // 익명 사용자 role
+
     // Id Check
     if (comment_id || template_id) {
       return withTransaction<ResultSetHeader>(async (conn) => {
@@ -116,6 +117,7 @@ export async function postComment(data: postCommentProps) {
           whereId,
           visitorResult.insertId,
         ]);
+
         return test;
       });
     } else {
@@ -131,6 +133,8 @@ export async function getCommentList(templateId: number) {
       templateId,
     }) as Promise<GetCommentListProps[]>;
   });
+
+  console.log(data);
 
   //구조 변경
   const comment = data.reduce<MessageProps[]>((acc, cur) => {
