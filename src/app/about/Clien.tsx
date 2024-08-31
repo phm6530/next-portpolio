@@ -9,7 +9,7 @@ export default function Client() {
 
   return (
     <button type="button" onClick={refetchButton}>
-      버튼!!
+      버튼!! 이거 머지 한번해보려고
     </button>
   );
 }
