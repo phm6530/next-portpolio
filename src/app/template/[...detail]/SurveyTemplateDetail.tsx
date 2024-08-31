@@ -28,6 +28,7 @@ import "dayjs/locale/ko";
 
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
+import Button from "@/app/_components/ui/button/Button";
 dayjs.locale("ko");
 
 interface Option {
@@ -196,13 +197,16 @@ export default function SurveyTemplateDetail({
           })}
         </FormProvider>
 
-        <button
-          type="button"
-          onClick={formMethod.handleSubmit(onSubmitHandler)}
-          disabled={!!participatedAt}
-        >
-          제출하기
-        </button>
+        <div style={{ textAlign: "center" }}>
+          <Button.submit
+            type="button"
+            onClick={formMethod.handleSubmit(onSubmitHandler)}
+            disabled={!!participatedAt}
+          >
+            제출하기
+          </Button.submit>
+        </div>
+
         {!!participatedAt && (
           <>
             이미 {participatedAt}에 참여하신 이력이 있어요!

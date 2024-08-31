@@ -12,26 +12,16 @@
     @include textGradient($gradient-main);
     font-size: 20px;
   }
-
   border-radius: 33.5px;
 }
-/* Rectangle 1079 */
 
-// position: absolute;
-// width: 139px;
-// height: 26px;
-// left: 335px;
-// top: 406px;
-
-// font-family: 'Inter';
-// font-style: normal;
-// font-weight: 400;
-// font-size: 20px;
-// line-height: 24px;
-
-// /* aaaaa */
-// background: linear-gradient(90deg, #9A6CE7 0%, #56B2F4 100%);
-// -webkit-background-clip: text;
-// -webkit-text-fill-color: transparent;
-// background-clip: text;
-// text-fill-color: transparent;
+.submitButton {
+  // @include textGradient($gradient-main);
+  color: #fff;
+  padding: 1rem 3rem;
+  background: #829ee4;
+  box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.12);
+  border-radius: 50rem;
+  margin-top: 2rem;
+  font-size: 18px;
+}

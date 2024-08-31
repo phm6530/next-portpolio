@@ -22,13 +22,16 @@ export default function QuestionOptions({
 
   const selectLabel = watch(qsId + "");
 
+  console.log("selectLabel::", selectLabel);
+
   return (
     <QuestionWrapper>
       {options?.map((e, idx) => {
         return (
           <InputTypeStyle.RadioAnswer
             key={`option-${idx}`}
-            selectLabel={selectLabel === e.label}
+            selectLabel={selectLabel}
+            curLabel={e.label}
           >
             <input
               type="radio"

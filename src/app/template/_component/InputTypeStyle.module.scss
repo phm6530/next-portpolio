@@ -2,18 +2,36 @@
   input[type="radio"] {
     display: none;
   }
+
   padding: 1rem;
   display: block;
   border-radius: 1rem;
   margin-bottom: 0.7rem;
-  background-color: #f7f7f7;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box;
+  &:hover {
+    border: 1px solid;
+    color: rgb(110, 13, 189);
+    box-shadow: 0px 0px 1px rgb(110, 13, 189);
+  }
 }
 
 .answer_active {
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box;
+  border: 1px solid;
+  color: rgb(110, 13, 189);
+  box-shadow: 0px 0px 1px rgb(110, 13, 189);
+  @extend .answerLabel;
+}
+
+.answer_null {
   @extend .answerLabel;
 }
 
 .answer_noneActive {
+  opacity: 0.5;
   @extend .answerLabel;
 }
 

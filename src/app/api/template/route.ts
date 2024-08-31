@@ -4,7 +4,7 @@ import {
   getTemplateAllCnt,
   postUser,
 } from "@/app/api/_service/template/templateSerivce";
-import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
 import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import { NextRequest, NextResponse } from "next/server";
 import { QUERY_STRING } from "@/types/constans";
@@ -12,6 +12,7 @@ import { auth } from "@/auth";
 
 // template List Get
 export async function GET(req: NextRequest) {
+  console.log("test");
   try {
     const searchParams = req.nextUrl.searchParams;
     const pageParams = searchParams.get(QUERY_STRING.PAGE);

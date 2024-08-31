@@ -58,9 +58,9 @@ export default async function surveyPage({
                 <p className={classes.description}>
                   평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
                 </p>
-                <Button.submit moveUrl={"/template/made"}>
+                <Button.moveLink moveUrl={"/template/made"}>
                   설문조사 만들기
-                </Button.submit>
+                </Button.moveLink>
               </div>
               <TemplateCractor />
             </div>
