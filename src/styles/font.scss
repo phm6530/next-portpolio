@@ -9,3 +9,25 @@
 .pretendard {
   font-family: "Pretendard-Regular";
 }
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../public/font/PretendardVariable.woff2") format("woff2");
+}
+
+// @font-face {
+//   font-family: "Pretendard Variable";
+//   font-weight: 45 920;
+//   font-style: normal;
+//   font-display: swap;
+//   src: url("/public//font/Montserrat-Bold.woff2") format("woff2");
+// }
+@font-face {
+  font-family: "Montserrat";
+  src: url("../../public/font/Montserrat-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
