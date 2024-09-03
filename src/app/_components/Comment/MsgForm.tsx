@@ -48,7 +48,6 @@ export default function MsgForm({
   });
 
   const submitHandler = (data: any) => {
-    console.log(data);
     if (template_id) {
       mutate({ ...data, template_id, type: "comment" });
     } else if (comment_id) {

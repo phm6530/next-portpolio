@@ -6,8 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { imgUploader } from "@/app/lib/uploaderHanlder";
 import { withFetch } from "@/app/lib/helperClient";
 import { QUERY_KEY } from "@/types/constans";
-import pixabayJson from "./pixabay.json";
-import { resolve } from "path";
+import { createClient } from "pexels";
 
 type UnsplashApi = {
   total: number;
@@ -62,6 +61,10 @@ export default function ThumbNailUploader({
     }[]
   >();
 
+  // const client = createClient(
+  //   "8RowvXBP0E769y2ZG5dDjCKTQ29pLjXSVQ8vrKZwf0IxTYTNvn3neSrY"
+  // );
+
   //upLoader
   const thumbNailhandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
@@ -78,14 +81,20 @@ export default function ThumbNailUploader({
     }
   };
 
-  const { data, isPending, isSuccess } = useQuery<PixabayApi>({
+  const { data, isPending, isSuccess } = useQuery<UnsplashApi>({
     queryKey: [QUERY_KEY.UNSPLASH, imgSearch],
     queryFn: () => {
       return withFetch(async () => {
         if (imgSearch) {
           const encodingText = encodeURI(imgSearch);
+          // const query = imgSearch;
+          // client.photos.search({ query, per_page: 20 }).then((photos) => {
+          //   console.log("photo ; ", photos);
+          // });
+
           return fetch(
-            `https://pixabay.com/api/?key=${process.env.NEXT_PUBLIC_PIXABAY_API_KEY}&q=${encodingText}&image_type=photo&pretty=true&per_page=32`,
+            `https://api.unsplash.com/search/photos?query=${encodingText}&client_id=PIkUJ8qatZ2000yVp0DzplIL15unNYVPJ3GsjXtWDSE&per_page=30&page=1`,
+            // `https://pixabay.com/api/?key=${process.env.NEXT_PUBLIC_PIXABAY_API_KEY}&q=${encodingText}&image_type=photo&pretty=true&per_page=32`,
             {
               cache: "no-cache",
             }
@@ -97,13 +106,26 @@ export default function ThumbNailUploader({
     },
     enabled: !!imgSearch,
   });
-
+  type UnsplashApi = {
+    total: number;
+    total_pages: number;
+    results: {
+      urls: {
+        regular: string;
+        raw: string;
+        small: string;
+      };
+      alternative_slugs: {
+        ko: string;
+      };
+    }[];
+  };
   useEffect(() => {
     if (isSuccess && data) {
-      const processedDataArr = data.hits.map((item) => ({
-        largeImageURL: item.largeImageURL,
-        webformatURL: item.webformatURL,
-        alt: item.tags,
+      const processedDataArr = data.results.map((item) => ({
+        largeImageURL: item.urls.regular,
+        webformatURL: item.urls.small,
+        alt: item.alternative_slugs.ko,
       }));
 
       setProcessedData(processedDataArr);
@@ -160,7 +182,6 @@ export default function ThumbNailUploader({
                 ) : processedData && processedData.length > 0 ? (
                   <>
                     {processedData.map((e, idx) => {
-                      console.log(e);
                       return (
                         <div
                           className={classes.unsplashItem}

@@ -1,15 +1,21 @@
+.btnWrapper {
+  display: flex;
+  gap: 10px;
+}
+
 .btnControler {
-  padding: 0.7rem 1rem;
+  padding: 0.5rem 1rem;
   background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #e0e0e0;
+  color: #969696;
   border-radius: 5rem;
   font-size: 12px;
-  margin-right: 1rem;
+
   margin-top: 20px;
   margin-bottom: 20px;
   align-items: center;
   display: inline-flex;
+
   svg {
     margin-right: 0.2rem;
   }
@@ -20,6 +26,7 @@
   // background: $background-active;
   border: 1px solid $color-font-signiture-2;
   color: $color-font-signiture-2;
+
   svg path {
     fill: $color-font-signiture-2;
   }

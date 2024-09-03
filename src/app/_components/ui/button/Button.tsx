@@ -1,5 +1,18 @@
 import Link from "next/link";
 import classes from "./Button.module.scss";
+import { HTMLAttributes, ReactNode } from "react";
+
+//close
+function closeBtn({
+  children,
+  ...rest
+}: { children: ReactNode } & HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={classes.closeButton} {...rest}>
+      <span>{children}</span>
+    </div>
+  );
+}
 
 //Link
 function moveLink({
@@ -35,6 +48,7 @@ function submit({
 interface ButtonProps extends React.FC<{ children: string }> {
   moveLink: typeof moveLink;
   submit: typeof submit;
+  closeBtn: typeof closeBtn;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -43,5 +57,6 @@ const Button: ButtonProps = ({ children }) => {
 
 Button.moveLink = moveLink;
 Button.submit = submit;
+Button.closeBtn = closeBtn;
 
 export default Button;

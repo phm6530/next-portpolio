@@ -16,6 +16,7 @@ import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import Grid from "@/app/_components/ui/Grid";
 import BackButton from "@/app/_components/ui/button/BackButton";
+import imgUrlMapper from "@/app/lib/imgUrlMapper";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -71,7 +72,9 @@ export async function generateMetadata({
       openGraph: {
         images: [
           {
-            url: surveyItem.thumbnail ? surveyItem.thumbnail : "",
+            url: surveyItem.thumbnail
+              ? imgUrlMapper({ thumbnail: surveyItem.thumbnail })
+              : "",
           },
         ],
       },

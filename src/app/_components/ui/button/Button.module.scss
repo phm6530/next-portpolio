@@ -2,21 +2,20 @@
 
 .importantButton {
   padding: 1.4rem 2rem;
-  padding-right: 3rem;
   margin-top: 2rem;
   display: inline-block;
-
-  background: linear-gradient(89.69deg, #ffffff 0.27%, #f0f6ff 161.39%);
+  background: linear-gradient(
+    180deg,
+    #7b69e7 0%,
+    #7498de 100%,
+    #c981cb 100.01%
+  );
+  color: #fff;
   box-shadow: 0px 0px 30px rgba(51, 144, 202, 0.25);
-  span {
-    @include textGradient($gradient-main);
-    font-size: 20px;
-  }
   border-radius: 33.5px;
 }
 
 .submitButton {
-  // @include textGradient($gradient-main);
   color: #fff;
   padding: 1rem 3rem;
   background: #829ee4;
@@ -24,4 +23,9 @@
   border-radius: 50rem;
   margin-top: 2rem;
   font-size: 18px;
+}
+
+.closeButton {
+  cursor: pointer;
+  display: flex;
 }
