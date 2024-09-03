@@ -1,0 +1,18 @@
+.userDisplayWrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  & > span {
+    opacity: 0.5;
+    font-size: 0.8rem;
+  }
+}
+
+.buttonWrapper {
+  text-align: center;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+}

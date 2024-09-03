@@ -1,4 +1,5 @@
 import { JWT } from "next-auth/jwt";
+import { user_role } from "@/types/user";
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
@@ -6,7 +7,7 @@ declare module "next-auth" {
     user: {
       id: string;
       nickName: string;
-      role: "admin" | "visitor" | "anonymous";
+      role: user_role;
 
       //익명
       access_email?: string;
@@ -20,7 +21,7 @@ declare module "next-auth" {
     user_nickname?: string;
     access_email?: string;
     template_key?: string;
-    role: "admin" | "visitor" | "anonymous"; // 사용자 역할
+    role: user_role;
   }
 }
 
@@ -28,6 +29,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     nickName: string;
-    role: "admin" | "visitor" | "anonymous";
+    role: user_role;
   }
 }

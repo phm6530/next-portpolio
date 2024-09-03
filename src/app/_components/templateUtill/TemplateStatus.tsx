@@ -1,4 +1,4 @@
-import helperDateCompare from "@/app/lib/helperDateCompare";
+import DateCompareToday from "@/app/lib/DateCompareToday";
 import { CommentTemplateProps } from "@/types/template";
 import classes from "./TemplateComponent.module.scss";
 
@@ -9,7 +9,7 @@ export default function TemplateStatus({
   dateRange: CommentTemplateProps["dateRange"];
   createdAt: string;
 }) {
-  const todayCompare = helperDateCompare();
+  const todayCompare = DateCompareToday();
 
   return (
     <>

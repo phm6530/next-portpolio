@@ -1,0 +1,18 @@
+.masterIcon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6rem;
+  background: rgb(134, 85, 231);
+  color: $color-white;
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+
+.anonymousIcon {
+  display: flex;
+  svg {
+    width: 15px;
+    opacity: 0.6;
+    margin-right: 5px;
+  }
+}

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export default function helperDateCompare() {
+export default function DateCompareToday() {
   const today = dayjs();
 
   return {

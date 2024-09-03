@@ -2,6 +2,17 @@ import Link from "next/link";
 import classes from "./Button.module.scss";
 import { HTMLAttributes, ReactNode } from "react";
 
+function normalButton({
+  children,
+  ...rest
+}: { children: ReactNode } & HTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button type="button" {...rest} className={classes.normalButton}>
+      {children}
+    </button>
+  );
+}
+
 //close
 function closeBtn({
   children,
@@ -49,6 +60,7 @@ interface ButtonProps extends React.FC<{ children: string }> {
   moveLink: typeof moveLink;
   submit: typeof submit;
   closeBtn: typeof closeBtn;
+  normalButton: typeof normalButton;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -58,5 +70,6 @@ const Button: ButtonProps = ({ children }) => {
 Button.moveLink = moveLink;
 Button.submit = submit;
 Button.closeBtn = closeBtn;
+Button.normalButton = normalButton;
 
 export default Button;

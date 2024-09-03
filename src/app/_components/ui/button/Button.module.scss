@@ -23,9 +23,27 @@
   border-radius: 50rem;
   margin-top: 2rem;
   font-size: 18px;
+  &:disabled {
+    opacity: 0.5;
+    cursor: "";
+    background: #bdbdbd;
+  }
 }
 
 .closeButton {
   cursor: pointer;
   display: flex;
+}
+
+.normalButton {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  svg,
+  img {
+    margin-right: 0.4rem;
+  }
+  // padding: 0.6rem 0.7rem;
+  // border-radius: 0.5rem;
+  // border: 1px solid $border-button-color;
 }

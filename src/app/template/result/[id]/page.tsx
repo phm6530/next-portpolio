@@ -12,7 +12,7 @@ import { withFetch } from "@/app/lib/helperClient";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import { auth } from "@/auth";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
-import helperDateCompare from "@/app/lib/helperDateCompare";
+import DateCompareToday from "@/app/lib/DateCompareToday";
 import Grid from "@/app/_components/ui/Grid";
 
 interface TemplateData {
@@ -76,7 +76,7 @@ export default async function resultPage({
 
   const dateRange = [start_date, end_date] as [string, string] | [null, null];
 
-  const dayCompare = helperDateCompare();
+  const dayCompare = DateCompareToday();
 
   //template Gard
   if (

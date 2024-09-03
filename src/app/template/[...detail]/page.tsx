@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
 
 import { auth } from "@/auth";
-import helperDateCompare from "@/app/lib/helperDateCompare";
+import DateCompareToday from "@/app/lib/DateCompareToday";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import Grid from "@/app/_components/ui/Grid";
@@ -97,7 +97,7 @@ export default async function Page({
     queryFn: () => fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id),
     staleTime: 10000,
   });
-  const dayCompare = helperDateCompare();
+  const dayCompare = DateCompareToday();
 
   const {
     dateRange,
@@ -135,7 +135,13 @@ export default async function Page({
 
   return (
     <Grid.smallCenter>
-      <BackButton />
+      <div
+        style={{
+          marginBottom: "20px",
+        }}
+      >
+        <BackButton />
+      </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         {session && session.user.role === "admin" && (
           <AdminController
