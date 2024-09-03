@@ -44,4 +44,8 @@
   font-weight: normal;
 }
 
+@mixin marginAuto($where) {
+  #{$where}: auto;
+}
+
 //Template Type

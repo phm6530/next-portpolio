@@ -12,6 +12,7 @@ import {
   GetSurveyDetailProps,
   GetSurveyQuestions,
 } from "@/types/templateSurvey";
+import { user_role } from "@/types/user";
 import { ResultSetHeader } from "mysql2";
 
 //Data Base ROWS 타입
@@ -28,7 +29,7 @@ type RowDataSurvey = {
 
   user_nickname: string;
   user_id: string;
-  user_role: "admin" | "user" | "anonymous";
+  user_role: user_role;
 
   start_date: string | null;
   end_date: string | null;

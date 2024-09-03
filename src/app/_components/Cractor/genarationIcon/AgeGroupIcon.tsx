@@ -28,7 +28,7 @@ export default function AgeGroupIcon({
       }`}
     >
       <div className={classes.iconWrap}>
-        <Image src={ageGroup10} alt="icon" priority fill />
+        <Image src={ageGroup10} alt="icon" priority width={20} height={20} />
       </div>
       <span className={classes.ageGroup}>{ageGroup}</span> 대
     </div>

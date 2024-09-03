@@ -12,7 +12,7 @@ import classes from "@/styles/pages/template.module.scss";
 import { FormProvider, useForm } from "react-hook-form";
 
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
-import helperDateCompare from "@/app/lib/helperDateCompare";
+import DateCompareToday from "@/app/lib/DateCompareToday";
 
 import { useRouter } from "next/navigation";
 import { withFetch } from "@/app/lib/helperClient";
@@ -29,6 +29,12 @@ import "dayjs/locale/ko";
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import Button from "@/app/_components/ui/button/Button";
+import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
+
+import styles from "./SurveyTemplateDetail.module.scss";
+import { TemplateTypeProps } from "@/types/template";
+import UiLoading from "@/app/_components/ui/loading/UiLoading";
+
 dayjs.locale("ko");
 
 interface Option {
@@ -47,8 +53,17 @@ export default function SurveyTemplateDetail({
 }) {
   const formMethod = useForm();
   const router = useRouter();
-  const dayCompare = helperDateCompare(); //날짜 비교 lib
-  const [participatedAt, setParticipatedAt] = useState<string | null>(null);
+  const dayCompare = DateCompareToday(); //날짜 비교 lib
+  const [participatedAt, setParticipatedAt] = useState<
+    | {
+        templateId: number;
+        templateType: TemplateTypeProps;
+        participatedAt: string;
+      }
+    | false
+    | null
+  >(null);
+  const [touched, setTouched] = useState<boolean>(false);
 
   const { isLoading, data } = useQuery({
     queryKey: [templateType, surveyId],
@@ -64,8 +79,10 @@ export default function SurveyTemplateDetail({
         templateId: data.id,
         templateType: data.template,
       }).getter();
-      localParticipation &&
-        setParticipatedAt(localParticipation.participatedAt);
+      setParticipatedAt(localParticipation ? localParticipation : false);
+      setTimeout(() => {
+        setTouched(true);
+      }, 30000);
     }
   }, [data]);
 
@@ -145,12 +162,14 @@ export default function SurveyTemplateDetail({
       <>
         <TemplateStatus dateRange={dateRange} createdAt={created_at} />
         <div className={classes.templateTitle}>{title}</div>
-        <div>
-          {dayjs(created_at).fromNow()}
-          <span>
-            {user_nickname === "anonymous" ? "익명" : user_nickname}
-            {user_role === "admin" ? "M" : ""}
-          </span>
+        <div className={styles.userDisplayWrapper}>
+          {/* User Info + Role Display  */}
+          <UserRoleDisplay
+            user_nickname={user_nickname}
+            user_role={user_role}
+          />
+
+          <span>{dayjs(created_at).fromNow()}</span>
         </div>
 
         <div className={classes.thumbNailContainer}>
@@ -159,6 +178,7 @@ export default function SurveyTemplateDetail({
               <Image
                 src={thumbnail}
                 alt="alt"
+                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
                 fill
                 style={{ objectFit: "cover" }}
               />
@@ -197,23 +217,31 @@ export default function SurveyTemplateDetail({
           })}
         </FormProvider>
 
-        <div style={{ textAlign: "center" }}>
-          <Button.submit
-            type="button"
-            onClick={formMethod.handleSubmit(onSubmitHandler)}
-            disabled={!!participatedAt}
-          >
-            제출하기
-          </Button.submit>
-        </div>
-
-        {!!participatedAt && (
+        {touched ? (
           <>
-            이미 {participatedAt}에 참여하신 이력이 있어요!
-            <button onClick={() => router.push(`/template/result/${surveyId}`)}>
-              결과 보기
-            </button>
+            {!!participatedAt && (
+              <>
+                <div className={styles.buttonWrapper}>
+                  <Button.submit
+                    type="button"
+                    onClick={formMethod.handleSubmit(onSubmitHandler)}
+                    disabled={!!participatedAt}
+                  >
+                    제출하기
+                  </Button.submit>
+
+                  <Button.submit
+                    type="button"
+                    onClick={() => router.push(`/template/result/${surveyId}`)}
+                  >
+                    결과보기
+                  </Button.submit>
+                </div>
+              </>
+            )}
           </>
+        ) : (
+          <UiLoading />
         )}
       </>
     );

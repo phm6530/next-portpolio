@@ -10,6 +10,7 @@ import gsap from "gsap";
 import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
 import FemaleIcon from "/public/asset/icon/mdi_face-female.png";
 import MaleIcon from "/public/asset/icon/mdi_face-male.png";
+import imgUrlMapper from "@/app/lib/imgUrlMapper";
 
 export default function SurveyItem({
   itemData,
@@ -97,14 +98,13 @@ export default function SurveyItem({
           <div className={classes.templateType}>{templateType}</div>
           <Image
             alt="test"
-            sizes="(max-width: 768px) 100vw, (min-width: 769px) 30vw"
-            src={
-              /^(https?:)?\/\//.test(thumbnail)
-                ? thumbnail
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/${thumbnail}`
-            }
-            priority
+            // sizes=" 100vw"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+            // unoptimized
             fill
+            src={imgUrlMapper({ thumbnail })}
+            priority
+            // fill
             style={{ objectFit: "cover" }}
           />
         </div>

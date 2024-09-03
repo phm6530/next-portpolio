@@ -1,3 +1,5 @@
+"use client";
+
 import { TemplateTypeProps } from "@/types/template";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -25,8 +27,10 @@ export const localStorageHandler = ({
       localStorage.setItem(storageKey, JSON.stringify(participationData));
     },
     getter: () => {
-      const data = localStorage.getItem(storageKey);
-      return data ? JSON.parse(data) : null;
+      if (typeof window !== "undefined") {
+        const data = localStorage.getItem(storageKey);
+        return data ? JSON.parse(data) : null;
+      }
     },
     remove: () => {
       localStorage.removeItem(storageKey);

@@ -1,28 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import classes from "./surveyControler.module.scss";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LIST_SORT } from "@/types/constans";
-import Image from "next/image";
 import FemaleIcon from "/public/asset/icon/female.svg";
+import MaleIcon from "/public/asset/icon/male.svg";
+import GraphIcon from "/public/asset/icon/graph.svg";
+
+import classes from "./surveyControler.module.scss";
 
 const btnArr = [
   {
-    label: "전체보기",
+    label: "최신 순",
     value: LIST_SORT.ALL,
   },
   {
-    label: "참여자 높은 순",
+    label: "참여자 순",
     value: LIST_SORT.USER,
+    icon: GraphIcon,
   },
   {
-    label: "남자 선호가 높은",
+    label: "남성 선호도",
     value: LIST_SORT.MALE,
+    icon: MaleIcon,
   },
   {
-    label: "여자 선호가 높은",
+    label: "여성 선호도",
     value: LIST_SORT.FEMALE,
+    icon: FemaleIcon,
   },
 ];
 
@@ -49,7 +54,7 @@ export default function SurveyControler() {
   };
 
   return (
-    <div className="btnWrapper">
+    <div className={classes.btnWrapper}>
       {btnArr.map((btn, idx) => {
         return (
           <button
@@ -60,7 +65,7 @@ export default function SurveyControler() {
             value={btn.value}
             onClick={onClickHandler}
           >
-            <FemaleIcon />
+            {btn.icon && <btn.icon />}
             {btn.label}
           </button>
         );

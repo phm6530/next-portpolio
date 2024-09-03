@@ -55,11 +55,13 @@ export default async function surveyPage({
                   다른사람들은<br></br> 어떤
                   <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
                 </PageTitle>
+
                 <p className={classes.description}>
                   평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
                 </p>
+
                 <Button.moveLink moveUrl={"/template/made"}>
-                  설문조사 만들기
+                  + 설문조사 만들기
                 </Button.moveLink>
               </div>
               <TemplateCractor />
@@ -70,10 +72,10 @@ export default async function surveyPage({
         <Grid.center>
           {/* btn Area */}
           <div className={classes.searchFilterWrapper}>
-            <HotKeyword />
+            {/* <HotKeyword /> */}
 
-            <SearchInput search={search} />
             <SurveyControler />
+            <SearchInput search={search} />
           </div>
           {/* List */}
           <HydrationBoundary state={hydurateState}>
