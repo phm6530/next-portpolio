@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FieldError, useFormContext } from "react-hook-form";
 import classes from "@/styles/pages/template.module.scss";
 import { GetSurveyQuestions } from "@/types/templateSurvey";
+import FormRegisterError from "@/app/_components/Error/FormRegisterError";
 
 type SurveyQuestionOptions = GetSurveyQuestions["questions"][number]["options"];
 
@@ -22,7 +23,7 @@ export default function QuestionOptions({
 
   const selectLabel = watch(qsId + "");
 
-  console.log("selectLabel::", selectLabel);
+  const errorMsg = errors[`${qsId}`] as FieldError;
 
   return (
     <QuestionWrapper>
@@ -59,7 +60,7 @@ export default function QuestionOptions({
           </InputTypeStyle.RadioAnswer>
         );
       })}
-      {(errors[`${qsId}`] as FieldError)?.message}
+      {errorMsg && <FormRegisterError errorMsg={errorMsg.message as string} />}
     </QuestionWrapper>
   );
 }

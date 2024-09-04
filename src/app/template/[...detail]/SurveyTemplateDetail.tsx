@@ -21,9 +21,7 @@ import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 
 import ChkIcon from "/public/asset/icon/chkCircle.png";
-
 import dayjs from "dayjs";
-
 import "dayjs/locale/ko";
 
 import QuestionText from "@/app/template/_component/QuestionText";
@@ -31,9 +29,12 @@ import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import Button from "@/app/_components/ui/button/Button";
 import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
 
-import styles from "./SurveyTemplateDetail.module.scss";
 import { TemplateTypeProps } from "@/types/template";
+import styles from "./SurveyTemplateDetail.module.scss";
 import UiLoading from "@/app/_components/ui/loading/UiLoading";
+import TalkTooltip from "@/app/_components/ui/Tooltip/TalkTooptip";
+
+import MegaPhoneIcon from "/public/asset/icon/megaphone.svg";
 
 dayjs.locale("ko");
 
@@ -80,9 +81,8 @@ export default function SurveyTemplateDetail({
         templateType: data.template,
       }).getter();
       setParticipatedAt(localParticipation ? localParticipation : false);
-      setTimeout(() => {
-        setTouched(true);
-      }, 30000);
+
+      setTouched(true);
     }
   }, [data]);
 
@@ -186,8 +186,7 @@ export default function SurveyTemplateDetail({
           )}
         </div>
 
-        <span className={classes.description}>{description}</span>
-
+        <span className={styles.description}>{description}</span>
         {/* Option  */}
         <FormProvider {...formMethod}>
           {/**
@@ -219,26 +218,32 @@ export default function SurveyTemplateDetail({
 
         {touched ? (
           <>
-            {!!participatedAt && (
-              <>
-                <div className={styles.buttonWrapper}>
-                  <Button.submit
-                    type="button"
-                    onClick={formMethod.handleSubmit(onSubmitHandler)}
-                    disabled={!!participatedAt}
-                  >
-                    제출하기
-                  </Button.submit>
+            <div className={styles.buttonWrapper}>
+              <TalkTooltip>
+                {!!participatedAt && (
+                  <div className="tooltip">
+                    <MegaPhoneIcon />
+                    이미 참여하셨네요!
+                  </div>
+                )}
 
-                  <Button.submit
-                    type="button"
-                    onClick={() => router.push(`/template/result/${surveyId}`)}
-                  >
-                    결과보기
-                  </Button.submit>
-                </div>
-              </>
-            )}
+                <Button.submit
+                  type="button"
+                  onClick={formMethod.handleSubmit(onSubmitHandler)}
+                  disabled={!!participatedAt}
+                >
+                  제출하기
+                </Button.submit>
+              </TalkTooltip>
+              {!!participatedAt && (
+                <Button.submit
+                  type="button"
+                  onClick={() => router.push(`/template/result/${surveyId}`)}
+                >
+                  결과보기
+                </Button.submit>
+              )}
+            </div>
           </>
         ) : (
           <UiLoading />
