@@ -109,7 +109,7 @@ export default async function Page({
     id: template_id,
   } = data;
 
-  //template Gard
+  //template Date Gard
   if (!(session?.user.user_id === user_id || session?.user.role === "admin")) {
     if (dateRange.every((e) => e !== null)) {
       const [start, end] = dateRange;
@@ -120,14 +120,17 @@ export default async function Page({
         ? "after"
         : (null as never);
 
+      //종료일과 시작일에 따른 상태보여주기
       if (templateStatus) {
         return (
-          <TemplatePending
-            dateRange={dateRange}
-            thumbnail={thumbnail}
-            title={title}
-            templateStatus={templateStatus}
-          />
+          <Grid.smallCenter>
+            <TemplatePending
+              dateRange={dateRange}
+              thumbnail={thumbnail}
+              title={title}
+              templateStatus={templateStatus}
+            />
+          </Grid.smallCenter>
         );
       }
     }

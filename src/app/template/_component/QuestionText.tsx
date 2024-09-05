@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
 import classes from "./QuestionText.module.scss";
+import FormRegisterError from "@/app/_components/Error/FormRegisterError";
 
 export default function QuestionText({
   qsImg,
@@ -15,6 +16,8 @@ export default function QuestionText({
     register,
     formState: { errors },
   } = useFormContext();
+
+  const errorMsg = errors[`${qsId}`]?.message;
 
   return (
     <QuestionWrapper>
@@ -36,7 +39,7 @@ export default function QuestionText({
         })}
         autoComplete="off"
       />
-      {errors[`${qsId}`]?.message && "에러"}
+      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
     </QuestionWrapper>
   );
 }
