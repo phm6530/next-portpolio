@@ -41,7 +41,7 @@ export async function postComment(data: postCommentProps) {
       user_id: string;
       user_name: string;
       user_nickname: string;
-      role: "admin" | "visitor";
+      role: "admin" | "anonymous";
     };
   };
 
@@ -88,7 +88,7 @@ export async function postComment(data: postCommentProps) {
     });
   } else {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const ROLE = "visitor"; // 익명 사용자 role
+    const ROLE = "anonymous"; // 익명 사용자 role
 
     // Id Check
     if (comment_id || template_id) {
@@ -96,11 +96,11 @@ export async function postComment(data: postCommentProps) {
         // 사용자 정보 삽입
         const insertUserSql = `
         INSERT INTO 
-          user_visitor (nick_name, password, role) 
+          anonymous_reply (nick_name, password, role) 
         VALUES (?, ?, ?);
       `;
 
-        const [visitorResult] = await conn.query<ResultSetHeader>(
+        const [anonymousResult] = await conn.query<ResultSetHeader>(
           insertUserSql,
           [nickName, hashedPassword, ROLE]
         );
@@ -108,14 +108,14 @@ export async function postComment(data: postCommentProps) {
         // 댓글인지 대댓글인지
         const insertCommentSql = `
         INSERT INTO 
-          ${targetTable} (created_at, message, ${targetColumn}, visitor_id) 
+          ${targetTable} (created_at, message, ${targetColumn}, anonymous_id) 
         VALUES (now(), ?, ?, ?);
     `;
 
         const [test] = await conn.query<ResultSetHeader>(insertCommentSql, [
           msg,
           whereId,
-          visitorResult.insertId,
+          anonymousResult.insertId,
         ]);
 
         return test;
@@ -217,9 +217,9 @@ export const chkPasswordMatch = async (
       const sql = `
     SELECT password FROM ${targetTable} rc
     JOIN 
-      user_visitor uv
+      anonymous_reply uv
     ON 
-      rc.visitor_id = uv.id
+      rc.anonymous_id = uv.id
     where 
       rc.id = ?;
   `;

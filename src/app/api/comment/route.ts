@@ -61,7 +61,7 @@ export async function DELETE(req: NextRequest) {
       : (null as never);
 
     // 세션이 있는 경우 (회원 및 관리자)
-    if (session && msgRole !== "visitor") {
+    if (session && msgRole !== "anonymous") {
       const { user_id, role } = session.user;
 
       // 운영자

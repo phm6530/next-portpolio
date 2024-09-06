@@ -1,4 +1,3 @@
-import QuestionWrapper from "@/app/template/_component/survey/QuestionWrapper";
 import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
@@ -20,7 +19,7 @@ export default function QuestionText({
   const errorMsg = errors[`${qsId}`]?.message;
 
   return (
-    <QuestionWrapper>
+    <>
       {qsImg && (
         <div className={commonStyle.previewContainer}>
           <Image
@@ -40,6 +39,6 @@ export default function QuestionText({
         autoComplete="off"
       />
       {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
-    </QuestionWrapper>
+    </>
   );
 }

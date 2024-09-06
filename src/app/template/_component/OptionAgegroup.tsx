@@ -1,7 +1,8 @@
 import { useFormContext } from "react-hook-form";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import QuestionWrapper from "@/app/template/_component/survey/QuestionWrapper";
 import FormRegisterError from "@/app/_components/Error/FormRegisterError";
+import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
+import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
 
 export default function OptionAgeGroup() {
   const {
@@ -15,12 +16,14 @@ export default function OptionAgeGroup() {
   const errorMsg = errors.ageGroup?.message;
 
   return (
-    <QuestionWrapper subtitle={"연령대"}>
+    <TemplateQuestionWrapper>
+      <QuestionTitle>연령대</QuestionTitle>
       {AgeGroups.map((range) => {
         return (
           <InputTypeStyle.Radio
             key={`ageGroup-${range}`}
-            selectLabel={+selectAgeGroup === range}
+            selectLabel={selectAgeGroup}
+            curLabel={range + ""}
           >
             <input
               type="radio"
@@ -32,6 +35,6 @@ export default function OptionAgeGroup() {
         );
       })}
       {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
-    </QuestionWrapper>
+    </TemplateQuestionWrapper>
   );
 }

@@ -1,16 +1,16 @@
 import { fetchDetailResult } from "@/app/_services/client/templateResult";
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
-import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import { notFound } from "next/navigation";
 import { GetTemplateItemProps } from "@/types/template";
+import { auth } from "@/auth";
+import { withFetch } from "@/app/lib/helperClient";
+
 import CommentSection, {
   MessageProps,
 } from "@/app/_components/Comment/CommentSection";
-import { withFetch } from "@/app/lib/helperClient";
+import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import AdminController from "@/app/template/admin/_component/AdminController";
-import { auth } from "@/auth";
 import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
 import DateCompareToday from "@/app/lib/DateCompareToday";
 import Grid from "@/app/_components/ui/Grid";
@@ -117,12 +117,12 @@ export default async function resultPage({
             endDate={prefetchMetaData.templateMeta.end_date}
           />
         )}
-        <Grid.center>
-          {/* Result */}
+        <Grid.smallCenter>
+          {/* 결과 */}
           <SurveyResult id={templateId} />
           {/* 댓글 */}
           <CommentSection templateId={templateId} />{" "}
-        </Grid.center>
+        </Grid.smallCenter>
       </HydrationBoundary>
     </>
   );

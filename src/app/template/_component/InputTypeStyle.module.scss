@@ -1,13 +1,13 @@
+//Asnwer Radio
 .answerLabel {
   input[type="radio"] {
     display: none;
   }
-
   padding: 1rem;
   display: block;
+  cursor: pointer;
   border-radius: 1rem;
   margin-bottom: 0.7rem;
-  cursor: pointer;
   border: 1px solid #e6e6e6;
   box-sizing: border-box;
   &:hover {
@@ -35,30 +35,40 @@
   @extend .answerLabel;
 }
 
+//Radio
 .radioLabel {
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 4rem;
-  border: 1px solid;
-  margin-right: 0.5rem;
-  margin-bottom: 10px;
-  cursor: pointer;
-  display: inline-block;
-  transition: all 0.2s ease;
   input[type="radio"] {
     display: none;
   }
+  margin-right: 10px;
+  padding: 1rem;
+  display: inline-block;
+  border-radius: 5rem;
+  margin-bottom: 0.7rem;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box;
+  &:hover {
+    border: 1px solid;
+    color: rgb(110, 13, 189);
+    box-shadow: 0px 0px 1px rgb(110, 13, 189);
+  }
 }
 
-.active {
-  color: #fff;
-  background: rgb(93, 112, 235);
-
+.radio_active {
+  border: 1px solid #e6e6e6;
+  box-sizing: border-box;
+  border: 1px solid;
+  color: rgb(110, 13, 189);
+  box-shadow: 0px 0px 1px rgb(110, 13, 189);
   @extend .radioLabel;
 }
 
-.nonActive {
-  color: rgba(0, 0, 0, 0.5);
+.radio_null {
   @extend .radioLabel;
+}
+
+.radio_noneActive {
   opacity: 0.5;
+  @extend .radioLabel;
 }

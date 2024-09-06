@@ -5,31 +5,52 @@
   grid-template-columns: repeat(4, 1fr); /* 3개의 동일한 너비의 칸 */
   gap: 10px; /* 요소 간의 간격을 위해 추가 */
 
-  input,
-  .textArea {
+  input {
     @include inputStyles;
   }
 
-  .textArea {
-    grid-column: 1 / -1; /* 전체 열을 차지 */
-  }
+  .textareaWrap {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid #eeeeee;
+    border-radius: 1rem;
+    overflow: hidden;
 
-  .errorBoundary {
-    grid-column: 1 / 4; /* 전체 3칸을 차지 */
-    color: $color-error-1;
-  }
+    & > textarea {
+      outline: none;
+      border: 0;
+      grid-column: 1 / -1;
+      padding: 20px;
+      border: 1px solid #eeeeee;
+    }
 
-  button {
-    grid-column: 4 / 5; /* 버튼은 마지막 칸에 위치 */
+    & > .errorBoundary {
+      grid-column: 1 / 4; /* 전체 3칸을 차지 */
+      color: $color-error-1;
+      height: 50px;
+      align-items: center;
+      display: flex;
+      text-indent: 1.5rem;
+    }
+
+    & > button {
+      grid-column: 4 / 5; /* 버튼은 마지막 칸에 위치 */
+
+      @include btn-hover(#7975e5);
+      color: #fff;
+    }
   }
 }
 
 .commentContainer {
   display: grid;
-
+  grid-gap: 10px;
   gap: 10px;
   justify-items: start;
-  margin-bottom: 3rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
 }
 
 .replyWrapper {
@@ -47,11 +68,12 @@
   margin-left: 2rem;
 }
 
-.commentBtnWrap {
-}
-
 .MsgWrap {
   // padding: 1rem;
+  span {
+    opacity: 0.5;
+    font-size: 0.8rem;
+  }
 }
 .msgContents {
 }

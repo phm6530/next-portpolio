@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { HTMLAttributes, HtmlHTMLAttributes, ReactNode } from "react";
 import classes from "./InputTypeStyle.module.scss";
 
 //동적 Radio Style
@@ -29,26 +29,40 @@ function RadioAnswer({
 }
 
 //필수 Radio Style
-function Radio({
+function Radio<T extends HTMLLabelElement>({
   selectLabel,
+  curLabel,
   children,
+  ...rest
 }: {
-  selectLabel: boolean;
+  selectLabel: string | null;
+  curLabel: string;
   children: ReactNode;
-}) {
+} & HTMLAttributes<T>) {
+  console.log(selectLabel, curLabel);
+
   return (
-    <label className={selectLabel ? classes.active : classes.nonActive}>
+    <label
+      className={
+        selectLabel == null
+          ? classes.radio_null // null일 때 적용할 클래스
+          : selectLabel === curLabel
+          ? classes.radio_active // true일 때 적용할 클래스
+          : classes.radio_noneActive // false 또는 undefined일 때 적용할 클래스
+      }
+      {...rest}
+    >
       {children}
     </label>
   );
 }
 
-interface IntpitTypeStyleProps extends React.FC<{ children: ReactNode }> {
+interface InputTypeStyleProps extends React.FC<{ children: ReactNode }> {
   RadioAnswer: typeof RadioAnswer;
   Radio: typeof Radio;
 }
 
-const InputTypeStyle: IntpitTypeStyleProps = ({ children }) => {
+const InputTypeStyle: InputTypeStyleProps = ({ children }) => {
   return <>{children}</>;
 };
 

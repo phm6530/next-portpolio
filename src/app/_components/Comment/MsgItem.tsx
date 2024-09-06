@@ -10,6 +10,7 @@ import { withFetch } from "@/app/lib/helperClient";
 import "dayjs/locale/ko";
 import { queryClient } from "@/app/config/queryClient";
 import { useSession } from "next-auth/react";
+import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
 
 //import
 dayjs.extend(relativeTime);
@@ -80,11 +81,11 @@ export default function MsgItem({
 
   return (
     <div className={classes.MsgWrap}>
-      <div>
-        {username}
-        {role === "admin" ? <span className="admin_icon">M</span> : null}
+      <div style={{ alignItems: "center", display: "flex" }}>
+        <UserRoleDisplay user_nickname={username} user_role={role} />
         <span>{dayjs(create_at).fromNow()}</span>
-        {(role === "visitor" || userId === session?.user.user_id) && (
+
+        {(role === "anonymous" || userId === session?.user.user_id) && (
           <button type="button" onClick={deleteMessage}>
             삭제
           </button>

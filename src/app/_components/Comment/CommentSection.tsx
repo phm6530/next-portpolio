@@ -48,7 +48,7 @@ export default function CommentSection({ templateId }: { templateId: number }) {
     return (
       <>
         {/* Reply */}
-        <h1>댓글 {data.length} 개</h1>
+        <span>댓글 {data.length} 개</span>
 
         {/* Msg - Form */}
         <MsgForm template_id={templateId} />

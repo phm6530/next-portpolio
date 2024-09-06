@@ -1,10 +1,12 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import QuestionWrapper from "@/app/template/_component/survey/QuestionWrapper";
+
 import Image from "next/image";
 import { FieldError, useFormContext } from "react-hook-form";
 import classes from "@/styles/pages/template.module.scss";
 import { GetSurveyQuestions } from "@/types/templateSurvey";
 import FormRegisterError from "@/app/_components/Error/FormRegisterError";
+
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 
 type SurveyQuestionOptions = GetSurveyQuestions["questions"][number]["options"];
 
@@ -22,11 +24,14 @@ export default function QuestionOptions({
   } = useFormContext();
 
   const selectLabel = watch(qsId + "");
-
   const errorMsg = errors[`${qsId}`] as FieldError;
 
+  //하나라도 이미지 있으면 UI 변경하기
+  const isPictureOption =
+    options?.some((e) => e.optionPictrue !== null) || false;
+
   return (
-    <QuestionWrapper>
+    <QuestionsContainer isPicture={isPictureOption}>
       {options?.map((e, idx) => {
         return (
           <InputTypeStyle.RadioAnswer
@@ -61,6 +66,6 @@ export default function QuestionOptions({
         );
       })}
       {errorMsg && <FormRegisterError errorMsg={errorMsg.message as string} />}
-    </QuestionWrapper>
+    </QuestionsContainer>
   );
 }
