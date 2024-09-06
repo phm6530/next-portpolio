@@ -8,6 +8,10 @@ import { Gender } from "@/types/template";
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ThumbNail from "@/app/template/_component/thumbNail/thumbNail";
+import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
+import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
+import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 
 const FILTER_GENDER = [
   {
@@ -61,6 +65,8 @@ export default function SurveyResult({ id }: { id: number }) {
     "all"
   );
 
+  console.log(ageGroup);
+
   const router = useRouter();
 
   const { data, isError } = useQuery({
@@ -78,7 +84,14 @@ export default function SurveyResult({ id }: { id: number }) {
 
   if (data) {
     const { templateResult, templateMeta } = data;
-    const { template: templateType } = templateMeta;
+    const {
+      template: templateType,
+      title,
+      thumbnail,
+      start_date,
+      end_date,
+      created_at,
+    } = templateMeta;
 
     const templateNames: { [key: string]: string } = {
       survey: "설문조사",
@@ -89,16 +102,15 @@ export default function SurveyResult({ id }: { id: number }) {
     const { questions } = templateResult;
 
     // Gender Filter
-    const filterGenderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const btnVal = e.currentTarget.value;
+    const filterGenderHandler = (btnVal: string) => {
       if (btnVal === "all" || btnVal === "female" || btnVal === "male") {
         setGenderGroup(btnVal);
       }
     };
 
     // Age Filter
-    const filterAgeHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const btnVal = e.currentTarget.value;
+    const filterAgeHandler = (btnVal: string) => {
+      console.log("btnVal:", btnVal);
       if (
         btnVal === "all" ||
         btnVal === "10" ||
@@ -119,32 +131,36 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
-          <button
-            onClick={() => router.push(`/template/${templateType}/${id}`)}
-          >
-            참여하기
-          </button>
-          <p>참여자 : {templateMeta.user_cnt || 0} 명</p>
+          <ThumbNail thumbnail={thumbnail} />
+          <TemplateStatus
+            dateRange={[start_date, end_date]}
+            createdAt={created_at}
+          />
+          <TemplateTitle>{title}</TemplateTitle>
 
-          <p>
+          <div>참여자 : {templateMeta.user_cnt || 0} 명</div>
+
+          <div>
             {templateMeta.user_cnt < 10
               ? "집계하기엔 아직 참여자가 너무 적습니다."
               : `이 ${templateName}은/는 ${templateMeta.age_group}대 ${templateMeta.gender_group}이 가장 많이 참여하였습니다.`}
-          </p>
+          </div>
         </div>
-
+        <button onClick={() => router.push(`/template/${templateType}/${id}`)}>
+          참여하기
+        </button>
         {/* Gender Filter */}
         <div className={classes.filterController}>
           {FILTER_GENDER.map((e, idx) => {
             return (
-              <button
+              <InputTypeStyle.Radio
                 key={`genderFilter-${idx}`}
-                onClick={filterGenderHandler}
-                type="button"
-                value={e.val}
+                selectLabel={genderGroup}
+                curLabel={e.val + ""}
+                onClick={() => filterGenderHandler(e.val)}
               >
                 {e.label}
-              </button>
+              </InputTypeStyle.Radio>
             );
           })}
         </div>
@@ -153,14 +169,14 @@ export default function SurveyResult({ id }: { id: number }) {
         <div className={classes.filterController}>
           {FILTER_Age.map((e, idx) => {
             return (
-              <button
+              <InputTypeStyle.Radio
                 key={`genderFilter-${idx}`}
-                onClick={filterAgeHandler}
-                type="button"
-                value={e.val}
+                selectLabel={ageGroup + ""}
+                curLabel={e.val + ""}
+                onClick={() => filterAgeHandler(e.val + "")}
               >
                 {e.label}
-              </button>
+              </InputTypeStyle.Radio>
             );
           })}
         </div>

@@ -1,7 +1,6 @@
 //Template Mixin
 @import "./mixins/templateMixin.scss";
-
-//grid
+@import "./mixins/uiMixin.scss";
 
 //btn Hover
 @mixin gradient-btn-hover($color, $hover-color) {

@@ -20,10 +20,7 @@ import { localStorageHandler } from "@/app/lib/localStorageHandler";
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 
-import ChkIcon from "/public/asset/icon/chkCircle.png";
-
 import dayjs from "dayjs";
-
 import "dayjs/locale/ko";
 
 import QuestionText from "@/app/template/_component/QuestionText";
@@ -31,9 +28,17 @@ import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import Button from "@/app/_components/ui/button/Button";
 import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
 
-import styles from "./SurveyTemplateDetail.module.scss";
 import { TemplateTypeProps } from "@/types/template";
+import styles from "./SurveyTemplateDetail.module.scss";
 import UiLoading from "@/app/_components/ui/loading/UiLoading";
+import TalkTooltip from "@/app/_components/ui/Tooltip/TalkTooptip";
+
+import MegaPhoneIcon from "/public/asset/icon/megaphone.svg";
+import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
+import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import DateRange from "@/app/template/_component/DateRange/DateRange";
+import ThumbNail from "@/app/template/_component/thumbNail/thumbNail";
+import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
 
 dayjs.locale("ko");
 
@@ -80,9 +85,8 @@ export default function SurveyTemplateDetail({
         templateType: data.template,
       }).getter();
       setParticipatedAt(localParticipation ? localParticipation : false);
-      setTimeout(() => {
-        setTouched(true);
-      }, 30000);
+
+      setTouched(true);
     }
   }, [data]);
 
@@ -140,6 +144,8 @@ export default function SurveyTemplateDetail({
       user_role,
     } = data;
 
+    console.log(data);
+
     //Submit
     const onSubmitHandler = async (data: Record<string, string>) => {
       // 둘 다 true면
@@ -160,39 +166,33 @@ export default function SurveyTemplateDetail({
 
     return (
       <>
-        <TemplateStatus dateRange={dateRange} createdAt={created_at} />
-        <div className={classes.templateTitle}>{title}</div>
-        <div className={styles.userDisplayWrapper}>
-          {/* User Info + Role Display  */}
-          <UserRoleDisplay
-            user_nickname={user_nickname}
-            user_role={user_role}
-          />
+        <TemplateQuestionWrapper>
+          <ThumbNail thumbnail={thumbnail} />
 
-          <span>{dayjs(created_at).fromNow()}</span>
-        </div>
+          <div className={styles.templateSumeryWrapp}>
+            <TemplateStatus dateRange={dateRange} createdAt={created_at} />
+            <TemplateTitle>{title}</TemplateTitle>
+            <DateRange dateRange={dateRange} />
 
-        <div className={classes.thumbNailContainer}>
-          {thumbnail && (
-            <>
-              <Image
-                src={thumbnail}
-                alt="alt"
-                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                fill
-                style={{ objectFit: "cover" }}
+            {/* Desciprtion */}
+            <div className={styles.description}>{description}</div>
+            {/* date */}
+            <div className={styles.userDisplayWrapper}>
+              {/* User Info + Role Display  */}
+              <UserRoleDisplay
+                user_nickname={user_nickname}
+                user_role={user_role}
               />
-            </>
-          )}
-        </div>
-
-        <span className={classes.description}>{description}</span>
-
+              <span>{dayCompare.fromNow(created_at)}</span>
+            </div>
+          </div>
+        </TemplateQuestionWrapper>
         {/* Option  */}
         <FormProvider {...formMethod}>
           {/**
            * gender는 DB 1,0으로 저장때문에 Boolean으로 바꾸기로 했음
            */}
+
           {/* Gender Chk  */}
           {Boolean(Number(templateOption.genderChk)) && <OptionGenderGroup />}
 
@@ -201,44 +201,50 @@ export default function SurveyTemplateDetail({
 
           {questions.map((qs) => {
             return (
-              <div key={`question-${qs.id}`} className={classes.questionWrap}>
-                <div className={classes.qsLabel}>
-                  <Image src={ChkIcon} alt={qs.id + ""} width={35} /> {qs.label}
-                </div>
+              //Ui Wrapper
+              <TemplateQuestionWrapper key={`question-${qs.id}`}>
+                {/* 타이틀 명 */}
+                <QuestionTitle>{qs.label}</QuestionTitle>
                 {qs.type === "text" ? (
                   //주관식
                   <QuestionText qsImg={qs.textImg} qsId={qs.id} />
                 ) : (
-                  //객관식
+                  //객관식s
                   <QuestionOptions options={qs.options} qsId={qs.id} />
                 )}
-              </div>
+              </TemplateQuestionWrapper>
             );
           })}
         </FormProvider>
 
         {touched ? (
           <>
-            {!!participatedAt && (
-              <>
-                <div className={styles.buttonWrapper}>
-                  <Button.submit
-                    type="button"
-                    onClick={formMethod.handleSubmit(onSubmitHandler)}
-                    disabled={!!participatedAt}
-                  >
-                    제출하기
-                  </Button.submit>
+            <div className={styles.buttonWrapper}>
+              <TalkTooltip>
+                {!!participatedAt && (
+                  <div className="tooltip">
+                    <MegaPhoneIcon />
+                    이미 참여하셨네요!
+                  </div>
+                )}
 
-                  <Button.submit
-                    type="button"
-                    onClick={() => router.push(`/template/result/${surveyId}`)}
-                  >
-                    결과보기
-                  </Button.submit>
-                </div>
-              </>
-            )}
+                <Button.submit
+                  type="button"
+                  onClick={formMethod.handleSubmit(onSubmitHandler)}
+                  disabled={!!participatedAt}
+                >
+                  제출하기
+                </Button.submit>
+              </TalkTooltip>
+              {!!participatedAt && (
+                <Button.submit
+                  type="button"
+                  onClick={() => router.push(`/template/result/${surveyId}`)}
+                >
+                  결과보기
+                </Button.submit>
+              )}
+            </div>
           </>
         ) : (
           <UiLoading />

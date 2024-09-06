@@ -35,7 +35,7 @@ function moveLink({
 }) {
   return (
     <Link href={moveUrl}>
-      <div className={classes.importantButton}>
+      <div className={classes.importantButton} style={{ borderRadius: "5rem" }}>
         <span>{children}</span>
       </div>
     </Link>
@@ -51,7 +51,7 @@ function submit({
 }) {
   return (
     <button {...rest} className={classes.submitButton}>
-      {children}
+      <div className={classes.btns}>{children}</div>
     </button>
   );
 }

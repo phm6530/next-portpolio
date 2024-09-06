@@ -1,8 +1,8 @@
-import QuestionWrapper from "@/app/template/_component/survey/QuestionWrapper";
 import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
 import classes from "./QuestionText.module.scss";
+import FormRegisterError from "@/app/_components/Error/FormRegisterError";
 
 export default function QuestionText({
   qsImg,
@@ -16,8 +16,10 @@ export default function QuestionText({
     formState: { errors },
   } = useFormContext();
 
+  const errorMsg = errors[`${qsId}`]?.message;
+
   return (
-    <QuestionWrapper>
+    <>
       {qsImg && (
         <div className={commonStyle.previewContainer}>
           <Image
@@ -36,7 +38,7 @@ export default function QuestionText({
         })}
         autoComplete="off"
       />
-      {errors[`${qsId}`]?.message && "에러"}
-    </QuestionWrapper>
+      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
+    </>
   );
 }

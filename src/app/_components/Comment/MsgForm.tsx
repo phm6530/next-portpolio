@@ -75,6 +75,8 @@ export default function MsgForm({
     }
   }, [anonymous, setValue]);
 
+  console.log(errorMessage);
+
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={classes.replyForm}>
       {session?.user.role === "admin" ? (
@@ -110,27 +112,26 @@ export default function MsgForm({
           />
         </>
       )}
-
-      <textarea
-        className={classes.textArea}
-        rows={rows}
-        {...register("msg", {
-          required: "남기실 말은 필수입니다.",
-          onChange: rowsHandler,
-          minLength: {
-            value: 4,
-            message: "최소 4글자 남겨주세요!",
-          },
-        })}
-        placeholder="욕설이나 비하 댓글을 삭제 될 수 있습니다. 타인에게 상처주는 말은 하지 말아주세요!"
-      />
-      {typeof errorMessage === "string" ? (
-        <div className={classes.errorBoundary}>{errorMessage}</div>
-      ) : null}
-
-      <button type="submit" disabled={isPending}>
-        제출
-      </button>
+      <div className={classes.textareaWrap}>
+        <textarea
+          rows={rows}
+          {...register("msg", {
+            required: "남기실 말은 필수입니다.",
+            onChange: rowsHandler,
+            minLength: {
+              value: 4,
+              message: "최소 4글자 남겨주세요!",
+            },
+          })}
+          placeholder="댓글을 입력해주세요! 욕설이나 비하 댓글을 삭제 될 수 있습니다. 타인에게 상처주는 말은 하지 말아주세요!"
+        />
+        <div className={classes.errorBoundary}>
+          {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
+        </div>
+        <button type="submit" disabled={isPending}>
+          댓글 작성
+        </button>
+      </div>{" "}
     </form>
   );
 }

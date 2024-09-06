@@ -12,22 +12,26 @@
   );
   color: #fff;
   box-shadow: 0px 0px 30px rgba(51, 144, 202, 0.25);
-  border-radius: 33.5px;
+  border-radius: 13px;
 }
 
 .submitButton {
   color: #fff;
-  padding: 1rem 3rem;
-  background: #829ee4;
+  padding: 1rem 1.5rem;
+
+  background: #5d5bf5;
   box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.12);
-  border-radius: 50rem;
-  margin-top: 2rem;
-  font-size: 18px;
+  border-radius: 10px;
+  margin-top: 2em;
+  font-size: 14px;
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: "";
     background: #bdbdbd;
   }
+  // .btns {
+  //   background: red;
+  // }
 }
 
 .closeButton {

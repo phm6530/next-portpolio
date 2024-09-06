@@ -16,5 +16,8 @@ export default function DateCompareToday() {
     isNew: (date: string): boolean => {
       return today.diff(date, "day") < 7;
     },
+    fromNow: (date: string): string => {
+      return dayjs(date).fromNow();
+    },
   };
 }
