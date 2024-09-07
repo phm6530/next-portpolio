@@ -39,8 +39,6 @@ function Radio<T extends HTMLLabelElement>({
   curLabel: string;
   children: ReactNode;
 } & HTMLAttributes<T>) {
-  console.log(selectLabel, curLabel);
-
   return (
     <label
       className={

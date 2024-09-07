@@ -37,7 +37,7 @@ import MegaPhoneIcon from "/public/asset/icon/megaphone.svg";
 import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
 import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
 import DateRange from "@/app/template/_component/DateRange/DateRange";
-import ThumbNail from "@/app/template/_component/thumbNail/thumbNail";
+import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
 
 dayjs.locale("ko");

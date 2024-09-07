@@ -32,7 +32,7 @@ export default function Page() {
   ) => {
     const target = e.currentTarget;
 
-    const ani = gsap.to(target, {
+    gsap.to(target, {
       keyframes: {
         "15%": { y: -200, ease: "power1.out" },
         "30%": { rotation: RandomRotation },

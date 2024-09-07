@@ -1,0 +1,15 @@
+.progressbar {
+  width: 0%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+
+  background: #d7e2ff;
+
+  position: absolute;
+  border-radius: 30px 5rem 5rem 30px;
+}
+
+.maxCnt {
+  background: linear-gradient(270deg, #7595df 0%, #7b6de7 100%);
+}
