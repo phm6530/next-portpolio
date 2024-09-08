@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { fetchDetailResult } from "@/app/_services/client/templateResult";
 import { useState } from "react";
-import { Gender } from "@/types/template";
+import { ageGroupProps, Gender } from "@/types/template";
 
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import SurveyResultBar from "@/app/template/result/[id]/_component/SurveyResultBar";
 import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import ResponseText from "@/app/template/result/[id]/_component/ResponseText";
 
 const FILTER_GENDER = [
   {
@@ -63,9 +64,7 @@ const FILTER_Age = [
 
 export default function SurveyResult({ id }: { id: number }) {
   const [genderGroup, setGenderGroup] = useState<"all" | Gender>("all");
-  const [ageGroup, setAgeGroup] = useState<"all" | 10 | 20 | 30 | 40 | 50 | 60>(
-    "all"
-  );
+  const [ageGroup, setAgeGroup] = useState<ageGroupProps>("all");
 
   const router = useRouter();
 
@@ -107,19 +106,11 @@ export default function SurveyResult({ id }: { id: number }) {
 
     // Age Filter
     const filterAgeHandler = (btnVal: string) => {
-      if (
-        btnVal === "all" ||
-        btnVal === "10" ||
-        btnVal === "20" ||
-        btnVal === "30" ||
-        btnVal === "40" ||
-        btnVal === "50" ||
-        btnVal === "60"
-      ) {
+      if (btnVal === "all" || "10" || "20" || "30" || "40" || "50" || "60") {
         setAgeGroup(
           btnVal === "all"
             ? "all"
-            : (parseInt(btnVal) as 10 | 20 | 30 | 40 | 50 | 60)
+            : (parseInt(btnVal) as Exclude<ageGroupProps, "all">)
         );
       }
     };
@@ -178,39 +169,34 @@ export default function SurveyResult({ id }: { id: number }) {
 
         {/* Test */}
         {questions.map((q, idx) => {
-          //type - 객관식 일때
+          //type - 주관식 일때
           if (q.type === "text") {
-            const filterData = q.values?.filter((e) => {
-              if (genderGroup === "all") {
-                return ageGroup === "all" || e.age === ageGroup;
-              }
-              return (
-                e.gender === genderGroup &&
-                (ageGroup === "all" || e.age === ageGroup)
-              );
-            });
+            const filterData =
+              q.values?.filter((e) => {
+                //성별 전체선택 일떄
+                if (genderGroup === "all")
+                  return ageGroup === "all" || e.age === ageGroup;
+                //특정 성별 선택이후 ageGroup
+                else
+                  return (
+                    e.gender === genderGroup &&
+                    (ageGroup === "all" || e.age === ageGroup)
+                  );
+              }) || [];
 
             return (
-              <div key={idx} className={classes.questionItem}>
-                <QuestionTitle>{q.question}</QuestionTitle>
-                <div>
-                  {filterData && filterData?.length > 0
-                    ? filterData.map((e, txtIdx) => (
-                        <div key={txtIdx}>
-                          {e.value} / {e.gender} {e.age}
-                        </div>
-                      ))
-                    : `${ageGroup}대${
-                        genderGroup === "all"
-                          ? "는 참여자가 없네요.."
-                          : ` ${
-                              genderGroup === "female" ? "여성" : "남성"
-                            }은 참여자가 없네요...`
-                      }`}
-                </div>
-              </div>
+              <ResponseText
+                key={`key-${idx}`}
+                questionTitle={q.question}
+                filterData={filterData}
+                genderGroup={genderGroup}
+                ageGroup={ageGroup}
+              />
             );
-          } else {
+          }
+
+          // 객관식
+          else {
             const cntList =
               q.options?.map((e) => {
                 const femaleGroup = e.user.female;

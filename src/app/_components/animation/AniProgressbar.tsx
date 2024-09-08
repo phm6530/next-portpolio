@@ -14,7 +14,6 @@ export default function AniProgressbar({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Tween | null>(null);
-  const [gender] = trigger;
 
   useGSAP(
     () => {
@@ -28,7 +27,7 @@ export default function AniProgressbar({
         {
           width: `${percent}%`,
           duration: 2,
-          background: maxCnt ? `#7b6de7` : undefined,
+          background: maxCnt ? `#7b6de7` : `#d7e2ff`,
         }
       );
     },

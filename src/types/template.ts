@@ -5,6 +5,8 @@ export type SurveyType = {
   type: "text" | "select";
 };
 
+export type ageGroupProps = "all" | 10 | 20 | 30 | 40 | 50 | 60;
+
 //Template Name
 export type TemplateTypeProps = "survey" | "rank";
 export type IuputBoolean = "1" | "0";

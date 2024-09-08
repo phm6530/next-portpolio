@@ -39,7 +39,11 @@ export default function SurveyResultBar({
 
   return (
     <div className={classes.ResultBarWrap}>
-      <div className={`${classes.label} ${maxCnt && classes.maxCntColor}`}>
+      <div
+        className={`${classes.label} ${
+          maxCnt ? classes.maxCntColor : undefined
+        }`}
+      >
         {maxCnt && <Crown />} {label}
       </div>
       <span className={classes.curCnt}>{curCnt}명</span>

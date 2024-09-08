@@ -12,7 +12,6 @@ import { auth } from "@/auth";
 
 // template List Get
 export async function GET(req: NextRequest) {
-  console.log("test");
   try {
     const searchParams = req.nextUrl.searchParams;
     const pageParams = searchParams.get(QUERY_STRING.PAGE);
