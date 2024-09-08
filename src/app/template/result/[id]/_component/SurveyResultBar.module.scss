@@ -1,0 +1,38 @@
+.ResultBarWrap {
+  background: #f9f9f9;
+  margin-bottom: 1rem;
+  position: relative;
+  padding: 1.5rem;
+  // border-radius: 10px 5rem 5rem 10px;
+  overflow: hidden;
+
+  .curCnt {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+  .perCent {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+  }
+  .label {
+    position: absolute;
+    z-index: 10;
+    color: #26376d;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+  .maxCntColor {
+    color: #fff;
+  }
+}
