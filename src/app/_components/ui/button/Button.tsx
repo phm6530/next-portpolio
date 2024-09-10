@@ -1,6 +1,31 @@
 import Link from "next/link";
 import classes from "./Button.module.scss";
-import { HTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, HtmlHTMLAttributes, ReactNode } from "react";
+import Image from "next/image";
+import DeleteIcon from "/public/asset/icon/close.png";
+import DeleteSvg from "/public/asset/icon/delete.svg";
+
+function noneStyleButton({
+  fontSize,
+  color,
+  children,
+  ...rest
+}: {
+  fontSize?: number;
+  color?: string;
+  children: ReactNode;
+} & HtmlHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      style={{ fontSize, color }}
+      className={classes.noneStyleButton}
+      type="button"
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
 
 function normalButton({
   children,
@@ -14,13 +39,11 @@ function normalButton({
 }
 
 //close
-function closeBtn({
-  children,
-  ...rest
-}: { children: ReactNode } & HTMLAttributes<HTMLDivElement>) {
+function closeBtn({ ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={classes.closeButton} {...rest}>
-      <span>{children}</span>
+      <Image src={DeleteIcon} alt="close" />
+      {/* <DeleteSvg className={classes.deleteIcon} /> */}
     </div>
   );
 }
@@ -61,6 +84,7 @@ interface ButtonProps extends React.FC<{ children: string }> {
   submit: typeof submit;
   closeBtn: typeof closeBtn;
   normalButton: typeof normalButton;
+  noneStyleButton: typeof noneStyleButton;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -71,5 +95,6 @@ Button.moveLink = moveLink;
 Button.submit = submit;
 Button.closeBtn = closeBtn;
 Button.normalButton = normalButton;
+Button.noneStyleButton = noneStyleButton;
 
 export default Button;

@@ -3,6 +3,7 @@ import classes from "./Msg.module.scss";
 import { SetStateAction, useState } from "react";
 import { MessageProps } from "@/app/_components/Comment/CommentSection";
 import ReplyContainer from "@/app/_components/Comment/ReplyContainer";
+import Button from "@/app/_components/ui/button/Button";
 
 export default function CommentContainer({
   comment_id,
@@ -27,27 +28,39 @@ export default function CommentContainer({
   };
 
   return (
-    <div className={classes.commentWrapper}>
-      <MsgItem
-        //commentId만 전달.
-        comment_id={comment_id}
-        userId={comment.user.userId}
-        username={comment.user.username}
-        create_at={comment.create_at}
-        msg={comment.msg}
-        role={comment.user.role}
-      />
-      <div className={classes.commentBtnWrap}>
-        {comment.reply && comment.reply.length > 0 && (
-          <>
-            <button onClick={() => setViewReply((prev) => !prev)}>
-              {viewReply
-                ? "댓글 숨기기"
-                : `댓글보기 (${comment.reply?.length})`}
-            </button>
-          </>
-        )}
-        <button onClick={formHandler}>답글쓰기</button>
+    <>
+      <div className={classes.commentWrapper}>
+        <MsgItem
+          //commentId만 전달.
+          comment_id={comment_id}
+          userId={comment.user.userId}
+          username={comment.user.username}
+          create_at={comment.create_at}
+          msg={comment.msg}
+          role={comment.user.role}
+        />
+        <div className={classes.commentBtnWrap}>
+          {comment.reply && comment.reply.length > 0 && (
+            <>
+              <Button.noneStyleButton
+                onClick={() => setViewReply((prev) => !prev)}
+              >
+                <span style={{ color: "rgb(0, 133, 255)", fontSize: "12px" }}>
+                  {viewReply
+                    ? "댓글 숨기기"
+                    : `댓글보기 (${comment.reply?.length})`}
+                </span>
+              </Button.noneStyleButton>
+            </>
+          )}
+          <Button.noneStyleButton
+            fontSize={12}
+            color={replyIdx === commentIdx ? "red" : undefined}
+            onClick={formHandler}
+          >
+            {replyIdx === commentIdx ? "댓글창 닫기" : "답글쓰기"}
+          </Button.noneStyleButton>
+        </div>
       </div>
       {viewReply && (
         <ReplyContainer
@@ -58,6 +71,6 @@ export default function CommentContainer({
           formHandler={formHandler}
         />
       )}
-    </div>
+    </>
   );
 }

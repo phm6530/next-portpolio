@@ -11,9 +11,9 @@ export default function UserRoleDisplay({
 }) {
   return (
     <div className={classes.userDisplayContainer}>
-      {user_role === "admin" && <UserMarker.Master />}
       {user_role === "anonymous" && <UserMarker.anonymonus />}
       {user_nickname === "anonymous" ? "익명" : user_nickname}
+      {user_role === "admin" && <UserMarker.Master />}
     </div>
   );
 }

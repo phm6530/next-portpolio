@@ -78,6 +78,8 @@ export default function SurveyResult({ id }: { id: number }) {
     notFound();
   }
 
+  console.log(data);
+
   if (data) {
     const { templateResult, templateMeta } = data;
     const {
@@ -106,7 +108,7 @@ export default function SurveyResult({ id }: { id: number }) {
 
     // Age Filter
     const filterAgeHandler = (btnVal: string) => {
-      if (btnVal === "all" || "10" || "20" || "30" || "40" || "50" || "60") {
+      if (["all", "10", "20", "30", "40", "50", "60"].includes(btnVal)) {
         setAgeGroup(
           btnVal === "all"
             ? "all"
@@ -197,15 +199,15 @@ export default function SurveyResult({ id }: { id: number }) {
 
           // 객관식
           else {
+            const targetCnt = (arr: { [key: string]: number }) => {
+              return Object.values(arr).reduce((acc, cur) => acc + +cur, 0);
+            };
+
             const cntList =
               q.options?.map((e) => {
                 const femaleGroup = e.user.female;
                 const maleGroup = e.user.male;
                 const ageGroupKey = ageGroup + "s";
-
-                const targetCnt = (arr: { [key: string]: number }) => {
-                  return Object.values(arr).reduce((acc, cur) => acc + +cur, 0);
-                };
 
                 //성별 + 나이 전체보기
                 if (genderGroup === "all" && ageGroup === "all") {

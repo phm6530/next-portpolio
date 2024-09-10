@@ -11,6 +11,7 @@ import "dayjs/locale/ko";
 import { queryClient } from "@/app/config/queryClient";
 import { useSession } from "next-auth/react";
 import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
+import Button from "@/app/_components/ui/button/Button";
 
 //import
 dayjs.extend(relativeTime);
@@ -81,16 +82,16 @@ export default function MsgItem({
 
   return (
     <div className={classes.MsgWrap}>
-      <div style={{ alignItems: "center", display: "flex" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <UserRoleDisplay user_nickname={username} user_role={role} />
-        <span>{dayjs(create_at).fromNow()}</span>
-
+        <span style={{ marginRight: "20px" }}>
+          {dayjs(create_at).fromNow()}
+        </span>
         {(role === "anonymous" || userId === session?.user.user_id) && (
-          <button type="button" onClick={deleteMessage}>
-            삭제
-          </button>
+          <Button.closeBtn onClick={deleteMessage} />
         )}
       </div>
+      {/* <DeleteSvg className={classes.deleteIcon} /> */}
       <div className={classes.msgContents}>{msg}</div>
     </div>
   );

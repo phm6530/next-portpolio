@@ -25,9 +25,9 @@
 }
 
 //Input Style
-@mixin inputStyles {
+@mixin inputStyles($radius: 5px) {
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: $radius;
   font-size: 14px;
   padding: 1rem;
   &:focus {
@@ -45,6 +45,13 @@
 
 @mixin marginAuto($where) {
   #{$where}: auto;
+}
+
+@mixin FouceInput($color: #7975e5, $borderWeight) {
+  &:focus {
+    border: $borderWeight solid darken($color, 10);
+    background: #f3f0ff;
+  }
 }
 
 //Template Type

@@ -9,26 +9,39 @@
 
 # PACKAGE
 
-- Client
-  npm i react-hook-form<br>
-  npm i zod @hookform/resolvers<br>
-  npm i @tanstack@query<br>
-  npm i axios<br>
-  npm i sass<br>
-  npm i dayjs<br>
-  npm i zustand
+### Client
 
-  - template_key 공유에 사용<br>
-    npm install @svgr/webpack --save-dev Svg 사용
+```bash
+npm i react-hook-form
+npm i zod @hookform/resolvers
+npm i @tanstack/query
+npm i axios
+npm i sass
+npm i dayjs
+npm i zustand
+```
 
-- Server
-  npm i next-auth<br>
-  npm i mysql2<br>
-  npm i @types/multer & multer<br>
-  npm install nodemailer <br><br>
-- 암호화
-  npm install bcrypt<br>
+save-dev Svg 사용
+
+```bash
+  npm install @svgr/webpack
+```
+
+### Server
+
+```bash
+  npm i next-auth
+  npm i mysql2
+  npm i @types/multer , multer
+  npm install nodemailer
+```
+
+### 암호화
+
+```bash
+  npm install bcrypt
   npm install @types/bcrypt --save-dev
+```
 
 # 진척도
 
@@ -77,3 +90,7 @@
 ~ 9/10
 
 - 최종 완료 목표
+
+```
+
+```

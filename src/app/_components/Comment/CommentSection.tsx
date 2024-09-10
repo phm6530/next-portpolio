@@ -8,6 +8,7 @@ import { userProps } from "@/types/user";
 import { withFetch } from "@/app/lib/helperClient";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import NotFoundComponent from "@/app/_components/NotFoundComponent";
 
 export type MessageProps = {
   //각 Id로 분기처리
@@ -48,30 +49,35 @@ export default function CommentSection({ templateId }: { templateId: number }) {
     return (
       <>
         {/* Reply */}
-        <span>댓글 {data.length} 개</span>
+        <div className={classes.replyCount}>
+          댓글 <span>{data.length}</span> 개
+        </div>
 
         {/* Msg - Form */}
         <MsgForm template_id={templateId} />
 
-        {data.length > 0
-          ? data.map((comment, CommentIdx) => {
-              return (
-                <div
-                  className={classes.commentContainer}
-                  key={`comment-${CommentIdx}`}
-                >
-                  {/* Comment */}
-                  <CommentContainer
-                    comment_id={comment.comment_id}
-                    comment={comment}
-                    commentIdx={CommentIdx}
-                    replyIdx={replyIdx}
-                    setReplyIdx={setReplyIdx}
-                  />
-                </div>
-              );
-            })
-          : "댓글이 없습니다"}
+        {data.length > 0 ? (
+          data.map((comment, CommentIdx) => {
+            return (
+              <div
+                className={classes.commentContainer}
+                key={`comment-${CommentIdx}`}
+              >
+                {/* Comment */}
+                <CommentContainer
+                  comment_id={comment.comment_id}
+                  comment={comment}
+                  commentIdx={CommentIdx}
+                  replyIdx={replyIdx}
+                  setReplyIdx={setReplyIdx}
+                />
+              </div>
+            );
+          })
+        ) : (
+          // 댓글 없을때
+          <NotFoundComponent.reply />
+        )}
       </>
     );
   }

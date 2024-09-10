@@ -16,10 +16,6 @@ import Button from "@/app/_components/ui/button/Button";
 
 import classes from "./surveyPage.module.scss";
 import TemplateCractor from "@/app/_components/Cractor/TemplateCractor";
-import { commentMetadata } from "@/meta/staticMetaData";
-
-//메타설정
-export const metadata = commentMetadata;
 
 export default async function surveyPage({
   searchParams,
