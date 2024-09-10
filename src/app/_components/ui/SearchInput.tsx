@@ -43,9 +43,7 @@ export default function SearchInput({ search }: { search?: string }) {
       {curSearch && (
         <div className={classes.curSearch}>
           <span>{curSearch}</span>
-          <Button.closeBtn onClick={clearSearch}>
-            <Image src={DeleteIcon} alt="close" />
-          </Button.closeBtn>
+          <Button.closeBtn onClick={clearSearch} />
         </div>
       )}
 

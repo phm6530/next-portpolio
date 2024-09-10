@@ -10,7 +10,7 @@
 # PACKAGE
 
 - Client
-  npm i react-hook-form<br>
+  ` npm i react-hook-form<br>
   npm i zod @hookform/resolvers<br>
   npm i @tanstack@query<br>
   npm i axios<br>
@@ -19,9 +19,10 @@
   npm i zustand
 
   - template_key 공유에 사용<br>
-    npm install @svgr/webpack --save-dev Svg 사용
+    npm install @svgr/webpack --save-dev Svg 사용`
 
 - Server
+  `
   npm i next-auth<br>
   npm i mysql2<br>
   npm i @types/multer & multer<br>
@@ -29,6 +30,7 @@
 - 암호화
   npm install bcrypt<br>
   npm install @types/bcrypt --save-dev
+  `
 
 # 진척도
 

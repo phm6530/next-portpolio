@@ -47,6 +47,9 @@ button {
     @include font-color-hover();
   }
 }
+input::placeholder {
+  font-family: "Pretendard Variable";
+}
 
 input:focus {
   outline: none;

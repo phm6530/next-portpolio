@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEY, QUERY_STRING } from "@/types/constans";
 import { useSearchParams } from "next/navigation";
-import ErrorComponent from "@/app/_components/ErrorComponent";
+import NotFoundComponent from "@/app/_components/NotFoundComponent";
 
 export default function SurveyList({
   page,
@@ -52,7 +52,7 @@ export default function SurveyList({
                 })}
               </div>
             ) : keyword ? (
-              <ErrorComponent.NotFoundSearch keyword={keyword as string} />
+              <NotFoundComponent.search keyword={keyword as string} />
             ) : (
               "없네요"
             )}

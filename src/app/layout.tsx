@@ -4,6 +4,10 @@ import ProviderContext from "@/app/_provider";
 import { auth } from "@/auth";
 
 import "@/styles/_styles.scss";
+import { commentMetadata } from "@/meta/staticMetaData";
+
+//전역 Meta
+export const metadata = commentMetadata;
 
 export default async function RootLayout({
   children,

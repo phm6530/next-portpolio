@@ -1,10 +1,7 @@
 import Grid from "@/app/_components/ui/Grid";
 import classes from "./SelectTemplate.module.scss";
-import { commentMetadata } from "@/meta/staticMetaData";
-import SelectTemplateList from "@/app/template/made/SelectTemplateList";
 
-//정적 메타 데이터
-export const metadata = commentMetadata;
+import SelectTemplateList from "@/app/template/made/SelectTemplateList";
 
 export default function templatePage() {
   return (
