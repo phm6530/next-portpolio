@@ -21,18 +21,27 @@ npm i dayjs
 npm i zustand
 ```
 
-- template_key 공유에 사용<br>
-  npm install @svgr/webpack --save-dev Svg 사용`
+save-dev Svg 사용
+
+```bash
+  npm install @svgr/webpack
+```
 
 - Server
-  npm i next-auth<br>
-  npm i mysql2<br>
-  npm i @types/multer & multer<br>
-  npm install nodemailer <br><br>
+
+```bash
+  npm i next-auth
+  npm i mysql2
+  npm i @types/multer , multer
+  npm install nodemailer
+```
+
 - 암호화
-  npm install bcrypt<br>
+
+```bash
+  npm install bcrypt
   npm install @types/bcrypt --save-dev
-  `
+```
 
 # 진척도
 
