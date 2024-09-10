@@ -27,7 +27,7 @@ save-dev Svg 사용
   npm install @svgr/webpack
 ```
 
-- Server
+### Server
 
 ```bash
   npm i next-auth
@@ -36,7 +36,7 @@ save-dev Svg 사용
   npm install nodemailer
 ```
 
-- 암호화
+### 암호화
 
 ```bash
   npm install bcrypt
