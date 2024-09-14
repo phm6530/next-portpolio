@@ -64,7 +64,6 @@ export async function DELETE(
 ) {
   return withRequest(async () => {
     const session = await auth();
-    console.log(session);
 
     if (!params.detail[0]) {
       throw new ApiError("필요한 정보가 누락되었습니다.", 403);

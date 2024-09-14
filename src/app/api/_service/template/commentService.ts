@@ -134,8 +134,6 @@ export async function getCommentList(templateId: number) {
     }) as Promise<GetCommentListProps[]>;
   });
 
-  console.log(data);
-
   //구조 변경
   const comment = data.reduce<MessageProps[]>((acc, cur) => {
     const find = acc.find((e) => e.comment_id === cur.comment_id);

@@ -1,0 +1,11 @@
+@import "mixin";
+
+.textarea {
+  outline: none;
+  @include FouceInput(#7975e5, 1px);
+  border: 0;
+  border-radius: 1rem 1rem 0 0;
+  grid-column: 1 / -1;
+  padding: 20px;
+  border-bottom: 1px solid $border-box-color;
+}

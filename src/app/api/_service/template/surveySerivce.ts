@@ -82,8 +82,6 @@ export async function getSurveyDetail(
     },
   };
 
-  console.log(metaData, "meta");
-
   const getQuestions = () => {
     const arr: GetSurveyQuestions["questions"] = [];
 

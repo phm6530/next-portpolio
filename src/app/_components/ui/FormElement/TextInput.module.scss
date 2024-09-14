@@ -1,0 +1,7 @@
+@import "mixin";
+
+.textInput {
+  @include inputStyles(10px);
+  border: 1px solid $border-box-color;
+  @include FouceInput(#7975e5, 1px);
+}

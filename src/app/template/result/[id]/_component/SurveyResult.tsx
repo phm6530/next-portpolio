@@ -78,8 +78,6 @@ export default function SurveyResult({ id }: { id: number }) {
     notFound();
   }
 
-  console.log(data);
-
   if (data) {
     const { templateResult, templateMeta } = data;
     const {
@@ -117,21 +115,34 @@ export default function SurveyResult({ id }: { id: number }) {
       }
     };
 
+    const transferGenderString = (group: Gender | null) => {
+      return group === "female"
+        ? "여성"
+        : group === "male"
+        ? "남성"
+        : undefined;
+    };
+
     return (
       <>
         <div className={classes.summeryDetail}>
           <ThumbNail thumbnail={thumbnail} />
-          <TemplateStatus
-            dateRange={[start_date, end_date]}
-            createdAt={created_at}
-          />
-          <TemplateTitle>{title}</TemplateTitle>
-          <div>참여자 : {templateMeta.user_cnt || 0} 명</div>
-
+          <div className={classes.summary}>
+            <TemplateStatus
+              dateRange={[start_date, end_date]}
+              createdAt={created_at}
+            />
+            <TemplateTitle>{title}</TemplateTitle>
+            <div>참여자 : {templateMeta.user_cnt || 0} 명</div>
+          </div>
           <div>
             {templateMeta.user_cnt < 10
               ? "집계하기엔 아직 참여자가 너무 적습니다."
-              : `이 ${templateName}은/는 ${templateMeta.age_group}대 ${templateMeta.gender_group}이 가장 많이 참여하였습니다.`}
+              : `이 ${templateName}은/는 ${
+                  templateMeta.age_group
+                }대 ${transferGenderString(
+                  templateMeta.gender_group
+                )}이 가장 많이 참여하였습니다.`}
           </div>
         </div>
         <button onClick={() => router.push(`/template/${templateType}/${id}`)}>
@@ -169,110 +180,102 @@ export default function SurveyResult({ id }: { id: number }) {
           })}
         </div>
 
-        {/* Test */}
-        {questions.map((q, idx) => {
-          //type - 주관식 일때
-          if (q.type === "text") {
-            const filterData =
-              q.values?.filter((e) => {
-                //성별 전체선택 일떄
-                if (genderGroup === "all")
-                  return ageGroup === "all" || e.age === ageGroup;
-                //특정 성별 선택이후 ageGroup
-                else
-                  return (
-                    e.gender === genderGroup &&
-                    (ageGroup === "all" || e.age === ageGroup)
-                  );
-              }) || [];
+        {/* Text */}
 
-            return (
-              <ResponseText
-                key={`key-${idx}`}
-                questionTitle={q.question}
-                filterData={filterData}
-                genderGroup={genderGroup}
-                ageGroup={ageGroup}
-              />
-            );
-          }
+        <div className={classes.questionListWrapper}>
+          {questions.map((q, idx) => {
+            //type - 주관식 일때
+            if (q.type === "text") {
+              return (
+                <ResponseText
+                  key={`key-${idx}`}
+                  questionTitle={q.question}
+                  answers={q.values!}
+                  genderGroup={genderGroup}
+                  ageGroup={ageGroup}
+                  questionId={q.id}
+                  templateId={templateMeta.id}
+                />
+              );
+            }
 
-          // 객관식
-          else {
-            const targetCnt = (arr: { [key: string]: number }) => {
-              return Object.values(arr).reduce((acc, cur) => acc + +cur, 0);
-            };
+            // 객관식
+            else {
+              const targetCnt = (arr: { [key: string]: number }) => {
+                return Object.values(arr).reduce((acc, cur) => acc + +cur, 0);
+              };
 
-            const cntList =
-              q.options?.map((e) => {
-                const femaleGroup = e.user.female;
-                const maleGroup = e.user.male;
-                const ageGroupKey = ageGroup + "s";
+              const cntList =
+                q.options?.map((e) => {
+                  const femaleGroup = e.user.female;
+                  const maleGroup = e.user.male;
+                  const ageGroupKey = ageGroup + "s";
 
-                //성별 + 나이 전체보기
-                if (genderGroup === "all" && ageGroup === "all") {
-                  const femaleCnt = targetCnt(e.user.female);
-                  const maleCnt = targetCnt(e.user.male);
-                  return +maleCnt + +femaleCnt;
-                }
+                  //성별 + 나이 전체보기
+                  if (genderGroup === "all" && ageGroup === "all") {
+                    const femaleCnt = targetCnt(e.user.female);
+                    const maleCnt = targetCnt(e.user.male);
+                    return +maleCnt + +femaleCnt;
+                  }
 
-                // 나이 특정그룹
-                else if (ageGroup !== "all") {
-                  return genderGroup === "all"
-                    ? +femaleGroup[ageGroupKey] + +maleGroup[ageGroupKey]
-                    : +e.user[genderGroup][ageGroupKey];
-                }
+                  // 나이 특정그룹
+                  else if (ageGroup !== "all") {
+                    return genderGroup === "all"
+                      ? +femaleGroup[ageGroupKey] + +maleGroup[ageGroupKey]
+                      : +e.user[genderGroup][ageGroupKey];
+                  }
 
-                // 성별 특정
-                else if (genderGroup !== "all") {
-                  const genderData = e.user[genderGroup];
-                  return ageGroup === "all"
-                    ? targetCnt(genderData)
-                    : +e.user[genderGroup][ageGroupKey];
-                }
-              }) || [];
+                  // 성별 특정
+                  else if (genderGroup !== "all") {
+                    const genderData = e.user[genderGroup];
+                    return ageGroup === "all"
+                      ? targetCnt(genderData)
+                      : +e.user[genderGroup][ageGroupKey];
+                  }
+                }) || [];
 
-            //최고값
-            const maxCnt = Math.max(...(cntList as number[]));
+              //최고값
+              const maxCnt = Math.max(...(cntList as number[]));
 
-            return (
-              <div key={idx} className={classes.questionItem}>
-                {/* Select */}
-                <QuestionTitle>{q.question}</QuestionTitle>
-                {q.options?.map((e, idx) => {
-                  //option 선택자 수
-                  const cnt = cntList[idx] || 0;
-                  return (
-                    <div key={idx}>
-                      {e.picture && (
-                        <div>
-                          <Image
-                            src={e.picture}
-                            layout="responsive"
-                            width={16}
-                            height={9}
-                            style={{ maxWidth: 700, objectFit: "cover" }}
-                            alt="preview"
-                            priority
-                          />
-                        </div>
-                      )}
+              return (
+                <div key={idx} className={classes.questionItem}>
+                  {/* Select */}
+                  <QuestionTitle>{q.question}</QuestionTitle>
+                  {q.options?.map((e, idx) => {
+                    //option 선택자 수
+                    const cnt = cntList[idx] || 0;
+                    return (
+                      <div key={idx}>
+                        {e.picture && (
+                          <div>
+                            <Image
+                              src={e.picture}
+                              layout="responsive"
+                              width={16}
+                              height={9}
+                              style={{ maxWidth: 700, objectFit: "cover" }}
+                              alt="preview"
+                              priority
+                            />
+                          </div>
+                        )}
 
-                      {/* Percent */}
-                      <SurveyResultBar
-                        triggerContents={[genderGroup, ageGroup]}
-                        label={e.label}
-                        curCnt={cnt}
-                        allCnt={templateMeta.user_cnt}
-                        maxCnt={maxCnt === 0 ? false : maxCnt === +cnt}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          }
-        })}
+                        {/* Percent */}
+                        <SurveyResultBar
+                          triggerContents={[genderGroup, ageGroup]}
+                          label={e.label}
+                          curCnt={cnt}
+                          allCnt={templateMeta.user_cnt}
+                          maxCnt={maxCnt === 0 ? false : maxCnt === +cnt}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
+          })}
+        </div>
       </>
     );
   }

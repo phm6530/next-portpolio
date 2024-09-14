@@ -1,15 +1,7 @@
 import { ApiError } from "@/app/lib/apiErrorHandler";
 import { TemplateTypeProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
-import nodemailer from "nodemailer";
-
-const myMail = nodemailer.createTransport({
-  service: process.env.MAIL_SERVICE,
-  auth: {
-    user: process.env.MAIL_ID,
-    pass: process.env.MAIL_PASSWORD,
-  },
-});
+import myMail from "@/app/config/mailConfig";
 
 export const authMail = async ({ to, pin }: { to: string; pin: string }) => {
   try {

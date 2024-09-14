@@ -13,7 +13,6 @@ const pool = mysql.createPool({
 export const dbConnectTest = async () => {
   try {
     const db = await pool.getConnection();
-    console.log("연결완료");
     db.release();
   } catch (error) {
     if (error instanceof Error) {

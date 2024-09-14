@@ -1,16 +1,99 @@
+@import "mixin";
+
 .questionItem {
-  margin-bottom: 2rem;
+  // margin-bottom: 2rem;
 }
 
 .responseContainer {
-  padding: 1rem;
-  border: 1px solid rgb(218, 218, 218);
   border-radius: 10px;
   line-height: 1.4rem;
-  margin-bottom: 1rem;
 }
 
 .anonymousResponse {
+  background: #ffffff;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+  min-width: 50px;
+  margin: 5px 0;
+  line-height: 1.6rem;
+  font-size: 15px;
+  border-radius: 14px;
+  word-break: keep-all;
+  position: relative;
+  transform: translateY(-3px);
+  &::after {
+    display: block;
+    content: "";
+    width: 15px;
+    height: 15px;
+    bottom: calc(100% - 7px);
+    color: rgb(231, 231, 231);
+    background: #fff;
+    transform: rotate(45deg);
+    border-left: 1px solid;
+    border-top: 1px solid;
+    position: absolute;
+  }
+}
+
+.iconWrap {
+  border-radius: 5rem;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  border: 3px solid rgb(226, 226, 226);
+  margin-right: 10px;
+}
+
+.textQuestionList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // display: grid;
+  // grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding-top: 15px;
+  justify-items: start;
 }
 .anonymous {
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  .age {
+    display: inline-block;
+    font-size: 14px;
+    margin-right: 7px;
+  }
+  .male {
+    color: $male-color;
+  }
+  .female {
+    color: $female-color;
+  }
+}
+
+.moreButtonWrap {
+  display: flex;
+  padding: 10px 0;
+  font-size: 14px;
+  // border: 3px dotted $border-box-color;
+  margin: 20px 0;
+  border-radius: 1rem;
+
+  @include btn-hover(#8f33da14);
+  color: rgb(142, 50, 218);
+  justify-content: center;
+  cursor: pointer;
+}
+
+.noParticipants {
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
 }

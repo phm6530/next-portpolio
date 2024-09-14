@@ -144,8 +144,6 @@ export default function SurveyTemplateDetail({
       user_role,
     } = data;
 
-    console.log(data);
-
     //Submit
     const onSubmitHandler = async (data: Record<string, string>) => {
       // 둘 다 true면

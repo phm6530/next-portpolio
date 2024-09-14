@@ -3,7 +3,6 @@ import SurveyList from "@/app/template/_component/survey/surveyList";
 import PageTitle from "@/app/_components/ui/PageTitle";
 import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 import SearchInput from "@/app/_components/ui/SearchInput";
-import HotKeyword from "@/app/template/_component/HotKeyWords";
 
 import { queryClient } from "@/app/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";

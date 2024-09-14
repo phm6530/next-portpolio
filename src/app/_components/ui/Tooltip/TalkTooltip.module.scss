@@ -24,7 +24,7 @@
     margin-right: 10px;
   }
   &:after {
-    @include afterTriangle($size: 30px, $left: 50%);
+    @include afterTriangle($size: 30px, $left: 50%, $bottom: -24px);
     font-size: 18px;
   }
 }

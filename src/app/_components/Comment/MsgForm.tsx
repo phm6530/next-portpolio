@@ -42,7 +42,7 @@ export default function MsgForm({
       reset(); //폼 초기화
 
       queryClient.invalidateQueries({
-        queryKey: ["comment"],
+        queryKey: ["comment", template_id],
       });
     },
   });

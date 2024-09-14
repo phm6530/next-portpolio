@@ -24,11 +24,7 @@
   border-radius: 10px;
   margin-top: 2em;
   font-size: 14px;
-  &:disabled {
-    opacity: 0.3;
-    cursor: "";
-    background: #bdbdbd;
-  }
+  @include disabledButton();
   // .btns {
   //   background: red;
   // }
@@ -41,7 +37,7 @@
 .noneStyleButton {
   background: transparent;
   padding: 0;
-  display: flex;
+  isplay: flex;
   align-items: center;
   svg {
     width: 10px;
@@ -70,4 +66,14 @@
   border-radius: 1rem;
   opacity: 0.5;
   height: auto !important;
+}
+
+.solidButton {
+  padding: 1rem 2rem;
+  border-radius: 7px;
+  font-size: 12px;
+  display: inline-block;
+  color: #fff;
+  @include btn-hover(#592bc4);
+  @include disabledButton();
 }

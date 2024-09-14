@@ -1,9 +1,29 @@
 import Link from "next/link";
 import classes from "./Button.module.scss";
-import { HTMLAttributes, HtmlHTMLAttributes, ReactNode } from "react";
+import {
+  CSSProperties,
+  HTMLAttributes,
+  HtmlHTMLAttributes,
+  ReactNode,
+} from "react";
 import Image from "next/image";
 import DeleteIcon from "/public/asset/icon/close.png";
-import DeleteSvg from "/public/asset/icon/delete.svg";
+
+function solid({
+  style,
+  children,
+  disabled,
+}: {
+  style: CSSProperties;
+  children: string;
+  disabled?: boolean;
+}) {
+  return (
+    <button style={style} disabled={disabled} className={classes.solidButton}>
+      {children}
+    </button>
+  );
+}
 
 function noneStyleButton({
   fontSize,
@@ -85,6 +105,7 @@ interface ButtonProps extends React.FC<{ children: string }> {
   closeBtn: typeof closeBtn;
   normalButton: typeof normalButton;
   noneStyleButton: typeof noneStyleButton;
+  solid: typeof solid;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -96,5 +117,6 @@ Button.submit = submit;
 Button.closeBtn = closeBtn;
 Button.normalButton = normalButton;
 Button.noneStyleButton = noneStyleButton;
+Button.solid = solid;
 
 export default Button;

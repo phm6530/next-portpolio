@@ -59,7 +59,7 @@ export default async function resultPage({
 
   //댓글리스트임
   await queryClient.prefetchQuery({
-    queryKey: ["comment"],
+    queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(
