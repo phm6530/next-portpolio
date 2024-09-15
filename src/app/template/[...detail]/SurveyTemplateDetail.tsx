@@ -9,6 +9,7 @@ import { GetSurveyDetailProps } from "@/types/templateSurvey";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { FormProvider, useForm } from "react-hook-form";
+import { BASE_URL } from "@/config/base";
 
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import DateCompareToday from "@/util/DateCompareToday";
@@ -97,16 +98,13 @@ export default function SurveyTemplateDetail({
   >({
     mutationFn: (formData) =>
       withFetch(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        return fetch(`${BASE_URL}/api/template/${templateType}/${surveyId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
       }),
 
     onSuccess: () => {

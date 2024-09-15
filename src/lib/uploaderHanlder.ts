@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/config/base";
 export const imgUploader = async (
   pathSegment: string,
   file: File,
@@ -18,7 +19,7 @@ export const imgUploader = async (
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/${pathSegment}/${template_key}`,
+    `${BASE_URL}/api/upload/${pathSegment}/${template_key}`,
     {
       method: "POST",
       body: formData,

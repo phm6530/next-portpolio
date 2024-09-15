@@ -2,6 +2,7 @@ import { ApiError } from "@/util/apiErrorHandler";
 import { TemplateTypeProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import mailConfig from "@/config/mailConfig";
+import { BASE_URL } from "@/config/base";
 
 export const authMail = async ({ to, pin }: { to: string; pin: string }) => {
   try {
@@ -45,8 +46,8 @@ export const sendEmail = async (
   pin: AddSurveyFormProps["access_pin"]
 ) => {
   try {
-    const adminUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/template/admin/${template_key}`;
-    const currentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/template/${template}/${anonymouseId}`;
+    const adminUrl = `${BASE_URL}/template/admin/${template_key}`;
+    const currentUrl = `${BASE_URL}/template/${template}/${anonymouseId}`;
 
     // 이메일 옵션 정의
     const mailOptions = {

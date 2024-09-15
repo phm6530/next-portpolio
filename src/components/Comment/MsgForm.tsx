@@ -8,6 +8,7 @@ import { withFetch } from "@/util/clientUtil";
 import { queryClient } from "@/config/queryClient";
 import { useSession } from "next-auth/react";
 import CommentTextArea from "@/components/Comment/CommentTextArea";
+import { BASE_URL } from "@/config/base";
 
 export default function MsgForm({
   template_id,
@@ -30,7 +31,7 @@ export default function MsgForm({
   const { mutate, isPending } = useMutation({
     mutationFn: (data) =>
       withFetch(async () => {
-        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/comment`, {
+        return fetch(`${BASE_URL}/api/comment`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

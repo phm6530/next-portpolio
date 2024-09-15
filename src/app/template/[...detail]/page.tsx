@@ -129,6 +129,8 @@ export default async function Page({
               thumbnail={thumbnail}
               title={title}
               templateStatus={templateStatus}
+              templateType={templateType}
+              templateId={id}
             />
           </Grid.smallCenter>
         );

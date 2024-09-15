@@ -11,7 +11,7 @@ import SurveyList from "@/app/template/made/[templateType]/_component/Survey/Sur
 import QuestionAddController from "@/app/template/made/[templateType]/_component/Survey/QuestionAddController";
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { useEffect, useState } from "react";
-
+import { BASE_URL } from "@/config/base";
 import dayjs from "dayjs";
 
 import useStore from "@/store/store";
@@ -107,7 +107,7 @@ export default function SurveyPage({
   >({
     mutationFn: (data) =>
       withFetch(async () => {
-        return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/template`, {
+        return fetch(`${BASE_URL}/api/template`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

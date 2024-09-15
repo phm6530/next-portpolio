@@ -8,6 +8,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import { withFetch } from "@/util/clientUtil";
+import { BASE_URL } from "@/config/base";
 
 type FilterDataProps = {
   gender: Gender;
@@ -22,6 +23,7 @@ export default function ResponseText({
   ageGroup,
   questionId,
   templateId,
+  responseCnt,
 }: {
   questionTitle: string;
   answers: FilterDataProps[];
@@ -29,11 +31,13 @@ export default function ResponseText({
   ageGroup: ageGroupProps;
   questionId: number;
   templateId: number;
+  responseCnt: number;
 }) {
   const [allResponses, setAllResponses] = useState<FilterDataProps[]>(
     answers || []
   );
-  console.log(allResponses);
+
+  const [touched, setTouched] = useState<boolean>(false);
 
   // 필터링 로직을 useMemo로 최적화
   const filteredData = useMemo(() => {
@@ -53,18 +57,25 @@ export default function ResponseText({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isPending,
   } = useInfiniteQuery<{ results: FilterDataProps[]; nextPage: number | null }>(
     {
       queryKey: [QUERY_KEY.QUESTION_TEXT, questionId],
       queryFn: ({ pageParam }) => {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/result/${templateId}/${questionId}/${pageParam}`;
+        const url = `${BASE_URL}/api/result/${templateId}/${questionId}/${pageParam}`;
         return withFetch(() => fetch(url));
       },
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? false, // 다음 페이지 결정
+      getNextPageParam: (lastPage) => {
+        return lastPage.nextPage || null;
+      }, // 다음 페이지 결정
       initialPageParam: 2, // 첫번째는 초기데이터에서 가져오도록 하였음
       enabled: false,
     }
   );
+
+  console.log("isFetchingNextPage", isFetchingNextPage);
+
+  const touchedView = touched && !hasNextPage;
 
   // 새로운 데이터가 추가될 때 allResponses에 병합
   useEffect(() => {
@@ -116,10 +127,21 @@ export default function ResponseText({
           )}
         </div>
       )}
-      {!hasNextPage && (
-        <div className={classes.moreButtonWrap} onClick={() => fetchNextPage()}>
-          {isFetchingNextPage ? "로딩 중..." : "+ 10개 더보기"}
-        </div>
+      {responseCnt > 10 && (
+        <>
+          {!touchedView && (
+            <div
+              className={classes.moreButtonWrap}
+              onClick={() => {
+                setTouched(true);
+
+                fetchNextPage();
+              }}
+            >
+              {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

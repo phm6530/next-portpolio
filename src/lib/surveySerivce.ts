@@ -1,6 +1,7 @@
 import { withFetch } from "@/util/clientUtil";
 import { QUERY_STRING } from "@/types/constans";
 import { GetTemplateMetaLists, TemplateTypeProps } from "@/types/template";
+import { BASE_URL } from "@/config/base";
 
 //get-List
 export function fetchList(
@@ -22,12 +23,11 @@ export function fetchList(
       queryParams.append(QUERY_STRING.SEARCH, search);
     }
 
-    return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/template?${queryParams}`,
-      {
-        cache: "no-cache",
-      }
-    );
+    const tset = await fetch(`${BASE_URL}/api/template?${queryParams}`, {
+      cache: "no-cache",
+    });
+
+    return tset;
   });
 }
 
@@ -37,12 +37,8 @@ export function fetchTemplateDetail<T>(
   id: number
 ): Promise<T> {
   return withFetch<T>(async () => {
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    return fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${id}`,
-      {
-        cache: "no-cache",
-      }
-    );
+    return fetch(`${BASE_URL}/api/template/${templateType}/${id}`, {
+      cache: "no-cache",
+    });
   });
 }

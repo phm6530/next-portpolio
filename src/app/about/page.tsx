@@ -1,5 +1,6 @@
 import Grid from "@/components/ui/Grid";
 import { revalidateTag } from "next/cache";
+import { BASE_URL } from "@/config/base";
 
 export default async function AboutPage() {
   async function serverAction() {
@@ -7,7 +8,7 @@ export default async function AboutPage() {
     revalidateTag("hitme");
   }
 
-  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/test`, {
+  await fetch(`${BASE_URL}/api/test`, {
     headers: {
       "x-id": "request_1",
     },

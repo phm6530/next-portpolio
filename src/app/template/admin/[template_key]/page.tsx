@@ -1,13 +1,14 @@
 import CommentSection, {
   MessageProps,
-} from "@/app/_components/Comment/CommentSection";
-import { fetchDetailResult } from "@/app/_services/client/templateResult";
+} from "@/components/Comment/CommentSection";
+import { fetchDetailResult } from "@/lib/templateResult";
 import { queryClient } from "@/config/queryClient";
 import { withFetch } from "@/util/clientUtil";
 import { withConnection } from "@/util/server/serverUtill";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import { auth } from "@/auth";
+import { BASE_URL } from "@/config/base";
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { RowDataPacket } from "mysql2";
@@ -39,12 +40,9 @@ export default async function adminResult({
     queryKey: ["comment"],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
-          {
-            cache: "no-cache",
-          }
-        );
+        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
+          cache: "no-cache",
+        });
       }),
   });
   const { template } = prefetchData.templateMeta;

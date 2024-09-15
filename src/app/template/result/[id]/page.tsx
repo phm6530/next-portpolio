@@ -11,9 +11,9 @@ import CommentSection, {
 } from "@/components/Comment/CommentSection";
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import AdminController from "@/app/template/admin/_component/AdminController";
-import TemplatePending from "@/components/templateUtill/TemplatePending";
 import DateCompareToday from "@/util/DateCompareToday";
 import Grid from "@/components/ui/Grid";
+import { BASE_URL } from "@/config/base";
 
 interface TemplateData {
   templateMeta: GetTemplateItemProps;
@@ -62,12 +62,9 @@ export default async function resultPage({
     queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
-          {
-            cache: "no-cache",
-          }
-        );
+        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
+          cache: "no-cache",
+        });
       }),
   });
 
@@ -79,31 +76,31 @@ export default async function resultPage({
   const dayCompare = DateCompareToday();
 
   //template Gard
-  if (
-    !(session?.user.user_id !== user_id) ||
-    !(session?.user.role === "admin")
-  ) {
-    if (dateRange.every((e) => e !== null)) {
-      const [start, end] = dateRange;
+  // if (
+  //   !(session?.user.user_id !== user_id) ||
+  //   !(session?.user.role === "admin")
+  // ) {
+  //   if (dateRange.every((e) => e !== null)) {
+  //     const [start, end] = dateRange;
 
-      const templateStatus = dayCompare.isBefore(start)
-        ? "pending"
-        : dayCompare.isAfter(end)
-        ? "after"
-        : (null as never);
+  //     const templateStatus = dayCompare.isBefore(start)
+  //       ? "pending"
+  //       : dayCompare.isAfter(end)
+  //       ? "after"
+  //       : (null as never);
 
-      if (templateStatus) {
-        return (
-          <TemplatePending
-            dateRange={dateRange}
-            thumbnail={thumbnail}
-            title={title}
-            templateStatus={templateStatus}
-          />
-        );
-      }
-    }
-  }
+  //     if (templateStatus) {
+  //       return (
+  //         <TemplatePending
+  //           dateRange={dateRange}
+  //           thumbnail={thumbnail}
+  //           title={title}
+  //           templateStatus={templateStatus}
+  //         />
+  //       );
+  //     }
+  //   }
+  // }
 
   return (
     <>

@@ -2,17 +2,23 @@
 import Image from "next/image";
 import classes from "./TemplateComponent.module.scss";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/button/Button";
+import { TemplateTypeProps } from "@/types/template";
 
 export default function TemplatePending({
   dateRange,
   thumbnail,
   title,
   templateStatus,
+  templateType,
+  templateId,
 }: {
   dateRange: [string, string];
   thumbnail: string | null;
   title: string;
   templateStatus: "pending" | "after";
+  templateType: TemplateTypeProps;
+  templateId: string;
 }) {
   const router = useRouter();
 
@@ -36,7 +42,11 @@ export default function TemplatePending({
       <p>{templateStatus === "after" && "종료되었습니다."}</p>
       {templateStatus === "after" && (
         <>
-          <button>결과보기</button>
+          <Button.submit
+            onClick={() => router.push(`/template/result/${templateId}`)}
+          >
+            결과보기
+          </Button.submit>
         </>
       )}
       <button onClick={() => router.replace("/template")}>

@@ -15,6 +15,7 @@ import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import SurveyResultBar from "@/app/template/result/[id]/_component/SurveyResultBar";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import ResponseText from "@/app/template/result/[id]/_component/ResponseText";
+import Button from "@/components/ui/button/Button";
 
 const FILTER_GENDER = [
   {
@@ -83,6 +84,7 @@ export default function SurveyResult({ id }: { id: number }) {
     const {
       template: templateType,
       title,
+      description,
       thumbnail,
       start_date,
       end_date,
@@ -126,28 +128,42 @@ export default function SurveyResult({ id }: { id: number }) {
     return (
       <>
         <div className={classes.summeryDetail}>
-          <ThumbNail thumbnail={thumbnail} />
+          <div style={{ position: "relative" }}>
+            <div className={classes.Badge}>결과페이지</div>
+            <ThumbNail thumbnail={thumbnail} />
+          </div>
           <div className={classes.summary}>
             <TemplateStatus
               dateRange={[start_date, end_date]}
               createdAt={created_at}
             />
             <TemplateTitle>{title}</TemplateTitle>
-            <div>참여자 : {templateMeta.user_cnt || 0} 명</div>
+            <div className={classes.description}>{description}</div>
+
+            <div>
+              <span>참여자 </span>
+              <span className={classes.userCnt}>
+                {templateMeta.user_cnt || 0}
+              </span>{" "}
+              명
+            </div>
           </div>
-          <div>
-            {templateMeta.user_cnt < 10
-              ? "집계하기엔 아직 참여자가 너무 적습니다."
-              : `이 ${templateName}은/는 ${
-                  templateMeta.age_group
-                }대 ${transferGenderString(
-                  templateMeta.gender_group
-                )}이 가장 많이 참여하였습니다.`}
+          <div className={classes.participantMessage}>
+            {templateMeta.user_cnt < 10 ? (
+              "집계하기엔 아직 참여자가 너무 적습니다."
+            ) : (
+              <>
+                이 {templateName}은/는 {templateMeta.age_group}대{" "}
+                <span>{transferGenderString(templateMeta.gender_group)}</span>이
+                가장 많이 참여하였습니다.
+              </>
+            )}
           </div>
+          <Button.moveLink moveUrl={`/template/${templateType}/${id}`}>
+            참여하기
+          </Button.moveLink>
         </div>
-        <button onClick={() => router.push(`/template/${templateType}/${id}`)}>
-          참여하기
-        </button>
+
         {/* Gender Filter */}
         <div className={classes.filterController}>
           {FILTER_GENDER.map((e, idx) => {
@@ -195,6 +211,7 @@ export default function SurveyResult({ id }: { id: number }) {
                   ageGroup={ageGroup}
                   questionId={q.id}
                   templateId={templateMeta.id}
+                  responseCnt={templateMeta.user_cnt}
                 />
               );
             }

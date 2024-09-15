@@ -1,38 +1,19 @@
-import SurveyList from "@/app/template/_component/survey/surveyList";
-
 import PageTitle from "@/components/ui/PageTitle";
-import SurveyControler from "@/app/template/_component/survey/SurveyControler";
-import SearchInput from "@/components/ui/SearchInput";
 
-import { queryClient } from "@/config/queryClient";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { fetchList } from "@/lib/surveySerivce";
-
-import { QUERY_KEY } from "@/types/constans";
 import Grid from "@/components/ui/Grid";
 import Vanner from "@/components/ui/Vanner";
 import Button from "@/components/ui/button/Button";
 
 import classes from "./surveyPage.module.scss";
 import TemplateCractor from "@/components/Cractor/TemplateCractor";
+import dynamic from "next/dynamic";
+import TemplateList from "@/app/template/_component/TemplateList";
 
 export default async function surveyPage({
   searchParams,
 }: {
   searchParams: { page: string; sort?: string; search?: string };
 }) {
-  // search
-  const page = +searchParams.page || 1;
-  const sort = searchParams.sort;
-  const search = searchParams.search;
-
-  await queryClient.prefetchQuery({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
-    queryFn: () => fetchList(page + "", sort, search),
-    staleTime: 10000,
-  });
-  const hydurateState = dehydrate(queryClient);
-
   return (
     <>
       <div className={classes.wrap}>
@@ -64,19 +45,12 @@ export default async function surveyPage({
           </Grid.center>
         </Vanner>
 
-        <Grid.center>
-          {/* btn Area */}
-          <div className={classes.searchFilterWrapper}>
-            {/* <HotKeyword /> */}
-
-            <SurveyControler />
-            <SearchInput search={search} />
-          </div>
-          {/* List */}
-          <HydrationBoundary state={hydurateState}>
-            <SurveyList page={page} sort={sort} search={search} />
-          </HydrationBoundary>
-        </Grid.center>
+        {/* templat List  */}
+        <TemplateList
+          page={searchParams.page}
+          sort={searchParams.sort}
+          search={searchParams.search}
+        />
       </div>
     </>
   );

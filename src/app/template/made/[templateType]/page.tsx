@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { queryClient } from "@/config/queryClient";
 import { withFetch } from "@/util/clientUtil";
 import { auth } from "@/auth";
+import { BASE_URL } from "@/config/base";
 
 export const metadata: Metadata = {
   title: "나만의 설문조사를 만들어보세요",
@@ -28,7 +29,7 @@ export default async function SelectTemplate({
       queryKey: ["edit"],
       queryFn: () =>
         withFetch(async () => {
-          return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`);
+          return fetch(`${BASE_URL}`);
         }),
     });
   }

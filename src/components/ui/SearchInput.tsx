@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useEffect, useState } from "react";
 import classes from "./searchArea.module.scss";
 import { QUERY_STRING } from "@/types/constans";
 import SearchIcon from "/public/asset/icon/search.png";
 import Image from "next/image";
 import Button from "@/components/ui/button/Button";
+import { withFetch } from "@/util/clientUtil";
+import { BASE_URL } from "@/config/base";
+import Test from "@/components/ui/Test";
 
 export default function SearchInput({ search }: { search?: string }) {
   const [curSearch, setCurSearch] = useState<string | null>(null);
@@ -14,6 +17,17 @@ export default function SearchInput({ search }: { search?: string }) {
   const router = useRouter();
 
   const qs = useSearchParams();
+
+  const onClick = async () => {
+    return withFetch(async () => {
+      return fetch(`${BASE_URL}/api/test`, {
+        headers: { "x-id": "test" },
+        next: {
+          tags: ["test"],
+        },
+      });
+    });
+  };
 
   useEffect(() => {
     const search = qs.get(QUERY_STRING.SEARCH);

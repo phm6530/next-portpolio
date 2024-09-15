@@ -7,6 +7,7 @@ import { imgUploader } from "@/lib/uploaderHanlder";
 import { withFetch } from "@/util/clientUtil";
 import { QUERY_KEY } from "@/types/constans";
 import { createClient } from "pexels";
+import { BASE_URL } from "@/config/base";
 
 type UnsplashApi = {
   total: number;
@@ -76,7 +77,7 @@ export default function ThumbNailUploader({
       if (imgUrl) {
         //hook form에 반영함
         setValue("thumbnail", imgUrl);
-        setPreview(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+        setPreview(`${BASE_URL}/${imgUrl}`);
       }
     }
   };

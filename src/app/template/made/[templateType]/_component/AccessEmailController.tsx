@@ -9,8 +9,9 @@ import { useFormContext } from "react-hook-form";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
-import addPin from "@/app/lib/addPin";
+import addPin from "@/util/addPin";
 import classes from "./AccessEmailController.module.scss";
+import { BASE_URL } from "@/config/base";
 
 export default function AccessEmailController({
   agreed,
@@ -35,7 +36,7 @@ export default function AccessEmailController({
   const { mutate } = useMutation({
     mutationFn: (data: { pin: number; userEmail: string }) =>
       withFetch<number>(async () => {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/email`;
+        const url = `${BASE_URL}/api/auth/email`;
         return fetch(url, {
           method: "POST",
           headers: {

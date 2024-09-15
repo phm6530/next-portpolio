@@ -1,5 +1,24 @@
 import { AddSurveyFormProps, SurveyRadioProps } from "@/types/templateSurvey";
-import { PoolConnection, ResultSetHeader } from "mysql2/promise";
+import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+
+// 응답 갯수 가져오기
+export const selectTextCnt = async (
+  conn: PoolConnection,
+  templateId: string,
+  questionId: string
+): Promise<RowDataPacket> => {
+  const [count] = await conn.query<RowDataPacket[]>(
+    `   SELECT count(*) as cnt FROM survey_answers as sa 
+        join 
+            survey_question as sq ON sq.id = sa.question_id 
+        where 
+            sa.template_meta_id = ? AND sq.id = ? ;
+        `,
+    [templateId, questionId]
+  );
+
+  return count[0];
+};
 
 export const insertCreateUser = async (
   conn: PoolConnection,

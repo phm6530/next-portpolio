@@ -9,6 +9,7 @@ import { withFetch } from "@/util/clientUtil";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
+import { BASE_URL } from "@/config/base";
 
 export type MessageProps = {
   //각 Id로 분기처리
@@ -27,12 +28,9 @@ export default function CommentSection({ templateId }: { templateId: number }) {
     queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
-          {
-            cache: "no-cache",
-          }
-        );
+        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
+          cache: "no-cache",
+        });
       }),
     staleTime: 10000,
     enabled: !!templateId,

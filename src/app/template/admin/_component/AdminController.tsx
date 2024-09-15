@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { BASE_URL } from "@/config/base";
 
 export default function AdminController({
   user,
@@ -58,7 +59,7 @@ export default function AdminController({
   const { mutate } = useMutation({
     mutationFn: () =>
       withFetch(async () => {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${curTemplateKey}`;
+        const url = `${BASE_URL}/api/template/${curTemplateKey}`;
         return fetch(url, {
           method: "DELETE",
         });

@@ -1,3 +1,4 @@
+import { selectTextCnt } from "@/app/api/_dao/template/SurveyRepository";
 import { apiErrorHandler } from "@/util/apiErrorHandler";
 import { withTransaction } from "@/util/server/serverUtill";
 import { RowDataPacket } from "mysql2";
@@ -12,7 +13,7 @@ export async function GET(
   try {
     const offset = (+page - 1) * 10;
 
-    const [rows, allCount] = await withTransaction(async (conn) => {
+    const [rows, responseCnt] = await withTransaction(async (conn) => {
       //댓글 가져오기
       const sql = `
             SELECT pr.gender , pr.age_group as age , sa.answer_value as value FROM survey_answers as sa 
@@ -32,20 +33,15 @@ export async function GET(
         offset,
       ]);
 
-      const [count] = await conn.query<RowDataPacket[]>(
-        `   SELECT count(*) as cnt FROM survey_answers as sa 
-            join 
-                survey_question as sq ON sq.id = sa.question_id 
-            where 
-                sa.template_meta_id = ? AND sq.id = ? ;
-            `,
-        [templateId, questionId]
-      );
+      const responseCnt = await selectTextCnt(conn, templateId, questionId);
 
-      return [rows, count];
+      return [rows, responseCnt];
     });
 
-    const nextPage = +offset + rows.length > allCount[0].cnt;
+    const nextPage = +offset + rows.length > responseCnt.cnt;
+
+    console.log(nextPage);
+
     //형변환
     const results = rows.map((e) => {
       return { ...e, age: +e.age };
