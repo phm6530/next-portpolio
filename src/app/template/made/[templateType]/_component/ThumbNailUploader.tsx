@@ -3,8 +3,8 @@ import classes from "./ThumbNailUploader.module.scss";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
-import { imgUploader } from "@/app/lib/uploaderHanlder";
-import { withFetch } from "@/app/lib/helperClient";
+import { imgUploader } from "@/lib/uploaderHanlder";
+import { withFetch } from "@/util/clientUtil";
 import { QUERY_KEY } from "@/types/constans";
 import { createClient } from "pexels";
 

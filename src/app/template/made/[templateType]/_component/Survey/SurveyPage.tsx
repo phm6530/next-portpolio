@@ -18,7 +18,7 @@ import useStore from "@/store/store";
 import AddAgeGroup from "@/app/template/made/[templateType]/_component/templateAddOptions/AddAgeGroup";
 import AddGender from "@/app/template/made/[templateType]/_component/templateAddOptions/AddGender";
 import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
-import { withFetch } from "@/app/lib/helperClient";
+import { withFetch } from "@/util/clientUtil";
 import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";

@@ -1,5 +1,5 @@
-import GlobalNav from "@/app/_components/globalNav/GlobalNav";
-import Footer from "@/app/_components/ui/Footer";
+import GlobalNav from "@/components/globalNav/GlobalNav";
+import Footer from "@/components/ui/Footer";
 import ProviderContext from "@/app/_provider";
 import { auth } from "@/auth";
 

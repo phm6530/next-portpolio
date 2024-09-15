@@ -1,4 +1,4 @@
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/util/apiErrorHandler";
 import { PathSegments } from "@/types/upload";
 import { NextRequest, NextResponse } from "next/server";
 

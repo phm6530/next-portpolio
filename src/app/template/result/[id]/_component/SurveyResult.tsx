@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
-import { fetchDetailResult } from "@/app/_services/client/templateResult";
+import { fetchDetailResult } from "@/lib/templateResult";
 import { useState } from "react";
 import { ageGroupProps, Gender } from "@/types/template";
 
@@ -9,11 +9,11 @@ import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
-import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
-import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
+import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import SurveyResultBar from "@/app/template/result/[id]/_component/SurveyResultBar";
-import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import ResponseText from "@/app/template/result/[id]/_component/ResponseText";
 
 const FILTER_GENDER = [

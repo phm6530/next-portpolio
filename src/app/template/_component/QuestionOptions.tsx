@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FieldError, useFormContext } from "react-hook-form";
 import classes from "@/styles/pages/template.module.scss";
 import { GetSurveyQuestions } from "@/types/templateSurvey";
-import FormRegisterError from "@/app/_components/Error/FormRegisterError";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 

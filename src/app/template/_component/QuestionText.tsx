@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
 import classes from "./QuestionText.module.scss";
-import FormRegisterError from "@/app/_components/Error/FormRegisterError";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 export default function QuestionText({
   qsImg,

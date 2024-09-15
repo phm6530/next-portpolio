@@ -2,8 +2,8 @@ import {
   getSurveyDetail,
   postSurveyDetail,
 } from "@/app/api/_service/template/surveySerivce";
-import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { withConnection, withRequest } from "@/app/lib/helperServer";
+import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
+import { withConnection, withRequest } from "@/util/server/serverUtill";
 import { auth } from "@/auth";
 import { PostAddsurveyDetailProps, TemplateTypeProps } from "@/types/template";
 import { ResultSetHeader } from "mysql2";

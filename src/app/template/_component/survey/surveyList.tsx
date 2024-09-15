@@ -1,17 +1,17 @@
 "use client";
 
 import classes from "./SurveyList.module.scss";
-import SurveyItem from "@/app/_components/survey/SurveyItem";
-import PageGsap from "@/app/_aniPage/PageGsap";
-import Paging from "@/app/_components/ui/Paging";
+import SurveyItem from "@/components/survey/SurveyItem";
+import PageGsap from "@/components/_aniPage/PageGsap";
+import Paging from "@/components/ui/Paging";
 
-import { fetchList } from "@/app/_services/surveySerivce";
+import { fetchList } from "@/lib/surveySerivce";
 import { GetTemplateMetaLists } from "@/types/template";
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEY, QUERY_STRING } from "@/types/constans";
 import { useSearchParams } from "next/navigation";
-import NotFoundComponent from "@/app/_components/NotFoundComponent";
+import NotFoundComponent from "@/components/NotFoundComponent";
 
 export default function SurveyList({
   page,

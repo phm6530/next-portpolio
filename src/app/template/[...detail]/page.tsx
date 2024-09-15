@@ -1,22 +1,22 @@
 // import RankTemplateDetail from "@/app/template/[...detail]/RankTemplateDetail";
 // import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
 
-import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
+import { fetchTemplateDetail } from "@/lib/surveySerivce";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { queryClient } from "@/app/config/queryClient";
+import { queryClient } from "@/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
 
 import { auth } from "@/auth";
-import DateCompareToday from "@/app/lib/DateCompareToday";
-import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
+import DateCompareToday from "@/util/DateCompareToday";
+import TemplatePending from "@/components/templateUtill/TemplatePending";
 import AdminController from "@/app/template/admin/_component/AdminController";
-import Grid from "@/app/_components/ui/Grid";
-import BackButton from "@/app/_components/ui/button/BackButton";
-import imgUrlMapper from "@/app/lib/imgUrlMapper";
+import Grid from "@/components/ui/Grid";
+import BackButton from "@/components/ui/button/BackButton";
+import imgUrlMapper from "@/util/imgUrlMapper";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(

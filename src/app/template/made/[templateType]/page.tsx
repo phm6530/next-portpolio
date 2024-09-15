@@ -4,8 +4,8 @@ import RankSurvey from "@/app/template/made/[templateType]/_component/RankSurvey
 import { surveyParams } from "@/types/templateSurvey";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { queryClient } from "@/app/config/queryClient";
-import { withFetch } from "@/app/lib/helperClient";
+import { queryClient } from "@/config/queryClient";
+import { withFetch } from "@/util/clientUtil";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {

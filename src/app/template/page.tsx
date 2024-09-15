@@ -1,20 +1,20 @@
 import SurveyList from "@/app/template/_component/survey/surveyList";
 
-import PageTitle from "@/app/_components/ui/PageTitle";
+import PageTitle from "@/components/ui/PageTitle";
 import SurveyControler from "@/app/template/_component/survey/SurveyControler";
-import SearchInput from "@/app/_components/ui/SearchInput";
+import SearchInput from "@/components/ui/SearchInput";
 
-import { queryClient } from "@/app/config/queryClient";
+import { queryClient } from "@/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { fetchList } from "@/app/_services/surveySerivce";
+import { fetchList } from "@/lib/surveySerivce";
 
 import { QUERY_KEY } from "@/types/constans";
-import Grid from "@/app/_components/ui/Grid";
-import Vanner from "@/app/_components/ui/Vanner";
-import Button from "@/app/_components/ui/button/Button";
+import Grid from "@/components/ui/Grid";
+import Vanner from "@/components/ui/Vanner";
+import Button from "@/components/ui/button/Button";
 
 import classes from "./surveyPage.module.scss";
-import TemplateCractor from "@/app/_components/Cractor/TemplateCractor";
+import TemplateCractor from "@/components/Cractor/TemplateCractor";
 
 export default async function surveyPage({
   searchParams,

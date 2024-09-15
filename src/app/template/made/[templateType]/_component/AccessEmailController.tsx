@@ -8,7 +8,7 @@ import {
 import { useFormContext } from "react-hook-form";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/app/lib/helperClient";
+import { withFetch } from "@/util/clientUtil";
 import addPin from "@/app/lib/addPin";
 import classes from "./AccessEmailController.module.scss";
 

@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { SurveyType } from "@/types/template";
 import { ChangeEvent, useRef, useState } from "react";
 import useStore from "@/store/store";
-import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { imgUploader } from "@/lib/uploaderHanlder";
 import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
 
 export default function SurveyList() {

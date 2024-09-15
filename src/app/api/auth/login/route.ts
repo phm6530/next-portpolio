@@ -1,6 +1,6 @@
-import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { comparePassword } from "@/app/lib/comparePassword";
-import { withConnection } from "@/app/lib/helperServer";
+import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
+import { comparePassword } from "@/lib/comparePassword";
+import { withConnection } from "@/util/server/serverUtill";
 import { userProps } from "@/types/user";
 import { RowDataPacket } from "mysql2";
 

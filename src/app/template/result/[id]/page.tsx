@@ -1,19 +1,19 @@
-import { fetchDetailResult } from "@/app/_services/client/templateResult";
-import { queryClient } from "@/app/config/queryClient";
+import { fetchDetailResult } from "@/lib/templateResult";
+import { queryClient } from "@/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { GetTemplateItemProps } from "@/types/template";
 import { auth } from "@/auth";
-import { withFetch } from "@/app/lib/helperClient";
+import { withFetch } from "@/util/clientUtil";
 
 import CommentSection, {
   MessageProps,
-} from "@/app/_components/Comment/CommentSection";
+} from "@/components/Comment/CommentSection";
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import AdminController from "@/app/template/admin/_component/AdminController";
-import TemplatePending from "@/app/_components/templateUtill/TemplatePending";
-import DateCompareToday from "@/app/lib/DateCompareToday";
-import Grid from "@/app/_components/ui/Grid";
+import TemplatePending from "@/components/templateUtill/TemplatePending";
+import DateCompareToday from "@/util/DateCompareToday";
+import Grid from "@/components/ui/Grid";
 
 interface TemplateData {
   templateMeta: GetTemplateItemProps;

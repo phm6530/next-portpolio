@@ -4,7 +4,7 @@ import {
   getTemplateAllCnt,
   postUser,
 } from "@/app/api/_service/template/templateSerivce";
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/util/apiErrorHandler";
 import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import { NextRequest, NextResponse } from "next/server";
 import { QUERY_STRING } from "@/types/constans";

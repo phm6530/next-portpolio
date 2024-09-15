@@ -1,7 +1,7 @@
 "use client";
 
-import { queryClient } from "@/app/config/queryClient";
-import { withFetch } from "@/app/lib/helperClient";
+import { queryClient } from "@/config/queryClient";
+import { withFetch } from "@/util/clientUtil";
 import { QUERY_KEY } from "@/types/constans";
 import { TemplateTypeProps } from "@/types/template";
 import { useMutation } from "@tanstack/react-query";

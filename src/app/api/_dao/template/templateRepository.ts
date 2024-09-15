@@ -1,4 +1,4 @@
-import { bcryptHash } from "@/app/lib/brycptHash";
+import { bcryptHash } from "@/util/server/brycptHash";
 import { CONST_PAGING, LIST_SORT } from "@/types/constans";
 import { GetTemplateDetailMetaProps } from "@/types/template";
 import { AddSurveyFormProps } from "@/types/templateSurvey";

@@ -1,4 +1,4 @@
-import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { imgUploader } from "@/lib/uploaderHanlder";
 import useStore from "@/store/store";
 import { PathSegments } from "@/types/upload";
 import Image from "next/image";

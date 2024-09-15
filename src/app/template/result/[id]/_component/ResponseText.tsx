@@ -1,13 +1,13 @@
-import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import classes from "./ResponseText.module.scss";
 import { ageGroupProps, Gender } from "@/types/template";
 import Female30 from "/public/asset/icon/female_30.svg";
 import Male30 from "/public/asset/icon/male_30.svg";
 
 import { useEffect, useState, useMemo } from "react";
-import { QueryFunctionContext, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
-import { withFetch } from "@/app/lib/helperClient";
+import { withFetch } from "@/util/clientUtil";
 
 type FilterDataProps = {
   gender: Gender;

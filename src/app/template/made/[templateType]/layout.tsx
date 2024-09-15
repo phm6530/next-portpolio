@@ -1,4 +1,4 @@
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
 import { surveyParams } from "@/types/templateSurvey";
 import { ReactNode } from "react";
 

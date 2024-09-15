@@ -1,6 +1,6 @@
-import FormRegisterError from "@/app/_components/Error/FormRegisterError";
-import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
-import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
+import FormRegisterError from "@/components/Error/FormRegisterError";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
+import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 
 import { useFormContext } from "react-hook-form";

@@ -1,16 +1,16 @@
 "use client";
 
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
 import classes from "./contact.module.scss";
 import { FormProvider, useForm } from "react-hook-form";
-import TextInput from "@/app/_components/ui/FormElement/TextInput";
-import TextArea from "@/app/_components/ui/FormElement/TextArea";
-import Button from "@/app/_components/ui/button/Button";
-import FormRegisterError from "@/app/_components/Error/FormRegisterError";
+import TextInput from "@/components/ui/FormElement/TextInput";
+import TextArea from "@/components/ui/FormElement/TextArea";
+import Button from "@/components/ui/button/Button";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/app/lib/helperClient";
-import BackDrop from "@/app/_components/modal/BackDrop";
-import LoadingCircle from "@/app/_components/animation/LoadingCircle";
+import { withFetch } from "@/util/clientUtil";
+import BackDrop from "@/components/modal/BackDrop";
+import LoadingCircle from "@/components/animation/LoadingCircle";
 
 type MailFormData = {
   name: string;

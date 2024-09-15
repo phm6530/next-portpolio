@@ -3,8 +3,8 @@ import {
   insertQuestion,
 } from "@/app/api/_dao/template/SurveyRepository";
 
-import { getTemplateId } from "@/app/lib/utilFunc";
-import { withConnection, withTransaction } from "@/app/lib/helperServer";
+import { getTemplateId } from "@/util/utilFunc";
+import { withConnection, withTransaction } from "@/util/server/serverUtill";
 import { RequestSurveyFormProps } from "@/types/templateSurvey";
 import {
   insertAnonymous,
@@ -14,12 +14,12 @@ import {
 
 import { RowDataPacket } from "mysql2";
 import { CONST_PAGING } from "@/types/constans";
-import { sendEmail } from "@/app/lib/nodeMailer";
+import { sendEmail } from "@/lib/nodeMailer";
 import {
   GetTemplateDetail,
   GetTemplateDetailMetaProps,
 } from "@/types/template";
-import { ApiError } from "@/app/lib/apiErrorHandler";
+import { ApiError } from "@/util/apiErrorHandler";
 import { auth } from "@/auth";
 
 //template Post Service

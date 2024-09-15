@@ -2,9 +2,9 @@ import CommentSection, {
   MessageProps,
 } from "@/app/_components/Comment/CommentSection";
 import { fetchDetailResult } from "@/app/_services/client/templateResult";
-import { queryClient } from "@/app/config/queryClient";
-import { withFetch } from "@/app/lib/helperClient";
-import { withConnection } from "@/app/lib/helperServer";
+import { queryClient } from "@/config/queryClient";
+import { withFetch } from "@/util/clientUtil";
+import { withConnection } from "@/util/server/serverUtill";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import { auth } from "@/auth";

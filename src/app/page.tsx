@@ -3,7 +3,7 @@ import classes from "./home.module.scss";
 
 import dynamic from "next/dynamic";
 import SurveySlide from "@/app/_main/SurveySlide";
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -11,9 +11,12 @@ export const metadata: Metadata = {
   description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
 };
 
-const DynamicMainGsap = dynamic(() => import("@/app/_aniPage/MainGsap"), {
-  ssr: false,
-});
+const DynamicMainGsap = dynamic(
+  () => import("@/components/_aniPage/MainGsap"),
+  {
+    ssr: false,
+  }
+);
 export default async function Home() {
   //공백 arr
   const arr = Array.from({ length: 1 }, (_, idx) => idx);

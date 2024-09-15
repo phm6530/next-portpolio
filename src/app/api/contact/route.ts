@@ -1,6 +1,6 @@
-import myMail from "@/app/config/mailConfig";
-import { ApiError } from "@/app/lib/apiErrorHandler";
-import { withRequest } from "@/app/lib/helperServer";
+import mailConfig from "@/app/config/mailConfig";
+import { ApiError } from "@/util/apiErrorHandler";
+import { withRequest } from "@/util/server/serverUtill";
 import dayjs from "dayjs";
 import { NextRequest } from "next/server";
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       `,
       };
 
-      const test = await myMail.sendMail(mailForm);
+      const test = await mailConfig.sendMail(mailForm);
 
       return { message: "success" };
     } catch (error) {

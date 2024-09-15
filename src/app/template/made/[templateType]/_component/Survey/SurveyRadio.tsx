@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import classes from "./survey.module.scss";
 import useStore from "@/store/store";
-import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { imgUploader } from "@/lib/uploaderHanlder";
 import { PathSegments } from "@/types/upload";
 
 export default function SurveyRadio({

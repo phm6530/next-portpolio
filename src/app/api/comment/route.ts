@@ -5,10 +5,10 @@ import {
   postComment,
   removeMessage,
 } from "@/app/api/_service/template/commentService";
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { apiErrorHandler } from "@/util/apiErrorHandler";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { withRequest } from "@/app/lib/helperServer";
+import { withRequest } from "@/util/server/serverUtill";
 
 //초기 Comment 가져오기
 export async function GET(req: NextRequest) {

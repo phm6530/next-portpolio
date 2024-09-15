@@ -1,4 +1,4 @@
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
 import { revalidateTag } from "next/cache";
 
 export default async function AboutPage() {
