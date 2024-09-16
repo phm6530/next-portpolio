@@ -67,8 +67,6 @@ export default function SurveyResult({ id }: { id: number }) {
   const [genderGroup, setGenderGroup] = useState<"all" | Gender>("all");
   const [ageGroup, setAgeGroup] = useState<ageGroupProps>("all");
 
-  const router = useRouter();
-
   const { data, isError } = useQuery({
     queryKey: ["default", id],
     queryFn: () => fetchDetailResult(id),
@@ -154,8 +152,16 @@ export default function SurveyResult({ id }: { id: number }) {
             ) : (
               <>
                 이 {templateName}은/는 {templateMeta.age_group}대{" "}
-                <span>{transferGenderString(templateMeta.gender_group)}</span>이
-                가장 많이 참여하였습니다.
+                <span
+                  className={`${
+                    templateMeta.gender_group === "female"
+                      ? classes.female
+                      : classes.male
+                  }`}
+                >
+                  {transferGenderString(templateMeta.gender_group)}
+                </span>
+                이 가장 많이 참여하였습니다.
               </>
             )}
           </div>

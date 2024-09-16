@@ -5,12 +5,6 @@
   grid-template-columns: repeat(4, 1fr); /* 3개의 동일한 너비의 칸 */
   gap: 10px;
 
-  input {
-    @include inputStyles(10px);
-    border: 1px solid $border-box-color;
-    @include FouceInput(#7975e5, 1px);
-  }
-
   .textareaWrap {
     display: grid;
     grid-column: 1 / -1;
@@ -25,7 +19,9 @@
       border: 0;
       border-radius: 1rem 1rem 0 0;
       grid-column: 1 / -1;
+      box-sizing: border-box;
       padding: 20px;
+      border: 1px solid transparent;
       border-bottom: 1px solid $border-box-color;
     }
 
@@ -57,7 +53,9 @@
     }
   }
 }
-.commentWrapper {
+
+.commentSection {
+  margin-top: 3rem;
 }
 .commentContainer {
   display: grid;

@@ -3,8 +3,7 @@
 import Grid from "@/components/ui/Grid";
 import classes from "./contact.module.scss";
 import { FormProvider, useForm } from "react-hook-form";
-import TextInput from "@/components/ui/FormElement/TextInput";
-import TextArea from "@/components/ui/FormElement/TextArea";
+import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import { useMutation } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import { withFetch } from "@/util/clientUtil";
 import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { BASE_URL } from "@/config/base";
+import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 
 type MailFormData = {
   name: string;
@@ -25,6 +25,7 @@ export default function Page() {
     handleSubmit,
     formState: { errors },
     reset,
+    register,
   } = formMethod;
 
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
@@ -66,26 +67,33 @@ export default function Page() {
         >
           <h2>문의</h2>
           <FormProvider {...formMethod}>
-            <TextInput
-              placeholder={"이름"}
-              inputName="name"
-              errorMsg="보내시는 분의 성함을 기재해주세요."
+            <FormInput
+              type="text"
+              placeholder="이름"
+              {...register("name", {
+                required: "보내시는 분의 성함을 기재해주세요.",
+              })}
             />
-            <TextInput
-              placeholder={"회신 받으실 이메일이나 핸드폰번호를 기재해주세요."}
-              inputName="digit"
-              errorMsg="회신 받으실 이메일이나 핸드폰번호를 기재해주세요."
+
+            <FormInput
+              type="text"
+              placeholder="회신 받으실 이메일이나 핸드폰번호를 기재해주세요"
+              {...register("digit", {
+                required: "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
+              })}
             />
+
             <label htmlFor="">문의 내용</label>
-            <TextArea
-              placeholder={
-                "문의하실 내용을 기재해주세요. 최소 10글자 부탁드려요"
-              }
-              inputName="textarea"
-              errorMsg="문의 내용은 필수입니다."
+            <FormTextarea
+              placeholder="textarea"
+              {...register("textarea", {
+                required: "문의 내용은 필수입니다.",
+                minLength: { value: 10, message: "최소 10글자 적어주세요" },
+              })}
               className={classes.textarea}
             />
           </FormProvider>
+
           <div style={{ textAlign: "center" }}>
             <Button.solid disabled={isPending} style={{ marginLeft: "auto" }}>
               보내기

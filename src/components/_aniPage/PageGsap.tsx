@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useSearchParams } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default function PageGsap({
   const ref = useRef<HTMLDivElement>(null);
 
   const params = useSearchParams();
-  //파라미터 전부의존
+  //파라미터 전부 의존
   const allParams = Object.fromEntries(params.entries());
 
   useGSAP(

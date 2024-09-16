@@ -26,6 +26,8 @@ import ThumbNailUploader from "@/app/template/made/[templateType]/_component/Thu
 import { PathSegments } from "@/types/upload";
 import { getSession, signOut, useSession } from "next-auth/react";
 import { Session } from "next-auth";
+import FormInput from "@/components/ui/FormElement/FormInput";
+import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -95,6 +97,8 @@ export default function SurveyPage({
   const formState = useForm<AddSurveyFormProps>({
     defaultValues: initialFormState,
   });
+
+  const { register } = formState;
 
   const { mutate, isPending } = useMutation<
     unknown,
@@ -183,13 +187,22 @@ export default function SurveyPage({
 
           {/* 공통 제목 */}
           <p>title</p>
-          <SurveyText label={"title"} requiredMsg={"제목은 필수 입니다!"} />
+          <FormInput
+            {...register("title", {
+              required: "제목은 필수 입니다!",
+            })}
+            autoComplete="off"
+            placeholder="제목"
+          />
 
           {/* 공통 설명 적기 */}
           <p>Description</p>
-          <SurveyText
-            label={"description"}
-            requiredMsg={"간단한 설명을 적어주세요!"}
+          <FormTextarea
+            {...register("description", {
+              required: "간단한 설명을 적어주세요!",
+            })}
+            placeholder="설문조사에 대한 설명을 적어주세요!"
+            autoComplete="off"
           />
 
           {/* 썸네일 */}

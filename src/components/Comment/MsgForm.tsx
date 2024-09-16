@@ -9,6 +9,8 @@ import { queryClient } from "@/config/queryClient";
 import { useSession } from "next-auth/react";
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { BASE_URL } from "@/config/base";
+import FormInput from "@/components/ui/FormElement/FormInput";
+import { useParams } from "next/navigation";
 
 export default function MsgForm({
   template_id,
@@ -18,6 +20,8 @@ export default function MsgForm({
   comment_id?: number;
 }) {
   const { data: session } = useSession();
+
+  const { id } = useParams();
 
   const formMethod = useForm();
   const {
@@ -43,7 +47,7 @@ export default function MsgForm({
       reset(); //폼 초기화
 
       queryClient.invalidateQueries({
-        queryKey: ["comment", template_id],
+        queryKey: ["comment", +id],
       });
     },
   });
@@ -72,53 +76,52 @@ export default function MsgForm({
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={classes.replyForm}>
-      {session?.user.role === "admin" ? (
-        session?.user.user_id
-      ) : (
-        <>
-          <input
-            type="text"
-            placeholder="이름"
-            className={classes.input}
-            autoComplete="off"
-            {...register("name", {
-              required: "이름은 필수입니다.",
-              minLength: {
-                value: 2,
-                message: "이름은 최소 2글자로 설정해주세요",
-              },
-            })}
-            readOnly={anonymous}
-          />
-          <input
-            type="password"
-            {...register("password", {
-              required: "비밀번호는 필수입니다.",
-              minLength: {
-                value: 4,
-                message: "비밀번호는 최소 4글자로 설정해주세요",
-              },
-            })}
-            placeholder="password"
-            autoComplete="new-password"
-            className={classes.input}
-          />
-        </>
-      )}
-      <div className={classes.textareaWrap}>
-        {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
-        <FormProvider {...formMethod}>
-          <CommentTextArea>
+      <FormProvider {...formMethod}>
+        {session?.user.role === "admin" ? (
+          session?.user.user_id
+        ) : (
+          <>
+            <FormInput
+              type="text"
+              placeholder="이름"
+              autoComplete="off"
+              {...register("name", {
+                required: "이름은 필수입니다.",
+                minLength: {
+                  value: 2,
+                  message: "이름은 최소 2글자로 설정해주세요",
+                },
+              })}
+              readOnly={anonymous}
+            />
+            <FormInput
+              type="password"
+              {...register("password", {
+                required: "비밀번호는 필수입니다.",
+                minLength: {
+                  value: 4,
+                  message: "비밀번호는 최소 4글자로 설정해주세요",
+                },
+              })}
+              placeholder="password"
+              autoComplete="new-password"
+            />
+          </>
+        )}
+        <div className={classes.textareaWrap}>
+          {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
+
+          <CommentTextArea name={"msg"}>
             <div className={classes.errorDiv}>
               {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
             </div>
           </CommentTextArea>
-        </FormProvider>
 
-        <button type="submit" disabled={isPending}>
-          댓글 작성
-        </button>
-      </div>
+          <button type="submit" disabled={isPending}>
+            댓글 작성
+          </button>
+        </div>
+      </FormProvider>
     </form>
   );
 }

@@ -24,6 +24,7 @@ export type MessageProps = {
 
 export default function CommentSection({ templateId }: { templateId: number }) {
   const [replyIdx, setReplyIdx] = useState<number | null>(null);
+  console.log("test:", templateId);
   const { data, isError, isLoading } = useQuery<MessageProps[]>({
     queryKey: ["comment", templateId],
     queryFn: () =>
@@ -54,28 +55,30 @@ export default function CommentSection({ templateId }: { templateId: number }) {
         {/* Msg - Form */}
         <MsgForm template_id={templateId} />
 
-        {data.length > 0 ? (
-          data.map((comment, CommentIdx) => {
-            return (
-              <div
-                className={classes.commentContainer}
-                key={`comment-${CommentIdx}`}
-              >
-                {/* Comment */}
-                <CommentContainer
-                  comment_id={comment.comment_id}
-                  comment={comment}
-                  commentIdx={CommentIdx}
-                  replyIdx={replyIdx}
-                  setReplyIdx={setReplyIdx}
-                />
-              </div>
-            );
-          })
-        ) : (
-          // 댓글 없을때
-          <NotFoundComponent.reply />
-        )}
+        <div className={classes.commentSection}>
+          {data.length > 0 ? (
+            data.map((comment, CommentIdx) => {
+              return (
+                <div
+                  className={classes.commentContainer}
+                  key={`comment-${CommentIdx}`}
+                >
+                  {/* Comment */}
+                  <CommentContainer
+                    comment_id={comment.comment_id}
+                    comment={comment}
+                    commentIdx={CommentIdx}
+                    replyIdx={replyIdx}
+                    setReplyIdx={setReplyIdx}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            // 댓글 없을때
+            <NotFoundComponent.reply />
+          )}
+        </div>
       </>
     );
   }

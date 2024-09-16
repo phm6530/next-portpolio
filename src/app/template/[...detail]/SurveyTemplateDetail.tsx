@@ -202,7 +202,11 @@ export default function SurveyTemplateDetail({
                 <QuestionTitle>{qs.label}</QuestionTitle>
                 {qs.type === "text" ? (
                   //주관식
-                  <QuestionText qsImg={qs.textImg} qsId={qs.id} />
+                  <QuestionText
+                    description={qs.label}
+                    qsImg={qs.textImg}
+                    qsId={qs.id}
+                  />
                 ) : (
                   //객관식s
                   <QuestionOptions options={qs.options} qsId={qs.id} />
