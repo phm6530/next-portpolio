@@ -72,3 +72,20 @@
   opacity: 0.5;
   @extend .radioLabel;
 }
+
+.tab {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.7rem;
+  border-radius: 10px;
+  font-size: 14px;
+  &:hover {
+    color: #3270c9;
+  }
+
+  &.active {
+    background: #fff;
+    color: #3270c9;
+    box-shadow: 0px 5px 10px #d3d3d3;
+  }
+}

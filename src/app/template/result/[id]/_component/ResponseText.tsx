@@ -73,8 +73,6 @@ export default function ResponseText({
     }
   );
 
-  console.log("isFetchingNextPage", isFetchingNextPage);
-
   const touchedView = touched && !hasNextPage;
 
   // 새로운 데이터가 추가될 때 allResponses에 병합

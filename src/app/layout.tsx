@@ -25,7 +25,6 @@ export default function RootLayout({
         <ProviderContext>
           <GlobalNav />
           <main className="container">{children}</main>
-          <Footer />
         </ProviderContext>
         <Footer />
       </body>

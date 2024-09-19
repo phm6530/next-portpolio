@@ -14,20 +14,37 @@ export default function AniProgressbar({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Tween | null>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        textRef.current,
+        { innerHTML: 0 },
+        {
+          innerHTML: percent,
+          duration: 2,
+          snap: { innerHTML: 1 },
+          color: maxCnt ? `#7b6de7` : `#bfbfbf`,
+        }
+      );
+    },
+    { scope: textRef, dependencies: [...trigger] }
+  );
 
   useGSAP(
     () => {
       gsapRef.current = gsap.fromTo(
         ref.current,
         {
-          width: 0,
-          background: `#d7e2ff`,
+          width: 1,
+          background: `#bfbfbf`,
         },
 
         {
-          width: `${percent}%`,
+          width: `${percent === 0 ? 1 : percent}%`,
           duration: 2,
-          background: maxCnt ? `#7b6de7` : `#d7e2ff`,
+          background: maxCnt ? `#7b6de7` : `#bfbfbf`,
         }
       );
     },
@@ -53,6 +70,10 @@ export default function AniProgressbar({
     <div
       ref={ref}
       className={`${classes.progressbar} ${maxCnt && classes.maxCnt}`}
-    ></div>
+    >
+      <div className={classes.percentText}>
+        <span ref={textRef}>0</span>%
+      </div>
+    </div>
   );
 }

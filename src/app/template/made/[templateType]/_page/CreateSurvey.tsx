@@ -201,9 +201,9 @@ export default function CreateSurvey({
             {...register("title", {
               required: "제목은 필수 입니다!",
             })}
+            inputName={"title"}
             autoComplete="off"
             placeholder="제목"
-            error={errors?.title?.message}
           />
 
           {/* 설문조사 설명 */}
@@ -211,6 +211,7 @@ export default function CreateSurvey({
             {...register("description", {
               required: "간단한 설명을 적어주세요!",
             })}
+            textareaName={"description"}
             placeholder="설문조사에 대한 설명을 적어주세요!"
             autoComplete="off"
           />

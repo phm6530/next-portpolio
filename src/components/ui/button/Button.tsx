@@ -10,17 +10,19 @@ import Image from "next/image";
 import DeleteIcon from "/public/asset/icon/close.png";
 
 function solid({
+  type = "button",
   style,
   children,
   disabled,
 }: {
+  type?: "submit" | "button";
   style: CSSProperties;
   children: string;
   disabled?: boolean;
 }) {
   return (
     <button
-      type="button"
+      type={type}
       style={style}
       disabled={disabled}
       className={classes.solidButton}

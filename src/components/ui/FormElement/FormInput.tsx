@@ -1,25 +1,30 @@
 import { forwardRef, useEffect, useState } from "react";
 import classes from "./FormInput.module.scss";
+import { useFormContext } from "react-hook-form";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  inputName?: string;
   error?: string;
 }
 
 const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
-  const [touched, setTouched] = useState<boolean>(false);
+  const { inputName, ...rest } = props;
+  const {
+    formState: { errors },
+  } = useFormContext();
 
-  useEffect(() => {
-    if (!!props.error) setTouched(true);
-  }, [props.error]);
+  const err = inputName ? errors[inputName] : false;
 
   return (
-    <input
-      className={`${classes.FormInput} ${
-        !!props.error ? classes.error : undefined
-      }`}
-      ref={ref}
-      {...props}
-    />
+    <>
+      <input
+        className={`${classes.FormInput} ${!!err ? classes.error : undefined}`}
+        ref={ref}
+        {...rest}
+      />
+      {err && <FormRegisterError errorMsg={err.message as string} />}
+    </>
   );
 });
 

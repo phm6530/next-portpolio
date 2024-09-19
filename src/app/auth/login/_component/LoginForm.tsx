@@ -1,9 +1,11 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
 
 import classes from "./login.module.scss";
+import FormInput from "@/components/ui/FormElement/FormInput";
+import Button from "@/components/ui/button/Button";
 
 type LoginFormProps = {
   user_id: string;
@@ -15,7 +17,7 @@ export default function LoginForm({
 }: {
   redirectPath: string;
 }) {
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationFn: async (data: LoginFormProps) => {
       const result = await signIn("credentials", {
         redirect: false,
@@ -35,11 +37,12 @@ export default function LoginForm({
     },
   });
 
+  const method = useForm<LoginFormProps>();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormProps>();
+  } = method;
 
   const onSubmitHandler = async (data: LoginFormProps) => {
     mutate(data);
@@ -50,33 +53,29 @@ export default function LoginForm({
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmitHandler)}>
-        <label>
-          Username:
-          <input
+      <form onSubmit={handleSubmit(onSubmitHandler)} className={classes.form}>
+        <FormProvider {...method}>
+          <FormInput
             type="text"
+            placeholder="아이디"
             {...register("user_id", { required: "아이디는 필수 입니다." })}
             autoComplete="off"
           />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
+
+          <FormInput
             type="password"
+            placeholder="비밀번호"
             {...register("user_password", {
               required: "비밀번호는 필수 입니다.",
             })}
             autoComplete="new-password"
           />
-        </label>
-        <br />
-        <button type="submit" disabled={isPending}>
-          Login
-        </button>
-        {firstErrorMeg && (
-          <div className={classes.errorMsg}>{firstErrorMeg}</div>
-        )}
+
+          <Button.submit disabled={isPending}>로그인</Button.submit>
+          {firstErrorMeg && (
+            <div className={classes.errorMsg}>{firstErrorMeg}</div>
+          )}
+        </FormProvider>
       </form>
     </>
   );

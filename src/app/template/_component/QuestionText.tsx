@@ -27,7 +27,9 @@ export default function QuestionText({
         <div className={commonStyle.previewContainer}>
           <Image
             src={qsImg}
-            fill
+            layout="responsive"
+            width={16}
+            height={9}
             style={{ maxWidth: 700, objectFit: "cover" }}
             alt="preview"
             priority

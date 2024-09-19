@@ -15,9 +15,10 @@ const Login = async ({
   }
 
   return (
-    <Grid.center>
+    <Grid.extraSmall>
+      <h1>로그인</h1>
       <LoginForm redirectPath={redirectPath} />
-    </Grid.center>
+    </Grid.extraSmall>
   );
 };
 
