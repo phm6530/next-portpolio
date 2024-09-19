@@ -6,9 +6,8 @@ import { TemplateTypeProps } from "@/types/template";
 import { FormProvider, useForm } from "react-hook-form";
 import { v4 as uuid4 } from "uuid";
 
-import SurveyText from "@/app/template/made/[templateType]/_component/Survey/SurveyText";
 import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
-import QuestionAddController from "@/app/template/made/[templateType]/_component/Survey/QuestionAddController";
+import AddQuestionController from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "@/config/base";
@@ -28,6 +27,8 @@ import { getSession, signOut, useSession } from "next-auth/react";
 import { Session } from "next-auth";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
+import Button from "@/components/ui/button/Button";
+import classes from "./CreateSurvey.module.scss";
 
 const initialFormState: AddSurveyFormProps = {
   title: "",
@@ -43,7 +44,7 @@ const initialFormState: AddSurveyFormProps = {
   // access_pin: null,
 };
 
-export default function SurveyPage({
+export default function CreateSurvey({
   template,
   session,
 }: {
@@ -98,7 +99,10 @@ export default function SurveyPage({
     defaultValues: initialFormState,
   });
 
-  const { register } = formState;
+  const {
+    register,
+    formState: { errors },
+  } = formState;
 
   const { mutate, isPending } = useMutation<
     unknown,
@@ -174,29 +178,35 @@ export default function SurveyPage({
     <>
       <RenderPreview>프리뷰</RenderPreview>
       <button onClick={() => resetField()}>설문조사 초기화</button>
-      <form onSubmit={formState.handleSubmit(onSubmitHandler)}>
+      <form
+        className={classes.formContainer}
+        onSubmit={formState.handleSubmit(onSubmitHandler)}
+      >
         <FormProvider {...formState}>
-          {/* 연령 별 체크*/}
-          <AddAgeGroup />
+          <div>
+            <h2>설정</h2>
+            {/* 연령 별 체크*/}
 
-          {/* 성별 별 체크*/}
-          <AddGender />
+            <AddAgeGroup />
 
-          {/* 기간 */}
-          <AddDateRange />
+            {/* 성별 별 체크*/}
+            <AddGender />
 
-          {/* 공통 제목 */}
-          <p>title</p>
+            {/* 기간 */}
+            <AddDateRange />
+          </div>
+
+          {/* 설문조사 제목 */}
           <FormInput
             {...register("title", {
               required: "제목은 필수 입니다!",
             })}
             autoComplete="off"
             placeholder="제목"
+            error={errors?.title?.message}
           />
 
-          {/* 공통 설명 적기 */}
-          <p>Description</p>
+          {/* 설문조사 설명 */}
           <FormTextarea
             {...register("description", {
               required: "간단한 설명을 적어주세요!",
@@ -215,14 +225,14 @@ export default function SurveyPage({
           <SurveyList />
 
           {/* Survey Controller */}
-          <QuestionAddController />
+          <AddQuestionController />
 
           {/* 익명 사용자 - Email 정보동의  */}
           {!session && <TemplateAccess />}
         </FormProvider>
-        <button type="submit" disabled={isPending}>
-          제출
-        </button>
+        <Button.submit type="submit" disabled={isPending}>
+          설문조사 생성하기
+        </Button.submit>
         <button type="button" onClick={tempSave}>
           임시저장
         </button>

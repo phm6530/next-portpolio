@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ko from "date-fns/locale/ko";
 import dayjs from "dayjs";
 import { Locale } from "react-datepicker/dist/date_utils";
+import RadioWrap from "@/components/ui/RadioWrap";
 
 export default function AddDateRange() {
   const {
@@ -48,7 +49,7 @@ export default function AddDateRange() {
   const same = firstDate.isSame(today, "day");
 
   return (
-    <>
+    <RadioWrap>
       설문조사 기간
       <label>
         <input
@@ -103,6 +104,6 @@ export default function AddDateRange() {
           {errors.dateRange?.message}
         </>
       )}
-    </>
+    </RadioWrap>
   );
 }

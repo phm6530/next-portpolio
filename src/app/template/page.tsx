@@ -6,10 +6,9 @@ import Button from "@/components/ui/button/Button";
 
 import classes from "./surveyPage.module.scss";
 import TemplateCractor from "@/components/Cractor/TemplateCractor";
-import dynamic from "next/dynamic";
 import TemplateList from "@/app/template/_component/TemplateList";
 
-export default async function surveyPage({
+export default async function CreateSurvey({
   searchParams,
 }: {
   searchParams: { page: string; sort?: string; search?: string };

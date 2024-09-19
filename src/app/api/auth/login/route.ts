@@ -1,5 +1,5 @@
 import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
-import { comparePassword } from "@/lib/comparePassword";
+import { comparePassword } from "@/util/comparePassword";
 import { withConnection } from "@/util/server/serverUtill";
 import { userProps } from "@/types/user";
 import { RowDataPacket } from "mysql2";

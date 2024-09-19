@@ -5,6 +5,8 @@ import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import { ChangeEvent, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import classes from "./TemplateAccess.module.scss";
+import FormInput from "@/components/ui/FormElement/FormInput";
 
 export default function TemplateAccess() {
   const [agreed, setAgreed] = useState<boolean>(false);
@@ -26,7 +28,7 @@ export default function TemplateAccess() {
       {/* 개인정보 약관 */}
       <EmailAgreement />
 
-      <label className="cursor">
+      <label className={`${classes.labelAgreed} cursor`}>
         <input
           type="checkbox"
           {...register("access_email_agreed", {
@@ -39,9 +41,8 @@ export default function TemplateAccess() {
       </label>
       <div>{errors.access_email_agreed?.message as string | null}</div>
       <div>
-        이메일
-        <input
-          type="text"
+        {/* 이메일 */}
+        <FormInput
           {...register("access_email", {
             required: "이메일은 필수입니다.",
             pattern: {
@@ -50,6 +51,7 @@ export default function TemplateAccess() {
             },
             onChange: () => trigger("access_email"),
           })}
+          placeholder="인증번호 4자리"
           readOnly={!agreed || isAgreed === "ing" || isAgreed}
         />
         {/* 이메일 인증 */}

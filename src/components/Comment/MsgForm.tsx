@@ -11,6 +11,7 @@ import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { BASE_URL } from "@/config/base";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import { useParams } from "next/navigation";
+import { MessageProps } from "@/components/Comment/CommentSection";
 
 export default function MsgForm({
   template_id,
@@ -43,11 +44,16 @@ export default function MsgForm({
           body: JSON.stringify(data),
         });
       }),
-    onSuccess: () => {
+    onSuccess: async () => {
       reset(); //폼 초기화
-
-      queryClient.invalidateQueries({
-        queryKey: ["comment", +id],
+      await queryClient.prefetchQuery({
+        queryKey: ["comment", template_id],
+        queryFn: () =>
+          withFetch<MessageProps[]>(async () => {
+            return fetch(`${BASE_URL}/api/comment?templateId=${template_id}`, {
+              cache: "force-cache",
+            });
+          }),
       });
     },
   });

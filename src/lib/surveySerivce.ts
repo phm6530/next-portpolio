@@ -23,11 +23,7 @@ export function fetchList(
       queryParams.append(QUERY_STRING.SEARCH, search);
     }
 
-    const tset = await fetch(`${BASE_URL}/api/template?${queryParams}`, {
-      cache: "no-cache",
-    });
-
-    return tset;
+    return fetch(`${BASE_URL}/api/template?${queryParams}`);
   });
 }
 

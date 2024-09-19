@@ -12,6 +12,7 @@ import { withFetch } from "@/util/clientUtil";
 import addPin from "@/util/addPin";
 import classes from "./AccessEmailController.module.scss";
 import { BASE_URL } from "@/config/base";
+import FormInput from "@/components/ui/FormElement/FormInput";
 
 export default function AccessEmailController({
   agreed,
@@ -105,7 +106,7 @@ export default function AccessEmailController({
   return (
     <>
       {/* 인증번호 hidden  */}
-      <input
+      <FormInput
         type="hidden"
         {...register("access_pin", {
           required: "인증은 필수입니다. ",
@@ -118,11 +119,9 @@ export default function AccessEmailController({
         </button>
       ) : isAgreed === "ing" ? (
         <>
-          <input
-            type="text"
+          <FormInput
             placeholder="인증번호를 입력해주세요"
             onChange={onAuthMailNumber}
-            className={authError ? classes.error : undefined}
           />
           <p>
             남은 시간: {Math.floor(countdown / 60)}:

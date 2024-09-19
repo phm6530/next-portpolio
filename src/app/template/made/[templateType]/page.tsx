@@ -1,9 +1,8 @@
-import SurveyPage from "@/app/template/made/[templateType]/_component/Survey/SurveyPage";
+import CreateSurvey from "@/app/template/made/[templateType]/_page/CreateSurvey";
 import RankSurvey from "@/app/template/made/[templateType]/_component/RankSurvey/RankSurvey";
 
 import { surveyParams } from "@/types/templateSurvey";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
 import { queryClient } from "@/config/queryClient";
 import { withFetch } from "@/util/clientUtil";
 import { auth } from "@/auth";
@@ -33,7 +32,7 @@ export default async function SelectTemplate({
 
   //기본 Survey Page
   if (template === "survey") {
-    return <SurveyPage template={template} session={session} />;
+    return <CreateSurvey template={template} session={session} />;
   }
 
   //Rank

@@ -63,17 +63,17 @@ export default async function resultPage({
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
-          cache: "no-cache",
+          cache: "default",
         });
       }),
   });
 
-  const { user_id, start_date, end_date, thumbnail, title, id } =
-    prefetchMetaData.templateMeta;
+  // const { user_id, start_date, end_date, thumbnail, title, id } =
+  //   prefetchMetaData.templateMeta;
 
-  const dateRange = [start_date, end_date] as [string, string] | [null, null];
+  // const dateRange = [start_date, end_date] as [string, string] | [null, null];
 
-  const dayCompare = DateCompareToday();
+  // const dayCompare = DateCompareToday();
 
   //template Gard
   // if (

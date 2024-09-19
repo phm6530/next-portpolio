@@ -5,13 +5,8 @@ import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";
 
-interface GlobalNavProps {
-  isLogin: boolean;
-}
-
-export default function GlobalNav({ isLogin: initialIsLogin }: GlobalNavProps) {
+export default function GlobalNav() {
   const { data: session } = useSession();
-
   const pathname = usePathname();
 
   return (

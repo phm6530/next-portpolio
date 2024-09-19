@@ -1,4 +1,4 @@
-import mailConfig from "@/app/config/mailConfig";
+import mailConfig from "@/config/mailConfig";
 import { ApiError } from "@/util/apiErrorHandler";
 import { withRequest } from "@/util/server/serverUtill";
 import dayjs from "dayjs";

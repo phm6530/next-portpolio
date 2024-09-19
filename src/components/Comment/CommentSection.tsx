@@ -24,14 +24,13 @@ export type MessageProps = {
 
 export default function CommentSection({ templateId }: { templateId: number }) {
   const [replyIdx, setReplyIdx] = useState<number | null>(null);
-  console.log("test:", templateId);
+
+  console.log(templateId);
   const { data, isError, isLoading } = useQuery<MessageProps[]>({
     queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
-        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
-          cache: "no-cache",
-        });
+        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`);
       }),
     staleTime: 10000,
     enabled: !!templateId,

@@ -5,8 +5,9 @@ import {
   SurveyText,
   SurveyRadioProps,
 } from "@/types/templateSurvey";
+import classes from "./AddQuestionController.module.scss";
 
-export default function QuestionAddController() {
+export default function AddQuestionController() {
   const { control } = useFormContext<AddSurveyFormProps>();
   const { fields, append } = useFieldArray({
     control,
@@ -41,13 +42,17 @@ export default function QuestionAddController() {
   };
 
   return (
-    <div className="SurveyController">
-      <button type="button" onClick={() => addSurveyItem("text")}>
-        주관식 추가
-      </button>
-      <button type="button" onClick={() => addSurveyItem("select")}>
-        객관식 추가
-      </button>
+    <div className={classes.controllerWrapper}>
+      <div className={classes.buttonWrap}>
+        <button type="button" onClick={() => addSurveyItem("text")}>
+          + 주관식 추가
+        </button>
+      </div>
+      <div className={classes.buttonWrap}>
+        <button type="button" onClick={() => addSurveyItem("select")}>
+          + 객관식 추가
+        </button>
+      </div>
     </div>
   );
 }

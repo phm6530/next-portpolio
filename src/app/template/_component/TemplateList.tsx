@@ -17,22 +17,18 @@ export default async function TemplateList({
 }) {
   // search
   const curPage = +page || 1;
-
   const prefetchData = await fetchList(curPage + "", sort, search);
-
-  console.log(prefetchData);
 
   return (
     <Grid.center>
       {/* btn Area */}
       <div className={classes.searchFilterWrapper}>
         {/* <HotKeyword /> */}
-
         <SurveyControler />
         <SearchInput search={search} />
       </div>
-      {/* List */}
 
+      {/* List */}
       <SurveyList
         prefetchData={prefetchData}
         curPage={curPage}

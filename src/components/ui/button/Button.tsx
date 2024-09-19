@@ -19,7 +19,12 @@ function solid({
   disabled?: boolean;
 }) {
   return (
-    <button style={style} disabled={disabled} className={classes.solidButton}>
+    <button
+      type="button"
+      style={style}
+      disabled={disabled}
+      className={classes.solidButton}
+    >
       {children}
     </button>
   );

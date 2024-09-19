@@ -9,7 +9,7 @@ export async function fetchDetailResult(id: number) {
     templateMeta: GetTemplateDetailMetaProps;
   }>(() => {
     return fetch(`${BASE_URL}/api/result?templateId=${id}`, {
-      cache: "no-cache",
+      cache: "force-cache",
     });
   });
 }

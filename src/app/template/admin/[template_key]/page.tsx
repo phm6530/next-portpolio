@@ -36,15 +36,19 @@ export default async function adminResult({
     staleTime: 10000,
   });
 
+  console.log(templateId);
+
+  //댓글
   await queryClient.prefetchQuery({
-    queryKey: ["comment"],
+    queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
         return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
-          cache: "no-cache",
+          cache: "no-store",
         });
       }),
   });
+
   const { template } = prefetchData.templateMeta;
 
   return (

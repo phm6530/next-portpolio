@@ -12,9 +12,9 @@ export default function layOut({
   const template = params.templateType;
 
   return (
-    <Grid.center>
+    <Grid.smallCenter>
       <h1>{template} 템플릿</h1>
       {children}
-    </Grid.center>
+    </Grid.smallCenter>
   );
 }
