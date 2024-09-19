@@ -10,8 +10,9 @@ import {
 import Image from "next/image";
 import classes from "./survey.module.scss";
 import useStore from "@/store/store";
-import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { imgUploader } from "@/lib/uploaderHanlder";
 import { PathSegments } from "@/types/upload";
+import { BASE_URL } from "@/config/base";
 
 export default function SurveyRadio({
   fields,
@@ -70,7 +71,7 @@ export default function SurveyRadio({
         template_key,
       });
 
-      setPreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+      setPreView(`${BASE_URL}/${imgUrl}`);
 
       const currentOption = getValues(
         `items.${surveyIdx}.options.${optionIdx}`

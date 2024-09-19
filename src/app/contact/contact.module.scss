@@ -1,0 +1,30 @@
+.mailForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contactVanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border-radius: 1rem;
+  font-size: 2rem;
+  background: rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  background: $gradient-vanner;
+}
+
+.textarea {
+  min-height: 200px;
+}
+.mail {
+  position: fixed;
+  left: 50%;
+  z-index: 20;
+  top: 50%;
+  color: #fff;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+}

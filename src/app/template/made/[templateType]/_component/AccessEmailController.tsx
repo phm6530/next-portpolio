@@ -8,9 +8,11 @@ import {
 import { useFormContext } from "react-hook-form";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/app/lib/helperClient";
-import addPin from "@/app/lib/addPin";
+import { withFetch } from "@/util/clientUtil";
+import addPin from "@/util/addPin";
 import classes from "./AccessEmailController.module.scss";
+import { BASE_URL } from "@/config/base";
+import FormInput from "@/components/ui/FormElement/FormInput";
 
 export default function AccessEmailController({
   agreed,
@@ -35,7 +37,7 @@ export default function AccessEmailController({
   const { mutate } = useMutation({
     mutationFn: (data: { pin: number; userEmail: string }) =>
       withFetch<number>(async () => {
-        const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/email`;
+        const url = `${BASE_URL}/api/auth/email`;
         return fetch(url, {
           method: "POST",
           headers: {
@@ -104,7 +106,7 @@ export default function AccessEmailController({
   return (
     <>
       {/* 인증번호 hidden  */}
-      <input
+      <FormInput
         type="hidden"
         {...register("access_pin", {
           required: "인증은 필수입니다. ",
@@ -117,11 +119,9 @@ export default function AccessEmailController({
         </button>
       ) : isAgreed === "ing" ? (
         <>
-          <input
-            type="text"
+          <FormInput
             placeholder="인증번호를 입력해주세요"
             onChange={onAuthMailNumber}
-            className={authError ? classes.error : undefined}
           />
           <p>
             남은 시간: {Math.floor(countdown / 60)}:

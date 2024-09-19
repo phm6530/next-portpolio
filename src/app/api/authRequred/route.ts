@@ -1,4 +1,4 @@
-import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
+import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import RQProvider from "@/app/config/RQ_Provider";
+import RQProvider from "@/config/RQ_Provider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 

@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
+import { BASE_URL } from "@/config/base";
 
 export default async function layout({ children }: { children: ReactNode }) {
-  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/test`, {
+  await fetch(`${BASE_URL}/api/test`, {
     headers: {
       "x-id": "request_2",
     },

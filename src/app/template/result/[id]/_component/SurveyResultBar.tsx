@@ -1,4 +1,4 @@
-import AniProgressbar from "@/app/_components/animation/AniProgressbar";
+import AniProgressbar from "@/components/animation/AniProgressbar";
 import classes from "./SurveyResultBar.module.scss";
 import Crown from "/public/asset/icon/crown.svg";
 import { useGSAP } from "@gsap/react";

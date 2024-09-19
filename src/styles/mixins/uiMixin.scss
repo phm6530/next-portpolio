@@ -1,15 +1,21 @@
-@mixin afterTriangle($size, $left) {
+@mixin afterTriangle(
+  $size,
+  $left,
+  $bottom: 24px,
+  $rotate: 90deg,
+  $color: rgb(255, 255, 255)
+) {
   content: "";
   display: block;
   position: absolute;
   width: $size;
   height: $size;
-  bottom: -24px;
-  transform: rotate(90deg) translateX(-50%);
+  bottom: $bottom;
+  transform: rotate($rotate) translateX(-50%);
   left: $left;
   width: 0px;
   height: 0px;
   border-width: 7px 9px;
   border-style: solid;
-  border-color: transparent transparent transparent rgb(255, 255, 255);
+  border-color: transparent transparent transparent $color;
 }

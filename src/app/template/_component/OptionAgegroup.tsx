@@ -1,8 +1,8 @@
 import { useFormContext } from "react-hook-form";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import FormRegisterError from "@/app/_components/Error/FormRegisterError";
-import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
-import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import FormRegisterError from "@/components/Error/FormRegisterError";
+import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
 export default function OptionAgeGroup() {
   const {

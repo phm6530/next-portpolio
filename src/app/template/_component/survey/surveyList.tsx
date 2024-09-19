@@ -1,46 +1,50 @@
 "use client";
 
 import classes from "./SurveyList.module.scss";
-import SurveyItem from "@/app/_components/survey/SurveyItem";
-import PageGsap from "@/app/_aniPage/PageGsap";
-import Paging from "@/app/_components/ui/Paging";
+import SurveyItem from "@/components/survey/SurveyItem";
+import PageGsap from "@/components/_aniPage/PageGsap";
+import Paging from "@/components/ui/Paging";
 
-import { fetchList } from "@/app/_services/surveySerivce";
+import { fetchList } from "@/lib/surveySerivce";
 import { GetTemplateMetaLists } from "@/types/template";
 import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEY, QUERY_STRING } from "@/types/constans";
 import { useSearchParams } from "next/navigation";
-import NotFoundComponent from "@/app/_components/NotFoundComponent";
+import NotFoundComponent from "@/components/NotFoundComponent";
+import LoadingSpier from "@/components/ui/loading/LoadingSpiner";
 
 export default function SurveyList({
-  page,
+  prefetchData,
+  curPage,
   sort,
   search,
 }: {
-  page: number;
+  prefetchData: GetTemplateMetaLists;
+  curPage: number;
   sort?: string;
   search?: string;
 }) {
   //하이듀레이션
-  const { data, isLoading } = useQuery<GetTemplateMetaLists>({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST, page, sort, search],
-    queryFn: () => fetchList(page + "", sort, search),
+  const { data, isLoading, isFetching } = useQuery<GetTemplateMetaLists>({
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, curPage, sort, search],
+    queryFn: () => fetchList(curPage + "", sort, search),
     staleTime: 10000,
+    initialData: prefetchData,
   });
 
   const qs = useSearchParams();
   const keyword = qs.get(QUERY_STRING.SEARCH);
 
   if (isLoading) {
-    return "Loading....";
+    return <LoadingSpier />;
   }
 
   return (
     <>
       {data && (
         <>
-          <PageGsap page={page + ""}>
+          <PageGsap page={curPage + ""}>
             {data.result.length > 0 ? (
               <div className={` ${classes.surveyItemWrapper}`}>
                 {data.result.map((item, idx) => {

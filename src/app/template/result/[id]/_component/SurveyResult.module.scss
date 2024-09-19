@@ -7,3 +7,51 @@
 .filterController {
   margin: 1rem 0;
 }
+
+.questionListWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 0;
+  gap: 3rem;
+}
+
+.summary {
+  margin: 20px 0;
+}
+
+.description {
+  opacity: 0.6;
+  padding: 10px 0;
+}
+/* 130 */
+
+.userCnt {
+  font-size: 22px;
+  color: #7975e5;
+}
+
+.Badge {
+  position: absolute;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.445);
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 1rem;
+  color: #fff;
+  left: 10px;
+  top: 10px;
+}
+
+.summeryDetail {
+  margin-bottom: 3rem;
+}
+.participantMessage {
+  font-size: 14px;
+}
+
+.female {
+  color: $female-color;
+}
+.male {
+  color: $male-color;
+}

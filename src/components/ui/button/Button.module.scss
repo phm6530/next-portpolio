@@ -1,0 +1,76 @@
+@import "mixin";
+
+.importantButton {
+  padding: 1.4rem 2rem;
+  margin-top: 2rem;
+  display: inline-block;
+  background: linear-gradient(
+    180deg,
+    #7b69e7 0%,
+    #7498de 100%,
+    #c981cb 100.01%
+  );
+  color: #fff;
+  box-shadow: 0px 0px 30px rgba(51, 144, 202, 0.25);
+  border-radius: 13px;
+}
+
+.submitButton {
+  color: #fff;
+  padding: 1rem 1.5rem;
+
+  box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  margin-top: 2em;
+  font-size: 14px;
+  @include disabledButton();
+  @include btn-hover(#5d5bf5);
+}
+
+.closeButton {
+  cursor: pointer;
+  display: flex;
+}
+.noneStyleButton {
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  svg {
+    width: 10px;
+    margin-left: 20px;
+  }
+}
+
+.normalButton {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  svg,
+  img {
+    margin-right: 0.4rem;
+  }
+  // padding: 0.6rem 0.7rem;
+  // border-radius: 0.5rem;
+  // border: 1px solid $border-button-color;
+}
+.deleteIcon {
+  fill: red !important;
+  color: red !important;
+  width: 10px !important;
+  // background: rgb(223, 223, 223) !important;
+  padding: 4px;
+  border-radius: 1rem;
+  opacity: 0.5;
+  height: auto !important;
+}
+
+.solidButton {
+  padding: 1rem 2rem;
+  border-radius: 7px;
+  font-size: 12px;
+  display: inline-block;
+  color: #fff;
+  @include btn-hover(#592bc4);
+  @include disabledButton();
+}

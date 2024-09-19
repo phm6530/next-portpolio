@@ -1,4 +1,4 @@
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
 import { surveyParams } from "@/types/templateSurvey";
 import { ReactNode } from "react";
 
@@ -12,9 +12,9 @@ export default function layOut({
   const template = params.templateType;
 
   return (
-    <Grid.center>
+    <Grid.smallCenter>
       <h1>{template} 템플릿</h1>
       {children}
-    </Grid.center>
+    </Grid.smallCenter>
   );
 }

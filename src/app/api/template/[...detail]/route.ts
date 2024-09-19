@@ -2,8 +2,8 @@ import {
   getSurveyDetail,
   postSurveyDetail,
 } from "@/app/api/_service/template/surveySerivce";
-import { ApiError, apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { withConnection, withRequest } from "@/app/lib/helperServer";
+import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
+import { withConnection, withRequest } from "@/util/server/serverUtill";
 import { auth } from "@/auth";
 import { PostAddsurveyDetailProps, TemplateTypeProps } from "@/types/template";
 import { ResultSetHeader } from "mysql2";
@@ -64,7 +64,6 @@ export async function DELETE(
 ) {
   return withRequest(async () => {
     const session = await auth();
-    console.log(session);
 
     if (!params.detail[0]) {
       throw new ApiError("필요한 정보가 누락되었습니다.", 403);

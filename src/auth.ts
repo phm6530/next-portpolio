@@ -1,5 +1,6 @@
 import { getUserDataProps } from "@/app/api/auth/login/route";
-import { withFetch } from "@/app/lib/helperClient";
+import { BASE_URL } from "@/config/base";
+import { withFetch } from "@/util/clientUtil";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -16,16 +17,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const userData = credentials as LoginFormProps;
 
         //login Api
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-          }
-        );
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
 
         if (!response.ok) {
           const errorResult = await response.json();
@@ -54,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           template_key: string;
           access_email: string;
         }>(async () => {
-          return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/pin`, {
+          return fetch(`${BASE_URL}/api/auth/pin`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

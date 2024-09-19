@@ -1,6 +1,6 @@
-import { ApiError } from "@/app/lib/apiErrorHandler";
-import { withRequest } from "@/app/lib/helperServer";
-import { authMail } from "@/app/lib/nodeMailer";
+import { ApiError } from "@/util/apiErrorHandler";
+import { withRequest } from "@/util/server/serverUtill";
+import { authMail } from "@/lib/nodeMailer";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {

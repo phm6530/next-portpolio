@@ -1,13 +1,14 @@
 import CommentSection, {
   MessageProps,
-} from "@/app/_components/Comment/CommentSection";
-import { fetchDetailResult } from "@/app/_services/client/templateResult";
-import { queryClient } from "@/app/config/queryClient";
-import { withFetch } from "@/app/lib/helperClient";
-import { withConnection } from "@/app/lib/helperServer";
+} from "@/components/Comment/CommentSection";
+import { fetchDetailResult } from "@/lib/templateResult";
+import { queryClient } from "@/config/queryClient";
+import { withFetch } from "@/util/clientUtil";
+import { withConnection } from "@/util/server/serverUtill";
 import AdminController from "@/app/template/admin/_component/AdminController";
 import SurveyResult from "@/app/template/result/[id]/_component/SurveyResult";
 import { auth } from "@/auth";
+import { BASE_URL } from "@/config/base";
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { RowDataPacket } from "mysql2";
@@ -35,18 +36,19 @@ export default async function adminResult({
     staleTime: 10000,
   });
 
+  console.log(templateId);
+
+  //댓글
   await queryClient.prefetchQuery({
-    queryKey: ["comment"],
+    queryKey: ["comment", templateId],
     queryFn: () =>
       withFetch<MessageProps[]>(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/comment?templateId=${templateId}`,
-          {
-            cache: "no-cache",
-          }
-        );
+        return fetch(`${BASE_URL}/api/comment?templateId=${templateId}`, {
+          cache: "no-store",
+        });
       }),
   });
+
   const { template } = prefetchData.templateMeta;
 
   return (

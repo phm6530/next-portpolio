@@ -13,7 +13,7 @@
 @mixin btn-hover($color) {
   background: $color;
   &:hover {
-    background: darken($color, 10%);
+    background: darken($color, 50%);
   }
 }
 
@@ -54,4 +54,11 @@
   }
 }
 
+@mixin disabledButton() {
+  &:disabled {
+    opacity: 0.3;
+    cursor: "";
+    background: #bdbdbd;
+  }
+}
 //Template Type

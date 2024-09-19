@@ -1,5 +1,5 @@
 import { selectTemlateDetail } from "@/app/api/_dao/template/templateRepository";
-import { withConnection, withTransaction } from "@/app/lib/helperServer";
+import { withConnection, withTransaction } from "@/util/server/serverUtill";
 import { InferObj } from "@/types/common";
 import {
   PostAddsurveyDetailProps,
@@ -81,8 +81,6 @@ export async function getSurveyDetail(
       ageChk: rowData[0].age_chk === 1 ? "1" : "0",
     },
   };
-
-  console.log(metaData, "meta");
 
   const getQuestions = () => {
     const arr: GetSurveyQuestions["questions"] = [];

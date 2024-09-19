@@ -1,4 +1,4 @@
-import { imgUploader } from "@/app/lib/uploaderHanlder";
+import { imgUploader } from "@/lib/uploaderHanlder";
 import useStore from "@/store/store";
 import { PathSegments } from "@/types/upload";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import {
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
+import { BASE_URL } from "@/config/base";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -37,7 +38,7 @@ export default function SurveyTypeText({
       const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
         template_key,
       });
-      setpreView(`${process.env.NEXT_PUBLIC_BASE_URL}/${imgUrl}`);
+      setpreView(`${BASE_URL}/${imgUrl}`);
 
       const QuestionObj = getValues(`items.${surveyIdx}`);
 

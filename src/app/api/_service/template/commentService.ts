@@ -1,6 +1,6 @@
-import { MessageProps } from "@/app/_components/Comment/CommentSection";
-import { comparePassword } from "@/app/lib/comparePassword";
-import { withConnection, withTransaction } from "@/app/lib/helperServer";
+import { MessageProps } from "@/components/Comment/CommentSection";
+import { comparePassword } from "@/util/comparePassword";
+import { withConnection, withTransaction } from "@/util/server/serverUtill";
 import { auth } from "@/auth";
 import { userProps } from "@/types/user";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
@@ -133,8 +133,6 @@ export async function getCommentList(templateId: number) {
       templateId,
     }) as Promise<GetCommentListProps[]>;
   });
-
-  console.log(data);
 
   //구조 변경
   const comment = data.reduce<MessageProps[]>((acc, cur) => {

@@ -1,3 +1,4 @@
+import RadioWrap from "@/components/ui/RadioWrap";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { useFormContext } from "react-hook-form";
 
@@ -6,7 +7,7 @@ export default function AddGender() {
   const { register } = useFormContext<AddSurveyFormProps>();
 
   return (
-    <div>
+    <RadioWrap>
       성별 집계를 하시겠습니까?
       {booleanRadio.map((e, idx) => (
         <label key={`boolean-${idx}`}>
@@ -20,6 +21,6 @@ export default function AddGender() {
           {e === "1" ? "예" : "아니오"}
         </label>
       ))}
-    </div>
+    </RadioWrap>
   );
 }

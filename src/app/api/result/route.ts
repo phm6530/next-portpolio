@@ -1,7 +1,7 @@
 import { selectTemplateMetaData } from "@/app/api/_dao/template/templateRepository";
 import { selectTemplateResult } from "@/app/api/_dao/template/templateRepository";
-import { apiErrorHandler } from "@/app/lib/apiErrorHandler";
-import { withTransaction } from "@/app/lib/helperServer";
+import { apiErrorHandler } from "@/util/apiErrorHandler";
+import { withTransaction } from "@/util/server/serverUtill";
 import { Gender } from "@/types/template";
 import { ResultQuestion } from "@/types/templateSurvey";
 import { PoolConnection } from "mysql2/promise";
@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
     const { data, templateMeta } = await withTransaction(async (conn) => {
       //Detail
       const data = await selectTemplateResult(conn, templateId);
-
       //페이징 파라미터
       const parameter: {
         conn: PoolConnection;
@@ -134,10 +133,6 @@ export async function GET(req: NextRequest) {
       },
       { questions: [] } //initale
     );
-
-    // const templateMetaModify = {
-    //   id: templateMeta.id,
-    // };
 
     return NextResponse.json({ templateResult: questionList, templateMeta });
   } catch (error) {

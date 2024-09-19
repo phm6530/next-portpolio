@@ -1,0 +1,13 @@
+@import "mixin";
+
+.labelAgreed {
+  @include font-color-hover(#5d5bf5);
+  font-size: 14px;
+  display: flex;
+  padding: 10px 0;
+  margin-bottom: 1rem;
+  align-items: center;
+  input {
+    margin-right: 10px;
+  }
+}

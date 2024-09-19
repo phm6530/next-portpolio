@@ -1,22 +1,22 @@
 "use client";
 
-import LoadingSpier from "@/app/_components/ui/loading/LoadingSpiner";
-import { fetchTemplateDetail } from "@/app/_services/surveySerivce";
+import LoadingSpier from "@/components/ui/loading/LoadingSpiner";
+import { fetchTemplateDetail } from "@/lib/surveySerivce";
 import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import { GetSurveyDetailProps } from "@/types/templateSurvey";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import classes from "@/styles/pages/template.module.scss";
-import { FormProvider, useForm } from "react-hook-form";
 
-import TemplateStatus from "@/app/_components/templateUtill/TemplateStatus";
-import DateCompareToday from "@/app/lib/DateCompareToday";
+import { FormProvider, useForm } from "react-hook-form";
+import { BASE_URL } from "@/config/base";
+
+import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import DateCompareToday from "@/util/DateCompareToday";
 
 import { useRouter } from "next/navigation";
-import { withFetch } from "@/app/lib/helperClient";
-import { localStorageHandler } from "@/app/lib/localStorageHandler";
+import { withFetch } from "@/util/clientUtil";
+import { localStorageHandler } from "@/util/localStorageHandler";
 import { useEffect, useState } from "react";
 import { Session } from "next-auth";
 
@@ -25,20 +25,20 @@ import "dayjs/locale/ko";
 
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
-import Button from "@/app/_components/ui/button/Button";
-import UserRoleDisplay from "@/app/_components/ui/userRoleDisplay/UserRoleDisplay";
+import Button from "@/components/ui/button/Button";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 
 import { TemplateTypeProps } from "@/types/template";
 import styles from "./SurveyTemplateDetail.module.scss";
-import UiLoading from "@/app/_components/ui/loading/UiLoading";
-import TalkTooltip from "@/app/_components/ui/Tooltip/TalkTooptip";
+import UiLoading from "@/components/ui/loading/UiLoading";
+import TalkTooltip from "@/components/ui/Tooltip/TalkTooptip";
 
 import MegaPhoneIcon from "/public/asset/icon/megaphone.svg";
-import TemplateQuestionWrapper from "@/app/_components/ui/templateUi/TemplateQuestionWrap";
-import QuestionTitle from "@/app/_components/ui/templateUi/QuestionTitle";
+import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import DateRange from "@/app/template/_component/DateRange/DateRange";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
-import TemplateTitle from "@/app/_components/ui/templateUi/TemplateTitle";
+import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 
 dayjs.locale("ko");
 
@@ -98,16 +98,13 @@ export default function SurveyTemplateDetail({
   >({
     mutationFn: (formData) =>
       withFetch(async () => {
-        return fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/template/${templateType}/${surveyId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        return fetch(`${BASE_URL}/api/template/${templateType}/${surveyId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
       }),
 
     onSuccess: () => {
@@ -143,8 +140,6 @@ export default function SurveyTemplateDetail({
       user_id,
       user_role,
     } = data;
-
-    console.log(data);
 
     //Submit
     const onSubmitHandler = async (data: Record<string, string>) => {
@@ -207,7 +202,11 @@ export default function SurveyTemplateDetail({
                 <QuestionTitle>{qs.label}</QuestionTitle>
                 {qs.type === "text" ? (
                   //주관식
-                  <QuestionText qsImg={qs.textImg} qsId={qs.id} />
+                  <QuestionText
+                    description={qs.label}
+                    qsImg={qs.textImg}
+                    qsId={qs.id}
+                  />
                 ) : (
                   //객관식s
                   <QuestionOptions options={qs.options} qsId={qs.id} />

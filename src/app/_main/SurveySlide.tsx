@@ -4,7 +4,7 @@ import classes from "./SurveySlide.module.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
-import SurveyItem from "@/app/_components/survey/SurveyItem";
+import SurveyItem from "@/components/survey/SurveyItem";
 import { GetTemplateItemProps } from "@/types/template";
 
 export default function SurveySlide({ idx }: { idx: number }) {

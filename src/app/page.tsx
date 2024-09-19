@@ -1,25 +1,19 @@
+"use client";
+
 import { Metadata } from "next";
 import classes from "./home.module.scss";
 
 import dynamic from "next/dynamic";
 import SurveySlide from "@/app/_main/SurveySlide";
-import Grid from "@/app/_components/ui/Grid";
+import Grid from "@/components/ui/Grid";
+import MainGsap from "@/components/_aniPage/MainGsap";
 
-//메타 데이터
-export const metadata: Metadata = {
-  title: "나만의 설문조사를 만들어보세요",
-  description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
-};
-
-const DynamicMainGsap = dynamic(() => import("@/app/_aniPage/MainGsap"), {
-  ssr: false,
-});
-export default async function Home() {
+export default function Home() {
   //공백 arr
   const arr = Array.from({ length: 1 }, (_, idx) => idx);
 
   return (
-    <DynamicMainGsap>
+    <MainGsap>
       <Grid.center>
         <div className={classes.mainGrid}>
           <div className={classes.leftSection}>
@@ -68,6 +62,6 @@ export default async function Home() {
           </div>
         </div>
       </Grid.center>
-    </DynamicMainGsap>
+    </MainGsap>
   );
 }
