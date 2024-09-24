@@ -1,6 +1,3 @@
-// import RankTemplateDetail from "@/app/template/[...detail]/RankTemplateDetail";
-// import SurveyTemplateDetail from "@/app/template/[...detail]/SurveyTemplateDetail";
-
 import { fetchTemplateDetail } from "@/lib/surveySerivce";
 import { AddsurveyDetailProps } from "@/types/templateSurvey";
 import { Metadata } from "next";
@@ -17,6 +14,7 @@ import AdminController from "@/app/template/admin/_component/AdminController";
 import Grid from "@/components/ui/Grid";
 import BackButton from "@/components/ui/button/BackButton";
 import imgUrlMapper from "@/util/imgUrlMapper";
+import { ageGroupProps, Gender } from "@/types/template";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -101,12 +99,16 @@ export default async function Page({
 
   const {
     dateRange,
+    age_group,
+    gender_group,
     user_id,
     thumbnail,
     title,
     template_key,
     template,
+    description,
     id: template_id,
+    user_cnt,
   } = data;
 
   //template Date Gard
@@ -127,10 +129,14 @@ export default async function Page({
             <TemplatePending
               dateRange={dateRange}
               thumbnail={thumbnail}
+              description={description}
               title={title}
               templateStatus={templateStatus}
               templateType={templateType}
               templateId={id}
+              ageGroup={age_group as ageGroupProps}
+              genderGroup={gender_group as Gender}
+              userCnt={user_cnt}
             />
           </Grid.smallCenter>
         );

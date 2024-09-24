@@ -3,11 +3,16 @@ import {
   postSurveyDetail,
 } from "@/app/api/_service/template/surveySerivce";
 import { ApiError, apiErrorHandler } from "@/util/apiErrorHandler";
-import { withConnection, withRequest } from "@/util/server/serverUtill";
+import {
+  withConnection,
+  withRequest,
+  withTransaction,
+} from "@/util/server/serverUtill";
 import { auth } from "@/auth";
 import { PostAddsurveyDetailProps, TemplateTypeProps } from "@/types/template";
 import { ResultSetHeader } from "mysql2";
 import { NextRequest, NextResponse } from "next/server";
+import { selectTemplateMetaData } from "@/app/api/_dao/template/templateRepository";
 
 // GET Detail Survey
 export async function GET(
@@ -21,7 +26,14 @@ export async function GET(
   try {
     const [templateType, DetailId] = params.detail;
     if (templateType === "survey") {
-      const result = await getSurveyDetail(DetailId);
+      const [result, test] = await withTransaction(async (conn) => {
+        const result = await getSurveyDetail(DetailId);
+        const test = await selectTemplateMetaData({
+          conn,
+          usePagination: false,
+        });
+        return [result, test];
+      });
 
       return NextResponse.json(result);
     } else {

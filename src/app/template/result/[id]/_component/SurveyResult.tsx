@@ -18,6 +18,7 @@ import Button from "@/components/ui/button/Button";
 import IconLabel from "@/components/ui/IconLabel";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import GroupStatus from "@/components/ui/GroupStatus";
 
 const FILTER_GENDER = [
   {
@@ -89,8 +90,12 @@ export default function SurveyResult({ id }: { id: number }) {
       start_date,
       end_date,
       created_at,
+      user_cnt,
+      gender_group,
+      age_group,
     } = templateMeta;
 
+    console.log(data.templateMeta);
     const templateNames: { [key: string]: string } = {
       survey: "설문조사",
       rank: "랭킹",
@@ -117,13 +122,13 @@ export default function SurveyResult({ id }: { id: number }) {
       }
     };
 
-    const transferGenderString = (group: Gender | null) => {
-      return group === "female"
-        ? "여성"
-        : group === "male"
-        ? "남성"
-        : undefined;
-    };
+    // const transferGenderString = (group: Gender | null) => {
+    //   return group === "female"
+    //     ? "여성"
+    //     : group === "male"
+    //     ? "남성"
+    //     : undefined;
+    // };
 
     return (
       <>
@@ -142,31 +147,14 @@ export default function SurveyResult({ id }: { id: number }) {
 
             <div>
               <span>참여자 </span>
-              <span className={classes.userCnt}>
-                {templateMeta.user_cnt || 0}
-              </span>{" "}
-              명
+              <span className={classes.userCnt}>{user_cnt || 0}</span> 명
             </div>
           </div>
-          <div className={classes.participantMessage}>
-            {templateMeta.user_cnt < 10 ? (
-              "집계하기엔 아직 참여자가 너무 적습니다."
-            ) : (
-              <>
-                이 {templateName}은/는 {templateMeta.age_group}대{" "}
-                <span
-                  className={`${
-                    templateMeta.gender_group === "female"
-                      ? classes.female
-                      : classes.male
-                  }`}
-                >
-                  {transferGenderString(templateMeta.gender_group)}
-                </span>
-                이 가장 많이 참여하였습니다.
-              </>
-            )}
-          </div>
+          <GroupStatus
+            genderGroup={gender_group as Gender}
+            ageGroup={age_group as string}
+            action={user_cnt < 5}
+          />
           <Button.moveLink moveUrl={`/template/${templateType}/${id}`}>
             참여하기
           </Button.moveLink>

@@ -1,4 +1,8 @@
-import { GetTemplateDetail, GetTemplateItemProps } from "@/types/template";
+import {
+  Gender,
+  GetTemplateDetail,
+  GetTemplateItemProps,
+} from "@/types/template";
 import { useRouter } from "next/navigation";
 import { ForwardedRef, useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -11,6 +15,7 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import FemaleIcon from "/public/asset/icon/mdi_face-female.png";
 import MaleIcon from "/public/asset/icon/mdi_face-male.png";
 import imgUrlMapper from "@/util/imgUrlMapper";
+import GroupStatus from "@/components/ui/GroupStatus";
 
 export default function SurveyItem({
   itemData,
@@ -118,32 +123,11 @@ export default function SurveyItem({
         <div className={classes.surveyTitle}>{title}</div>
         {/* <div>{description}</div> */}
         {/* <div>{created_at}</div> */}
-        <div className={classes.groupParticipants}>
-          {gender_group === "female" ? (
-            <Image src={FemaleIcon} alt="femaleIcon" width={17} height={17} />
-          ) : gender_group === "male" ? (
-            <Image src={MaleIcon} alt="maleIcon" width={17} height={17} />
-          ) : (
-            ""
-          )}
-
-          {age_group && `${age_group}대`}
-
-          {gender_group ? (
-            <>
-              <span
-                className={
-                  gender_group === "male" ? classes.male : classes.female
-                }
-              >
-                {gender_group === "male" ? "남성" : "여성"}
-              </span>
-              의 참여율이 가장 높습니다.
-            </>
-          ) : (
-            user_cnt < 10 && "참여해주세요!"
-          )}
-        </div>
+        <GroupStatus
+          genderGroup={gender_group as Gender}
+          ageGroup={age_group as string}
+          action={user_cnt < 5}
+        />
         <div className={classes.bottomWrap}>
           <span className={classes.Participation}>
             참여자 {user_cnt || 0}명

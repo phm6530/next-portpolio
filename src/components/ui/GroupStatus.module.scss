@@ -1,0 +1,16 @@
+.groupParticipants {
+  font-size: 0.8rem;
+  letter-spacing: -0.4px;
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+
+  opacity: 0.5;
+  gap: 5px;
+  .male {
+    color: $male-color;
+  }
+  .female {
+    color: $female-color;
+  }
+}

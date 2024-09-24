@@ -4,6 +4,7 @@ import commonStyle from "@/styles/pages/template.module.scss";
 import classes from "./QuestionText.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
+import ImageZoom from "@/app/template/_component/ImageZoom";
 
 export default function QuestionText({
   description,
@@ -34,6 +35,7 @@ export default function QuestionText({
             alt="preview"
             priority
           />
+          <ImageZoom alt={"preview"} image={qsImg} />
         </div>
       )}
       <FormTextarea
