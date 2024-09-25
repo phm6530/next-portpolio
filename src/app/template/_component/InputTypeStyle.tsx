@@ -1,5 +1,22 @@
-import { HTMLAttributes, HtmlHTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import classes from "./InputTypeStyle.module.scss";
+
+// Tab
+interface RadioTabProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  select: boolean;
+}
+
+const RadioTab: React.FC<RadioTabProps> = ({ children, select, ...rest }) => {
+  return (
+    <div
+      className={`${classes.tab} ${select ? classes.active : undefined}`}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+};
 
 //동적 Radio Style
 function RadioAnswer({
@@ -58,6 +75,7 @@ function Radio<T extends HTMLLabelElement>({
 interface InputTypeStyleProps extends React.FC<{ children: ReactNode }> {
   RadioAnswer: typeof RadioAnswer;
   Radio: typeof Radio;
+  RadioTab: typeof RadioTab;
 }
 
 const InputTypeStyle: InputTypeStyleProps = ({ children }) => {
@@ -66,5 +84,6 @@ const InputTypeStyle: InputTypeStyleProps = ({ children }) => {
 
 InputTypeStyle.RadioAnswer = RadioAnswer;
 InputTypeStyle.Radio = Radio;
+InputTypeStyle.RadioTab = RadioTab;
 
 export default InputTypeStyle;

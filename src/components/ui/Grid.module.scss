@@ -1,16 +1,20 @@
 @mixin grid-center {
-  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
 }
 
 .GridCenter {
+  max-width: 1200px;
   @include grid-center;
 }
 
 .GridSmallCenter {
-  width: 100%;
-  margin: 0 auto;
+  @include grid-center;
   max-width: 700px;
   padding-top: 30px;
+}
+
+.ExtraSmall {
+  @include grid-center;
+  max-width: 500px;
 }

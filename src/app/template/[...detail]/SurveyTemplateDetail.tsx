@@ -155,7 +155,6 @@ export default function SurveyTemplateDetail({
           return;
         }
       }
-
       mutate(data);
     };
 

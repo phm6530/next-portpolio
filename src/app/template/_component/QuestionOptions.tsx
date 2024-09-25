@@ -1,12 +1,12 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-
 import Image from "next/image";
 import { FieldError, useFormContext } from "react-hook-form";
-import classes from "@/styles/pages/template.module.scss";
 import { GetSurveyQuestions } from "@/types/templateSurvey";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
+import styles from "./QuestionOptions.module.scss";
+import ImageZoom from "@/app/template/_component/ImageZoom";
+import ImageViewer from "@/app/template/_component/ImageViewer";
 
 type SurveyQuestionOptions = GetSurveyQuestions["questions"][number]["options"];
 
@@ -47,21 +47,22 @@ export default function QuestionOptions({
                 required: "필수 항목입니다.",
               })}
             />
-            {e.optionPictrue && (
-              <div className={classes.previewContainer}>
-                <Image
-                  src={e.optionPictrue}
-                  layout="responsive"
-                  width={16}
-                  height={9}
-                  style={{ maxWidth: 700, objectFit: "cover" }}
-                  alt="preview"
-                  priority
-                />
-              </div>
-            )}
 
-            {e.label}
+            <div className={styles.chkItemWrap}>
+              <div
+                className={`${styles.chkItem} ${
+                  selectLabel === e.label ? styles.active : undefined
+                }`}
+              />
+              {e.label}
+            </div>
+
+            {/* 이미지 있으면 */}
+            {e.optionPictrue && (
+              <>
+                <ImageViewer image={e.optionPictrue} alt={e.label} />
+              </>
+            )}
           </InputTypeStyle.RadioAnswer>
         );
       })}

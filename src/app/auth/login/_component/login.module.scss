@@ -1,3 +1,10 @@
 .errorMsg {
   color: $color-error-1;
 }
+
+.form {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}

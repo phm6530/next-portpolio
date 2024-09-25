@@ -7,8 +7,7 @@ import { ageGroupProps, Gender } from "@/types/template";
 
 import classes from "./SurveyResult.module.scss";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import Crown from "/public/asset/icon/crown.svg";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
@@ -16,6 +15,12 @@ import SurveyResultBar from "@/app/template/result/[id]/_component/SurveyResultB
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import ResponseText from "@/app/template/result/[id]/_component/ResponseText";
 import Button from "@/components/ui/button/Button";
+import IconLabel from "@/components/ui/IconLabel";
+import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
+import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import GroupStatus from "@/components/ui/GroupStatus";
+import ImageViewer from "@/app/template/_component/ImageViewer";
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 
 const FILTER_GENDER = [
   {
@@ -87,8 +92,12 @@ export default function SurveyResult({ id }: { id: number }) {
       start_date,
       end_date,
       created_at,
+      user_cnt,
+      gender_group,
+      age_group,
     } = templateMeta;
 
+    console.log(data.templateMeta);
     const templateNames: { [key: string]: string } = {
       survey: "설문조사",
       rank: "랭킹",
@@ -115,14 +124,6 @@ export default function SurveyResult({ id }: { id: number }) {
       }
     };
 
-    const transferGenderString = (group: Gender | null) => {
-      return group === "female"
-        ? "여성"
-        : group === "male"
-        ? "남성"
-        : undefined;
-    };
-
     return (
       <>
         <div className={classes.summeryDetail}>
@@ -140,68 +141,50 @@ export default function SurveyResult({ id }: { id: number }) {
 
             <div>
               <span>참여자 </span>
-              <span className={classes.userCnt}>
-                {templateMeta.user_cnt || 0}
-              </span>{" "}
-              명
+              <span className={classes.userCnt}>{user_cnt || 0}</span> 명
             </div>
           </div>
-          <div className={classes.participantMessage}>
-            {templateMeta.user_cnt < 10 ? (
-              "집계하기엔 아직 참여자가 너무 적습니다."
-            ) : (
-              <>
-                이 {templateName}은/는 {templateMeta.age_group}대{" "}
-                <span
-                  className={`${
-                    templateMeta.gender_group === "female"
-                      ? classes.female
-                      : classes.male
-                  }`}
-                >
-                  {transferGenderString(templateMeta.gender_group)}
-                </span>
-                이 가장 많이 참여하였습니다.
-              </>
-            )}
-          </div>
+          <GroupStatus
+            genderGroup={gender_group as Gender}
+            ageGroup={age_group as string}
+            action={user_cnt < 5}
+          />
           <Button.moveLink moveUrl={`/template/${templateType}/${id}`}>
             참여하기
           </Button.moveLink>
         </div>
 
-        {/* Gender Filter */}
-        <div className={classes.filterController}>
-          {FILTER_GENDER.map((e, idx) => {
-            return (
-              <InputTypeStyle.Radio
-                key={`genderFilter-${idx}`}
-                selectLabel={genderGroup}
-                curLabel={e.val + ""}
-                onClick={() => filterGenderHandler(e.val)}
-              >
-                {e.label}
-              </InputTypeStyle.Radio>
-            );
-          })}
-        </div>
+        <div className={classes.radioWrap}>
+          {/* Gender Filter */}
+          <div className={classes.filterController}>
+            {FILTER_GENDER.map((e, idx) => {
+              return (
+                <InputTypeStyle.RadioTab
+                  key={`genderFilter-${idx}`}
+                  select={genderGroup === e.val + ""}
+                  onClick={() => filterGenderHandler(e.val)}
+                >
+                  {e.label}
+                </InputTypeStyle.RadioTab>
+              );
+            })}
+          </div>
 
-        {/* Age Filter */}
-        <div className={classes.filterController}>
-          {FILTER_Age.map((e, idx) => {
-            return (
-              <InputTypeStyle.Radio
-                key={`genderFilter-${idx}`}
-                selectLabel={ageGroup + ""}
-                curLabel={e.val + ""}
-                onClick={() => filterAgeHandler(e.val + "")}
-              >
-                {e.label}
-              </InputTypeStyle.Radio>
-            );
-          })}
+          {/* Age Filter */}
+          <div className={classes.filterController}>
+            {FILTER_Age.map((e, idx) => {
+              return (
+                <InputTypeStyle.RadioTab
+                  key={`genderFilter-${idx}`}
+                  select={ageGroup + "" === e.val + ""}
+                  onClick={() => filterAgeHandler(e.val + "")}
+                >
+                  {e.label}
+                </InputTypeStyle.RadioTab>
+              );
+            })}
+          </div>
         </div>
-
         {/* Text */}
 
         <div className={classes.questionListWrapper}>
@@ -209,16 +192,18 @@ export default function SurveyResult({ id }: { id: number }) {
             //type - 주관식 일때
             if (q.type === "text") {
               return (
-                <ResponseText
-                  key={`key-${idx}`}
-                  questionTitle={q.question}
-                  answers={q.values!}
-                  genderGroup={genderGroup}
-                  ageGroup={ageGroup}
-                  questionId={q.id}
-                  templateId={templateMeta.id}
-                  responseCnt={templateMeta.user_cnt}
-                />
+                <TemplateQuestionWrapper key={idx}>
+                  <ResponseText
+                    key={`key-${idx}`}
+                    questionTitle={q.question}
+                    answers={q.values!}
+                    genderGroup={genderGroup}
+                    ageGroup={ageGroup}
+                    questionId={q.id}
+                    templateId={templateMeta.id}
+                    responseCnt={templateMeta.user_cnt}
+                  />
+                </TemplateQuestionWrapper>
               );
             }
 
@@ -259,41 +244,45 @@ export default function SurveyResult({ id }: { id: number }) {
 
               //최고값
               const maxCnt = Math.max(...(cntList as number[]));
-
+              const isPictureOption =
+                q.options?.some((e) => e.picture !== null) || false;
               return (
-                <div key={idx} className={classes.questionItem}>
+                <div
+                  className={classes.questionItem}
+                  key={`qustionSelect-${idx}`}
+                >
                   {/* Select */}
-                  <QuestionTitle>{q.question}</QuestionTitle>
-                  {q.options?.map((e, idx) => {
-                    //option 선택자 수
-                    const cnt = cntList[idx] || 0;
-                    return (
-                      <div key={idx}>
-                        {e.picture && (
-                          <div>
-                            <Image
-                              src={e.picture}
-                              layout="responsive"
-                              width={16}
-                              height={9}
-                              style={{ maxWidth: 700, objectFit: "cover" }}
-                              alt="preview"
-                              priority
-                            />
+                  <QuestionTitle>{q.question}</QuestionTitle>{" "}
+                  <QuestionsContainer isPicture={isPictureOption}>
+                    {q.options?.map((e, idx) => {
+                      //option 선택자 수
+                      const cnt = cntList[idx] || 0;
+                      const isMax = maxCnt === 0 ? false : maxCnt === +cnt;
+                      return (
+                        <div key={idx}>
+                          <div className={classes.questionLabel}>
+                            {isMax ? (
+                              <IconLabel Icon={Crown}>{e.label}</IconLabel>
+                            ) : (
+                              e.label
+                            )}
+                            <span>({cnt} 명)</span>
                           </div>
-                        )}
 
-                        {/* Percent */}
-                        <SurveyResultBar
-                          triggerContents={[genderGroup, ageGroup]}
-                          label={e.label}
-                          curCnt={cnt}
-                          allCnt={templateMeta.user_cnt}
-                          maxCnt={maxCnt === 0 ? false : maxCnt === +cnt}
-                        />
-                      </div>
-                    );
-                  })}
+                          {/* Percent */}
+                          <SurveyResultBar
+                            triggerContents={[genderGroup, ageGroup]}
+                            curCnt={cnt}
+                            allCnt={templateMeta.user_cnt}
+                            maxCnt={isMax}
+                          />
+                          {e.picture && (
+                            <ImageViewer image={e.picture} alt={e.label} />
+                          )}
+                        </div>
+                      );
+                    })}{" "}
+                  </QuestionsContainer>
                 </div>
               );
             }

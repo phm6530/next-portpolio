@@ -28,6 +28,8 @@ export default function Page() {
     register,
   } = formMethod;
 
+  console.log(errors);
+
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
       withFetch(async () => {
@@ -73,6 +75,7 @@ export default function Page() {
               {...register("name", {
                 required: "보내시는 분의 성함을 기재해주세요.",
               })}
+              inputName="name"
             />
 
             <FormInput
@@ -81,28 +84,31 @@ export default function Page() {
               {...register("digit", {
                 required: "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
               })}
+              inputName="digit"
             />
 
-            <label htmlFor="">문의 내용</label>
+            <label>문의 내용</label>
             <FormTextarea
               placeholder="textarea"
               {...register("textarea", {
                 required: "문의 내용은 필수입니다.",
                 minLength: { value: 10, message: "최소 10글자 적어주세요" },
               })}
+              textareaName="textarea"
               className={classes.textarea}
             />
           </FormProvider>
 
           <div style={{ textAlign: "center" }}>
-            <Button.solid disabled={isPending} style={{ marginLeft: "auto" }}>
+            <Button.submit
+              type="submit"
+              disabled={isPending}
+              style={{ marginLeft: "auto" }}
+            >
               보내기
-            </Button.solid>
+            </Button.submit>
           </div>
         </form>
-        <FormRegisterError
-          errorMsg={Object.values(errors)[0]?.message as string}
-        />
       </Grid.smallCenter>
     </>
   );
