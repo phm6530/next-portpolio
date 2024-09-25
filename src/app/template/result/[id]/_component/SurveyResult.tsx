@@ -19,6 +19,8 @@ import IconLabel from "@/components/ui/IconLabel";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import GroupStatus from "@/components/ui/GroupStatus";
+import ImageViewer from "@/app/template/_component/ImageViewer";
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 
 const FILTER_GENDER = [
   {
@@ -121,14 +123,6 @@ export default function SurveyResult({ id }: { id: number }) {
         );
       }
     };
-
-    // const transferGenderString = (group: Gender | null) => {
-    //   return group === "female"
-    //     ? "여성"
-    //     : group === "male"
-    //     ? "남성"
-    //     : undefined;
-    // };
 
     return (
       <>
@@ -250,12 +244,16 @@ export default function SurveyResult({ id }: { id: number }) {
 
               //최고값
               const maxCnt = Math.max(...(cntList as number[]));
-
+              const isPictureOption =
+                q.options?.some((e) => e.picture !== null) || false;
               return (
-                <TemplateQuestionWrapper key={idx}>
-                  <div className={classes.questionItem}>
-                    {/* Select */}
-                    <QuestionTitle>{q.question}</QuestionTitle>
+                <div
+                  className={classes.questionItem}
+                  key={`qustionSelect-${idx}`}
+                >
+                  {/* Select */}
+                  <QuestionTitle>{q.question}</QuestionTitle>{" "}
+                  <QuestionsContainer isPicture={isPictureOption}>
                     {q.options?.map((e, idx) => {
                       //option 선택자 수
                       const cnt = cntList[idx] || 0;
@@ -271,20 +269,6 @@ export default function SurveyResult({ id }: { id: number }) {
                             <span>({cnt} 명)</span>
                           </div>
 
-                          {e.picture && (
-                            <div>
-                              <Image
-                                src={e.picture}
-                                layout="responsive"
-                                width={16}
-                                height={9}
-                                style={{ maxWidth: 700, objectFit: "cover" }}
-                                alt="preview"
-                                priority
-                              />
-                            </div>
-                          )}
-
                           {/* Percent */}
                           <SurveyResultBar
                             triggerContents={[genderGroup, ageGroup]}
@@ -292,11 +276,14 @@ export default function SurveyResult({ id }: { id: number }) {
                             allCnt={templateMeta.user_cnt}
                             maxCnt={isMax}
                           />
+                          {e.picture && (
+                            <ImageViewer image={e.picture} alt={e.label} />
+                          )}
                         </div>
                       );
-                    })}
-                  </div>
-                </TemplateQuestionWrapper>
+                    })}{" "}
+                  </QuestionsContainer>
+                </div>
               );
             }
           })}

@@ -6,6 +6,7 @@ import FormRegisterError from "@/components/Error/FormRegisterError";
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
 import ImageZoom from "@/app/template/_component/ImageZoom";
+import ImageViewer from "@/app/template/_component/ImageViewer";
 
 type SurveyQuestionOptions = GetSurveyQuestions["questions"][number]["options"];
 
@@ -56,20 +57,10 @@ export default function QuestionOptions({
               {e.label}
             </div>
 
-            {/* 이미지 선택 있으면 */}
+            {/* 이미지 있으면 */}
             {e.optionPictrue && (
               <>
-                <div className={styles.previewContainer}>
-                  <Image
-                    src={e.optionPictrue}
-                    style={{ maxWidth: 700, objectFit: "cover" }}
-                    alt="preview"
-                    fill
-                    priority
-                  />
-                  {/* Image Zoom Button */}
-                  <ImageZoom alt={e.label} image={e.optionPictrue} />
-                </div>
+                <ImageViewer image={e.optionPictrue} alt={e.label} />
               </>
             )}
           </InputTypeStyle.RadioAnswer>
