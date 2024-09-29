@@ -1,9 +1,6 @@
 "use client";
 
-import { Metadata } from "next";
 import classes from "./home.module.scss";
-
-import dynamic from "next/dynamic";
 import SurveySlide from "@/app/_main/SurveySlide";
 import Grid from "@/components/ui/Grid";
 import MainGsap from "@/components/_aniPage/MainGsap";

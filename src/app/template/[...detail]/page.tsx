@@ -15,6 +15,7 @@ import Grid from "@/components/ui/Grid";
 import BackButton from "@/components/ui/button/BackButton";
 import imgUrlMapper from "@/util/imgUrlMapper";
 import { ageGroupProps, Gender } from "@/types/template";
+import { Suspense } from "react";
 
 // Dynamic import of components
 // const DynamicSurveyTemplateDetail = dynamic(
@@ -28,6 +29,7 @@ const DynamicRankTemplateDetail = dynamic(
 );
 
 const vaildateTemplateType = ["survey", "rank"] as const;
+
 export type TemplateUnionType = (typeof vaildateTemplateType)[number];
 type templateDetailParams = { detail: [TemplateUnionType, string] };
 
@@ -92,7 +94,10 @@ export default async function Page({
 
   const data = await queryClient.fetchQuery({
     queryKey: [templateType, +id],
-    queryFn: () => fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id),
+    queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      return fetchTemplateDetail<AddsurveyDetailProps>(templateType, +id);
+    },
     staleTime: 10000,
   });
   const dayCompare = DateCompareToday();
@@ -125,20 +130,22 @@ export default async function Page({
       //종료일과 시작일에 따른 상태보여주기
       if (templateStatus) {
         return (
-          <Grid.smallCenter>
-            <TemplatePending
-              dateRange={dateRange}
-              thumbnail={thumbnail}
-              description={description}
-              title={title}
-              templateStatus={templateStatus}
-              templateType={templateType}
-              templateId={id}
-              ageGroup={age_group as ageGroupProps}
-              genderGroup={gender_group as Gender}
-              userCnt={user_cnt}
-            />
-          </Grid.smallCenter>
+          <Suspense fallback={<>loading...</>}>
+            <Grid.smallCenter>
+              <TemplatePending
+                dateRange={dateRange}
+                thumbnail={thumbnail}
+                description={description}
+                title={title}
+                templateStatus={templateStatus}
+                templateType={templateType}
+                templateId={id}
+                ageGroup={age_group as ageGroupProps}
+                genderGroup={gender_group as Gender}
+                userCnt={user_cnt}
+              />
+            </Grid.smallCenter>
+          </Suspense>
         );
       }
     }
@@ -146,39 +153,41 @@ export default async function Page({
 
   return (
     <Grid.smallCenter>
-      <div
-        style={{
-          marginBottom: "20px",
-        }}
-      >
-        <BackButton />
-      </div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        {session && session.user.role === "admin" && (
-          <AdminController
-            user={session.user}
-            curTemplateKey={template_key as string}
-            curTemplateType={template}
-            curTemplateId={template_id}
-          />
-          // <AdminButton id={id} /> // 클라이언트 컴포넌트 사용
-        )}
+      <Suspense fallback={<div>loading...</div>}>
+        <div
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          <BackButton />
+        </div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          {session && session.user.role === "admin" && (
+            <AdminController
+              user={session.user}
+              curTemplateKey={template_key as string}
+              curTemplateType={template}
+              curTemplateId={template_id}
+            />
+            // <AdminButton id={id} /> // 클라이언트 컴포넌트 사용
+          )}
 
-        {(() => {
-          if (templateType === "survey") {
-            return (
-              <SurveyTemplateDetail
-                templateType={templateType}
-                surveyId={+id}
-                session={session}
-              />
-            );
-          }
-          if (templateType === "rank") {
-            return <DynamicRankTemplateDetail />;
-          }
-        })()}
-      </HydrationBoundary>
+          {(() => {
+            if (templateType === "survey") {
+              return (
+                <SurveyTemplateDetail
+                  templateType={templateType}
+                  surveyId={+id}
+                  session={session}
+                />
+              );
+            }
+            if (templateType === "rank") {
+              return <DynamicRankTemplateDetail />;
+            }
+          })()}
+        </HydrationBoundary>{" "}
+      </Suspense>
     </Grid.smallCenter>
   );
 }

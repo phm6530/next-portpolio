@@ -5,6 +5,7 @@ import ProviderContext from "@/app/_provider";
 import "@/styles/_styles.scss";
 
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -23,8 +24,10 @@ export default function RootLayout({
         <div id="backdrop-portal"></div>
         <div id="modal-portal"></div>
         <ProviderContext>
-          <GlobalNav />
-          <main className="container">{children}</main>
+          <Suspense fallback={<div>loading...</div>}>
+            <GlobalNav />
+            <main className="container">{children}</main>
+          </Suspense>
         </ProviderContext>
         <Footer />
       </body>
