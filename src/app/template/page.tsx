@@ -45,7 +45,7 @@ export default async function CreateSurveyPage({
           </Grid.center>
         </Vanner>
 
-        <Suspense fallback={<div>loaindg...</div>}>
+        <Suspense fallback={<div>loading.....</div>}>
           {/* templat List  */}
           <TemplateList
             page={searchParams.page}

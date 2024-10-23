@@ -2,7 +2,7 @@
 
 import LoadingSpier from "@/components/ui/loading/LoadingSpiner";
 import { fetchTemplateDetail } from "@/lib/surveySerivce";
-import { TemplateUnionType } from "@/app/template/[...detail]/page";
+// import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import { GetSurveyDetailProps } from "@/types/templateSurvey";
@@ -155,6 +155,7 @@ export default function SurveyTemplateDetail({
           return;
         }
       }
+
       mutate(data);
     };
 
@@ -164,7 +165,7 @@ export default function SurveyTemplateDetail({
           <ThumbNail thumbnail={thumbnail} />
 
           <div className={styles.templateSumeryWrapp}>
-            <TemplateStatus dateRange={dateRange} createdAt={created_at} />
+            {/* <TemplateStatus dateRange={dateRange} createdAt={created_at} /> */}
             <TemplateTitle>{title}</TemplateTitle>
             <DateRange dateRange={dateRange} />
 
@@ -181,6 +182,7 @@ export default function SurveyTemplateDetail({
             </div>
           </div>
         </TemplateQuestionWrapper>
+
         {/* Option  */}
         <FormProvider {...formMethod}>
           {/**

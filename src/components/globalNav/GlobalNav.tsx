@@ -19,7 +19,7 @@ export default function GlobalNav() {
             </div>
             <div className={classes.contentsLink}>
               <Link href={"/about"}>사용법</Link>
-              <Link href={"/template"}>
+              <Link href={"/list"}>
                 설문조사 리스트
                 <span className={classes.new}>NEW</span>
               </Link>

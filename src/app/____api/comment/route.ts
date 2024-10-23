@@ -12,7 +12,6 @@ import { withRequest } from "@/util/server/serverUtill";
 
 //초기 Comment 가져오기
 export async function GET(req: NextRequest) {
-  console.log("초기화 해야함");
   return withRequest(async () => {
     const searchParams = req.nextUrl.searchParams;
 

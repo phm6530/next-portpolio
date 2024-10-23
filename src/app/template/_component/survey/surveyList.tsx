@@ -26,16 +26,23 @@ export default function SurveyList({
   search?: string;
 }) {
   //하이듀레이션
-  const { data, isLoading, isFetching } = useQuery<GetTemplateMetaLists>({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST, curPage, sort, search],
-    queryFn: () => fetchList(curPage + "", sort, search),
-    staleTime: 10000,
-    initialData: prefetchData,
-  });
+  const { data, isLoading, isError, isFetching } =
+    useQuery<GetTemplateMetaLists>({
+      queryKey: [QUERY_KEY.TEMPLATE_LIST, curPage, sort, search],
+      queryFn: () => fetchList(curPage + "", sort, search),
+      staleTime: 10000,
+      initialData: prefetchData,
+    });
+
+  console.log("data:::", data);
+
+  console.log(isError);
 
   const qs = useSearchParams();
   const keyword = qs.get(QUERY_STRING.SEARCH);
-
+  if (isError) {
+    return "error...";
+  }
   if (isLoading) {
     return <LoadingSpier />;
   }

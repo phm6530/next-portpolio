@@ -78,6 +78,8 @@ export default function SurveyResult({ id }: { id: number }) {
     staleTime: 10000,
   });
 
+  console.log(data);
+
   if (isError) {
     notFound();
   }

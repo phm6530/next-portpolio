@@ -5,6 +5,15 @@ import SearchInput from "@/components/ui/SearchInput";
 import { fetchList } from "@/lib/surveySerivce";
 
 import classes from "./TemplateList.module.scss";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { queryClient } from "@/config/queryClient";
+import { BASE_NEST_URL } from "@/config/base";
+
+type ResponseError = {
+  message: string;
+  error: string;
+  statusCode: number;
+};
 
 export default async function TemplateList({
   page,
@@ -17,7 +26,15 @@ export default async function TemplateList({
 }) {
   // search
   const curPage = +page || 1;
-  const prefetchData = await fetchList(curPage + "", sort, search);
+
+  await queryClient.prefetchQuery({
+    queryKey: ["templateList"],
+    queryFn: async (): Promise<ResponseError> => {
+      const response = await fetch(`${BASE_NEST_URL}/template`);
+      return response.json();
+    },
+    staleTime: 10000,
+  });
 
   return (
     <Grid.center>
@@ -29,12 +46,9 @@ export default async function TemplateList({
       </div>
 
       {/* List */}
-      <SurveyList
-        prefetchData={prefetchData}
-        curPage={curPage}
-        sort={sort}
-        search={search}
-      />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SurveyList curPage={curPage} sort={sort} search={search} />
+      </HydrationBoundary>
     </Grid.center>
   );
 }

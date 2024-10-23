@@ -9,7 +9,7 @@ export enum QUERY_STRING {
 }
 
 export enum QUERY_KEY {
-  TEMPLATE_LIST = "template-list",
+  TEMPLATE_LIST = "template_list",
   TEMPLATE_RESULT_USER_ADMIN = "anonymous",
 
   QUESTION_TEXT = "questionText",

@@ -1,22 +1,24 @@
 import { ReactNode } from "react";
 import classes from "./Grid.module.scss";
 
-//가운데 정렬
-function center({ children }: { children: ReactNode }) {
-  return <div className={classes.GridCenter}>{children}</div>;
-}
+type Children<T> = { className?: string; children: T };
 
-function smallCenter({ children }: { children: ReactNode }) {
+//가운데 Grid
+const center: React.FC<Children<ReactNode>> = ({ className, children }) => {
+  return (
+    <div
+      className={`${classes.GridCenter} ${className ? className : undefined}`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const smallCenter: React.FC<Children<ReactNode>> = ({ children }) => {
   return <div className={classes.GridSmallCenter}>{children}</div>;
-}
+};
 
-function extraSmall({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
+const extraSmall: React.FC<Children<ReactNode>> = ({ className, children }) => {
   return (
     <div
       className={`${classes.ExtraSmall} ${className ? className : undefined}`}
@@ -24,7 +26,7 @@ function extraSmall({
       {children}
     </div>
   );
-}
+};
 
 interface GridComponent extends React.FC<{ children: ReactNode }> {
   center: typeof center;
@@ -38,8 +40,8 @@ const Grid: GridComponent = ({ children }) => {
 };
 
 // Grid.center에 center 함수 할당
-Grid.smallCenter = smallCenter;
 Grid.center = center;
+Grid.smallCenter = smallCenter;
 Grid.extraSmall = extraSmall;
 
 export default Grid;

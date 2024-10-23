@@ -132,6 +132,7 @@ export default function CreateSurvey({
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
     const curSession = await getSession();
+    console.log(data);
 
     if (isSession && !curSession) {
       alert("세션이 만료되었습니다....");
