@@ -17,7 +17,9 @@ export default function TemplateList() {
   const { data, isError, isLoading } = useQuery<TemplateItemMetadata[]>({
     queryKey: [QUERY_KEY.TEMPLATE_LIST],
     queryFn: async () => {
-      const response = await fetch(`${BASE_NEST_URL}/template`);
+      const response = await fetch(`${BASE_NEST_URL}/template`, {
+        cache: "no-store",
+      });
       return await response.json();
     },
     staleTime: 10000,

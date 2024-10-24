@@ -1,4 +1,4 @@
-enum TemplateType {
+export enum TEMPLATE_TYPE {
   SURVEY = "survey",
   RANK = "rank",
 }
@@ -23,7 +23,7 @@ export type TemplateItemMetadata = {
   createdAt: string;
   title: string;
   description: string;
-  templateType: TemplateType;
+  templateType: TEMPLATE_TYPE;
   isGenderCollected: boolean;
   isAgeCollected: boolean;
   startDate: string | null;

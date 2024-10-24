@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function BackButton() {
   const router = useRouter();
   return (
-    <Button.normalButton onClick={() => router.push("/template")}>
+    <Button.normalButton onClick={() => router.push("/list")}>
       {/* <PrevSvg /> */}
       <Image src={PrevImg} width={7} alt="prev" />
       목록으로

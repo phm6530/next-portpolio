@@ -20,22 +20,20 @@ const RadioTab: React.FC<RadioTabProps> = ({ children, select, ...rest }) => {
 
 //동적 Radio Style
 function RadioAnswer({
-  selectLabel,
-  curLabel,
+  selectId,
+  curid,
   children,
 }: {
-  selectLabel: string | null; // selectLabel이 null일 수도 있다고 가정
-  curLabel: string;
+  selectId: string | undefined; // selectLabel이 null일 수도 있다고 가정
+  curid: string;
   children: ReactNode;
 }) {
-  // console.log(selectLabel, curLabel);
-
   return (
     <label
       className={
-        selectLabel == null
+        selectId == null
           ? classes.answer_null // null일 때 적용할 클래스
-          : selectLabel === curLabel
+          : selectId === curid
           ? classes.answer_active // true일 때 적용할 클래스
           : classes.answer_noneActive // false 또는 undefined일 때 적용할 클래스
       }
@@ -52,7 +50,7 @@ function Radio<T extends HTMLLabelElement>({
   children,
   ...rest
 }: {
-  selectLabel: string | null;
+  selectLabel: string | undefined;
   curLabel: string;
   children: ReactNode;
 } & HTMLAttributes<T>) {

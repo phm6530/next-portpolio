@@ -1,5 +1,3 @@
-import DateRange from "@/app/template/_component/DateRange/DateRange";
-import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import Grid from "@/components/ui/Grid";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
@@ -11,6 +9,8 @@ import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import DateCompareToday from "@/util/DateCompareToday";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import BackButton from "@/components/ui/button/BackButton";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -49,11 +49,11 @@ export default async function SurveyDetailTemplate({
   const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
   const data: TemplateDetilaPageResponse = await response.json();
 
-  console.log(data);
-
   if (!data) {
     notFound();
   }
+
+  console.log(data);
 
   const {
     title,
@@ -72,6 +72,7 @@ export default async function SurveyDetailTemplate({
   return (
     <>
       <Grid.smallCenter>
+        <BackButton />
         <TemplateQuestionWrapper>
           {/* <ThumbNail thumbnail={thumbnail} /> */}
 
@@ -90,17 +91,17 @@ export default async function SurveyDetailTemplate({
             <div className={classes.userDisplayWrapper}>
               {/* User Info + Role Display  */}
               {/* <UserRoleDisplay
-              user_nickname={user_nickname}
-              user_role={user_role}
-            /> */}
+                user_nickname={user_nickname}
+                user_role={user_role}
+              /> */}
               {/* <span>{todayCompare.fromNow(createdAt)}</span> */}
             </div>
           </div>
         </TemplateQuestionWrapper>
-      </Grid.smallCenter>
 
-      {/* 제출 Form */}
-      <SurveyForm questions={questions} {...rest} />
+        {/* survey Form */}
+        <SurveyForm {...data} />
+      </Grid.smallCenter>
     </>
   );
 }
