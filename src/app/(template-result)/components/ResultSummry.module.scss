@@ -1,0 +1,33 @@
+.summeryDetail {
+  margin-bottom: 3rem;
+  border-bottom: 1px solid $border-box-color;
+  padding-bottom: 3rem;
+}
+
+.summeryInfoWrapper {
+  margin: 20px 0;
+}
+.relative {
+  position: relative;
+}
+
+.Badge {
+  position: absolute;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.445);
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 1rem;
+  color: #fff;
+  left: 10px;
+  top: 10px;
+}
+.description {
+  opacity: 0.6;
+  padding: 10px 0;
+}
+
+.userCnt {
+  font-size: 22px;
+  color: #7975e5;
+}

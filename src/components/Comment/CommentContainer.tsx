@@ -62,6 +62,7 @@ export default function CommentContainer({
           </Button.noneStyleButton>
         </div>
       </div>
+
       {viewReply && (
         <ReplyContainer
           comment_id={comment_id}

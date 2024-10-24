@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactNode, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import classes from "./Msg.module.scss";
+import classes from "./CommentTextArea.module.scss";
 import useRows from "@/_hook/useRows";
 
 export default function CommentTextArea({
@@ -17,6 +17,7 @@ export default function CommentTextArea({
   return (
     <>
       <textarea
+        className={classes.textarea}
         rows={rows}
         {...register(name, {
           required: "남기실 말은 필수입니다.",
@@ -36,6 +37,8 @@ export default function CommentTextArea({
         placeholder="댓글을 입력해주세요! 욕설이나 비하 댓글을 삭제 될 수 있습니다. 타인에게 상처주는 말은 하지 말아주세요!"
       />
       {children}
+
+      {/* 길이 */}
       <div
         className={`${classes.textLength} ${
           textLength.length > 1000 ? classes.errorColor : undefined
