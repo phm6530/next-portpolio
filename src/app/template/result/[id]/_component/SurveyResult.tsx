@@ -11,7 +11,6 @@ import Crown from "/public/asset/icon/crown.svg";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import SurveyResultBar from "@/app/template/result/[id]/_component/SurveyResultBar";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import ResponseText from "@/app/template/result/[id]/_component/ResponseText";
 import Button from "@/components/ui/button/Button";
@@ -78,6 +77,8 @@ export default function SurveyResult({ id }: { id: number }) {
     staleTime: 10000,
   });
 
+  console.log(data);
+
   if (isError) {
     notFound();
   }
@@ -126,34 +127,6 @@ export default function SurveyResult({ id }: { id: number }) {
 
     return (
       <>
-        <div className={classes.summeryDetail}>
-          <div style={{ position: "relative" }}>
-            <div className={classes.Badge}>결과페이지</div>
-            <ThumbNail thumbnail={thumbnail} />
-          </div>
-          <div className={classes.summary}>
-            <TemplateStatus
-              dateRange={[start_date, end_date]}
-              createdAt={created_at}
-            />
-            <TemplateTitle>{title}</TemplateTitle>
-            <div className={classes.description}>{description}</div>
-
-            <div>
-              <span>참여자 </span>
-              <span className={classes.userCnt}>{user_cnt || 0}</span> 명
-            </div>
-          </div>
-          <GroupStatus
-            genderGroup={gender_group as Gender}
-            ageGroup={age_group as string}
-            action={user_cnt < 5}
-          />
-          <Button.moveLink moveUrl={`/template/${templateType}/${id}`}>
-            참여하기
-          </Button.moveLink>
-        </div>
-
         <div className={classes.radioWrap}>
           {/* Gender Filter */}
           <div className={classes.filterController}>

@@ -1,0 +1,25 @@
+.optionsContainer {
+  display: grid;
+
+  &.pictrueGrid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+
+.subTitle {
+  margin-bottom: 0.3rem;
+  color: darken($color-font-signiture, 30);
+}
+.questionLabel {
+  height: 25px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-left: 10px;
+  }
+}

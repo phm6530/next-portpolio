@@ -4,12 +4,12 @@ import { GetTemplateMetaLists, TemplateTypeProps } from "@/types/template";
 import { BASE_URL } from "@/config/base";
 
 //get-List
-export function fetchList(
+export async function fetchList(
   page: string,
   sort?: string,
   search?: string
 ): Promise<GetTemplateMetaLists> {
-  return withFetch<GetTemplateMetaLists>(async () => {
+  try {
     const queryParams = new URLSearchParams({
       page,
     });
@@ -23,8 +23,13 @@ export function fetchList(
       queryParams.append(QUERY_STRING.SEARCH, search);
     }
 
-    return fetch(`${BASE_URL}/api/template?${queryParams}`);
-  });
+    const response = await fetch(`${BASE_URL}/api/template?${queryParams}`);
+    if (!response.ok) {
+      throw new Error("에러...");
+    }
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
 //Template 디테일

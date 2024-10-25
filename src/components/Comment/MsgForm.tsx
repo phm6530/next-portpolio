@@ -10,7 +10,6 @@ import { useSession } from "next-auth/react";
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { BASE_URL } from "@/config/base";
 import FormInput from "@/components/ui/FormElement/FormInput";
-import { useParams } from "next/navigation";
 import { MessageProps } from "@/components/Comment/CommentSection";
 
 export default function MsgForm({
@@ -21,8 +20,6 @@ export default function MsgForm({
   comment_id?: number;
 }) {
   const { data: session } = useSession();
-
-  const { id } = useParams();
 
   const formMethod = useForm();
   const {

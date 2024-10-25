@@ -1,0 +1,36 @@
+.commentSection {
+  margin: 2rem 0;
+}
+
+.commentsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  //   margin: 2rem 0;
+}
+
+.repleylist {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.repliesCotainer {
+  @extend .commentsWrapper;
+  margin-left: 2rem;
+}
+
+.commentController {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.commentCount {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  span {
+    color: #680edd;
+  }
+}

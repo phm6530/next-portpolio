@@ -1,32 +1,41 @@
 import DateCompareToday from "@/util/DateCompareToday";
-import { CommentTemplateProps } from "@/types/template";
 import classes from "./TemplateComponent.module.scss";
 
 export default function TemplateStatus({
-  dateRange,
+  startDate,
+  endDate,
   createdAt,
 }: {
-  dateRange: CommentTemplateProps["dateRange"];
+  startDate: string | null;
+  endDate: string | null;
   createdAt: string;
 }) {
   const todayCompare = DateCompareToday();
 
+  const curState = (startDate: string | null, endDate: string | null) => {
+    if (!endDate) {
+      return <div className={classes.ing}>무기한</div>;
+    } else if (
+      startDate &&
+      todayCompare.isAfter(startDate) &&
+      todayCompare.isBefore(endDate)
+    ) {
+      return <div className={classes.ing}>진행중</div>;
+    } else if (endDate && todayCompare.isAfter(endDate)) {
+      return <div className={classes.ended}>종료</div>;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <>
       <div className={classes.statusIcon}>
+        {/* New Template */}
         {todayCompare.isNew(createdAt) && (
           <div className={classes.new}>New</div>
         )}
-
-        {dateRange.some((e) => e === null) ? (
-          <div className={classes.ing}>무기한</div>
-        ) : dateRange[0] && todayCompare.isBefore(dateRange[0]) ? (
-          "진행 전"
-        ) : dateRange[1] && todayCompare.isAfter(dateRange[1]) ? (
-          <div className={classes.end}>종료</div>
-        ) : (
-          <div className={classes.ing}>진행중</div>
-        )}
+        {curState(startDate, endDate)}
       </div>
     </>
   );

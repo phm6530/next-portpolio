@@ -1,0 +1,29 @@
+.commentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .commentSurmmry {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    opacity: 0.5;
+    font-size: 0.8rem;
+  }
+}
+
+.comment {
+  background: #f1f1f1;
+  padding: 0.7rem 1rem;
+  min-width: 50px;
+  margin: 5px 0;
+  border-radius: 24px;
+  margin-top: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: #e8e7ff;
+  }
+}

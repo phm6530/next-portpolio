@@ -7,8 +7,9 @@ import Button from "@/components/ui/button/Button";
 import classes from "./surveyPage.module.scss";
 import TemplateCractor from "@/components/Cractor/TemplateCractor";
 import TemplateList from "@/app/template/_component/TemplateList";
+import { Suspense } from "react";
 
-export default async function CreateSurvey({
+export default async function CreateSurveyPage({
   searchParams,
 }: {
   searchParams: { page: string; sort?: string; search?: string };
@@ -44,12 +45,14 @@ export default async function CreateSurvey({
           </Grid.center>
         </Vanner>
 
-        {/* templat List  */}
-        <TemplateList
-          page={searchParams.page}
-          sort={searchParams.sort}
-          search={searchParams.search}
-        />
+        <Suspense fallback={<div>loading.....</div>}>
+          {/* templat List  */}
+          <TemplateList
+            page={searchParams.page}
+            sort={searchParams.sort}
+            search={searchParams.search}
+          />
+        </Suspense>
       </div>
     </>
   );

@@ -1,0 +1,18 @@
+.container {
+  background: $gradient-vanner;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bannerGrid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.description {
+  color: #7282a9;
+  margin: 12px 0;
+}

@@ -6,11 +6,11 @@ import classes from "./Aniprogressbar.module.scss";
 export default function AniProgressbar({
   maxCnt,
   percent,
-  trigger,
-}: {
+}: // trigger,
+{
   maxCnt: boolean;
   percent: number;
-  trigger: (string | number)[];
+  // trigger: (string | number)[];
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Tween | null>(null);
@@ -29,7 +29,10 @@ export default function AniProgressbar({
         }
       );
     },
-    { scope: textRef, dependencies: [...trigger] }
+    {
+      scope: textRef,
+      // dependencies: [...trigger]
+    }
   );
 
   useGSAP(
@@ -48,7 +51,10 @@ export default function AniProgressbar({
         }
       );
     },
-    { scope: ref, dependencies: [percent, ...trigger] }
+    {
+      scope: ref,
+      //  dependencies: [percent, ...trigger]
+    }
   );
 
   // useEffect(() => {

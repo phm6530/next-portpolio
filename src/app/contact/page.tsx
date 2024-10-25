@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
-import { BASE_URL } from "@/config/base";
+import { BASE_URL, ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 
 type MailFormData = {
@@ -28,12 +28,12 @@ export default function Page() {
     register,
   } = formMethod;
 
-  console.log(errors);
-
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
       withFetch(async () => {
-        const url = `${BASE_URL}/api/contact`;
+        const url = `${ENV_NESTBASE_URL}/contact`;
+        console.log(url);
+
         return fetch(url, {
           method: "POST",
           headers: {

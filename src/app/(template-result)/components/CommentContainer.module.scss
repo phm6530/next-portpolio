@@ -1,0 +1,29 @@
+.commentBtnWrap {
+  display: flex;
+  gap: 20px;
+  margin: 10px 0;
+}
+
+.replyWrapper {
+  display: flex;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    margin-right: 0.5rem;
+  }
+  .replyIcon {
+    opacity: 0.3;
+  }
+}
+
+.repliesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  &.leftMargin {
+    margin-left: 2rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

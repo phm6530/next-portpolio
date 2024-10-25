@@ -14,6 +14,7 @@ export default function DateCompareToday() {
       return today.isSame(date, "day");
     },
     isNew: (date: string): boolean => {
+      //생성한지 7일 이전이면 New로 처리
       return today.diff(date, "day") < 7;
     },
     fromNow: (date: string): string => {
