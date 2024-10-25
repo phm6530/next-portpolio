@@ -40,8 +40,6 @@ export async function GET(
 
     const nextPage = +offset + rows.length > responseCnt.cnt;
 
-    console.log(nextPage);
-
     //형변환
     const results = rows.map((e) => {
       return { ...e, age: +e.age };

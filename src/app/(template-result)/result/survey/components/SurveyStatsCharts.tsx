@@ -35,7 +35,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                 return <ResponseSelect allCnt={allCnt} {...qs} />;
               } else if (qs.type === QUESTION_TYPE.TEXT) {
                 // 주관식 답글
-                return <ResponseTexts {...qs} />;
+                return <ResponseTexts allCnt={allCnt} {...qs} />;
               } else {
                 return null as never;
               }
