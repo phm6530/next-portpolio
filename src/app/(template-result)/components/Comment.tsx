@@ -13,11 +13,11 @@ dayjs.locale("ko");
 
 export default function Comment({
   id,
-  updateAt,
   createAt,
   comment,
   user,
-}: Omit<CommentReponse, "replies">) {
+  onClickEvent,
+}: { onClickEvent?: () => void } & Omit<CommentReponse, "replies">) {
   const deleteMessage = () => {
     const msgPassword = prompt("비밀번호를 입력해주세요");
   };
@@ -29,8 +29,9 @@ export default function Comment({
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
         <Button.closeBtn onClick={deleteMessage} />
       </div>
-
-      <div className={classes.comment}>{comment}</div>
+      <div className={classes.comment} onClick={onClickEvent}>
+        {comment}
+      </div>
     </div>
   );
 }

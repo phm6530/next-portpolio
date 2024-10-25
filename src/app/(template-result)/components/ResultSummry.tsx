@@ -1,11 +1,17 @@
-import { fetchSurveyData } from "@/app/(template-result)/result/survey/[id]/page";
 import classes from "./ResultSummry.module.scss";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import Button from "@/components/ui/button/Button";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
+import { queryClient } from "@/config/queryClient";
+import { QUERY_KEY } from "@/types/constans";
 
 export default async function ResultSummry({ id }: { id: string }) {
-  const data = await fetchSurveyData(id);
+  const data = await queryClient.fetchQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+    queryFn: async () => await fetchSurveyData(id),
+    staleTime: 10000,
+  });
 
   const {
     title,
@@ -17,8 +23,6 @@ export default async function ResultSummry({ id }: { id: string }) {
     respondents,
   } = data;
   const { allCnt } = respondents;
-
-  console.log(data);
 
   return (
     <div className={classes.summeryDetail}>

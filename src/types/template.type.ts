@@ -16,6 +16,13 @@ export type RespondentsProps = {
   };
 };
 
+//응답자
+export interface Respondent {
+  id: number;
+  age: number;
+  gender: string;
+}
+
 //Template List Props ...
 export type TemplateItemMetadata = {
   id: number;

@@ -1,0 +1,15 @@
+.label {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  img {
+    margin-right: 0.4rem;
+  }
+
+  background: linear-gradient(84.35deg, #0a001a 13.62%, #373038 28.13%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

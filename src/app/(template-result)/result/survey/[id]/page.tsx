@@ -1,31 +1,25 @@
-import ResultComments from "@/app/(template-result)/components/ResultComments";
+import CommentEditor from "@/app/(template-result)/components/CommentEditor";
+import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(template-result)/components/ResultSummry";
+import ResultSurveyCharts from "@/app/(template-result)/result/survey/components/SurveyStatsCharts";
+import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
 import { BASE_NEST_URL } from "@/config/base";
-import { SurveyResult } from "@/types/surveyResult.type";
+import { queryClient } from "@/config/queryClient";
+import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
+import { QUERY_KEY } from "@/types/constans";
+import requestHandler from "@/utils/withFetch";
 import { Metadata } from "next";
-
-export async function fetchSurveyData(id: string): Promise<SurveyResult> {
-  const response = await fetch(`${BASE_NEST_URL}/answer/survey/${id}`, {
-    cache: "force-cache",
-    next: {
-      revalidate: 60,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch survey data: ${response.statusText}`);
-  }
-
-  const data: SurveyResult = await response.json();
-  return data;
-}
 
 export async function generateMetadata({
   params: { id },
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const data = await fetchSurveyData(id);
+  const data = await queryClient.fetchQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+    queryFn: async () => await fetchSurveyData(id),
+  });
+
   return {
     title: data.title,
     description: data.description,
@@ -41,13 +35,46 @@ export default async function SurveyResultPage({
 }: {
   params: { id: string };
 }) {
+  const type = "survey";
+
+  const PrefetchComment = await WithPrefetchRender(
+    ResultCommentSection,
+    async () => {
+      await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY.COMMENTS, id],
+        queryFn: () =>
+          requestHandler(async () => {
+            return fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
+              cache: "no-store",
+            });
+          }),
+        staleTime: 10000,
+      });
+    }
+  );
+
+  const PrefetchSurveyCharts = await WithPrefetchRender(
+    ResultSurveyCharts,
+    async () => {
+      await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+        queryFn: async () => await fetchSurveyData(id),
+      });
+    }
+  );
+
   return (
     <>
-      {/* template Summry*/}
+      {/* template Summry */}
       <ResultSummry id={id} />
 
+      <PrefetchSurveyCharts id={id} />
+
+      {/* 메인 Comment Editor */}
+      <CommentEditor id={id} />
+
       {/* Comments */}
-      <ResultComments type="survey" id={id} />
+      <PrefetchComment id={id} type={type} />
     </>
   );
 }

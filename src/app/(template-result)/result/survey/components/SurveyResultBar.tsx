@@ -5,12 +5,12 @@ import gsap from "gsap";
 import { useRef } from "react";
 
 export default function SurveyResultBar({
-  triggerContents, // gsap 갱신하려고 만든거
+  // triggerContents, // gsap 갱신하려고 만든거
   curCnt,
   allCnt,
   maxCnt,
 }: {
-  triggerContents: (string | number)[];
+  // triggerContents: (string | number)[];
   curCnt: number;
   allCnt: number;
   maxCnt: boolean;
@@ -26,7 +26,7 @@ export default function SurveyResultBar({
       <AniProgressbar
         maxCnt={maxCnt}
         percent={percent}
-        trigger={triggerContents}
+        // trigger={triggerContents}
       />
     </div>
   );

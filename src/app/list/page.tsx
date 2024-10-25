@@ -8,11 +8,10 @@ import { queryClient } from "@/config/queryClient";
 import { BASE_NEST_URL } from "@/config/base";
 import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import ListPageBanner from "@/app/list/components/ListPageBanner";
 import { QUERY_KEY } from "@/types/constans";
 import TemplateList from "@/app/list/components/TemplateItemList";
-import { WithDynamicRender } from "@/hoc/WithDynamicRender";
+import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
 
 type ResponseError = {
   message: string;
@@ -22,18 +21,21 @@ type ResponseError = {
 
 export default async function page() {
   // 고차 컴포넌트
-  const DynamicComponent = await WithDynamicRender(TemplateList, async () => {
-    await queryClient.prefetchQuery({
-      queryKey: [QUERY_KEY.TEMPLATE_LIST],
-      queryFn: async () => {
-        const response = await fetch(`${BASE_NEST_URL}/template`, {
-          cache: "no-store",
-        });
-        return await response.json();
-      },
-      staleTime: 10000,
-    });
-  });
+  const PrefetchTemplstList = await WithPrefetchRender(
+    TemplateList,
+    async () => {
+      await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY.TEMPLATE_LIST],
+        queryFn: async () => {
+          const response = await fetch(`${BASE_NEST_URL}/template`, {
+            cache: "no-store",
+          });
+          return await response.json();
+        },
+        staleTime: 10000,
+      });
+    }
+  );
 
   return (
     <div className={classes.wrap}>
@@ -47,7 +49,7 @@ export default async function page() {
           {/* <SearchInput search={search} /> */}
         </div>
         <Suspense fallback={<div>loading......???</div>}>
-          <DynamicComponent />
+          <PrefetchTemplstList />
         </Suspense>
       </Grid.center>
     </div>
