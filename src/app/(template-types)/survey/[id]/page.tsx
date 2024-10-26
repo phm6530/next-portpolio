@@ -53,8 +53,6 @@ export default async function SurveyDetailTemplate({
     notFound();
   }
 
-  console.log(data);
-
   const {
     title,
     description,
@@ -67,7 +65,6 @@ export default async function SurveyDetailTemplate({
     ...rest
   } = data;
 
-  console.log({ ...rest });
   const todayCompare = DateCompareToday();
   return (
     <>

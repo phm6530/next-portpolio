@@ -1,4 +1,4 @@
-import { TemplateItemMetadata } from "@/types/template.type";
+import { TEMPLATE_TYPE, TemplateItemMetadata } from "@/types/template.type";
 
 export enum QUESTION_TYPE {
   TEXT = "text",

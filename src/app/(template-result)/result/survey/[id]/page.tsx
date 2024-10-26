@@ -7,6 +7,7 @@ import { BASE_NEST_URL } from "@/config/base";
 import { queryClient } from "@/config/queryClient";
 import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
 import { QUERY_KEY } from "@/types/constans";
+import { SurveyResult } from "@/types/surveyResult.type";
 import requestHandler from "@/utils/withFetch";
 import { Metadata } from "next";
 
@@ -17,7 +18,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const data = await queryClient.fetchQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData(id),
+    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+    staleTime: 10000,
   });
 
   return {
@@ -37,13 +39,15 @@ export default async function SurveyResultPage({
 }) {
   const type = "survey";
 
+  console.log("id:::", id);
+
   const PrefetchComment = await WithPrefetchRender(
     ResultCommentSection,
     async () => {
       await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY.COMMENTS, id],
-        queryFn: () =>
-          requestHandler(async () => {
+        queryFn: async () =>
+          await requestHandler(async () => {
             return fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
               cache: "no-store",
             });
@@ -58,7 +62,8 @@ export default async function SurveyResultPage({
     async () => {
       await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-        queryFn: async () => await fetchSurveyData(id),
+        queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+        staleTime: 10000,
       });
     }
   );

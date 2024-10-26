@@ -17,6 +17,9 @@ import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import { useRouter } from "next/navigation";
+import { queryClient } from "@/config/queryClient";
+import { QUERY_KEY } from "@/types/constans";
 
 export default function SurveyForm({
   id,
@@ -38,18 +41,13 @@ export default function SurveyForm({
     }),
   };
 
+  const router = useRouter();
+
   const formMethod = useForm<AnswerSurvey>({
     defaultValues,
   });
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-  } = formMethod;
-  console.log("watch:::", watch());
-
+  const { reset } = formMethod;
   const { mutate } = useMutation<unknown, Error, AnswerSurvey>({
     mutationFn: async (data) => {
       return withFetch(async () => {
@@ -62,10 +60,12 @@ export default function SurveyForm({
         });
       });
     },
-    onSuccess: (data) => {
-      console.log(data);
-      alert("전송 완료");
+    onSuccess: async () => {
       reset(defaultValues);
+      await queryClient.refetchQueries({
+        queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
+      });
+      router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });
 

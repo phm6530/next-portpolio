@@ -43,7 +43,6 @@ export function ResponseTexts({
       );
     },
     getNextPageParam: (lastPage) => {
-      console.log(lastPage);
       return lastPage.isNextPage;
     }, // 다음 페이지 결정
     initialPageParam: 2,
@@ -91,20 +90,19 @@ export function ResponseTexts({
             </div>
           );
         })}
-
-        {moreButton() && (
-          <>
-            <div
-              className={classes.moreButtonWrap}
-              onClick={() => {
-                fetchNextPage();
-              }}
-            >
-              {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
-            </div>
-          </>
-        )}
-      </div>
+      </div>{" "}
+      {moreButton() && (
+        <>
+          <div
+            className={classes.moreButtonWrap}
+            onClick={() => {
+              fetchNextPage();
+            }}
+          >
+            {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
+          </div>
+        </>
+      )}
     </>
   );
 }

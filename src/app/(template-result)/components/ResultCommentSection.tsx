@@ -4,7 +4,6 @@ import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import classes from "./ResultCommentSection.module.scss";
-import Comment from "@/app/(template-result)/components/Comment";
 import { useState } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
 import CommentContainer from "@/app/(template-result)/components/CommentContainer";
@@ -22,7 +21,7 @@ export default function ResultCommentSection({
   const { data } = useQuery<CommentReponse[]>({
     queryKey: [QUERY_KEY.COMMENTS, id],
     queryFn: async () =>
-      requestHandler(async () => {
+      await requestHandler(async () => {
         return fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
           cache: "no-store",
         });

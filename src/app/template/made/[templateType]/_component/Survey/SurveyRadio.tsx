@@ -13,43 +13,33 @@ import useStore from "@/store/store";
 import { imgUploader } from "@/lib/uploaderHanlder";
 import { PathSegments } from "@/types/upload";
 import { BASE_URL } from "@/config/base";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 export default function SurveyRadio({
-  fields,
   surveyIdx,
   optionIdx,
   itemRemove,
-  update,
 }: {
-  fields: FieldArrayWithId<AddSurveyFormProps, `items.${number}.options`>[];
   surveyIdx: number;
   optionIdx: number; // survey 항목 안의 Array Idx 임
   itemRemove: UseFieldArrayRemove;
-  update: UseFieldArrayUpdate<AddSurveyFormProps, `items.${number}.options`>;
-  imgId: string;
+  // imgId: string;
 }) {
-  //img Key
-  const template_key = useStore((state) => state.template_key);
-
   const {
     register,
-    getValues,
     formState: { errors },
-  } = useFormContext<AddSurveyFormProps>();
-
-  //데이터가져오기
-  const [preView, setPreView] = useState<string>(() => {
-    return fields[optionIdx].img || "";
-  });
+    watch,
+  } = useFormContext<RequestSurveyFormData>();
+  const curRadio = watch(`questions.${surveyIdx}.options`);
 
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
   const removeOptions = (idx: number): void => {
-    if (fields.length > 2) {
+    if (curRadio.length > 2) {
       itemRemove(idx);
     } else {
-      alert("2개 이상 항목으로 줄일 수 없음");
+      alert("객관식은 최소 2개 이상 항목으로 줄일 수 없음");
       return;
     }
   };
@@ -62,41 +52,41 @@ export default function SurveyRadio({
   };
 
   //미리보기
-  const imgPreview = async (
-    e: ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    const target = e.target.files;
-    if (target && template_key) {
-      const imgUrl = await imgUploader(PathSegments.Survey, target[0], {
-        template_key,
-      });
+  // const imgPreview = async (
+  //   e: ChangeEvent<HTMLInputElement>
+  // ): Promise<void> => {
+  //   const target = e.target.files;
+  //   if (target && template_key) {
+  //     const imgUrl = await imgUploader(PathSegments.Survey, target[0], {
+  //       template_key,
+  //     });
 
-      setPreView(`${BASE_URL}/${imgUrl}`);
+  //     setPreView(`${BASE_URL}/${imgUrl}`);
 
-      const currentOption = getValues(
-        `items.${surveyIdx}.options.${optionIdx}`
-      );
+  //     const currentOption = getValues(
+  //       `items.${surveyIdx}.options.${optionIdx}`
+  //     );
 
-      update(optionIdx, {
-        ...currentOption,
-        img: imgUrl,
-      });
-    }
-  };
+  //     update(optionIdx, {
+  //       ...currentOption,
+  //       img: imgUrl,
+  //     });
+  //   }
+  // };
 
-  const clearPreview = () => {
-    setPreView("");
-    if (ref.current) {
-      ref.current.value = "";
-    }
-  };
+  // const clearPreview = () => {
+  //   setPreView("");
+  //   if (ref.current) {
+  //     ref.current.value = "";
+  //   }
+  // };
 
   return (
     <div>
       항목 {optionIdx + 1}
       <input
         type="text"
-        {...register(`items.${surveyIdx}.options.${optionIdx}.value`, {
+        {...register(`questions.${surveyIdx}.options.${optionIdx}.value`, {
           required: "질문 항목을 입력해주세요!",
         })}
         autoComplete="off"
@@ -104,7 +94,7 @@ export default function SurveyRadio({
       <input
         type="file"
         ref={ref}
-        onChange={imgPreview}
+        // onChange={imgPreview}
         className="hidden"
         autoComplete="off"
       />
@@ -115,7 +105,7 @@ export default function SurveyRadio({
         삭제!
       </button>
       {/* Error  */}
-      {preView && (
+      {/* {preView && (
         <>
           <div className={classes.previewContainer}>
             <Image
@@ -131,10 +121,10 @@ export default function SurveyRadio({
           {ref.current?.value}
           <button onClick={clearPreview}>삭제</button>
         </>
-      )}
+      )} */}
       <div>
         {(
-          errors.items?.[surveyIdx]?.options as FieldErrors<{
+          errors.questions?.[surveyIdx]?.options as FieldErrors<{
             value: string;
           }>[]
         )?.[optionIdx]?.value?.message || null}

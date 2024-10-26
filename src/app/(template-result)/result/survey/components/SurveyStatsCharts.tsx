@@ -6,13 +6,16 @@ import { ResponseTexts } from "@/app/(template-result)/result/survey/components/
 import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
+import { SurveyResult } from "@/types/surveyResult.type";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
+  console.log("id:::", id);
+
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData(id),
+    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
     staleTime: 10000,
   });
 

@@ -34,10 +34,6 @@ export default function SurveyList({
       initialData: prefetchData,
     });
 
-  console.log("data:::", data);
-
-  console.log(isError);
-
   const qs = useSearchParams();
   const keyword = qs.get(QUERY_STRING.SEARCH);
   if (isError) {

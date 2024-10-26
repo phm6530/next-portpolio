@@ -11,7 +11,6 @@ export const withFetch = async <T>(
     return response.json() as Promise<T>;
   } catch (error) {
     if (error instanceof Error) {
-      console.log("mEssage :::", error.message);
       throw new Error(error.message);
     } else {
       throw new Error("알 수 없는 에러");

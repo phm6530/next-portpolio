@@ -5,9 +5,10 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
+import { SurveyResult } from "@/types/surveyResult.type";
 
 export default async function ResultSummry({ id }: { id: string }) {
-  const data = await queryClient.fetchQuery({
+  const data = await queryClient.fetchQuery<SurveyResult>({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
     queryFn: async () => await fetchSurveyData(id),
     staleTime: 10000,

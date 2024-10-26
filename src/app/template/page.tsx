@@ -9,6 +9,10 @@ import TemplateCractor from "@/components/Cractor/TemplateCractor";
 import TemplateList from "@/app/template/_component/TemplateList";
 import { Suspense } from "react";
 
+type Extract<T, U> = T extends U ? T : never;
+
+type B = Extract<string | number | boolean, number>;
+
 export default async function CreateSurveyPage({
   searchParams,
 }: {
