@@ -1,6 +1,7 @@
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(template-result)/components/ResultSummry";
+import ResultSurveyCharts from "@/app/(template-result)/result/survey/components/SurveyStatsCharts";
 import {
   fetchComments,
   fetchSurveyData,
@@ -66,14 +67,13 @@ export default async function SurveyResultPage({
         {/* template Summry */}
         <ResultSummry {...data} />
 
-        {/* <ResultSurveyCharts id={id} /> */}
+        <ResultSurveyCharts id={id} />
+
         {/* 메인 Comment Editor */}
         <CommentEditor templateId={id} templateType={type} />
 
         {/* Comments */}
-        <Suspense fallback={<div>loading....</div>}>
-          <ResultCommentSection id={id} type={type} />
-        </Suspense>
+        <ResultCommentSection id={id} type={type} />
       </HydrationBoundary>
     </>
   );

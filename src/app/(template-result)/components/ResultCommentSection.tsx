@@ -22,14 +22,9 @@ export default function ResultCommentSection({
   const { data, isError, isLoading } = useQuery<CommentReponse[]>({
     queryKey: [QUERY_KEY.COMMENTS, id],
     queryFn: async () => {
-      const data = await fetchComments<CommentReponse[]>(id, type);
-
-      console.log("clinet :::: ", data.length);
-      return data;
+      return await fetchComments<CommentReponse[]>(id, type);
     },
-    initialData: () => queryClient.getQueryData([QUERY_KEY.COMMENTS, id]),
-
-    staleTime: 0,
+    staleTime: 10000,
   });
 
   if (isLoading) {

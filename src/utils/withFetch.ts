@@ -11,7 +11,7 @@ export default async function requestHandler<T>(
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`서버에 문제가 있습니다. \n failed : ${error.message}`); // 이게 오ㅓㅐ실행됨?
+      throw new Error(error.message); // 이게 왜 실행됨?
     } else {
       throw new Error("알수 없는 오류");
     }

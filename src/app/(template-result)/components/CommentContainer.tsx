@@ -17,7 +17,7 @@ export default function CommentContainer({
 } & CommentReponse) {
   const { id: commentId, replies } = props;
 
-  // console.log("commentId :::", commentId);
+  console.log(props);
 
   const formViewHandler = () => {
     setTouch((prev) => {
@@ -32,7 +32,12 @@ export default function CommentContainer({
   return (
     <div>
       {/* Comment */}
-      <Comment {...props} onClickEvent={formViewHandler} />
+      <Comment
+        contentType="comment"
+        templateId={templateId}
+        {...props}
+        onClickEvent={formViewHandler}
+      />
       <div className={classes.commentBtnWrap}>
         <Button.noneStyleButton onClick={formViewHandler}>
           답글쓰기
@@ -55,6 +60,8 @@ export default function CommentContainer({
             >
               <ReplyIcon className={classes.replyIcon} />
               <Comment
+                contentType="reply"
+                templateId={templateId}
                 comment={message}
                 onClickEvent={formViewHandler}
                 {...rest}

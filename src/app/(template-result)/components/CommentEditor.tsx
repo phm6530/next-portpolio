@@ -57,15 +57,16 @@ export default function CommentEditor({
           body: JSON.stringify(data),
         });
       }),
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       reset();
+
+      console.log("data", data);
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.COMMENTS, commentId],
+        queryKey: [QUERY_KEY.COMMENTS, templateId],
       });
+      // queryClient.set
     },
   });
-
-  console.log("template templateId :::::", templateId);
 
   const submitHandler = (data: any) => {
     console.log(data);

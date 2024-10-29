@@ -32,9 +32,7 @@ export default function LoginForm({
       }
       return result;
     },
-    onSuccess: () => {
-      window.location.href = redirectPath;
-    },
+    onSuccess: () => {},
   });
 
   const method = useForm<LoginFormProps>();
@@ -45,6 +43,9 @@ export default function LoginForm({
   } = method;
 
   const onSubmitHandler = async (data: LoginFormProps) => {
+    console.log(data);
+    return;
+
     mutate(data);
   };
 
@@ -55,6 +56,7 @@ export default function LoginForm({
     <>
       <form onSubmit={handleSubmit(onSubmitHandler)} className={classes.form}>
         <FormProvider {...method}>
+          {/* Id */}
           <FormInput
             type="text"
             placeholder="아이디"
@@ -62,6 +64,7 @@ export default function LoginForm({
             autoComplete="off"
           />
 
+          {/* Password */}
           <FormInput
             type="password"
             placeholder="비밀번호"
@@ -72,6 +75,7 @@ export default function LoginForm({
           />
 
           <Button.submit disabled={isPending}>로그인</Button.submit>
+
           {firstErrorMeg && (
             <div className={classes.errorMsg}>{firstErrorMeg}</div>
           )}

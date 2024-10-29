@@ -16,9 +16,6 @@ export async function fetchComments<T>(id: string, type: string): Promise<T> {
   return requestHandler(async () => {
     return await fetch(url, {
       cache: "no-store",
-      next: {
-        revalidate: 0,
-      },
     });
   });
 }
