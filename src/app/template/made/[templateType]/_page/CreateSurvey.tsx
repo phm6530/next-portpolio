@@ -14,8 +14,7 @@ import { BASE_URL } from "@/config/base";
 import dayjs from "dayjs";
 
 import useStore from "@/store/store";
-import AddAgeGroup from "@/app/template/made/[templateType]/_component/templateAddOptions/AddAgeGroup";
-import AddGender from "@/app/template/made/[templateType]/_component/templateAddOptions/AddGender";
+
 import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
 import { withFetch } from "@/util/clientUtil";
 import { useMutation } from "@tanstack/react-query";
@@ -187,11 +186,6 @@ export default function CreateSurvey({
           <div>
             <h2>설정</h2>
             {/* 연령 별 체크*/}
-
-            <AddAgeGroup />
-
-            {/* 성별 별 체크*/}
-            <AddGender />
 
             {/* 기간 */}
             <AddDateRange />

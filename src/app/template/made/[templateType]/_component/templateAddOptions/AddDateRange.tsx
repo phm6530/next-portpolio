@@ -9,34 +9,30 @@ import ko from "date-fns/locale/ko";
 import dayjs from "dayjs";
 import { Locale } from "react-datepicker/dist/date_utils";
 import RadioWrap from "@/components/ui/RadioWrap";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 export default function AddDateRange() {
-  const {
-    getValues,
-    control,
-    reset,
-    formState: { errors },
-    watch,
-  } = useFormContext<AddSurveyFormProps>();
+  const { control, reset, watch } = useFormContext<RequestSurveyFormData>();
   const [isDateRange, setIsDateRange] = useState<boolean>(false);
 
   useEffect(() => {
-    const range = getValues("dateRange");
-    setIsDateRange(!!range ? true : false);
-  }, [getValues]);
+    // 특정 필드만 초기화
+    if (isDateRange) {
+      console.log("실해앙ㄴ되냐 ???");
+      reset({ startDate: null, endDate: "test" });
+    } else {
+      reset({ startDate: null, endDate: null });
+    }
+  }, [isDateRange, reset]);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.value === "true") {
       setIsDateRange(true);
-      // 특정 필드만 초기화
-      reset({ dateRange: [] }, { keepValues: true });
     } else if (e.currentTarget.value === "false") {
       setIsDateRange(false);
-      // 특정 필드만 초기화
-      reset({ dateRange: null }, { keepValues: true });
     }
   };
-  const dateRange = watch("dateRange");
+  const dateRange = watch("startDate");
 
   //선택 날짜
   const firstDateAsString =
@@ -50,6 +46,13 @@ export default function AddDateRange() {
 
   return (
     <RadioWrap>
+      <button
+        onClick={() => {
+          reset({ title: "testtest" }, { keepValues: true });
+        }}
+      >
+        test
+      </button>
       설문조사 기간
       <label>
         <input
@@ -82,8 +85,8 @@ export default function AddDateRange() {
                 onChange={(dates) => {
                   field.onChange(dates);
                 }}
-                startDate={field.value ? field.value[0] : undefined}
-                endDate={field.value ? field.value[1] : undefined}
+                // startDate={field.value ? field.value[0] : undefined}
+                // endDate={field.value ? field.value[1] : undefined}
                 selectsRange
                 isClearable // 날짜 지우기 가능
                 placeholderText="날짜를 선택해주세요"
@@ -101,7 +104,7 @@ export default function AddDateRange() {
           {dateRange &&
             dateRange[1] &&
             dayjs(dateRange[1]).format("YYYY-MM-DD")}
-          {errors.dateRange?.message}
+          {/* {errors.dateRange?.message} */}
         </>
       )}
     </RadioWrap>

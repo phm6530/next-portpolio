@@ -36,7 +36,7 @@ export default function SurveyForm({
       } else if (e.type === QUESTION_TYPE.SELECT) {
         return { questionId: e.id, type: e.type, optionId: null };
       } else {
-        throw new Error("지원되지 않는 질문 타입입니다.");
+        throw new Error("지원되지 않는 질문 타입입니다.") as never;
       }
     }),
   };
@@ -60,11 +60,13 @@ export default function SurveyForm({
         });
       });
     },
-    onSuccess: async () => {
+    onSuccess: async (newData) => {
       reset(defaultValues);
       await queryClient.refetchQueries({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
       });
+      // queryClient.setQueryData()
+
       router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });

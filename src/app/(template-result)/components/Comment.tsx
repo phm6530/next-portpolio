@@ -16,6 +16,7 @@ export default function Comment({
   createAt,
   comment,
   user,
+  anonymous,
   onClickEvent,
 }: { onClickEvent?: () => void } & Omit<CommentReponse, "replies">) {
   const deleteMessage = () => {
@@ -25,7 +26,11 @@ export default function Comment({
   return (
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
-        <UserRoleDisplay user_nickname={"test"} user_role={"anonymous"} />
+        {/* 익명일때 */}
+        {anonymous && !user && (
+          <UserRoleDisplay user_nickname={anonymous} user_role={"anonymous"} />
+        )}
+
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
         <Button.closeBtn onClick={deleteMessage} />
       </div>

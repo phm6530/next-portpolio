@@ -11,48 +11,48 @@ import AddQuestionController, {
   RequestText,
 } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
-import { useEffect, useState } from "react";
-import { BASE_URL } from "@/config/base";
-import dayjs from "dayjs";
+import { BASE_NEST_URL, BASE_URL } from "@/config/base";
 
-import useStore from "@/store/store";
-import AddAgeGroup from "@/app/template/made/[templateType]/_component/templateAddOptions/AddAgeGroup";
-import AddGender from "@/app/template/made/[templateType]/_component/templateAddOptions/AddGender";
-import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
 import { withFetch } from "@/util/clientUtil";
 import { useMutation } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
-import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";
+import { useRouter } from "next/navigation";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
+import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
+import requestHandler from "@/utils/withFetch";
+
 //Form
 export type RequestSurveyFormData = {
   title: string;
   description: string;
   thumbnail: string;
+  startDate?: string | null; // 시작일
+  endDate?: string | null; //종료일
   isGenderCollected: boolean;
   isAgeCollected: boolean;
   templateType: TEMPLATE_TYPE;
   questions: (RequestText | RequestSelect)[];
 };
 
+//기본 Inital Data
+export const defaultValues: RequestSurveyFormData = {
+  title: "",
+  description: "",
+  thumbnail: "",
+  startDate: null,
+  endDate: null,
+  isGenderCollected: true, //기본값 True
+  isAgeCollected: true, // 기본값 True
+  templateType: TEMPLATE_TYPE.SURVEY,
+  questions: [],
+};
+
 export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
-
-  //기본 Inital Data
-  const defaultValues: RequestSurveyFormData = {
-    title: "",
-    description: "",
-    thumbnail: "",
-    isGenderCollected: true, //기본값 True
-    isAgeCollected: true, // 기본값 True
-    templateType: TEMPLATE_TYPE.SURVEY,
-    questions: [],
-  };
 
   //초기 세션상태
   const router = useRouter();
@@ -61,26 +61,16 @@ export default function CreateSurvey() {
     defaultValues,
   });
 
-  const {
-    register,
-    formState: { errors },
-    watch,
-  } = formState;
-
-  console.log(watch());
+  const { register, watch } = formState;
 
   const { mutate, isPending } = useMutation<
     unknown,
     Error,
-    Omit<AddSurveyFormProps, "dateRange"> & {
-      template: string;
-      template_key: string;
-      dateRange: string[] | null;
-    }
+    RequestSurveyFormData
   >({
     mutationFn: (data) =>
-      withFetch(async () => {
-        return fetch(`${BASE_URL}/api/template`, {
+      requestHandler(async () => {
+        return fetch(`${BASE_NEST_URL}/template/survey`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -89,13 +79,16 @@ export default function CreateSurvey() {
         });
       }),
     onSuccess: () => {
-      router.replace("/template");
+      router.replace("/list");
       alert("설문조사 개설 완료되었습니다. ");
     },
   });
 
   //submit
-  const onSubmitHandler = async (data: AddSurveyFormProps) => {
+  const onSubmitHandler = async (data: RequestSurveyFormData) => {
+    console.log(data);
+
+    mutate(data);
     // if (isSession && !curSession) {
     //   alert("세션이 만료되었습니다....");
     //   await signOut({ redirect: false });
@@ -124,7 +117,7 @@ export default function CreateSurvey() {
 
   const resetField = () => {
     if (confirm("초기화 하시겠습니까?")) {
-      // formState.reset(initialFormState);
+      formState.reset({ ...defaultValues });
       // localStorage.removeItem(template);
     } else {
       return;
@@ -134,23 +127,34 @@ export default function CreateSurvey() {
   return (
     <>
       <RenderPreview>프리뷰</RenderPreview>
-      <button onClick={() => resetField()}>설문조사 초기화</button>
       <form
         className={classes.formContainer}
-        // onSubmit={formState.handleSubmit(onSubmitHandler)}
+        onSubmit={formState.handleSubmit(onSubmitHandler)}
       >
         <FormProvider {...formState}>
           <div>
             <h2>설정</h2>
-            {/* 연령 별 체크*/}
+            {/* 나이 별 수집 */}
+            <BooleanGroup<RequestSurveyFormData>
+              groupName={"isAgeCollected"}
+              label="나이 집계 하시겠습니까"
+              description="흠"
+            />
 
-            <AddAgeGroup />
+            {/* 성별 별 수집 */}
+            <BooleanGroup<RequestSurveyFormData>
+              label="성별 집계 하시겠습니까"
+              groupName={"isGenderCollected"}
+            />
 
             {/* 성별 별 체크*/}
-            <AddGender />
+            {/* <AddGender /> */}
+            {/* <BooleanGroup<RequestSurveyFormData>
+              groupName={"isGenderCollected"}
+            /> */}
 
             {/* 기간 */}
-            <AddDateRange />
+            {/* <AddDateRange /> */}
           </div>
 
           {/* 설문조사 제목 */}
@@ -186,7 +190,7 @@ export default function CreateSurvey() {
           <AddQuestionController />
 
           {/* 익명 사용자 - Email 정보동의  */}
-          {/* {!session && <TemplateAccess />} */}
+          {/* <TemplateAccess /> */}
         </FormProvider>
         <Button.submit type="submit" disabled={isPending}>
           설문조사 생성하기

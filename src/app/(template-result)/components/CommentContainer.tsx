@@ -7,13 +7,17 @@ import ReplyIcon from "/public/asset/icon/reply.svg";
 
 export default function CommentContainer({
   touchIdx,
+  templateId,
   setTouch,
   ...props
 }: {
   touchIdx: number | null;
+  templateId: string;
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
   const { id: commentId, replies } = props;
+
+  // console.log("commentId :::", commentId);
 
   const formViewHandler = () => {
     setTouch((prev) => {
@@ -60,7 +64,7 @@ export default function CommentContainer({
         })}
         {touchIdx === commentId && (
           <div className={classes.replyFormContainer}>
-            <CommentEditor id={commentId + ""} />
+            <CommentEditor templateId={templateId} commentId={commentId + ""} />
           </div>
         )}
       </div>

@@ -243,12 +243,12 @@ export default function SurveyResult({ id }: { id: number }) {
                           </div>
 
                           {/* Percent */}
-                          <SurveyResultBar
+                          {/* <SurveyResultBar
                             triggerContents={[genderGroup, ageGroup]}
                             curCnt={cnt}
                             allCnt={templateMeta.user_cnt}
                             maxCnt={isMax}
-                          />
+                          /> */}
                           {e.picture && (
                             <ImageViewer image={e.picture} alt={e.label} />
                           )}

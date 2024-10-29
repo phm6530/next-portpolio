@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { userProps } from "@/types/user";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
-import selectCommentList from "@/app/api/_dao/commentRepositroy";
+import selectCommentList from "@/app/____api/_dao/commentRepositroy";
 import bcrypt from "bcrypt";
 
 type postCommentProps = {

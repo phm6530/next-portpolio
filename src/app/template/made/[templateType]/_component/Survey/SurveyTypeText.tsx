@@ -1,14 +1,11 @@
-import { imgUploader } from "@/lib/uploaderHanlder";
-import useStore from "@/store/store";
-import { PathSegments } from "@/types/upload";
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   FieldError,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
-import { BASE_URL } from "@/config/base";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -18,36 +15,33 @@ export default function SurveyTypeText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const template_key = useStore((state) => state.template_key);
   const [preView, setpreView] = useState<string>("");
   const {
     register,
     formState: { errors },
-    getValues,
-    setValue,
-  } = useFormContext();
+  } = useFormContext<RequestSurveyFormData>();
 
   const uploadClickTrigger = () => {
     imgRef.current?.click();
   };
 
-  const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
-    if (files && template_key) {
-      //임의로
-      const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
-        template_key,
-      });
-      setpreView(`${BASE_URL}/${imgUrl}`);
+  // const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.currentTarget.files;
+  //   if (files && template_key) {
+  //     //임의로
+  //     const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
+  //       template_key,
+  //     });
+  //     setpreView(`${BASE_URL}/${imgUrl}`);
 
-      const QuestionObj = getValues(`items.${surveyIdx}`);
+  //     const QuestionObj = getValues(`items.${surveyIdx}`);
 
-      setValue(`items.${surveyIdx}`, {
-        ...QuestionObj,
-        textImg: imgUrl,
-      });
-    }
-  };
+  //     setValue(`items.${surveyIdx}`, {
+  //       ...QuestionObj,
+  //       textImg: imgUrl,
+  //     });
+  //   }
+  // };
 
   const clearPreview = () => {
     setpreView("");
@@ -63,7 +57,7 @@ export default function SurveyTypeText({
         <input
           type="file"
           className="hidden"
-          onChange={imgHandler}
+          // onChange={imgHandler}
           autoComplete="off"
           ref={imgRef}
         />
@@ -90,7 +84,7 @@ export default function SurveyTypeText({
 
         <input
           type="text"
-          {...register(`items.${surveyIdx}.label`, {
+          {...register(`questions.${surveyIdx}.label`, {
             required: "질문 제목은 필수항목 입니다.",
           })}
         />
@@ -101,8 +95,9 @@ export default function SurveyTypeText({
 
         <div>
           {
-            (errors.items as unknown as { label?: FieldError }[])?.[surveyIdx]
-              ?.label?.message
+            (errors.questions as unknown as { label?: FieldError }[])?.[
+              surveyIdx
+            ]?.label?.message
           }
         </div>
       </div>

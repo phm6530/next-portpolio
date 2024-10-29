@@ -79,13 +79,13 @@ export default function QuestionOptions({
                     : undefined
                 }`}
               />
-              {e.label}
+              {e.value}
             </div>
 
             {/* 이미지 있으면 */}
             {e.optionPicture && (
               <>
-                <ImageViewer image={e.optionPicture} alt={e.label} />
+                <ImageViewer image={e.optionPicture} alt={e.value} />
               </>
             )}
           </InputTypeStyle.RadioAnswer>

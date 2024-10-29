@@ -25,17 +25,17 @@ export default function AddQuestionController() {
   const { control } = useFormContext<RequestSurveyFormData>();
 
   //questions
-  const { fields, append } = useFieldArray({
+  const { append } = useFieldArray({
     control,
     name: "questions",
   });
 
   const addSurveyItem = (itemType: QUESTION_TYPE) => {
-    if (itemType === "text") {
+    if (itemType === QUESTION_TYPE.TEXT) {
       append({
         label: "",
         type: itemType,
-      } as RequestText);
+      });
     } else if (itemType === QUESTION_TYPE.SELECT) {
       //라디오니까 무조건 Default 2개
       append({
@@ -43,12 +43,10 @@ export default function AddQuestionController() {
         type: itemType,
         options: [
           {
-            label: "",
             value: "",
             type: QUESTION_TYPE.SELECT,
           },
           {
-            label: "",
             value: "",
             type: QUESTION_TYPE.SELECT,
           },
@@ -64,6 +62,7 @@ export default function AddQuestionController() {
           + 주관식 추가
         </button>
       </div>
+
       <div className={classes.buttonWrap}>
         <button
           type="button"

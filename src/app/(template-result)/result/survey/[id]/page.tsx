@@ -1,36 +1,44 @@
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(template-result)/components/ResultSummry";
-import ResultSurveyCharts from "@/app/(template-result)/result/survey/components/SurveyStatsCharts";
-import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
-import { BASE_NEST_URL } from "@/config/base";
-import { queryClient } from "@/config/queryClient";
-import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
+import {
+  fetchComments,
+  fetchSurveyData,
+} from "@/app/(template-result)/result/survey/components/test";
+
 import { QUERY_KEY } from "@/types/constans";
 import { SurveyResult } from "@/types/surveyResult.type";
-import requestHandler from "@/utils/withFetch";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
-export async function generateMetadata({
-  params: { id },
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const data = await queryClient.fetchQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
-    staleTime: 10000,
-  });
+//이건 매번 생성될텐데 뭐지?
 
-  return {
-    title: data.title,
-    description: data.description,
-    openGraph: {
-      title: data.title,
-      description: data.description,
-    },
-  };
-}
+// export async function generateMetadata({
+//   params: { id },
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> {
+//   // 인스턴스 생성
+
+//   const data = await queryClient.fetchQuery({
+//     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+//     queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+//   });
+
+//   return {
+//     title: data.title,
+//     description: data.description,
+//     openGraph: {
+//       title: data.title,
+//       description: data.description,
+//     },
+//   };
+// }
 
 export default async function SurveyResultPage({
   params: { id },
@@ -38,48 +46,35 @@ export default async function SurveyResultPage({
   params: { id: string };
 }) {
   const type = "survey";
+  // 싱글톤
+  const queryClient = new QueryClient();
+  const data = await queryClient.fetchQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+  });
 
-  console.log("id:::", id);
-
-  const PrefetchComment = await WithPrefetchRender(
-    ResultCommentSection,
-    async () => {
-      await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY.COMMENTS, id],
-        queryFn: async () =>
-          await requestHandler(async () => {
-            return fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
-              cache: "no-store",
-            });
-          }),
-        staleTime: 10000,
-      });
-    }
-  );
-
-  const PrefetchSurveyCharts = await WithPrefetchRender(
-    ResultSurveyCharts,
-    async () => {
-      await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-        queryFn: async () => await fetchSurveyData<SurveyResult>(id),
-        staleTime: 10000,
-      });
-    }
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [QUERY_KEY.COMMENTS, id],
+    queryFn: async () => {
+      return await fetchComments<CommentReponse[]>(id, type);
+    },
+  });
 
   return (
     <>
-      {/* template Summry */}
-      <ResultSummry id={id} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {/* template Summry */}
+        <ResultSummry {...data} />
 
-      <PrefetchSurveyCharts id={id} />
+        {/* <ResultSurveyCharts id={id} /> */}
+        {/* 메인 Comment Editor */}
+        <CommentEditor templateId={id} templateType={type} />
 
-      {/* 메인 Comment Editor */}
-      <CommentEditor id={id} />
-
-      {/* Comments */}
-      <PrefetchComment id={id} type={type} />
+        {/* Comments */}
+        <Suspense fallback={<div>loading....</div>}>
+          <ResultCommentSection id={id} type={type} />
+        </Suspense>
+      </HydrationBoundary>
     </>
   );
 }

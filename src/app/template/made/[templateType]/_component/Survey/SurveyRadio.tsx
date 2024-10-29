@@ -1,19 +1,16 @@
 import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
-  FieldArrayWithId,
+  FieldError,
   FieldErrors,
+  FieldErrorsImpl,
+  Merge,
   UseFieldArrayRemove,
-  UseFieldArrayUpdate,
   useFormContext,
 } from "react-hook-form";
-import Image from "next/image";
-import classes from "./survey.module.scss";
-import useStore from "@/store/store";
-import { imgUploader } from "@/lib/uploaderHanlder";
-import { PathSegments } from "@/types/upload";
-import { BASE_URL } from "@/config/base";
+
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 
 export default function SurveyRadio({
   surveyIdx,
@@ -31,6 +28,8 @@ export default function SurveyRadio({
     watch,
   } = useFormContext<RequestSurveyFormData>();
   const curRadio = watch(`questions.${surveyIdx}.options`);
+
+  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -87,7 +86,7 @@ export default function SurveyRadio({
       <input
         type="text"
         {...register(`questions.${surveyIdx}.options.${optionIdx}.value`, {
-          required: "질문 항목을 입력해주세요!",
+          required: "선택 항목을 입력해주세요",
         })}
         autoComplete="off"
       />
@@ -123,11 +122,7 @@ export default function SurveyRadio({
         </>
       )} */}
       <div>
-        {(
-          errors.questions?.[surveyIdx]?.options as FieldErrors<{
-            value: string;
-          }>[]
-        )?.[optionIdx]?.value?.message || null}
+        {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ export type SurveyQuestionsText = {
 export type SurveyQuestionOption = {
   value: string;
   optionPicture: string | null;
-} & BaseQuestionsType;
+} & Omit<BaseQuestionsType, "label">;
 
 // 객관식
 export type SurveyQuestionSelect = {

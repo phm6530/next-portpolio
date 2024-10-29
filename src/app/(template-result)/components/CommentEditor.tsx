@@ -3,30 +3,53 @@
 import { FormProvider, useForm } from "react-hook-form";
 import classes from "./CommentEditor.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
-import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/util/clientUtil";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
-import { queryClient } from "@/config/queryClient";
-import { MessageProps } from "@/components/Comment/CommentSection";
-import CommentTextArea from "@/components/Comment/CommentTextArea";
 
-export default function CommentEditor({ id }: { id: string }) {
+import CommentTextArea from "@/components/Comment/CommentTextArea";
+import { QUERY_KEY } from "@/types/constans";
+import requestHandler from "@/utils/withFetch";
+
+export default function CommentEditor({
+  commentId,
+  templateId,
+  templateType,
+}: {
+  commentId?: string;
+  templateId?: string;
+  templateType?: string;
+}) {
   const formMethod = useForm();
+
+  //전역 인스턴스
+  const queryClient = useQueryClient();
   const {
     reset,
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
   } = formMethod;
 
   const errorArr = Object.values(errors);
   const errorMessage = errorArr[0]?.message;
 
+  const isAnonymous = commentId;
+
+  console.log(commentId);
+
   const { mutate, isPending } = useMutation({
-    mutationFn: (data) =>
-      withFetch(async () => {
-        return fetch(`${BASE_NEST_URL}/api/comment`, {
+    mutationFn: async (data) =>
+      await requestHandler(() => {
+        const url = () => {
+          if (isAnonymous) {
+            return `${BASE_NEST_URL}/reply/${commentId}`;
+          } else if (!isAnonymous) {
+            return `${BASE_NEST_URL}/comment/${templateType}/${templateId}`;
+          } else {
+            return null as never;
+          }
+        };
+        return fetch(url(), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -35,27 +58,18 @@ export default function CommentEditor({ id }: { id: string }) {
         });
       }),
     onSuccess: async () => {
-      reset(); //폼 초기화
-      await queryClient.prefetchQuery({
-        queryKey: ["comment"],
-        queryFn: () =>
-          withFetch<MessageProps[]>(async () => {
-            return fetch(`${BASE_NEST_URL}/api/comment?templateId=${id}`, {
-              cache: "force-cache",
-            });
-          }),
+      reset();
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.COMMENTS, commentId],
       });
     },
   });
 
+  console.log("template templateId :::::", templateId);
+
   const submitHandler = (data: any) => {
-    if (id) {
-      mutate({ ...data, id, type: "comment" });
-    } else if (id) {
-      mutate({ ...data, id, type: "reply" });
-    } else {
-      return 0 as never;
-    }
+    console.log(data);
+    mutate({ ...data });
   };
 
   return (
@@ -69,7 +83,7 @@ export default function CommentEditor({ id }: { id: string }) {
             type="text"
             placeholder="이름"
             autoComplete="off"
-            {...register("name", {
+            {...register("anonymous", {
               required: "이름은 필수입니다.",
               minLength: {
                 value: 2,
@@ -93,7 +107,7 @@ export default function CommentEditor({ id }: { id: string }) {
 
         <div className={classes.textareaWrap}>
           {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
-          <CommentTextArea name={"msg"}>
+          <CommentTextArea name={isAnonymous ? "reply" : "comment"}>
             <div className={classes.errorDiv}>
               {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
             </div>

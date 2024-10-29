@@ -7,9 +7,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import DateCompareToday from "@/util/DateCompareToday";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import BackButton from "@/components/ui/button/BackButton";
 
 type SurveyDetailTemplateParams = {
@@ -65,7 +63,6 @@ export default async function SurveyDetailTemplate({
     ...rest
   } = data;
 
-  const todayCompare = DateCompareToday();
   return (
     <>
       <Grid.smallCenter>

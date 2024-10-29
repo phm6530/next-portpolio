@@ -4,6 +4,7 @@ type Reply = {
   createAt: string;
   reply: string;
   user: User | null;
+  anonymous: string | null;
 };
 
 type CommentReponse = {
@@ -13,6 +14,7 @@ type CommentReponse = {
   comment: string;
   replies: Reply[];
   user: User | null;
+  anonymous: string | null;
 };
 
 type User = {

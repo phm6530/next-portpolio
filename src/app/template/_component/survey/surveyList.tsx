@@ -43,6 +43,8 @@ export default function SurveyList({
     return <LoadingSpier />;
   }
 
+  console.log(data);
+
   return (
     <>
       {data && (
