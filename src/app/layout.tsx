@@ -1,11 +1,8 @@
-import GlobalNav from "@/components/globalNav/GlobalNav";
 import Footer from "@/components/ui/Footer";
 import ProviderContext from "@/app/_provider";
-
 import "@/styles/_styles.scss";
-
 import { Metadata } from "next";
-import { Suspense } from "react";
+import Header from "@/components/Header/Header";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -21,13 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="body" suppressHydrationWarning>
+        {" "}
         <div id="backdrop-portal"></div>
         <div id="modal-portal"></div>
         <ProviderContext>
-          <Suspense fallback={<div>loading...</div>}>
-            <GlobalNav />
-            <main className="container">{children}</main>
-          </Suspense>
+          {/* 유저정보만 가져올 Client compoennts */}
+          {/* <UserLoader /> */}
+
+          <Header />
+          <main className="container">{children}</main>
         </ProviderContext>
         <Footer />
       </body>

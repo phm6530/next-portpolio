@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export async function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest, res: NextResponse) {
   const url = req.nextUrl;
   const urlKey = url.pathname.split("/").pop();
 
@@ -38,7 +38,6 @@ export async function middleware(req: NextRequest) {
       );
     }
   }
-
   return NextResponse.next();
 }
 

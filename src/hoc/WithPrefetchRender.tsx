@@ -2,7 +2,6 @@ import { queryClient } from "@/config/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ComponentType } from "react";
 
-//다이나믹 랜더 컴포넌트 생성
 export const WithPrefetchRender = async <T extends object>(
   Component: ComponentType<T>,
   cb: () => Promise<void>

@@ -1,53 +1,85 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "next-auth/react";
-
+import { SignIn, USER_ROLE } from "@/types/auth.type";
 import classes from "./login.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
+import requestHandler from "@/utils/withFetch";
+import { BASE_NEST_URL } from "@/config/base";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useStore from "@/store/store";
+import { TokenLocalStorage } from "@/utils/localstorage-token";
 
-type LoginFormProps = {
-  user_id: string;
-  user_password: string;
+type SignUpResponse = {
+  accessToken: string;
+  user: {
+    createAt: string;
+    email: string;
+    id: 1;
+    nickname: string;
+    role: USER_ROLE;
+  };
 };
 
-export default function LoginForm({
-  redirectPath = "/",
-}: {
-  redirectPath: string;
-}) {
-  const { mutate, isPending, error } = useMutation({
-    mutationFn: async (data: LoginFormProps) => {
-      const result = await signIn("credentials", {
-        redirect: false,
-        user_id: data.user_id,
-        user_password: data.user_password,
-      });
+const schema = z.object({
+  password: z.string().min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
+  email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
+});
 
-      if (result?.error) {
-        throw new Error(
-          "존재하지 않는 회원이거나 패스워드가 일치하지 않습니다."
-        );
-      }
-      return result;
+export default function LoginForm() {
+  const store = useStore();
+
+  const {
+    mutate: signUpMutate,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async (data: SignIn) => {
+      return await requestHandler<SignUpResponse>(async () => {
+        return await fetch(`${BASE_NEST_URL}/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: "include", // AccessToken
+          // credentials: "include",
+          //브라우저가 서버와의 요청에서 쿠키를 포함할지 여부를 결정하는 옵션
+        });
+      });
     },
-    onSuccess: () => {},
+    onSuccess: (data) => {
+      //초기 로그인 시에 사용자 정보 + 토큰 반영
+      // TokenLocalStorage.setAccessToken(data.accessToken);
+
+      const { nickname, email, role } = data.user;
+
+      store.setAuthUser({
+        nickname,
+        email,
+        role,
+      });
+    },
   });
 
-  const method = useForm<LoginFormProps>();
+  //zodResolver
+  const method = useForm<SignIn>({
+    resolver: zodResolver(schema),
+  });
+
+  //제출
+  const onSubmitHandler = (data: SignIn) => {
+    console.log(data);
+    signUpMutate(data);
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = method;
-
-  const onSubmitHandler = async (data: LoginFormProps) => {
-    console.log(data);
-    return;
-
-    mutate(data);
-  };
 
   const errorMessages = Object.values(errors);
   const firstErrorMeg = errorMessages[0]?.message;
@@ -60,25 +92,23 @@ export default function LoginForm({
           <FormInput
             type="text"
             placeholder="아이디"
-            {...register("user_id", { required: "아이디는 필수 입니다." })}
+            {...register("email")}
             autoComplete="off"
+            inputName="email"
           />
 
           {/* Password */}
           <FormInput
             type="password"
             placeholder="비밀번호"
-            {...register("user_password", {
-              required: "비밀번호는 필수 입니다.",
-            })}
+            {...register("password")}
             autoComplete="new-password"
+            inputName="password"
           />
 
           <Button.submit disabled={isPending}>로그인</Button.submit>
 
-          {firstErrorMeg && (
-            <div className={classes.errorMsg}>{firstErrorMeg}</div>
-          )}
+          {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>
       </form>
     </>

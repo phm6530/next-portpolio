@@ -1,15 +1,30 @@
+import { USER_ROLE } from "@/types/auth.type";
 import { create } from "zustand";
 
-interface zustandState {
-  template_key: string | null;
-  settemplate_key: (key: string) => void;
-  removetemplate_key: () => void;
-}
+// 상태 타입 정의
+type AuthUserStore = {
+  authUser: {
+    nickname: string | null;
+    email: string | null;
+    role: USER_ROLE | null;
+  };
+  setAuthUser: (authUser: {
+    nickname: string;
+    email: string;
+    role: USER_ROLE;
+  }) => void;
+  setRemoveUser: () => void;
+};
 
-const useStore = create<zustandState>((set) => ({
-  template_key: null,
-  settemplate_key: (key) => set({ template_key: key }),
-  removetemplate_key: () => set({ template_key: null }),
+//기본 user
+const initalAuthUser = { nickname: null, email: null, role: null };
+
+const useStore = create<AuthUserStore>((set) => ({
+  login: false,
+  authUser: initalAuthUser,
+  setAuthUser: ({ nickname, email, role }) =>
+    set({ authUser: { nickname, email, role } }),
+  setRemoveUser: () => set({ authUser: initalAuthUser }),
 }));
 
 export default useStore;

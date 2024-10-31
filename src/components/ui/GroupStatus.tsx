@@ -24,12 +24,10 @@ const GroupStatus: React.FC<RespondetsDetail> = ({
     );
   }
 
-  console.log(respodentsDetail);
-
   const respondentsIcon = () => {
     const femaleGroup = respodentsDetail["female"];
     for (const item in femaleGroup) {
-      console.log(item);
+      // console.log(item);
     }
 
     return 1;

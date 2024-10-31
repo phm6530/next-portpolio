@@ -29,8 +29,6 @@ export default function Page() {
     watch,
   } = formMethod;
 
-  console.log(watch());
-
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
       withFetch(async () => {

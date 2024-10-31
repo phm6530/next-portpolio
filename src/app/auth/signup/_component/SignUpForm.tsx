@@ -3,60 +3,89 @@
 import Button from "@/components/ui/button/Button";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import { useMutation } from "@tanstack/react-query";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import classes from "./SignUpForm.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FormRegisterError from "@/components/Error/FormRegisterError";
+import { BASE_NEST_URL } from "@/config/base";
+import { useRouter } from "next/navigation";
+import requestHandler from "@/utils/withFetch";
+import { SignupUser } from "@/types/auth.type";
 
-const nickNamezod = z.string().min(3, "닉네임은 최소 3글자 이상이어야 합니다.");
+//한글 검사
+const nickNamezod = z
+  .string()
+  .min(2, "닉네임은 최소 2글자 이상이어야 합니다.")
+  .regex(/^[가-힣a-zA-Z0-9]+$/, "올바른 닉네임 형식이 아닙니다.");
 
 const schema = z.object({
   nickname: nickNamezod,
   password: z.string().min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
-  userEmail: z.string().email("유효한 이메일주소가 아닙니다."),
+  email: z.string().email("유효한 이메일주소가 아닙니다."),
 });
 
 export default function SignUpForm() {
   const [isNicknameVaild, setIsNickanemVaild] = useState<null | boolean>(null);
-  const formMethod = useForm({ resolver: zodResolver(schema) });
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isValid },
-  } = formMethod;
+  const formMethod = useForm<SignupUser>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit } = formMethod;
+  const router = useRouter();
 
-  console.log(isValid);
-  console.log(errors);
+  console.log("isNicknameVaild", isNicknameVaild);
 
   const test = ["닉네임"];
 
-  const { isPending } = useMutation({});
-
-  const { mutate } = useMutation({
-    mutationFn: async () => {},
+  const { isPending, mutate: registerUserMutate } = useMutation<
+    unknown,
+    Error,
+    SignupUser
+  >({
+    mutationFn: async (data) => {
+      return requestHandler(async () => {
+        return await fetch(`${BASE_NEST_URL}/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      });
+    },
+    onSuccess: (data) => {
+      // alert("회원가입 완료되었습니다.")
+      console.log(data);
+      // router.replace("/auth/login");
+    },
   });
 
-  const onSubmitHandler = () => {};
+  const nickname = useWatch({
+    control: formMethod.control,
+    name: "nickname", // 특정 필드 감시
+  });
 
-  useEffect(() => {
-    // 디바운싱
-    const debounce = setTimeout(() => {
-      const nickname = watch("nickname");
-      const isNicknameValid = nickNamezod.safeParse(nickname);
-      if (!isNicknameValid.success) return;
-      const trues = !test.includes(nickname);
-      trues && setIsNickanemVaild(true);
-    }, 500);
+  const onSubmitHandler = (data: SignupUser) => {
+    registerUserMutate(data);
+  };
 
-    return () => {
-      //정리해버리기
-      console.log("정리함");
-      clearTimeout(debounce);
-    };
-  }, [watch("nickname")]);
+  // useEffect(() => {
+  //   // 디바운싱
+  //   const debounce = setTimeout(() => {
+  //     const isNicknameValid = nickNamezod.safeParse(nickname);
+  //     if (isNicknameValid?.success) {
+  //       const isExist = test.includes(nickname);
+  //       !isExist ? setIsNickanemVaild(true) : setIsNickanemVaild(false);
+  //     }
+
+  //     console.log("디바운싱");
+  //   }, 700);
+
+  //   return () => {
+  //     console.log("클린업");
+  //     clearTimeout(debounce);
+  //   };
+  // }, [nickname, test]);
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} className={classes.form}>
@@ -68,16 +97,14 @@ export default function SignUpForm() {
           autoComplete="off"
           inputName="nickname"
         />
-        {isNicknameVaild ?? "없음"}
-        {isNicknameVaild === true && "사용가능한 닉네임"}
-        {isNicknameVaild === false && "중복된 닉네임"}
+        {/* <FormRegisterError /> */}
 
         <FormInput
           type="text"
           placeholder="이메일"
-          {...register("userEmail")}
+          {...register("email")}
           autoComplete="off"
-          inputName="userEmail"
+          inputName="email"
         />
         <FormInput
           type="password"
@@ -85,7 +112,9 @@ export default function SignUpForm() {
           {...register("password")}
           inputName="password"
         />
-        <Button.submit disabled={isPending}>회원가입</Button.submit>
+        <Button.submit type={"submit"} disabled={isPending}>
+          회원가입
+        </Button.submit>
       </FormProvider>
     </form>
   );
