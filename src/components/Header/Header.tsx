@@ -1,15 +1,14 @@
 import GlobalNav from "@/components/Header/GlobalNav";
 import AutencitaionStore from "@/components/Header/components/AutencitaionStore";
-import { serverSession } from "@/utils/serverSession";
+import { BASE_NEST_URL } from "@/config/base";
+import { User } from "@/types/auth.type";
+import { cookies } from "next/headers";
+import { Suspense } from "react";
+import fetchWithAuth from "@/utils/withRefreshToken";
 
-export default function Header() {
-  const token = serverSession();
+export default async function Header() {
+  const cookieStore = cookies();
+  const token = cookieStore.get("accessToken")?.value;
 
-  return (
-    <>
-      {/* Client 인증 전역 변수 설정 */}
-      <AutencitaionStore token={!!token} />
-      <GlobalNav token={!!token} />
-    </>
-  );
+  return <></>;
 }

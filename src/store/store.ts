@@ -4,11 +4,13 @@ import { create } from "zustand";
 // 상태 타입 정의
 type AuthUserStore = {
   authUser: {
+    id: number | null;
     nickname: string | null;
     email: string | null;
     role: USER_ROLE | null;
   };
   setAuthUser: (authUser: {
+    id: number;
     nickname: string;
     email: string;
     role: USER_ROLE;
@@ -17,13 +19,13 @@ type AuthUserStore = {
 };
 
 //기본 user
-const initalAuthUser = { nickname: null, email: null, role: null };
+const initalAuthUser = { id: null, nickname: null, email: null, role: null };
 
 const useStore = create<AuthUserStore>((set) => ({
   login: false,
   authUser: initalAuthUser,
-  setAuthUser: ({ nickname, email, role }) =>
-    set({ authUser: { nickname, email, role } }),
+  setAuthUser: ({ id, nickname, email, role }) =>
+    set({ authUser: { id, nickname, email, role } }),
   setRemoveUser: () => set({ authUser: initalAuthUser }),
 }));
 

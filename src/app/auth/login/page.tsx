@@ -15,10 +15,11 @@ const Login = async ({
   if (token) {
     redirect(redirectPath);
   }
+
   return (
     <>
       <h1>로그인</h1>
-      <LoginForm />
+      <LoginForm redirectPath={redirectPath} />
       <div className={classes.authLinks}>
         <Link href={"/auth/signup"}>회원가입</Link>|{" "}
         <Link href={""}>비밀번호 찾기</Link>

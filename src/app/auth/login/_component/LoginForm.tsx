@@ -1,7 +1,7 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { SignIn, USER_ROLE } from "@/types/auth.type";
+import { SignIn, User, USER_ROLE } from "@/types/auth.type";
 import classes from "./login.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
@@ -10,17 +10,13 @@ import { BASE_NEST_URL } from "@/config/base";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useStore from "@/store/store";
+import { useRouter } from "next/navigation";
 import { TokenLocalStorage } from "@/utils/localstorage-token";
+import { SessionStorage } from "@/utils/SessionStorage-token";
 
 type SignUpResponse = {
   accessToken: string;
-  user: {
-    createAt: string;
-    email: string;
-    id: 1;
-    nickname: string;
-    role: USER_ROLE;
-  };
+  user: User;
 };
 
 const schema = z.object({
@@ -28,8 +24,9 @@ const schema = z.object({
   email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
 });
 
-export default function LoginForm() {
+export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
   const store = useStore();
+  const router = useRouter();
 
   const {
     mutate: signUpMutate,
@@ -52,15 +49,19 @@ export default function LoginForm() {
     },
     onSuccess: (data) => {
       //초기 로그인 시에 사용자 정보 + 토큰 반영
-      // TokenLocalStorage.setAccessToken(data.accessToken);
+      const { nickname, email, role, id } = data.user;
 
-      const { nickname, email, role } = data.user;
+      //세션 저장
+      SessionStorage.setAccessToken(data.accessToken);
 
       store.setAuthUser({
+        id,
         nickname,
         email,
         role,
       });
+      router.refresh();
+      // router.replace(redirectPath ? redirectPath : "/");
     },
   });
 

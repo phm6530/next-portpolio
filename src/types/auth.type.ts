@@ -4,6 +4,15 @@ export enum USER_ROLE {
   user = "user",
 }
 
+//UserData
+export type User = {
+  createAt: string;
+  email: string;
+  id: number;
+  nickname: string;
+  role: USER_ROLE;
+};
+
 //Sign In
 export type SignIn = { email: string; password: string };
 

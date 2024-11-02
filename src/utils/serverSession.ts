@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
-export const serverSession = (): boolean => {
+export const serverSession = () => {
   const cookieStore = cookies();
-  const token = cookieStore.get("accessToken")?.value;
-  return token ? true : false;
+  const token = cookieStore.get("refreshToken")?.value;
+  return token;
 };
