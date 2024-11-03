@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
 import { TokenLocalStorage } from "@/utils/localstorage-token";
-import { SessionStorage } from "@/utils/SessionStorage-token";
+import { SessionStorage } from "@/utils/sessionStorage-token";
 
 type SignUpResponse = {
   accessToken: string;

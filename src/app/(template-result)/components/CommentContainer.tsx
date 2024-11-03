@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Button from "@/components/ui/button/Button";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import ReplyIcon from "/public/asset/icon/reply.svg";
+import { CommentReponse } from "@/types/comment.type";
 
 export default function CommentContainer({
   touchIdx,
@@ -16,8 +17,6 @@ export default function CommentContainer({
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
   const { id: commentId, replies } = props;
-
-  console.log(props);
 
   const formViewHandler = () => {
     setTouch((prev) => {
@@ -51,7 +50,7 @@ export default function CommentContainer({
         }`}
       >
         {replies.map((reply, idx) => {
-          const { reply: message, ...rest } = reply;
+          const { content, ...rest } = reply;
           return (
             <div
               className={classes.replyWrapper}
@@ -62,7 +61,7 @@ export default function CommentContainer({
               <Comment
                 contentType="reply"
                 templateId={templateId}
-                comment={message}
+                content={content}
                 onClickEvent={formViewHandler}
                 {...rest}
               />

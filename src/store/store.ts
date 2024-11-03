@@ -16,6 +16,7 @@ type AuthUserStore = {
     role: USER_ROLE;
   }) => void;
   setRemoveUser: () => void;
+  // userDataloading: boolean | null;
 };
 
 //기본 user

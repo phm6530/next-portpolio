@@ -14,28 +14,28 @@ type ResponseError = {
 
 export default function TemplateList() {
   // //prefetch하기
-  // const { data } = useQuery<TemplateItemMetadata[]>({
-  //   queryKey: [QUERY_KEY.TEMPLATE_LIST],
-  //   queryFn: async () => {
-  //     const response = await fetch(`${BASE_NEST_URL}/template`, {
-  //       cache: "no-store",
-  //     });
-  //     return await response.json();
-  //   },
-  //   staleTime: 10000,
-  // });
+  const { data } = useQuery<TemplateItemMetadata[]>({
+    queryKey: [QUERY_KEY.TEMPLATE_LIST],
+    queryFn: async () => {
+      const response = await fetch(`${BASE_NEST_URL}/template`, {
+        cache: "no-store",
+      });
+      return await response.json();
+    },
+    staleTime: 10000,
+  });
 
-  // if (!data) {
-  //   return <div>데이터 없음</div>;
-  // }
+  if (!data) {
+    return <div>데이터 없음</div>;
+  }
 
   return (
     <>
-      {/* <div className={` ${classes.surveyItemWrapper}`}>
+      <div className={` ${classes.surveyItemWrapper}`}>
         {data.map((e, idx) => {
           return <TemplateItem {...e} key={`templateItem-${idx}`} />;
         })}
-      </div> */}
+      </div>
     </>
   );
 }

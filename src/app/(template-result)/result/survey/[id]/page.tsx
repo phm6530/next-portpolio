@@ -6,6 +6,7 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(template-result)/result/survey/components/test";
+import { CommentReponse } from "@/types/comment.type";
 
 import { QUERY_KEY } from "@/types/constans";
 import { SurveyResult } from "@/types/surveyResult.type";

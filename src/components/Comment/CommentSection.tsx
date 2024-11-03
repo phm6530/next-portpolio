@@ -25,7 +25,6 @@ export type MessageProps = {
 export default function CommentSection({ templateId }: { templateId: number }) {
   const [replyIdx, setReplyIdx] = useState<number | null>(null);
 
-  console.log(templateId);
   const { data, isError, isLoading } = useQuery<MessageProps[]>({
     queryKey: ["comment", templateId],
     queryFn: () =>

@@ -1,19 +1,19 @@
 import { User } from "@/types/auth.type";
 
-type Reply = {
+export type Reply = {
   id: number;
   updateAt: string;
   createAt: string;
-  reply: string;
+  content: string;
   user: User | null;
   anonymous: string | null;
 };
 
-type CommentReponse = {
+export type CommentReponse = {
   id: number;
   updateAt: string;
   createAt: string;
-  comment: string;
+  content: string;
   replies: Reply[];
   user: User | null;
   anonymous: string | null;

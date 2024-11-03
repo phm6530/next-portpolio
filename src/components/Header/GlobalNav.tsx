@@ -9,6 +9,9 @@ import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import NavUserProfile from "@/components/Header/components/NavUserProfile";
+import { queryClient } from "@/config/queryClient";
+import { QUERY_KEY } from "@/types/constans";
+import { SessionStorage } from "@/utils/sessionStorage-token";
 
 export default function GlobalNav({ token }: { token: string | null }) {
   const store = useStore();
@@ -31,6 +34,10 @@ export default function GlobalNav({ token }: { token: string | null }) {
     onSuccess: () => {
       // alert("로그아웃 되었습니다.");
       store.setRemoveUser(); // 유저 정보 삭제
+      SessionStorage.removeAccessToken();
+      queryClient.removeQueries({
+        queryKey: [QUERY_KEY.USER_DATA],
+      }); //유저데이터 삭제
       router.refresh(); // 서버 컴포넌트 새로고침
     },
     onError: () => {
@@ -60,7 +67,6 @@ export default function GlobalNav({ token }: { token: string | null }) {
               {token ? (
                 <>
                   <NavUserProfile />
-
                   <button className={classes.logOut} onClick={() => logout()}>
                     로그아웃
                   </button>

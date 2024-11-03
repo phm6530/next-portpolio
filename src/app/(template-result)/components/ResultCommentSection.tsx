@@ -6,6 +6,7 @@ import { useState } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
 import CommentContainer from "@/app/(template-result)/components/CommentContainer";
 import { fetchComments } from "@/app/(template-result)/result/survey/components/test";
+import { CommentReponse } from "@/types/comment.type";
 
 //tempalte ID
 export default function ResultCommentSection({

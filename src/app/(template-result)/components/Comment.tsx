@@ -10,6 +10,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
+import { CommentReponse } from "@/types/comment.type";
+import { User } from "@/types/auth.type";
 
 //import
 dayjs.extend(relativeTime);
@@ -20,7 +22,7 @@ export default function Comment({
   templateId,
   id,
   createAt,
-  comment,
+  content,
   user,
   anonymous,
   onClickEvent,
@@ -30,6 +32,12 @@ export default function Comment({
   onClickEvent?: () => void;
 } & Omit<CommentReponse, "replies">) {
   const queryClient = useQueryClient();
+  const userData: User | null =
+    queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
+
+  if (contentType === "reply") {
+    console.log(user);
+  }
 
   const { mutate } = useMutation({
     mutationFn: async (data: string) =>
@@ -47,7 +55,7 @@ export default function Comment({
       alert(error.message);
     },
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       alert("댓글이 삭제되었습니다.");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.COMMENTS, templateId],
@@ -61,7 +69,8 @@ export default function Comment({
       mutate(msgPassword);
     }
   };
-
+  const isUserCommentAuthor = user?.email === userData?.email; // 현재 사용자가 댓글 작성자인지 확인
+  const canDeleteComment = isUserCommentAuthor || anonymous;
   return (
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
@@ -69,12 +78,19 @@ export default function Comment({
         {anonymous && !user && (
           <UserRoleDisplay user_nickname={anonymous} user_role={"anonymous"} />
         )}
-
+        {user && "유저"}
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
-        <Button.closeBtn onClick={deleteMessage} />
+
+        {/* 내 댓글일 경우만 삭제버튼 노출 */}
+        {canDeleteComment && (
+          <>
+            {isUserCommentAuthor && <span>내 댓글</span>}
+            <Button.closeBtn onClick={deleteMessage} />
+          </>
+        )}
       </div>
       <div className={classes.comment} onClick={onClickEvent}>
-        {comment}
+        {content}
       </div>
     </div>
   );

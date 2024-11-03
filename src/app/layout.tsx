@@ -6,6 +6,14 @@ import Header from "@/components/Header/Header";
 import GlobalNav from "@/components/Header/GlobalNav";
 import { cookies } from "next/headers";
 import { serverSession } from "@/utils/serverSession";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { BASE_NEST_URL } from "@/config/base";
+import fetchWithAuth from "@/utils/withRefreshToken";
+import { QUERY_KEY } from "@/types/constans";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -23,6 +31,26 @@ export default async function RootLayout({
    */
 
   const token = serverSession();
+  const queryClient = new QueryClient();
+
+  //세션이기때문에 refresh 보내야함
+  if (token) {
+    await queryClient.prefetchQuery({
+      queryKey: [QUERY_KEY.USER_DATA],
+      queryFn: async () => {
+        console.log("요청!");
+        const endpoint = `${BASE_NEST_URL}/user/me`;
+        const option: RequestInit = {
+          cache: "no-store",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        };
+        return await fetchWithAuth(endpoint, option);
+      },
+    });
+  }
 
   return (
     <html lang="en">
@@ -31,8 +59,10 @@ export default async function RootLayout({
         <div id="modal-portal"></div>
 
         <ProviderContext>
-          <GlobalNav token={token || null} />
-          <main className="container">{children}</main>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <GlobalNav token={token || null} />
+            <main className="container">{children}</main>
+          </HydrationBoundary>
         </ProviderContext>
 
         <Footer />
