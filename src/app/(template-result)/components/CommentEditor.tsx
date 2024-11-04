@@ -8,11 +8,8 @@ import { BASE_NEST_URL } from "@/config/base";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
-import requestHandler from "@/utils/withFetch";
-import useStore from "@/store/store";
 import { useEffect } from "react";
-import { User, USER_ROLE } from "@/types/auth.type";
-import { headers } from "next/headers";
+import { User } from "@/types/auth.type";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 
@@ -72,11 +69,9 @@ export default function CommentEditor({
     watch,
   } = formMethod;
 
-  console.log(watch());
-
   useEffect(() => {
     reset(defaultValues);
-  }, [userData]);
+  }, [userData, reset, defaultValues]);
 
   const errorArr = Object.values(errors);
   const errorMessage = errorArr[0]?.message;
@@ -94,8 +89,6 @@ export default function CommentEditor({
       })();
       const token = SessionStorage.getAccessToken();
 
-      console.log(data);
-
       const options = {
         method: "POST",
         headers: {
@@ -107,7 +100,7 @@ export default function CommentEditor({
 
       return await fetchWithAuth(url, options);
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       reset();
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.COMMENTS, templateId],
@@ -116,7 +109,6 @@ export default function CommentEditor({
   });
 
   const submitHandler = (data: any) => {
-    console.log(data);
     mutate({ ...data });
   };
 

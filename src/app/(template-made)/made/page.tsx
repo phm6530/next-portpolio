@@ -1,4 +1,3 @@
-import Grid from "@/components/ui/Grid";
 import classes from "./page.module.scss";
 import SelectTemplateList from "@/app/(template-made)/components/SelectTemplateList";
 

@@ -3,23 +3,29 @@ import classes from "./page.module.scss";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { serverSession } from "@/utils/serverSession";
+import { MSG } from "@/codeMsg";
 
 const Login = async ({
   searchParams,
 }: {
-  searchParams: { redirect: string };
+  searchParams: { redirect: string; code: string };
 }) => {
-  const { redirect: redirectPath } = searchParams;
+  const { redirect: redirectPath, code } = searchParams;
   const token = serverSession();
 
   if (token) {
-    redirect(redirectPath);
+    redirect(redirectPath || "/list");
   }
+
+  const msg = (code: keyof typeof MSG) => {
+    return MSG[code] || "Error";
+  };
 
   return (
     <>
       <h1>로그인</h1>
-      <LoginForm redirectPath={redirectPath} />
+      <LoginForm />
+      <p>{code && msg(code)}</p>
       <div className={classes.authLinks}>
         <Link href={"/auth/signup"}>회원가입</Link>|{" "}
         <Link href={""}>비밀번호 찾기</Link>

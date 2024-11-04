@@ -53,10 +53,9 @@ export default function SignUpForm() {
         });
       });
     },
-    onSuccess: (data) => {
-      // alert("회원가입 완료되었습니다.")
-      console.log(data);
-      // router.replace("/auth/login");
+    onSuccess: () => {
+      alert("회원가입 완료되었습니다.");
+      router.replace("/auth/login");
     },
   });
 

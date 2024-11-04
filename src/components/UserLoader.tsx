@@ -17,7 +17,6 @@ export default function UserLoader() {
     },
   });
   useEffect(() => {
-    console.log(data);
     store.setAuthUser({ ...data });
   }, [data]);
 

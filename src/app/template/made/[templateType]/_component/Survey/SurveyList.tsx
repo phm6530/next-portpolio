@@ -4,10 +4,16 @@ import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Surv
 import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
+import classes from "./SurveyList.module.scss";
 
 export default function SurveyList() {
-  const { control, watch } = useFormContext<RequestSurveyFormData>();
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext<RequestSurveyFormData>();
 
+  console.log("errors", errors);
   const { remove } = useFieldArray({
     control,
     name: "questions",
@@ -31,43 +37,32 @@ export default function SurveyList() {
       <p>주관식 항목 : {cntType(QUESTION_TYPE.TEXT)}</p>
       <p>객관식 항목 : {cntType(QUESTION_TYPE.SELECT)}</p>
 
-      {questionsWatch.map((field, qsIdx) => {
-        if (field.type === QUESTION_TYPE.TEXT) {
-          return (
-            <SurveyTypeText
-              key={`typeText-${qsIdx}`}
-              surveyIdx={qsIdx}
-              remove={remove}
-            />
-          );
-        } else if (field.type === QUESTION_TYPE.SELECT) {
-          //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
-          // const handleAddOption = (idx: number, cnt: number = 1) => {
-          //   const newOption = [...Array(cnt)].map((_, idx) => {
-          //     return {
-          //       idx,
-          //       value: "",
-          //     };
-          //   });
-
-          //   const curOptions = getValues(`items.${idx}.options`) || [];
-          //   setValue(`items.${idx}.options`, [...curOptions, ...newOption]);
-          //   trigger(`items.${idx}.options`);
-          // };
-
-          return (
-            <div key={qsIdx}>
-              <h1> Q.{qsIdx + 1} </h1>
-              <SurveyTypeSelect
-                surveyDelete={remove}
+      <div className={classes.list}>
+        {questionsWatch.map((field, qsIdx) => {
+          if (field.type === QUESTION_TYPE.TEXT) {
+            return (
+              <SurveyTypeText
+                key={`typeText-${qsIdx}`}
                 surveyIdx={qsIdx}
-                // imgId={imgId}
+                remove={remove}
               />
-            </div>
-          );
-        }
-      })}
-      {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."}
+            );
+          } else if (field.type === QUESTION_TYPE.SELECT) {
+            //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
+            return (
+              <div key={qsIdx}>
+                <h1> Q.{qsIdx + 1} </h1>
+                <SurveyTypeSelect
+                  surveyDelete={remove}
+                  surveyIdx={qsIdx}
+                  // imgId={imgId}
+                />
+              </div>
+            );
+          }
+        })}
+        {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."}
+      </div>
     </>
   );
 }

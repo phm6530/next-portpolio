@@ -49,31 +49,30 @@ export default function SelectTemplateList() {
 
   return (
     <div className={classes.templateSelector}>
-      {templateList.map((template) => {
+      {templateList.map((template, idx) => {
         return (
-          <>
-            <div
-              className={`${classes.choiceItem} ${
-                !template.isActive ? classes.notYet : undefined
-              }`}
-              onClick={(e) =>
-                onNotYetHandler(e, template.isActive, template.path)
-              }
-            >
-              <div className={classes.iconWrap}>
-                <Image
-                  src={SurveyIcon}
-                  alt="dd"
-                  fill
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-              <span className={classes.typeTitle}>{template.name}</span>
-              {template.description.map((e, idx) => {
-                return <p key={`description-${idx}`}>{e}</p>;
-              })}
+          <div
+            key={`${template.type}-${idx}`}
+            className={`${classes.choiceItem} ${
+              !template.isActive ? classes.notYet : undefined
+            }`}
+            onClick={(e) =>
+              onNotYetHandler(e, template.isActive, template.path)
+            }
+          >
+            <div className={classes.iconWrap}>
+              <Image
+                src={SurveyIcon}
+                alt="dd"
+                fill
+                style={{ objectFit: "contain" }}
+              />
             </div>
-          </>
+            <span className={classes.typeTitle}>{template.name}</span>
+            {template.description.map((e, idx) => {
+              return <p key={`description-${idx}`}>{e}</p>;
+            })}
+          </div>
         );
       })}
     </div>

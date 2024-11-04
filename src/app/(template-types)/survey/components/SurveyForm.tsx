@@ -1,8 +1,5 @@
 "use client";
-import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
-import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
-import QuestionOptions from "@/app/template/_component/QuestionOptions";
-import QuestionText from "@/app/template/_component/QuestionText";
+
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import {
@@ -20,6 +17,10 @@ import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
+import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
+import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
+import QuestionText from "@/app/template/_component/QuestionText";
+import QuestionOptions from "@/app/template/_component/QuestionOptions";
 
 export default function SurveyForm({
   id,
@@ -48,7 +49,7 @@ export default function SurveyForm({
   });
 
   const { reset } = formMethod;
-  const { mutate } = useMutation<unknown, Error, AnswerSurvey>({
+  const { mutate, isPending } = useMutation<unknown, Error, AnswerSurvey>({
     mutationFn: async (data) => {
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
@@ -115,6 +116,7 @@ export default function SurveyForm({
         <Button.submit
           type="button"
           onClick={formMethod.handleSubmit(onSubmitHandler)}
+          disabled={isPending}
         >
           제출하기
         </Button.submit>

@@ -18,8 +18,6 @@ export default function ResultCommentSection({
 }) {
   const [touchFormIdx, setTouchFormIdx] = useState<null | number>(null);
 
-  const queryClient = useQueryClient();
-
   const { data, isError, isLoading } = useQuery<CommentReponse[]>({
     queryKey: [QUERY_KEY.COMMENTS, id],
     queryFn: async () => {

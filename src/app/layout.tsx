@@ -2,7 +2,6 @@ import Footer from "@/components/ui/Footer";
 import ProviderContext from "@/app/_provider";
 import "@/styles/_styles.scss";
 import { Metadata } from "next";
-import Header from "@/components/Header/Header";
 import GlobalNav from "@/components/Header/GlobalNav";
 import { cookies } from "next/headers";
 import { serverSession } from "@/utils/serverSession";
@@ -26,10 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  /**
-   * 드릴링이 생기더라도 Cookie를 먼저 서버컴포넌트에서 받아 넘겨주는게 맞음
-   */
-
   const token = serverSession();
   const queryClient = new QueryClient();
 
@@ -38,7 +33,6 @@ export default async function RootLayout({
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
-        console.log("요청!");
         const endpoint = `${BASE_NEST_URL}/user/me`;
         const option: RequestInit = {
           cache: "no-store",

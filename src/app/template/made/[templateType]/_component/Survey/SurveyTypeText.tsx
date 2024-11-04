@@ -78,21 +78,14 @@ export default function SurveyTypeText({
             <button onClick={clearPreview}>삭제</button>
           </>
         )}
+        <input type="text" {...register(`questions.${surveyIdx}.label`)} />
         <button type="button" onClick={uploadClickTrigger}>
           사진
         </button>
-
-        <input
-          type="text"
-          {...register(`questions.${surveyIdx}.label`, {
-            required: "질문 제목은 필수항목 입니다.",
-          })}
-        />
         {/* delete */}
         <button type="button" onClick={() => remove(surveyIdx)}>
           삭제
         </button>
-
         <div>
           {
             (errors.questions as unknown as { label?: FieldError }[])?.[
