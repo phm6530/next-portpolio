@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import {
   FieldError,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import ImageUploadHandler from "@/utils/img-uploader";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -25,23 +26,14 @@ export default function SurveyTypeText({
     imgRef.current?.click();
   };
 
-  // const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.currentTarget.files;
-  //   if (files && template_key) {
-  //     //임의로
-  //     const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
-  //       template_key,
-  //     });
-  //     setpreView(`${BASE_URL}/${imgUrl}`);
-
-  //     const QuestionObj = getValues(`items.${surveyIdx}`);
-
-  //     setValue(`items.${surveyIdx}`, {
-  //       ...QuestionObj,
-  //       textImg: imgUrl,
-  //     });
-  //   }
-  // };
+  const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (files) {
+      const endPoint = `common/image/${1}`;
+      const img = await ImageUploadHandler(endPoint, files[0]);
+      console.log(img);
+    }
+  };
 
   const clearPreview = () => {
     setpreView("");
@@ -57,7 +49,7 @@ export default function SurveyTypeText({
         <input
           type="file"
           className="hidden"
-          // onChange={imgHandler}
+          onChange={imgHandler}
           autoComplete="off"
           ref={imgRef}
         />
