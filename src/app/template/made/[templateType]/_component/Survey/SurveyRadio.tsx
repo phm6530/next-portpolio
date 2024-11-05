@@ -1,16 +1,16 @@
-import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
-  FieldError,
-  FieldErrors,
   FieldErrorsImpl,
-  Merge,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
 
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
+import ImageUploadHandler from "@/utils/img-uploader";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import classes from "./SurveyRadio.module.scss";
 
 export default function SurveyRadio({
   surveyIdx,
@@ -25,9 +25,28 @@ export default function SurveyRadio({
   const {
     register,
     formState: { errors },
+    setValue,
     watch,
   } = useFormContext<RequestSurveyFormData>();
   const curRadio = watch(`questions.${surveyIdx}.options`);
+  const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
+  const key = watch("key");
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (file: File) => {
+      const endPoint = `common/image/${key}`;
+      return await ImageUploadHandler(endPoint, file);
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
+    onSuccess: (data) => {
+      setValue(
+        `questions.${surveyIdx}.options.${optionIdx}.img`,
+        data!.supabase_storage_imgurl
+      );
+    },
+  });
 
   const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
 
@@ -50,35 +69,15 @@ export default function SurveyRadio({
     }
   };
 
+  const clearPreview = () => {};
+
   //미리보기
-  // const imgPreview = async (
-  //   e: ChangeEvent<HTMLInputElement>
-  // ): Promise<void> => {
-  //   const target = e.target.files;
-  //   if (target && template_key) {
-  //     const imgUrl = await imgUploader(PathSegments.Survey, target[0], {
-  //       template_key,
-  //     });
-
-  //     setPreView(`${BASE_URL}/${imgUrl}`);
-
-  //     const currentOption = getValues(
-  //       `items.${surveyIdx}.options.${optionIdx}`
-  //     );
-
-  //     update(optionIdx, {
-  //       ...currentOption,
-  //       img: imgUrl,
-  //     });
-  //   }
-  // };
-
-  // const clearPreview = () => {
-  //   setPreView("");
-  //   if (ref.current) {
-  //     ref.current.value = "";
-  //   }
-  // };
+  const imgPreview = async (
+    e: ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    const files = e.currentTarget.files;
+    if (files) mutate(files[0]);
+  };
 
   return (
     <div>
@@ -93,7 +92,7 @@ export default function SurveyRadio({
       <input
         type="file"
         ref={ref}
-        // onChange={imgPreview}
+        onChange={imgPreview}
         className="hidden"
         autoComplete="off"
       />
@@ -104,23 +103,24 @@ export default function SurveyRadio({
         삭제!
       </button>
       {/* Error  */}
-      {/* {preView && (
+      {(isPending || isSuccess) && (
         <>
           <div className={classes.previewContainer}>
-            <Image
-              src={preView}
-              layout="responsive"
-              width={16}
-              height={9}
-              style={{ maxWidth: 700, objectFit: "cover" }}
-              alt="preview"
-              priority
-            />
+            {isPending && "loading......"}
+            {isSuccess && preView && (
+              <Image
+                src={preView}
+                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                alt="preview"
+                style={{ objectFit: "cover" }}
+                fill
+              />
+            )}
           </div>
           {ref.current?.value}
-          <button onClick={clearPreview}>삭제</button>
+          <button onClick={clearPreview}>이미지 삭제</button>
         </>
-      )} */}
+      )}
       <div>
         {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
       </div>

@@ -12,11 +12,19 @@ import NavUserProfile from "@/components/Header/components/NavUserProfile";
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
 import { SessionStorage } from "@/utils/sessionStorage-token";
+import { useEffect } from "react";
 
 export default function GlobalNav({ token }: { token: string | null }) {
   const store = useStore();
   const pathname = usePathname();
   const router = useRouter();
+
+  //리프래시는 없는데 엑세스는 남았을떄 정리해버리기
+  useEffect(() => {
+    if (!token && SessionStorage.getAccessToken()) {
+      SessionStorage.removeAccessToken();
+    }
+  }, [token]);
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({

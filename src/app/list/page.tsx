@@ -18,21 +18,21 @@ type ResponseError = {
 
 export default async function page() {
   // 고차 컴포넌트
-  // const PrefetchTemplstList = await WithPrefetchRender(
-  //   TemplateList,
-  //   async () => {
-  //     await queryClient.prefetchQuery({
-  //       queryKey: [QUERY_KEY.TEMPLATE_LIST],
-  //       queryFn: async () => {
-  //         const response = await fetch(`${BASE_NEST_URL}/template`, {
-  //           cache: "no-store",
-  //         });
-  //         return await response.json();
-  //       },
-  //       staleTime: 10000,
-  //     });
-  //   }
-  // );
+  const PrefetchTemplateList = await WithPrefetchRender(
+    TemplateList,
+    async (queryClient) => {
+      await queryClient.prefetchQuery({
+        queryKey: [QUERY_KEY.TEMPLATE_LIST],
+        queryFn: async () => {
+          const response = await fetch(`${BASE_NEST_URL}/template`, {
+            cache: "no-store",
+          });
+          return await response.json();
+        },
+        staleTime: 10000,
+      });
+    }
+  );
 
   return (
     <div className={classes.wrap}>
@@ -46,7 +46,7 @@ export default async function page() {
           {/* <SearchInput search={search} /> */}
         </div>
 
-        <TemplateList />
+        <PrefetchTemplateList />
       </Grid.center>
     </div>
   );

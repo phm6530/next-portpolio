@@ -39,12 +39,11 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
         },
       };
 
-      console.log("options::::", options);
       const reRequestReponse = await fetch(url, options);
 
       if (!reRequestReponse.ok) {
         const response = await reRequestReponse.json();
-        throw response;
+        throw new Error(response.message);
       }
       return await reRequestReponse.json();
     } else {

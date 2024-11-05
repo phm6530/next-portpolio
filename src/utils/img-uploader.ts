@@ -25,7 +25,7 @@ export default async function ImageUploadHandler(endPoint: string, file: File) {
       throw new Error(errorMsg.message);
     }
 
-    return (await response.json()) as { imgUrl: string };
+    return (await response.json()) as { supabase_storage_imgurl: string };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message || "업로드 실패하였습니다.");

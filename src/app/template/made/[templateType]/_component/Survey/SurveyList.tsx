@@ -13,7 +13,6 @@ export default function SurveyList() {
     formState: { errors },
   } = useFormContext<RequestSurveyFormData>();
 
-  console.log("errors", errors);
   const { remove } = useFieldArray({
     control,
     name: "questions",

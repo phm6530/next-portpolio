@@ -7,11 +7,13 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 export type RequestSelectOption = {
   label: string;
   value: string;
+  img?: string;
   type: QUESTION_TYPE.SELECT;
 };
 
 export type RequestText = {
   label: string;
+  img?: string;
   type: QUESTION_TYPE.TEXT;
 };
 

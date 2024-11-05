@@ -66,12 +66,12 @@ export default function CommentEditor({
     register,
     formState: { errors },
     handleSubmit,
-    watch,
   } = formMethod;
 
   useEffect(() => {
     reset(defaultValues);
-  }, [userData, reset, defaultValues]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const errorArr = Object.values(errors);
   const errorMessage = errorArr[0]?.message;

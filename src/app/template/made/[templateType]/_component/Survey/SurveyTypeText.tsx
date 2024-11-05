@@ -5,8 +5,11 @@ import {
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
+import classes from "./SurveyTypeText.module.scss";
+
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -16,31 +19,42 @@ export default function SurveyTypeText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const [preView, setpreView] = useState<string>("");
   const {
     register,
     formState: { errors },
+    watch,
+    setValue,
   } = useFormContext<RequestSurveyFormData>();
 
-  const uploadClickTrigger = () => {
+  const preView = watch(`questions.${surveyIdx}.img`);
+
+  const key = watch("key");
+
+  console.log(watch());
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (file: File) => {
+      const endPoint = `common/image/${key}`;
+      return await ImageUploadHandler(endPoint, file);
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
+    onSuccess: (data) => {
+      setValue(`questions.${surveyIdx}.img`, data!.supabase_storage_imgurl);
+    },
+  });
+
+  const imgHandler = () => {
     imgRef.current?.click();
   };
 
-  const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  const imgUploader = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
-    if (files) {
-      const endPoint = `common/image/${1}`;
-      const img = await ImageUploadHandler(endPoint, files[0]);
-      console.log(img);
-    }
+    if (files) mutate(files[0]);
   };
 
-  const clearPreview = () => {
-    setpreView("");
-    if (imgRef.current) {
-      imgRef.current.value = "";
-    }
-  };
+  const clearPreview = () => {};
 
   return (
     <>
@@ -49,29 +63,30 @@ export default function SurveyTypeText({
         <input
           type="file"
           className="hidden"
-          onChange={imgHandler}
+          onChange={imgUploader}
           autoComplete="off"
           ref={imgRef}
         />
-        {preView && (
+        {(isPending || isSuccess) && (
           <>
-            <div>
-              <Image
-                src={preView}
-                layout="responsive"
-                width={16}
-                height={9}
-                style={{ maxWidth: 700, objectFit: "cover" }}
-                alt="preview"
-                priority
-              />
+            <div className={classes.previewContainer}>
+              {isPending && "loading......"}
+              {isSuccess && preView && (
+                <Image
+                  src={preView}
+                  sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                  alt="preview"
+                  style={{ objectFit: "cover" }}
+                  fill
+                />
+              )}
             </div>
             {imgRef.current?.value}
-            <button onClick={clearPreview}>삭제</button>
+            <button onClick={clearPreview}>이미지 삭제</button>
           </>
         )}
         <input type="text" {...register(`questions.${surveyIdx}.label`)} />
-        <button type="button" onClick={uploadClickTrigger}>
+        <button type="button" onClick={imgHandler}>
           사진
         </button>
         {/* delete */}
