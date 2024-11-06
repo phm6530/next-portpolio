@@ -2,7 +2,7 @@ import usePopup from "@/app/hook/usePopup";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classes from "./UnsplashTunmbNail.module.scss";
 type UnsplashApi = {
   total: number;
@@ -32,6 +32,7 @@ type PixabayApi = {
 export default function UnSplashThumbNail() {
   const [imgSearch, setImgSearch] = useState<string | null>(null);
   const { setView, PopupRender } = usePopup();
+  const ref = useRef<HTMLInputElement>(null);
 
   const { mutate, data, isPending, isSuccess } = useMutation<
     UnsplashApi,
@@ -50,7 +51,8 @@ export default function UnSplashThumbNail() {
   });
 
   const onSearchHandler = () => {
-    if (imgSearch) mutate(imgSearch); // 검색어가 있을 때만 mutate 실행
+    console.log(ref.current!.value);
+    // if (imgSearch) mutate(imgSearch); // 검색어가 있을 때만 mutate 실행
   };
 
   return (
@@ -58,7 +60,7 @@ export default function UnSplashThumbNail() {
       <PopupRender className={classes.popupWidth}>
         <div className={classes.wrap}>
           <div className={classes.search}>
-            <input onChange={(e) => setImgSearch(e.currentTarget.value)} />
+            <input ref={ref} />
             <button type="button" onClick={onSearchHandler}>
               검색
             </button>
