@@ -62,6 +62,21 @@ const defaultValues = {
   templateKey: null,
 };
 
+type StringToNumber<T extends string> = T extends `${infer R extends number}`
+  ? R
+  : never;
+
+//Exclude
+type MyExclude<T, U> = T extends U ? never : T;
+
+//Pick
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+//Omit
+type MyOmit<T, K extends keyof T> = MyPick<T, MyExclude<keyof T, K>>;
+
 export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
   const queryClient = useQueryClient();
@@ -98,7 +113,7 @@ export default function CreateSurvey() {
       return await fetchWithAuth(url, options);
     },
     enabled: !!qs.get("edit"),
-    staleTime: 0,
+    staleTime: 10000,
   });
 
   useEffect(() => {
