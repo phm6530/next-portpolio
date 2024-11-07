@@ -115,40 +115,7 @@ export default function CreateSurvey() {
   //submit
   const onSubmitHandler = async (data: RequestSurveyFormData) => {
     mutate(data);
-    // if (isSession && !curSession) {
-    //   alert("세션이 만료되었습니다....");
-    //   await signOut({ redirect: false });
-    //   if (confirm("작성한 내용을 임시 저장 하시겠습니까?")) {
-    //     tempSave();
-    //   }
-    //   router.push(`/auth/login?redirect=${pathname}`);
-    //   return;
-    // }
-    // const dateformatting =
-    //   data.dateRange?.map((e) => dayjs(e).format("YYYY-MM-DD")) || null;
-    // const resultData = {
-    //   ...data,
-    //   template_key: template_key as string,
-    //   dateRange: dateformatting,
-    // };
-    // 어드민이거나 필요한 필드가 채워졌을 경우 데이터 처리
-    // if (
-    //   session?.user.role === "admin" ||
-    //   (formState.getValues("items").length !== 0 &&
-    //     formState.getValues("access_pin") !== null)
-    // ) {
-    //   mutate(resultData);
-    // }
   };
-
-  // const resetField = () => {
-  //   if (confirm("초기화 하시겠습니까?")) {
-  //     formState.reset(defaultValues);
-  //     // localStorage.removeItem(template);
-  //   } else {
-  //     return;
-  //   }
-  // };
 
   return (
     <>

@@ -24,7 +24,7 @@ export default function WithProtectedComponent({
     setIsClient(true); // 클라이언트에서만 실행되도록 설정
   }, []);
 
-  const { isSuccess } = useQuery({
+  const { isSuccess, isLoading } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
@@ -44,6 +44,10 @@ export default function WithProtectedComponent({
       router.push(`/auth/login?redirect=${pathname}&code=AUTH_001`);
     }
   }, [isClient, token, router, pathname]);
+
+  if (isLoading) {
+    return <>loading.......</>;
+  }
 
   if (token) {
     return <>{children}</>;

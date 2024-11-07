@@ -28,7 +28,12 @@ export default async function RootLayout({
   const token = serverSession();
   const queryClient = new QueryClient();
 
-  //세션이기때문에 refresh 보내야함
+  /**
+   * 11/07
+   * AccessToken이 SessionStorage로 관리되기 때문에 ,
+   * 초기 진입시에 Refresh Token으로 AccessToken 생성해야함
+   *
+   */
   if (token) {
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],

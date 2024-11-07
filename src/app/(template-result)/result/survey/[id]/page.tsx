@@ -15,8 +15,14 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { Metadata } from "next";
-import { Suspense } from "react";
+
+type StringToNumber<T extends string> = T extends `${infer R extends number}`
+  ? R
+  : never;
+
+const test = "1d++";
+
+type testProps = StringToNumber<typeof test>;
 
 //이건 매번 생성될텐데 뭐지?
 

@@ -28,7 +28,7 @@ export interface Respondent {
 //Template List Props ...
 export type TemplateItemMetadata = {
   id: number;
-  updatedAt: string;
+  // updatedAt: string;
   createdAt: string;
   title: string;
   description: string;
