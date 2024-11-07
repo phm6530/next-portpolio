@@ -73,7 +73,8 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue } = formState;
+  const { register, setValue, watch } = formState;
+  console.log(watch());
   useEffect(() => {
     /**
      * 수정일때는 key를 서치파람스로 받아서 수정임을 알림,
