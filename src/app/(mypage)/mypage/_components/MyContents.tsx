@@ -36,13 +36,16 @@ export default function MyContents() {
       ) : (
         <div>
           {data?.map((e, idx) => {
+            console.log(e);
             return (
               <div key={idx}>
                 {e.title}
                 <div>
                   <button>결과페이지</button>
                   <button
-                    onClick={() => router.push(`/made/${e.templateType}`)}
+                    onClick={() =>
+                      router.push(`/made/${e.templateType}?edit=${e.id}`)
+                    }
                   >
                     수정
                   </button>

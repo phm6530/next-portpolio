@@ -3,13 +3,16 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { BASE_NEST_URL } from "@/config/base";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
-import { TEMPLATE_TYPE } from "@/types/template.type";
+import {
+  TEMPLATE_TYPE,
+  TemplateDetilaPageResponse,
+} from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
@@ -26,7 +29,7 @@ import fetchWithAuth from "@/utils/withRefreshToken";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 
@@ -42,7 +45,21 @@ export type RequestSurveyFormData = {
   templateType: TEMPLATE_TYPE;
   questions: (RequestText | RequestSelect)[];
   creator: User;
-  key: string | null;
+  templateKey: string | null;
+};
+
+// UserData는 useEffect로 처리
+const defaultValues = {
+  title: "",
+  description: "",
+  thumbnail: "",
+  startDate: null,
+  endDate: null,
+  isGenderCollected: true,
+  isAgeCollected: true,
+  templateType: TEMPLATE_TYPE.SURVEY,
+  questions: [],
+  templateKey: null,
 };
 
 export default function CreateSurvey() {
@@ -56,36 +73,72 @@ export default function CreateSurvey() {
   const router = useRouter();
 
   const formState = useForm<RequestSurveyFormData>({
-    defaultValues: {
-      title: "",
-      description: "",
-      thumbnail: "",
-      startDate: null,
-      endDate: null,
-      isGenderCollected: true,
-      isAgeCollected: true,
-      templateType: TEMPLATE_TYPE.SURVEY,
-      questions: [],
-      creator: userData, // userData가 존재할 때만 설정
-      key: null,
-    },
+    defaultValues,
     // userData가 없으면 defaultValues 설정하지 않음
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, watch } = formState;
+  const { register, setValue, reset, watch } = formState;
+
   console.log(watch());
+
+  //수정시 get해오기
+  const { data: editData } = useQuery<TemplateDetilaPageResponse>({
+    queryKey: ["test", qs.get("edit")],
+    queryFn: async () => {
+      const token = SessionStorage.getAccessToken();
+      const url = `${BASE_NEST_URL}/template/survey/${qs.get("edit")}`;
+
+      const options: RequestInit = {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      };
+
+      return await fetchWithAuth(url, options);
+    },
+    enabled: !!qs.get("edit"),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    if (userData) {
+      reset({ ...defaultValues, creator: userData });
+    }
+  }, [userData, reset]);
+
+  console.log(editData);
+
+  useEffect(() => {
+    if (!editData) return;
+
+    reset({
+      ...defaultValues,
+      title: editData.title,
+      description: editData.description,
+      thumbnail: editData.thumbnail,
+      isGenderCollected: editData.isGenderCollected,
+      isAgeCollected: editData.isAgeCollected,
+      questions: editData.questions,
+      templateKey: editData.templateKey,
+    });
+  }, [editData, reset]);
+
   useEffect(() => {
     /**
      * 수정일때는 key를 서치파람스로 받아서 수정임을 알림,
      * 없을 경우 uuid로 temp Id를 생성해서 저장함
      */
-    const imgKey = qs.get("key");
-    const newKey = imgKey || uuid4();
-    setValue("key", newKey);
-    console.log("key 설정 완료:", newKey);
+
+    //수정일경우는
+    const editId = qs.get("edit");
+    if (!editId) {
+      const newKey = uuid4();
+      setValue("templateKey", newKey);
+    }
   }, [qs, setValue]);
 
+  //요청
   const { mutate, isPending } = useMutation<
     unknown,
     Error,
@@ -114,6 +167,7 @@ export default function CreateSurvey() {
 
   //submit
   const onSubmitHandler = async (data: RequestSurveyFormData) => {
+    console.log(data);
     mutate(data);
   };
 

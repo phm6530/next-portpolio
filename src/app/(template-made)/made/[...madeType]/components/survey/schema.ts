@@ -34,6 +34,7 @@ const surveySchema = z.object({
   isGenderCollected: z.boolean().optional(),
   isAgeCollected: z.boolean().optional(),
   templateType: z.nativeEnum(TEMPLATE_TYPE),
+  templateKey: z.string(),
   questions: z
     .array(z.union([RequestTextSchema, RequestSelectSchema]))
     .min(1, "질문 문항은 하나이상 등록되어야 합니다."),

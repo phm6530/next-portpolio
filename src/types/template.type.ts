@@ -40,6 +40,7 @@ export type TemplateItemMetadata = {
   thumbnail: string;
   respondents: RespondentsProps;
   creator: User;
+  templateKey: string;
 };
 
 export type TemplateDetilaPageResponse = {

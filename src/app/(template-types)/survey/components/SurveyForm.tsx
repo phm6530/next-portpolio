@@ -28,6 +28,7 @@ export default function SurveyForm({
   isGenderCollected,
   isAgeCollected,
   questions,
+  ...rest
 }: SurveyTemplateDetail) {
   const defaultValues: AnswerSurvey = {
     ...(isGenderCollected && { gender: null }),
@@ -42,6 +43,8 @@ export default function SurveyForm({
       }
     }),
   };
+
+  console.log(questions);
 
   const router = useRouter();
 

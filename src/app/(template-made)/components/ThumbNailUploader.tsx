@@ -79,7 +79,7 @@ export default function ThumbNailUploader() {
                   alt="preview"
                   style={{ objectFit: "cover" }}
                   fill
-                  onLoadingComplete={() => setImgPending(false)}
+                  onLoad={() => setImgPending(false)}
                 />
               )}
             </>

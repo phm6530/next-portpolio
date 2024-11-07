@@ -7,11 +7,7 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 import classes from "./SurveyList.module.scss";
 
 export default function SurveyList() {
-  const {
-    control,
-    watch,
-    formState: { errors },
-  } = useFormContext<RequestSurveyFormData>();
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
 
   const { remove } = useFieldArray({
     control,

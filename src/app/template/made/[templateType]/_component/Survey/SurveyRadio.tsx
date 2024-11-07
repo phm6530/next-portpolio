@@ -30,7 +30,12 @@ export default function SurveyRadio({
   } = useFormContext<RequestSurveyFormData>();
   const curRadio = watch(`questions.${surveyIdx}.options`);
   const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
-  const key = watch("key");
+  const key = watch("templateKey");
+
+  console.log(
+    "watch ::",
+    watch(`questions.${surveyIdx}.options.${optionIdx}.img`)
+  );
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {
@@ -103,24 +108,22 @@ export default function SurveyRadio({
         삭제!
       </button>
       {/* Error  */}
-      {(isPending || isSuccess) && (
-        <>
-          <div className={classes.previewContainer}>
-            {isPending && "loading......"}
-            {isSuccess && preView && (
-              <Image
-                src={preView}
-                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                alt="preview"
-                style={{ objectFit: "cover" }}
-                fill
-              />
-            )}
-          </div>
-          {ref.current?.value}
-          <button onClick={clearPreview}>이미지 삭제</button>
-        </>
-      )}
+      <>
+        <div className={classes.previewContainer}>
+          {isPending && "loading......"}
+          {preView && (
+            <Image
+              src={preView}
+              sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+              alt="preview"
+              style={{ objectFit: "cover" }}
+              fill
+            />
+          )}
+        </div>
+        {ref.current?.value}
+        <button onClick={clearPreview}>이미지 삭제</button>
+      </>
       <div>
         {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
       </div>

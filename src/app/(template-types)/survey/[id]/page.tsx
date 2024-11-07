@@ -61,6 +61,7 @@ export default async function SurveyDetailTemplate({
     createdAt,
     respondents,
     creator,
+    templateKey,
   } = data;
 
   return (
