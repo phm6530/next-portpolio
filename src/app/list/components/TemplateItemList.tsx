@@ -8,30 +8,62 @@ import {
   TemplateItemMetadata,
   TEMPLATERLIST_SORT,
 } from "@/types/template.type";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import classes from "./TemplateItemlist.module.scss";
 import { useSearchParams } from "next/navigation";
-import requestHandler from "@/utils/withFetch";
+import { useEffect, useRef } from "react";
 
 export default function TemplateList() {
   const qs = useSearchParams();
   const sort = qs.get("sort") || TEMPLATERLIST_SORT.ALL;
+  const ref = useRef<HTMLDivElement>(null);
 
-  //prefetch하기
-  const { data, isLoading, isPending } = useQuery<
-    TemplateItemMetadata<RespondentsAndMaxGroup>[]
-  >({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
-    queryFn: async () => {
-      return await requestHandler(async () => {
-        //정렬도 같이 넘김
-        const url = `${BASE_NEST_URL}/template?sort=${sort}`;
-        return await fetch(url, {
-          cache: "no-store",
-        });
-      });
-    },
-  });
+  const { data, isPending, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery<{
+      data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
+      nextPage: number | null;
+    }>({
+      queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
+      queryFn: async ({ pageParam = 1 }) => {
+        let url = `${BASE_NEST_URL}/template?sort=${sort}`;
+        url += `&page=${pageParam}`;
+
+        const response = await fetch(url);
+        return await response.json();
+      },
+      getNextPageParam: (lastPage) => {
+        return lastPage.nextPage || null;
+      },
+      initialPageParam: 1,
+      staleTime: 10000,
+    });
+
+  console.log("isFetchingNextPage::", isFetchingNextPage);
+
+  useEffect(() => {
+    const target = ref.current;
+
+    const ob = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        if (entries[0].isIntersecting) {
+          target!.style.backgroundColor = "red";
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    if (target) {
+      ob.observe(target);
+    }
+
+    return () => {
+      if (target) {
+        ob.unobserve(target);
+      }
+      ob.disconnect();
+    };
+  }, [ref]);
 
   if (isPending) {
     return "loading....";
@@ -41,21 +73,26 @@ export default function TemplateList() {
     return <div>데이터 없음</div>;
   }
 
-  console.log(data);
+  //마지막 잡기
+  const lastPage = data.pages.at(-1);
+  const lastItem = lastPage?.data.at(-1);
 
   return (
     <>
       <div className={` ${classes.surveyItemWrapper}`}>
-        {data.map((e) => {
-          if (e.respondents.tag === RESPONDENT_TAG.MAXGROUP) {
-            return (
-              <TemplateItem
-                {...e}
-                respondents={e.respondents}
-                key={`templateItem-${e.id}`}
-              />
-            );
-          }
+        {data.pages.map((page) => {
+          return page.data.map((item) => {
+            if (item.respondents.tag === RESPONDENT_TAG.MAXGROUP) {
+              return (
+                <TemplateItem
+                  {...item}
+                  respondents={item.respondents}
+                  key={`templateItem-${item.id}`}
+                  ref={item.id === lastItem?.id ? ref : null}
+                />
+              );
+            }
+          });
         })}
       </div>
     </>

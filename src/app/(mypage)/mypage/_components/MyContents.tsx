@@ -89,7 +89,13 @@ export default function MyContents() {
               <div key={idx}>
                 {e.title}
                 <div>
-                  <button>결과페이지</button>
+                  <button
+                    onClick={() =>
+                      router.push(`/result/${e.templateType}/${e.id}`)
+                    }
+                  >
+                    결과페이지
+                  </button>
                   <button
                     onClick={() =>
                       router.push(`/made/${e.templateType}?edit=${e.id}`)

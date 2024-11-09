@@ -1,8 +1,5 @@
-import { Suspense } from "react";
-
 import Grid from "@/components/ui/Grid";
 import classes from "./page.module.scss";
-import { queryClient } from "@/config/queryClient";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
@@ -22,15 +19,21 @@ export default async function page({
   const PrefetchTemplateList = await WithPrefetchRender(
     TemplateList,
     async (queryClient) => {
-      await queryClient.prefetchQuery({
+      await queryClient.prefetchInfiniteQuery({
         queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
-        queryFn: async () => {
-          const url = `${BASE_NEST_URL}/template?sort=${sort}`;
+        queryFn: async ({ pageParam = 1 }) => {
+          let url = `${BASE_NEST_URL}/template?sort=${sort}`;
+          url += `&page=${pageParam}`;
+
           const response = await fetch(url, {
             cache: "no-cache",
           });
           return await response.json();
         },
+        getNextPageParam: (lastPage: { nextPage: number }) => {
+          return lastPage.nextPage || null;
+        },
+        initialPageParam: 1,
       });
     }
   );
