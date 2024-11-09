@@ -52,7 +52,9 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
     }
   }
 
-  return await response.json();
+  const test = await response.json();
+  // console.log(test);
+  return test;
 }
 
 export default fetchWithAuth;

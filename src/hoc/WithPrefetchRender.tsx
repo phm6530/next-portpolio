@@ -1,4 +1,3 @@
-import { queryClient } from "@/config/queryClient";
 import {
   dehydrate,
   HydrationBoundary,

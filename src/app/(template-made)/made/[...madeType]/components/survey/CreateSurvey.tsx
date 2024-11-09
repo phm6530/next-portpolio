@@ -9,10 +9,7 @@ import FormInput from "@/components/ui/FormElement/FormInput";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
-import {
-  TEMPLATE_TYPE,
-  TemplateDetilaPageResponse,
-} from "@/types/template.type";
+import { TEMPLATE_TYPE, FetchTemplateForm } from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
@@ -32,6 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
+import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
 
 //Form
 export type RequestSurveyFormData = {
@@ -44,7 +42,7 @@ export type RequestSurveyFormData = {
   isAgeCollected: boolean;
   templateType: TEMPLATE_TYPE;
   questions: (RequestText | RequestSelect)[];
-  creator: User;
+  creator?: User | null;
   templateKey: string | null;
 };
 
@@ -60,6 +58,7 @@ const defaultValues = {
   templateType: TEMPLATE_TYPE.SURVEY,
   questions: [],
   templateKey: null,
+  creator: null,
 };
 
 type StringToNumber<T extends string> = T extends `${infer R extends number}`
@@ -93,16 +92,15 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset, watch } = formState;
-
-  console.log(watch());
+  const { register, setValue, reset } = formState;
+  const editId = qs.get("edit");
 
   //수정시 get해오기
-  const { data: editData } = useQuery<TemplateDetilaPageResponse>({
-    queryKey: ["test", qs.get("edit")],
+  const { data: editData } = useQuery<FetchTemplateForm>({
+    queryKey: ["test", editId],
     queryFn: async () => {
       const token = SessionStorage.getAccessToken();
-      const url = `${BASE_NEST_URL}/template/survey/${qs.get("edit")}`;
+      const url = `${BASE_NEST_URL}/template/survey/${editId}`;
 
       const options: RequestInit = {
         headers: {
@@ -112,17 +110,16 @@ export default function CreateSurvey() {
 
       return await fetchWithAuth(url, options);
     },
-    enabled: !!qs.get("edit"),
+    enabled: !!editId,
     staleTime: 10000,
   });
 
   useEffect(() => {
-    if (userData) {
+    if (!!userData && !editId) {
+      console.log("난실행 안되어야함");
       reset({ ...defaultValues, creator: userData });
     }
-  }, [userData, reset]);
-
-  console.log(editData);
+  }, [setValue, userData, reset, editId]);
 
   useEffect(() => {
     if (!editData) return;
@@ -136,8 +133,9 @@ export default function CreateSurvey() {
       isAgeCollected: editData.isAgeCollected,
       questions: editData.questions,
       templateKey: editData.templateKey,
+      creator: userData,
     });
-  }, [editData, reset]);
+  }, [editData, reset, userData]);
 
   useEffect(() => {
     /**
@@ -146,12 +144,11 @@ export default function CreateSurvey() {
      */
 
     //수정일경우는
-    const editId = qs.get("edit");
     if (!editId) {
       const newKey = uuid4();
       setValue("templateKey", newKey);
     }
-  }, [qs, setValue]);
+  }, [qs, setValue, editId]);
 
   //요청
   const { mutate, isPending } = useMutation<
@@ -161,10 +158,9 @@ export default function CreateSurvey() {
   >({
     mutationFn: async (data) => {
       const token = SessionStorage.getAccessToken();
-      const url = `${BASE_NEST_URL}/template/survey`;
 
-      const options = {
-        method: "POST",
+      let options: RequestInit = {
+        method: editId ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
@@ -172,17 +168,23 @@ export default function CreateSurvey() {
         body: JSON.stringify(data),
       };
 
+      // 메소드 분류해서 요청하기에 URL도 구분하였음 11/9
+      const url = !editId
+        ? `${BASE_NEST_URL}/template/survey`
+        : `${BASE_NEST_URL}/template/survey/${editId}`;
+
       return await fetchWithAuth(url, options);
     },
     onSuccess: () => {
       router.replace("/list");
-      alert("설문조사 개설 완료되었습니다. ");
+      alert(
+        !editId ? "설문조사 개설 완료되었습니다." : "수정 완료 되었습니다."
+      );
     },
   });
 
   //submit
   const onSubmitHandler = async (data: RequestSurveyFormData) => {
-    console.log(data);
     mutate(data);
   };
 
@@ -228,8 +230,10 @@ export default function CreateSurvey() {
           </div>
           {/* 썸네일 */}
           <ThumbNailUploader />
+
           {/* Survey Edit Form + List*/}
           <SurveyList />
+
           {/* Survey Controller */}
           <AddQuestionController />
           {/* 익명 사용자 - Email 정보동의  */}

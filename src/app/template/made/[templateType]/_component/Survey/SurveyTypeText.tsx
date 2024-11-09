@@ -28,9 +28,7 @@ export default function SurveyTypeText({
 
   const preView = watch(`questions.${surveyIdx}.img`);
 
-  const key = watch("key");
-
-  console.log(watch());
+  const key = watch("templateKey");
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {

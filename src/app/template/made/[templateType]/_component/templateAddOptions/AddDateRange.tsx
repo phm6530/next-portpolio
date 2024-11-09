@@ -22,7 +22,6 @@ export default function AddDateRange() {
     }
   };
   const dateRange = watch();
-  console.log(watch());
 
   //선택 날짜
   const firstDateAsString =

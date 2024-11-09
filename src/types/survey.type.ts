@@ -1,4 +1,8 @@
-import { TEMPLATE_TYPE, TemplateItemMetadata } from "@/types/template.type";
+import {
+  RespondentsAndMaxGroup,
+  TEMPLATE_TYPE,
+  TemplateItemMetadata,
+} from "@/types/template.type";
 
 export enum QUESTION_TYPE {
   TEXT = "text",
@@ -15,7 +19,7 @@ export type BaseQuestionsType = {
 //설문조사 Detail Page Props
 export type SurveyTemplateDetail = {
   questions: (SurveyQuestionsText | SurveyQuestionSelect)[];
-} & TemplateItemMetadata;
+} & TemplateItemMetadata<RespondentsAndMaxGroup>;
 
 // 주관식
 export type SurveyQuestionsText = {

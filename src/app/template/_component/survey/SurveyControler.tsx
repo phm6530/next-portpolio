@@ -2,31 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LIST_SORT } from "@/types/constans";
+
 import FemaleIcon from "/public/asset/icon/female.svg";
 import MaleIcon from "/public/asset/icon/male.svg";
 import GraphIcon from "/public/asset/icon/graph.svg";
 
 import classes from "./surveyControler.module.scss";
+import { TEMPLATERLIST_SORT } from "@/types/template.type";
 
 const btnArr = [
   {
     label: "최신 순",
-    value: LIST_SORT.ALL,
+    value: TEMPLATERLIST_SORT.ALL,
   },
   {
     label: "참여자 순",
-    value: LIST_SORT.USER,
+    value: TEMPLATERLIST_SORT.RESPONDENTS,
     icon: GraphIcon,
   },
   {
     label: "남성 선호도",
-    value: LIST_SORT.MALE,
+    value: TEMPLATERLIST_SORT.MALE,
     icon: MaleIcon,
   },
   {
     label: "여성 선호도",
-    value: LIST_SORT.FEMALE,
+    value: TEMPLATERLIST_SORT.FEMALE,
     icon: FemaleIcon,
   },
 ];
@@ -50,7 +51,7 @@ export default function SurveyControler() {
 
     setActive(newSortValue);
 
-    router.push(`/template?${newParams.toString()}`, { scroll: false });
+    router.push(`/list?${newParams.toString()}`, { scroll: false });
   };
 
   return (

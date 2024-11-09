@@ -2,6 +2,7 @@
 
 import ResponseSelect from "@/app/(template-result)/result/survey/components/ResponseSelect";
 import { ResponseTexts } from "@/app/(template-result)/result/survey/components/ResponseTexts";
+import SurveyGroupFilter from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
@@ -11,8 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
-  console.log("id:::", id);
-
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
     queryFn: async () => {
@@ -34,6 +33,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
 
   return (
     <>
+      <SurveyGroupFilter />
       {questions.map((qs, idx) => {
         return (
           <div key={idx}>

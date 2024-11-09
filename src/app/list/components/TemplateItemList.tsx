@@ -2,30 +2,38 @@
 import TemplateItem from "@/app/list/components/TemplateItem";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
-import { TemplateItemMetadata } from "@/types/template.type";
+import {
+  RESPONDENT_TAG,
+  RespondentsAndMaxGroup,
+  TemplateItemMetadata,
+  TEMPLATERLIST_SORT,
+} from "@/types/template.type";
 import { useQuery } from "@tanstack/react-query";
 import classes from "./TemplateItemlist.module.scss";
-
-type ResponseError = {
-  message: string;
-  error: string;
-  statusCode: number;
-};
+import { useSearchParams } from "next/navigation";
+import requestHandler from "@/utils/withFetch";
 
 export default function TemplateList() {
-  // //prefetch하기
-  const { data, isLoading } = useQuery<TemplateItemMetadata[]>({
-    queryKey: [QUERY_KEY.TEMPLATE_LIST],
+  const qs = useSearchParams();
+  const sort = qs.get("sort") || TEMPLATERLIST_SORT.ALL;
+
+  //prefetch하기
+  const { data, isLoading, isPending } = useQuery<
+    TemplateItemMetadata<RespondentsAndMaxGroup>[]
+  >({
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
     queryFn: async () => {
-      const response = await fetch(`${BASE_NEST_URL}/template`, {
-        cache: "no-store",
+      return await requestHandler(async () => {
+        //정렬도 같이 넘김
+        const url = `${BASE_NEST_URL}/template?sort=${sort}`;
+        return await fetch(url, {
+          cache: "no-store",
+        });
       });
-      return await response.json();
     },
-    staleTime: 10000,
   });
 
-  if (isLoading) {
+  if (isPending) {
     return "loading....";
   }
 
@@ -33,11 +41,21 @@ export default function TemplateList() {
     return <div>데이터 없음</div>;
   }
 
+  console.log(data);
+
   return (
     <>
       <div className={` ${classes.surveyItemWrapper}`}>
-        {data.map((e, idx) => {
-          return <TemplateItem {...e} key={`templateItem-${idx}`} />;
+        {data.map((e) => {
+          if (e.respondents.tag === RESPONDENT_TAG.MAXGROUP) {
+            return (
+              <TemplateItem
+                {...e}
+                respondents={e.respondents}
+                key={`templateItem-${e.id}`}
+              />
+            );
+          }
         })}
       </div>
     </>

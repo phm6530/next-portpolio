@@ -1,5 +1,9 @@
 "use client";
-import { TemplateItemMetadata } from "@/types/template.type";
+import {
+  DetailRespondents,
+  RespondentsAndMaxGroup,
+  TemplateItemMetadata,
+} from "@/types/template.type";
 import classes from "./templateItem.module.scss";
 import Image from "next/image";
 import imgUrlMapper from "@/util/imgUrlMapper";
@@ -18,11 +22,10 @@ export default function TemplateItem({
   thumbnail,
   respondents,
   ...rest
-}: TemplateItemMetadata) {
-  const router = useRouter();
-
+}: TemplateItemMetadata<RespondentsAndMaxGroup>) {
   //참여자
-  const { allCnt, detail } = respondents;
+  const { allCnt, maxGroup } = respondents;
+  const router = useRouter();
 
   return (
     <div
@@ -59,7 +62,8 @@ export default function TemplateItem({
         <div>{description}</div>
         <div>{createdAt}</div>
 
-        <GroupStatus {...rest} detail={detail} action={allCnt < 5} />
+        {/* 선호 그룹은 10명이상일때만 생성하기 */}
+        {allCnt >= 10 && <GroupStatus {...rest} maxGroup={maxGroup} />}
 
         <div className={classes.bottomWrap}>
           <span className={classes.Participation}>참여자 {allCnt || 0}명</span>

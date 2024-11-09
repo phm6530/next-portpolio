@@ -25,10 +25,3 @@ export enum NEXTAUTH_ID {
   CREDENTIALS = "credentials",
   ANONYMOUS = "anonymous",
 }
-
-export enum LIST_SORT {
-  ALL = "all",
-  MALE = "male",
-  FEMALE = "female",
-  USER = "user",
-}
