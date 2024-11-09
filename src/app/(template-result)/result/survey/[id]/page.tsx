@@ -2,33 +2,51 @@ import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(template-result)/components/ResultSummry";
 import ResultSurveyCharts from "@/app/(template-result)/result/survey/components/SurveyStatsCharts";
-import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
-import { BASE_NEST_URL } from "@/config/base";
-import { queryClient } from "@/config/queryClient";
-import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
+import {
+  fetchComments,
+  fetchSurveyData,
+} from "@/app/(template-result)/result/survey/components/test";
+import { CommentReponse } from "@/types/comment.type";
+
 import { QUERY_KEY } from "@/types/constans";
-import requestHandler from "@/utils/withFetch";
-import { Metadata } from "next";
+import { SurveyResult } from "@/types/surveyResult.type";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
-export async function generateMetadata({
-  params: { id },
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const data = await queryClient.fetchQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData(id),
-  });
+type StringToNumber<T extends string> = T extends `${infer R extends number}`
+  ? R
+  : never;
 
-  return {
-    title: data.title,
-    description: data.description,
-    openGraph: {
-      title: data.title,
-      description: data.description,
-    },
-  };
-}
+const test = "1d++";
+
+type testProps = StringToNumber<typeof test>;
+
+//이건 매번 생성될텐데 뭐지?
+
+// export async function generateMetadata({
+//   params: { id },
+// }: {
+//   params: { id: string };
+// }): Promise<Metadata> {
+//   // 인스턴스 생성
+
+//   const data = await queryClient.fetchQuery({
+//     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+//     queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+//   });
+
+//   return {
+//     title: data.title,
+//     description: data.description,
+//     openGraph: {
+//       title: data.title,
+//       description: data.description,
+//     },
+//   };
+// }
 
 export default async function SurveyResultPage({
   params: { id },
@@ -36,45 +54,35 @@ export default async function SurveyResultPage({
   params: { id: string };
 }) {
   const type = "survey";
+  // 싱글톤
+  const queryClient = new QueryClient();
+  const data = await queryClient.fetchQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+  });
 
-  const PrefetchComment = await WithPrefetchRender(
-    ResultCommentSection,
-    async () => {
-      await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY.COMMENTS, id],
-        queryFn: () =>
-          requestHandler(async () => {
-            return fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
-              cache: "no-store",
-            });
-          }),
-        staleTime: 10000,
-      });
-    }
-  );
-
-  const PrefetchSurveyCharts = await WithPrefetchRender(
-    ResultSurveyCharts,
-    async () => {
-      await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-        queryFn: async () => await fetchSurveyData(id),
-      });
-    }
-  );
+  await queryClient.prefetchQuery({
+    queryKey: [QUERY_KEY.COMMENTS, id],
+    queryFn: async () => {
+      return await fetchComments<CommentReponse[]>(id, type);
+    },
+  });
+  console.log(data.creator);
 
   return (
     <>
-      {/* template Summry */}
-      <ResultSummry id={id} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {/* template Summry */}
+        <ResultSummry {...data} />
 
-      <PrefetchSurveyCharts id={id} />
+        <ResultSurveyCharts id={id} />
 
-      {/* 메인 Comment Editor */}
-      <CommentEditor id={id} />
+        {/* 메인 Comment Editor */}
+        <CommentEditor templateId={id} templateType={type} />
 
-      {/* Comments */}
-      <PrefetchComment id={id} type={type} />
+        {/* Comments */}
+        <ResultCommentSection id={id} type={type} />
+      </HydrationBoundary>
     </>
   );
 }

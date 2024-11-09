@@ -1,3 +1,4 @@
+import { User } from "@/types/auth.type";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { TemplateItemMetadata } from "@/types/template.type";
 

@@ -18,9 +18,7 @@ export default function ListPageBanner() {
             평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
           </p>
 
-          <Button.moveLink moveUrl={"/template/made"}>
-            + 설문조사 만들기
-          </Button.moveLink>
+          <Button.moveLink moveUrl={"/made"}>+ 설문조사 만들기</Button.moveLink>
         </div>
 
         {/* 캐릭터 */}

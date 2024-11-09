@@ -1,4 +1,4 @@
-import { TemplateItemMetadata } from "@/types/template.type";
+import { TEMPLATE_TYPE, TemplateItemMetadata } from "@/types/template.type";
 
 export enum QUESTION_TYPE {
   TEXT = "text",
@@ -26,7 +26,7 @@ export type SurveyQuestionsText = {
 export type SurveyQuestionOption = {
   value: string;
   optionPicture: string | null;
-} & BaseQuestionsType;
+} & Omit<BaseQuestionsType, "label">;
 
 // 객관식
 export type SurveyQuestionSelect = {

@@ -3,59 +3,113 @@
 import { FormProvider, useForm } from "react-hook-form";
 import classes from "./CommentEditor.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
-import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/util/clientUtil";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
-import { queryClient } from "@/config/queryClient";
-import { MessageProps } from "@/components/Comment/CommentSection";
-import CommentTextArea from "@/components/Comment/CommentTextArea";
 
-export default function CommentEditor({ id }: { id: string }) {
-  const formMethod = useForm();
+import CommentTextArea from "@/components/Comment/CommentTextArea";
+import { QUERY_KEY } from "@/types/constans";
+import { useEffect } from "react";
+import { User } from "@/types/auth.type";
+import fetchWithAuth from "@/utils/withRefreshToken";
+import { SessionStorage } from "@/utils/sessionStorage-token";
+
+//익명은 Password도 받음
+type AnonymousDefaultValue = {
+  anonymous: string; //닉네임
+  password: string;
+  content: string;
+};
+
+//로그인 유저는 ID만 받음
+type AuthUserDefaultValue = {
+  userId: number | null;
+  content: string;
+};
+
+export default function CommentEditor({
+  commentId,
+  templateId,
+  templateType,
+}: {
+  commentId?: string;
+  templateId?: string;
+  templateType?: string;
+}) {
+  const queryclient = useQueryClient();
+  const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
+
+  const AnonymousValues: AnonymousDefaultValue = {
+    anonymous: "",
+    password: "",
+    content: "",
+  };
+
+  const AuthUserValues: AuthUserDefaultValue = {
+    userId: userData?.id ?? null,
+    content: "",
+  };
+
+  const defaultValues = userData ? AuthUserValues : AnonymousValues;
+
+  type DefaultValues<T> = T extends number
+    ? AuthUserDefaultValue
+    : AnonymousDefaultValue;
+
+  const formMethod = useForm<DefaultValues<typeof userData>>({
+    defaultValues,
+  });
+
+  //전역 인스턴스
+  const queryClient = useQueryClient();
   const {
     reset,
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
   } = formMethod;
+
+  useEffect(() => {
+    reset(defaultValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const errorArr = Object.values(errors);
   const errorMessage = errorArr[0]?.message;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data) =>
-      withFetch(async () => {
-        return fetch(`${BASE_NEST_URL}/api/comment`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-      }),
+    mutationFn: async (data) => {
+      const url = (() => {
+        if (commentId) {
+          return `${BASE_NEST_URL}/reply/${commentId}`;
+        } else if (!commentId) {
+          return `${BASE_NEST_URL}/comment/${templateType}/${templateId}`;
+        } else {
+          return null as never;
+        }
+      })();
+      const token = SessionStorage.getAccessToken();
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      };
+
+      return await fetchWithAuth(url, options);
+    },
     onSuccess: async () => {
-      reset(); //폼 초기화
-      await queryClient.prefetchQuery({
-        queryKey: ["comment"],
-        queryFn: () =>
-          withFetch<MessageProps[]>(async () => {
-            return fetch(`${BASE_NEST_URL}/api/comment?templateId=${id}`, {
-              cache: "force-cache",
-            });
-          }),
+      reset();
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.COMMENTS, templateId],
       });
     },
   });
 
   const submitHandler = (data: any) => {
-    if (id) {
-      mutate({ ...data, id, type: "comment" });
-    } else if (id) {
-      mutate({ ...data, id, type: "reply" });
-    } else {
-      return 0 as never;
-    }
+    mutate({ ...data });
   };
 
   return (
@@ -65,35 +119,40 @@ export default function CommentEditor({ id }: { id: string }) {
     >
       <FormProvider {...formMethod}>
         <>
-          <FormInput
-            type="text"
-            placeholder="이름"
-            autoComplete="off"
-            {...register("name", {
-              required: "이름은 필수입니다.",
-              minLength: {
-                value: 2,
-                message: "이름은 최소 2글자로 설정해주세요",
-              },
-            })}
-          />
-          <FormInput
-            type="password"
-            {...register("password", {
-              required: "비밀번호는 필수입니다.",
-              minLength: {
-                value: 4,
-                message: "비밀번호는 최소 4글자로 설정해주세요",
-              },
-            })}
-            placeholder="password"
-            autoComplete="new-password"
-          />
+          {userData && <></>}
+          {!userData && (
+            <>
+              <FormInput
+                type="text"
+                placeholder="이름"
+                autoComplete="off"
+                {...register("anonymous", {
+                  required: "이름은 필수입니다.",
+                  minLength: {
+                    value: 2,
+                    message: "이름은 최소 2글자로 설정해주세요",
+                  },
+                })}
+              />
+              <FormInput
+                type="password"
+                {...register("password", {
+                  required: "비밀번호는 필수입니다.",
+                  minLength: {
+                    value: 4,
+                    message: "비밀번호는 최소 4글자로 설정해주세요",
+                  },
+                })}
+                placeholder="password"
+                autoComplete="new-password"
+              />
+            </>
+          )}
         </>
 
         <div className={classes.textareaWrap}>
           {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
-          <CommentTextArea name={"msg"}>
+          <CommentTextArea name={"content"}>
             <div className={classes.errorDiv}>
               {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
             </div>

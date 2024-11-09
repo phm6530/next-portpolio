@@ -1,20 +1,20 @@
-type Reply = {
+import { User } from "@/types/auth.type";
+
+export type Reply = {
   id: number;
   updateAt: string;
   createAt: string;
-  reply: string;
+  content: string;
   user: User | null;
+  anonymous: string | null;
 };
 
-type CommentReponse = {
+export type CommentReponse = {
   id: number;
   updateAt: string;
   createAt: string;
-  comment: string;
+  content: string;
   replies: Reply[];
   user: User | null;
-};
-
-type User = {
-  // user의 구조를 정의, 현재는 null이므로 필요한 경우 나중에 채울 수 있음
+  anonymous: string | null;
 };

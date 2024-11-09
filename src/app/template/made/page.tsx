@@ -10,7 +10,7 @@ export default function templatePage() {
         <div className={classes.title}>
           <h1>만드실 템플릿을 선택해주세요</h1>
         </div>
-        <SelectTemplateList />
+        {/* <SelectTemplateList /> */}
       </div>
     </Grid.center>
   );

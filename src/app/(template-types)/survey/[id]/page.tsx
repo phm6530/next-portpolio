@@ -7,9 +7,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import DateCompareToday from "@/util/DateCompareToday";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import BackButton from "@/components/ui/button/BackButton";
 
 type SurveyDetailTemplateParams = {
@@ -53,8 +51,6 @@ export default async function SurveyDetailTemplate({
     notFound();
   }
 
-  console.log(data);
-
   const {
     title,
     description,
@@ -64,11 +60,10 @@ export default async function SurveyDetailTemplate({
     endDate,
     createdAt,
     respondents,
-    ...rest
+    creator,
+    templateKey,
   } = data;
 
-  console.log({ ...rest });
-  const todayCompare = DateCompareToday();
   return (
     <>
       <Grid.smallCenter>
@@ -95,6 +90,7 @@ export default async function SurveyDetailTemplate({
                 user_role={user_role}
               /> */}
               {/* <span>{todayCompare.fromNow(createdAt)}</span> */}
+              <div> {creator?.nickname}</div>
             </div>
           </div>
         </TemplateQuestionWrapper>

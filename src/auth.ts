@@ -1,4 +1,4 @@
-import { getUserDataProps } from "@/app/api/auth/login/route";
+import { getUserDataProps } from "@/app/____api/auth/login/route";
 import { BASE_URL } from "@/config/base";
 import { withFetch } from "@/util/clientUtil";
 import NextAuth from "next-auth";

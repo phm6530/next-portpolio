@@ -1,17 +1,22 @@
 import { queryClient } from "@/config/queryClient";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { ComponentType } from "react";
 
-//다이나믹 랜더 컴포넌트 생성
 export const WithPrefetchRender = async <T extends object>(
   Component: ComponentType<T>,
-  cb: () => Promise<void>
+  prefetchCallback: (queryClient: QueryClient) => Promise<void> // queryClient를 전달받아 패칭하도록 설정
 ) => {
-  // 고차 컴포넌트 반환
-  return async function Render(props: T) {
-    // 콜백 실행하여 데이터를 미리 패칭
-    await cb();
+  const queryClient = new QueryClient();
 
+  // 미리 패칭 실행
+  await prefetchCallback(queryClient);
+
+  // 컴포넌트 반환
+  return function Render(props: T) {
     return (
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Component {...props} />

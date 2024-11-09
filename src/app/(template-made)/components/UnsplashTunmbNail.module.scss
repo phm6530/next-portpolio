@@ -1,0 +1,27 @@
+.popupWidth {
+  max-width: 800px;
+  width: 95%;
+}
+
+.search {
+  display: flex;
+}
+
+.slugItemsWrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.slugItem {
+  position: relative;
+  padding-bottom: 10rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 2px solid transparent;
+  &:hover {
+    border: 2px solid red;
+  }
+}

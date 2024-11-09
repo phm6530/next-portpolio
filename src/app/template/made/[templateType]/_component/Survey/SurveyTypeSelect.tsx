@@ -1,4 +1,6 @@
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import SurveyRadio from "@/app/template/made/[templateType]/_component/Survey/SurveyRadio";
+import { QUESTION_TYPE } from "@/types/survey.type";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import {
@@ -10,28 +12,27 @@ import {
 export default function SurveyTypeSelect({
   surveyDelete,
   surveyIdx,
-  imgId,
-}: {
+}: // imgId,
+{
   surveyDelete: UseFieldArrayRemove;
   surveyIdx: number;
-  imgId: string;
+  // imgId: string;
 }) {
   //FormContext
   const {
     control,
     register,
     formState: { errors },
-  } = useFormContext<AddSurveyFormProps>();
+  } = useFormContext<RequestSurveyFormData>();
 
   //항목 컨트롤러
   const {
     fields,
     append,
-    update,
     remove: itemRemove,
   } = useFieldArray({
     control,
-    name: `items.${surveyIdx}.options`,
+    name: `questions.${surveyIdx}.options`,
   });
 
   //숫자 2~20
@@ -47,7 +48,7 @@ export default function SurveyTypeSelect({
   //   };
 
   const handleArrAppend = () => {
-    append({ idx: fields[fields.length - 1].idx + 1, value: "" });
+    append({ label: "", value: "", type: QUESTION_TYPE.SELECT });
   };
 
   return (
@@ -56,12 +57,14 @@ export default function SurveyTypeSelect({
       <input
         type="text"
         autoComplete="off"
-        {...register(`items.${surveyIdx}.label`, {
+        {...register(`questions.${surveyIdx}.label`, {
           required: "질문 제목은 필수항목 입니다.",
         })}
       />
       {/* 제목에러 */}
-      <div>{errors.items?.[surveyIdx]?.label?.message as string | null}</div>
+      <div>
+        {errors.questions?.[surveyIdx]?.label?.message as string | null}
+      </div>
       <div>
         {/* <>
           <input
@@ -79,12 +82,9 @@ export default function SurveyTypeSelect({
         return (
           <div key={`option-${optionIdx}`}>
             <SurveyRadio
-              fields={fields}
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}
               itemRemove={itemRemove}
-              update={update}
-              imgId={imgId}
             />
           </div>
         );

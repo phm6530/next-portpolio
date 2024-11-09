@@ -1,6 +1,5 @@
 "use client";
 
-import { AddSurveyFormProps } from "@/types/templateSurvey";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
@@ -9,34 +8,21 @@ import ko from "date-fns/locale/ko";
 import dayjs from "dayjs";
 import { Locale } from "react-datepicker/dist/date_utils";
 import RadioWrap from "@/components/ui/RadioWrap";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 export default function AddDateRange() {
-  const {
-    getValues,
-    control,
-    reset,
-    formState: { errors },
-    watch,
-  } = useFormContext<AddSurveyFormProps>();
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
   const [isDateRange, setIsDateRange] = useState<boolean>(false);
-
-  useEffect(() => {
-    const range = getValues("dateRange");
-    setIsDateRange(!!range ? true : false);
-  }, [getValues]);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.value === "true") {
       setIsDateRange(true);
-      // 특정 필드만 초기화
-      reset({ dateRange: [] }, { keepValues: true });
     } else if (e.currentTarget.value === "false") {
       setIsDateRange(false);
-      // 특정 필드만 초기화
-      reset({ dateRange: null }, { keepValues: true });
     }
   };
-  const dateRange = watch("dateRange");
+  const dateRange = watch();
+  console.log(watch());
 
   //선택 날짜
   const firstDateAsString =
@@ -68,40 +54,52 @@ export default function AddDateRange() {
           name="dateRanges"
           onChange={onChangeHandler}
           checked={isDateRange}
-        />{" "}
+        />
         기한 설정
       </label>
       {isDateRange && (
         <>
           <Controller
-            name="dateRange"
+            name="startDate"
             control={control}
-            rules={{ required: isDateRange && "날짜 범위는 필수입니다." }}
+            rules={{ required: isDateRange && "시작 날짜는 필수입니다." }}
             render={({ field }) => (
               <DatePicker
-                onChange={(dates) => {
-                  field.onChange(dates);
-                }}
-                startDate={field.value ? field.value[0] : undefined}
-                endDate={field.value ? field.value[1] : undefined}
-                selectsRange
-                isClearable // 날짜 지우기 가능
-                placeholderText="날짜를 선택해주세요"
-                minDate={new Date()} // 최소 오늘날짜
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                placeholderText="시작 날짜를 선택해주세요"
+                minDate={new Date()}
                 locale={ko as unknown as Locale}
                 dateFormat={"yyyy.MM.dd"}
               />
             )}
           />
+
+          <Controller
+            name="endDate"
+            control={control}
+            rules={{ required: isDateRange && "시작 날짜는 필수입니다." }}
+            render={({ field }) => (
+              <DatePicker
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                placeholderText="시작 날짜를 선택해주세요"
+                minDate={new Date()}
+                locale={ko as unknown as Locale}
+                dateFormat={"yyyy.MM.dd"}
+              />
+            )}
+          />
+
           {/* 시작일 종료일 기재 */}
-          {dateRange &&
+          {/* {dateRange &&
             dateRange[0] &&
             dayjs(dateRange[0]).format("YYYY-MM-DD")}
           {same && "시작일이 오늘날짜라면 즉시 시작됩니다!"}~
           {dateRange &&
             dateRange[1] &&
-            dayjs(dateRange[1]).format("YYYY-MM-DD")}
-          {errors.dateRange?.message}
+            dayjs(dateRange[1]).format("YYYY-MM-DD")} */}
+          {/* {errors.dateRange?.message} */}
         </>
       )}
     </RadioWrap>

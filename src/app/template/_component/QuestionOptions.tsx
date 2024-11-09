@@ -55,7 +55,6 @@ export default function QuestionOptions({
   return (
     <QuestionsContainer isPicture={isPictureOption}>
       {options?.map((e, idx) => {
-        console.log(e.id);
         return (
           <InputTypeStyle.RadioAnswer
             key={`${e.id}-option-${idx}`}
@@ -79,13 +78,13 @@ export default function QuestionOptions({
                     : undefined
                 }`}
               />
-              {e.label}
+              {e.value}
             </div>
 
             {/* 이미지 있으면 */}
             {e.optionPicture && (
               <>
-                <ImageViewer image={e.optionPicture} alt={e.label} />
+                <ImageViewer image={e.optionPicture} alt={e.value} />
               </>
             )}
           </InputTypeStyle.RadioAnswer>
@@ -94,13 +93,4 @@ export default function QuestionOptions({
       {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
     </QuestionsContainer>
   );
-}
-
-{
-  /* <InputTypeStyle.RadioAnswer
-key={`option-${idx}`}
-selectLabel={true}
-curLabel={e.label}
->
-</InputTypeStyle.RadioAnswer> */
 }

@@ -1,55 +1,68 @@
-import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import { ChangeEvent, useRef, useState } from "react";
 import {
-  FieldArrayWithId,
-  FieldErrors,
+  FieldErrorsImpl,
   UseFieldArrayRemove,
-  UseFieldArrayUpdate,
   useFormContext,
 } from "react-hook-form";
+
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
+import ImageUploadHandler from "@/utils/img-uploader";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
-import classes from "./survey.module.scss";
-import useStore from "@/store/store";
-import { imgUploader } from "@/lib/uploaderHanlder";
-import { PathSegments } from "@/types/upload";
-import { BASE_URL } from "@/config/base";
+import classes from "./SurveyRadio.module.scss";
 
 export default function SurveyRadio({
-  fields,
   surveyIdx,
   optionIdx,
   itemRemove,
-  update,
 }: {
-  fields: FieldArrayWithId<AddSurveyFormProps, `items.${number}.options`>[];
   surveyIdx: number;
   optionIdx: number; // survey 항목 안의 Array Idx 임
   itemRemove: UseFieldArrayRemove;
-  update: UseFieldArrayUpdate<AddSurveyFormProps, `items.${number}.options`>;
-  imgId: string;
+  // imgId: string;
 }) {
-  //img Key
-  const template_key = useStore((state) => state.template_key);
-
   const {
     register,
-    getValues,
     formState: { errors },
-  } = useFormContext<AddSurveyFormProps>();
+    setValue,
+    watch,
+  } = useFormContext<RequestSurveyFormData>();
+  const curRadio = watch(`questions.${surveyIdx}.options`);
+  const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
+  const key = watch("templateKey");
 
-  //데이터가져오기
-  const [preView, setPreView] = useState<string>(() => {
-    return fields[optionIdx].img || "";
+  console.log(
+    "watch ::",
+    watch(`questions.${surveyIdx}.options.${optionIdx}.img`)
+  );
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (file: File) => {
+      const endPoint = `common/image/${key}`;
+      return await ImageUploadHandler(endPoint, file);
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
+    onSuccess: (data) => {
+      setValue(
+        `questions.${surveyIdx}.options.${optionIdx}.img`,
+        data!.supabase_storage_imgurl
+      );
+    },
   });
+
+  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
   const removeOptions = (idx: number): void => {
-    if (fields.length > 2) {
+    if (curRadio.length > 2) {
       itemRemove(idx);
     } else {
-      alert("2개 이상 항목으로 줄일 수 없음");
+      alert("객관식은 최소 2개 이상 항목으로 줄일 수 없음");
       return;
     }
   };
@@ -61,34 +74,14 @@ export default function SurveyRadio({
     }
   };
 
+  const clearPreview = () => {};
+
   //미리보기
   const imgPreview = async (
     e: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    const target = e.target.files;
-    if (target && template_key) {
-      const imgUrl = await imgUploader(PathSegments.Survey, target[0], {
-        template_key,
-      });
-
-      setPreView(`${BASE_URL}/${imgUrl}`);
-
-      const currentOption = getValues(
-        `items.${surveyIdx}.options.${optionIdx}`
-      );
-
-      update(optionIdx, {
-        ...currentOption,
-        img: imgUrl,
-      });
-    }
-  };
-
-  const clearPreview = () => {
-    setPreView("");
-    if (ref.current) {
-      ref.current.value = "";
-    }
+    const files = e.currentTarget.files;
+    if (files) mutate(files[0]);
   };
 
   return (
@@ -96,8 +89,8 @@ export default function SurveyRadio({
       항목 {optionIdx + 1}
       <input
         type="text"
-        {...register(`items.${surveyIdx}.options.${optionIdx}.value`, {
-          required: "질문 항목을 입력해주세요!",
+        {...register(`questions.${surveyIdx}.options.${optionIdx}.value`, {
+          required: "선택 항목을 입력해주세요",
         })}
         autoComplete="off"
       />
@@ -115,29 +108,24 @@ export default function SurveyRadio({
         삭제!
       </button>
       {/* Error  */}
-      {preView && (
-        <>
-          <div className={classes.previewContainer}>
+      <>
+        <div className={classes.previewContainer}>
+          {isPending && "loading......"}
+          {preView && (
             <Image
               src={preView}
-              layout="responsive"
-              width={16}
-              height={9}
-              style={{ maxWidth: 700, objectFit: "cover" }}
+              sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
               alt="preview"
-              priority
+              style={{ objectFit: "cover" }}
+              fill
             />
-          </div>
-          {ref.current?.value}
-          <button onClick={clearPreview}>삭제</button>
-        </>
-      )}
+          )}
+        </div>
+        {ref.current?.value}
+        <button onClick={clearPreview}>이미지 삭제</button>
+      </>
       <div>
-        {(
-          errors.items?.[surveyIdx]?.options as FieldErrors<{
-            value: string;
-          }>[]
-        )?.[optionIdx]?.value?.message || null}
+        {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
       </div>
     </div>
   );

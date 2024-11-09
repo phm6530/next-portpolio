@@ -14,6 +14,7 @@ const nextConfig = {
       "pixabay.com",
       "localhost", // dev
       "images.unsplash.com",
+      "hnfcmdvepwcpcxxwavim.supabase.co",
     ], // 내 포트폴리오
   },
   sassOptions: {

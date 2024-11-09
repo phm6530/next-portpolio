@@ -26,6 +26,7 @@ export default function Page() {
     formState: { errors },
     reset,
     register,
+    watch,
   } = formMethod;
 
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({

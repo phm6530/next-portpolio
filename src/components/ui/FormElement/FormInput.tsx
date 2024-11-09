@@ -1,3 +1,4 @@
+"use client";
 import { forwardRef, useEffect, useState } from "react";
 import classes from "./FormInput.module.scss";
 import { useFormContext } from "react-hook-form";

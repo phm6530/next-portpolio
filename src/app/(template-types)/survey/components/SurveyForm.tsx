@@ -1,8 +1,5 @@
 "use client";
-import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
-import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
-import QuestionOptions from "@/app/template/_component/QuestionOptions";
-import QuestionText from "@/app/template/_component/QuestionText";
+
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import {
@@ -17,12 +14,21 @@ import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import { useRouter } from "next/navigation";
+import { queryClient } from "@/config/queryClient";
+import { QUERY_KEY } from "@/types/constans";
+import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
+import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
+import QuestionText from "@/app/template/_component/QuestionText";
+import QuestionOptions from "@/app/template/_component/QuestionOptions";
+import { useState } from "react";
 
 export default function SurveyForm({
   id,
   isGenderCollected,
   isAgeCollected,
   questions,
+  ...rest
 }: SurveyTemplateDetail) {
   const defaultValues: AnswerSurvey = {
     ...(isGenderCollected && { gender: null }),
@@ -33,24 +39,21 @@ export default function SurveyForm({
       } else if (e.type === QUESTION_TYPE.SELECT) {
         return { questionId: e.id, type: e.type, optionId: null };
       } else {
-        throw new Error("지원되지 않는 질문 타입입니다.");
+        throw new Error("지원되지 않는 질문 타입입니다.") as never;
       }
     }),
   };
+
+  console.log(questions);
+
+  const router = useRouter();
 
   const formMethod = useForm<AnswerSurvey>({
     defaultValues,
   });
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
-  } = formMethod;
-  console.log("watch:::", watch());
-
-  const { mutate } = useMutation<unknown, Error, AnswerSurvey>({
+  const { reset } = formMethod;
+  const { mutate, isPending } = useMutation<unknown, Error, AnswerSurvey>({
     mutationFn: async (data) => {
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
@@ -62,10 +65,14 @@ export default function SurveyForm({
         });
       });
     },
-    onSuccess: (data) => {
-      console.log(data);
-      alert("전송 완료");
+    onSuccess: async () => {
       reset(defaultValues);
+      await queryClient.refetchQueries({
+        queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
+      });
+      // queryClient.setQueryData()
+
+      router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });
 
@@ -113,6 +120,7 @@ export default function SurveyForm({
         <Button.submit
           type="button"
           onClick={formMethod.handleSubmit(onSubmitHandler)}
+          disabled={isPending}
         >
           제출하기
         </Button.submit>

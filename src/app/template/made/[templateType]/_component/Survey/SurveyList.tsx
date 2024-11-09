@@ -1,80 +1,64 @@
 "use client";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { AddSurveyFormProps, surveyParams } from "@/types/templateSurvey";
 import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeSelect";
-import { useParams } from "next/navigation";
-import { SurveyType } from "@/types/template";
-import { ChangeEvent, useRef, useState } from "react";
-import useStore from "@/store/store";
-import { imgUploader } from "@/lib/uploaderHanlder";
 import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { QUESTION_TYPE } from "@/types/survey.type";
+import classes from "./SurveyList.module.scss";
 
 export default function SurveyList() {
-  const { control, getValues } = useFormContext<AddSurveyFormProps>();
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
 
   const { remove } = useFieldArray({
     control,
-    name: "items",
+    name: "questions",
   });
 
-  // get List
-  const surveyList = getValues("items");
+  //Get보단 watch가 성능이 좋다 ,.
+  const questionsWatch = watch("questions");
 
   //갯수
-  const cntType = (type: SurveyType["type"]) => {
-    return surveyList.filter((item) => item.type === type).length;
+  const cntType = (type: QUESTION_TYPE) => {
+    return questionsWatch.filter((item) => item.type === type).length;
   };
 
-  //img Params
-  const params: surveyParams = useParams();
-  const [_, imgId] = params.templateType;
+  // //img Params
+  // const params: surveyParams = useParams();
+  // const [_, imgId] = params.templateType;
 
   return (
     <>
-      <p>총 항목 : {surveyList.length}</p>
-      <p>TEXT 항목 : {cntType("text")}</p>
-      <p>선택 항목 : {cntType("select")}</p>
+      <p>총 항목 : {questionsWatch.length}</p>
+      <p>주관식 항목 : {cntType(QUESTION_TYPE.TEXT)}</p>
+      <p>객관식 항목 : {cntType(QUESTION_TYPE.SELECT)}</p>
 
-      {surveyList.map((field, surveyIdx) => {
-        if (field.type === "text") {
-          return (
-            <SurveyTypeText
-              key={`typeText-${surveyIdx}`}
-              surveyIdx={surveyIdx}
-              remove={remove}
-            />
-          );
-        } else if (field.type === "select") {
-          //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
-          // const handleAddOption = (idx: number, cnt: number = 1) => {
-          //   const newOption = [...Array(cnt)].map((_, idx) => {
-
-          //     return {
-          //       idx,
-          //       value: "",
-          //     };
-          //   });
-
-          //   const curOptions = getValues(`items.${idx}.options`) || [];
-          //   setValue(`items.${idx}.options`, [...curOptions, ...newOption]);
-          //   trigger(`items.${idx}.options`);
-          // };
-
-          return (
-            <div key={surveyIdx}>
-              <h1> Q.{surveyIdx + 1} </h1>
-
-              <SurveyTypeSelect
-                // handleAddOption={handleAddOption}
-                surveyDelete={remove}
-                surveyIdx={surveyIdx}
-                imgId={imgId}
+      <div className={classes.list}>
+        {questionsWatch.map((field, qsIdx) => {
+          if (field.type === QUESTION_TYPE.TEXT) {
+            return (
+              <SurveyTypeText
+                key={`typeText-${qsIdx}`}
+                surveyIdx={qsIdx}
+                remove={remove}
               />
-            </div>
-          );
-        }
-      })}
-      {surveyList.length === 0 && "하나이상의 질문을 하셔야합니다."}
+            );
+          } else if (field.type === QUESTION_TYPE.SELECT) {
+            //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
+            return (
+              <div key={qsIdx}>
+                <h1> Q.{qsIdx + 1} </h1>
+                <SurveyTypeSelect
+                  surveyDelete={remove}
+                  surveyIdx={qsIdx}
+                  // imgId={imgId}
+                />
+              </div>
+            );
+          }
+        })}
+
+        {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."}
+      </div>
     </>
   );
 }

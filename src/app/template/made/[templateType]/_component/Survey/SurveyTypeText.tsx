@@ -1,6 +1,3 @@
-import { imgUploader } from "@/lib/uploaderHanlder";
-import useStore from "@/store/store";
-import { PathSegments } from "@/types/upload";
 import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import {
@@ -8,7 +5,11 @@ import {
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
-import { BASE_URL } from "@/config/base";
+import classes from "./SurveyTypeText.module.scss";
+
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import ImageUploadHandler from "@/utils/img-uploader";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -18,43 +19,42 @@ export default function SurveyTypeText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const template_key = useStore((state) => state.template_key);
-  const [preView, setpreView] = useState<string>("");
   const {
     register,
     formState: { errors },
-    getValues,
+    watch,
     setValue,
-  } = useFormContext();
+  } = useFormContext<RequestSurveyFormData>();
 
-  const uploadClickTrigger = () => {
+  const preView = watch(`questions.${surveyIdx}.img`);
+
+  const key = watch("key");
+
+  console.log(watch());
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (file: File) => {
+      const endPoint = `common/image/${key}`;
+      return await ImageUploadHandler(endPoint, file);
+    },
+    onError: (error) => {
+      alert(error.message);
+    },
+    onSuccess: (data) => {
+      setValue(`questions.${surveyIdx}.img`, data!.supabase_storage_imgurl);
+    },
+  });
+
+  const imgHandler = () => {
     imgRef.current?.click();
   };
 
-  const imgHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  const imgUploader = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
-    if (files && template_key) {
-      //임의로
-      const imgUrl = await imgUploader(PathSegments.Survey, files[0], {
-        template_key,
-      });
-      setpreView(`${BASE_URL}/${imgUrl}`);
-
-      const QuestionObj = getValues(`items.${surveyIdx}`);
-
-      setValue(`items.${surveyIdx}`, {
-        ...QuestionObj,
-        textImg: imgUrl,
-      });
-    }
+    if (files) mutate(files[0]);
   };
 
-  const clearPreview = () => {
-    setpreView("");
-    if (imgRef.current) {
-      imgRef.current.value = "";
-    }
-  };
+  const clearPreview = () => {};
 
   return (
     <>
@@ -63,46 +63,41 @@ export default function SurveyTypeText({
         <input
           type="file"
           className="hidden"
-          onChange={imgHandler}
+          onChange={imgUploader}
           autoComplete="off"
           ref={imgRef}
         />
-        {preView && (
+        {(isPending || isSuccess) && (
           <>
-            <div>
-              <Image
-                src={preView}
-                layout="responsive"
-                width={16}
-                height={9}
-                style={{ maxWidth: 700, objectFit: "cover" }}
-                alt="preview"
-                priority
-              />
+            <div className={classes.previewContainer}>
+              {isPending && "loading......"}
+              {isSuccess && preView && (
+                <Image
+                  src={preView}
+                  sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                  alt="preview"
+                  style={{ objectFit: "cover" }}
+                  fill
+                />
+              )}
             </div>
             {imgRef.current?.value}
-            <button onClick={clearPreview}>삭제</button>
+            <button onClick={clearPreview}>이미지 삭제</button>
           </>
         )}
-        <button type="button" onClick={uploadClickTrigger}>
+        <input type="text" {...register(`questions.${surveyIdx}.label`)} />
+        <button type="button" onClick={imgHandler}>
           사진
         </button>
-
-        <input
-          type="text"
-          {...register(`items.${surveyIdx}.label`, {
-            required: "질문 제목은 필수항목 입니다.",
-          })}
-        />
         {/* delete */}
         <button type="button" onClick={() => remove(surveyIdx)}>
           삭제
         </button>
-
         <div>
           {
-            (errors.items as unknown as { label?: FieldError }[])?.[surveyIdx]
-              ?.label?.message
+            (errors.questions as unknown as { label?: FieldError }[])?.[
+              surveyIdx
+            ]?.label?.message
           }
         </div>
       </div>

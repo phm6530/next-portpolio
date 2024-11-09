@@ -59,8 +59,6 @@ export async function POST(
       //Data
       const data: PostAddsurveyDetailProps = await req.json();
 
-      console.log(data);
-
       await postSurveyDetail(data, DetailId);
       // JSON 응답
 

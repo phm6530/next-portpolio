@@ -1,17 +1,14 @@
 import { Suspense } from "react";
 
 import Grid from "@/components/ui/Grid";
-import Vanner from "@/components/ui/Vanner";
 import classes from "./page.module.scss";
-
 import { queryClient } from "@/config/queryClient";
 import { BASE_NEST_URL } from "@/config/base";
-import SurveyControler from "@/app/template/_component/survey/SurveyControler";
-
-import ListPageBanner from "@/app/list/components/ListPageBanner";
 import { QUERY_KEY } from "@/types/constans";
-import TemplateList from "@/app/list/components/TemplateItemList";
 import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
+import SurveyControler from "@/app/template/_component/survey/SurveyControler";
+import ListPageBanner from "@/app/list/components/ListPageBanner";
+import TemplateList from "@/app/list/components/TemplateItemList";
 
 type ResponseError = {
   message: string;
@@ -21,9 +18,9 @@ type ResponseError = {
 
 export default async function page() {
   // 고차 컴포넌트
-  const PrefetchTemplstList = await WithPrefetchRender(
+  const PrefetchTemplateList = await WithPrefetchRender(
     TemplateList,
-    async () => {
+    async (queryClient) => {
       await queryClient.prefetchQuery({
         queryKey: [QUERY_KEY.TEMPLATE_LIST],
         queryFn: async () => {
@@ -48,9 +45,8 @@ export default async function page() {
           <SurveyControler />
           {/* <SearchInput search={search} /> */}
         </div>
-        <Suspense fallback={<div>loading......???</div>}>
-          <PrefetchTemplstList />
-        </Suspense>
+
+        <PrefetchTemplateList />
       </Grid.center>
     </div>
   );

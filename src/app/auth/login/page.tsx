@@ -1,24 +1,36 @@
-import Grid from "@/components/ui/Grid";
 import LoginForm from "@/app/auth/login/_component/LoginForm";
-import { auth } from "@/auth";
+import classes from "./page.module.scss";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { serverSession } from "@/utils/serverSession";
+import { MSG } from "@/codeMsg";
+
 const Login = async ({
   searchParams,
 }: {
-  searchParams: { redirect: string };
+  searchParams: { redirect: string; code: string };
 }) => {
-  const { redirect: redirectPath } = searchParams;
-  const session = await auth();
+  const { redirect: redirectPath, code } = searchParams;
+  const token = serverSession();
 
-  if (session?.user.role === "admin") {
-    redirect(redirectPath || "/");
+  if (token) {
+    redirect(redirectPath || "/list");
   }
 
+  const msg = (code: keyof typeof MSG) => {
+    return MSG[code] || "Error";
+  };
+
   return (
-    <Grid.extraSmall>
+    <>
       <h1>로그인</h1>
-      <LoginForm redirectPath={redirectPath} />
-    </Grid.extraSmall>
+      <LoginForm />
+      <p>{code && msg(code)}</p>
+      <div className={classes.authLinks}>
+        <Link href={"/auth/signup"}>회원가입</Link>|{" "}
+        <Link href={""}>비밀번호 찾기</Link>
+      </div>
+    </>
   );
 };
 

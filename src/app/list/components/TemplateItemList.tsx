@@ -14,7 +14,7 @@ type ResponseError = {
 
 export default function TemplateList() {
   // //prefetch하기
-  const { data, isError, isLoading } = useQuery<TemplateItemMetadata[]>({
+  const { data, isLoading } = useQuery<TemplateItemMetadata[]>({
     queryKey: [QUERY_KEY.TEMPLATE_LIST],
     queryFn: async () => {
       const response = await fetch(`${BASE_NEST_URL}/template`, {
@@ -24,6 +24,10 @@ export default function TemplateList() {
     },
     staleTime: 10000,
   });
+
+  if (isLoading) {
+    return "loading....";
+  }
 
   if (!data) {
     return <div>데이터 없음</div>;

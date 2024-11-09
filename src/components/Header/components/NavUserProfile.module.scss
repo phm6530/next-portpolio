@@ -1,0 +1,17 @@
+.Wrapper {
+  font-size: 14px;
+  // width: 100px;
+  text-align: right;
+  align-items: center;
+  justify-content: flex-end;
+
+  .nickName {
+    font-weight: 700;
+  }
+  .mypageNav {
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
+}

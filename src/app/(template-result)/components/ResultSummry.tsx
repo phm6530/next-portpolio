@@ -3,17 +3,13 @@ import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import Button from "@/components/ui/button/Button";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
-import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
+import { SurveyResult } from "@/types/surveyResult.type";
+import { QueryClient } from "@tanstack/react-query";
 
-export default async function ResultSummry({ id }: { id: string }) {
-  const data = await queryClient.fetchQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData(id),
-    staleTime: 10000,
-  });
-
+export default async function ResultSummry(data: SurveyResult) {
   const {
+    id,
     title,
     description,
     templateType,

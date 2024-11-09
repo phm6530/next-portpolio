@@ -4,13 +4,16 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Button from "@/components/ui/button/Button";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import ReplyIcon from "/public/asset/icon/reply.svg";
+import { CommentReponse } from "@/types/comment.type";
 
 export default function CommentContainer({
   touchIdx,
+  templateId,
   setTouch,
   ...props
 }: {
   touchIdx: number | null;
+  templateId: string;
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
   const { id: commentId, replies } = props;
@@ -28,7 +31,12 @@ export default function CommentContainer({
   return (
     <div>
       {/* Comment */}
-      <Comment {...props} onClickEvent={formViewHandler} />
+      <Comment
+        contentType="comment"
+        templateId={templateId}
+        {...props}
+        onClickEvent={formViewHandler}
+      />
       <div className={classes.commentBtnWrap}>
         <Button.noneStyleButton onClick={formViewHandler}>
           답글쓰기
@@ -42,7 +50,7 @@ export default function CommentContainer({
         }`}
       >
         {replies.map((reply, idx) => {
-          const { reply: message, ...rest } = reply;
+          const { content, ...rest } = reply;
           return (
             <div
               className={classes.replyWrapper}
@@ -51,7 +59,9 @@ export default function CommentContainer({
             >
               <ReplyIcon className={classes.replyIcon} />
               <Comment
-                comment={message}
+                contentType="reply"
+                templateId={templateId}
+                content={content}
                 onClickEvent={formViewHandler}
                 {...rest}
               />
@@ -60,7 +70,7 @@ export default function CommentContainer({
         })}
         {touchIdx === commentId && (
           <div className={classes.replyFormContainer}>
-            <CommentEditor id={commentId + ""} />
+            <CommentEditor templateId={templateId} commentId={commentId + ""} />
           </div>
         )}
       </div>

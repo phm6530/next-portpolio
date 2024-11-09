@@ -3,11 +3,11 @@ import classes from "./ThumbNailUploader.module.scss";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
-import { imgUploader } from "@/lib/uploaderHanlder";
+
 import { withFetch } from "@/util/clientUtil";
 import { QUERY_KEY } from "@/types/constans";
-import { createClient } from "pexels";
-import { BASE_URL } from "@/config/base";
+
+import ImageUploadHandler from "@/utils/img-uploader";
 
 type UnsplashApi = {
   total: number;
@@ -38,13 +38,7 @@ type PixabayApi = {
  * template_type : 템플릿 종류
  * template_key : 이미지 키 + 템플릿 키
  */
-export default function ThumbNailUploader({
-  template_type,
-  template_key,
-}: {
-  template_type: string;
-  template_key: string;
-}) {
+export default function ThumbNailUploader() {
   const [thumNailEditor, setThumNailEditor] = useState<Boolean>(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [imgKeyword, setImgKeyword] = useState<string>("");
@@ -73,12 +67,7 @@ export default function ThumbNailUploader({
       const img = files[0];
 
       //썸네일 업로드
-      const imgUrl = await imgUploader(template_type, img, { template_key });
-      if (imgUrl) {
-        //hook form에 반영함
-        setValue("thumbnail", imgUrl);
-        setPreview(`${BASE_URL}/${imgUrl}`);
-      }
+      await ImageUploadHandler();
     }
   };
 
@@ -107,20 +96,7 @@ export default function ThumbNailUploader({
     },
     enabled: !!imgSearch,
   });
-  type UnsplashApi = {
-    total: number;
-    total_pages: number;
-    results: {
-      urls: {
-        regular: string;
-        raw: string;
-        small: string;
-      };
-      alternative_slugs: {
-        ko: string;
-      };
-    }[];
-  };
+
   useEffect(() => {
     if (isSuccess && data) {
       const processedDataArr = data.results.map((item) => ({
@@ -207,7 +183,7 @@ export default function ThumbNailUploader({
                     })}
                   </>
                 ) : (
-                  "없습니다."
+                  "검색결과가 없네요.."
                 )}
               </div>
             )}

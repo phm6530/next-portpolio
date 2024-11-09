@@ -1,3 +1,5 @@
+import { User } from "@/types/auth.type";
+
 export enum TEMPLATE_TYPE {
   SURVEY = "survey",
   RANK = "rank",
@@ -26,7 +28,7 @@ export interface Respondent {
 //Template List Props ...
 export type TemplateItemMetadata = {
   id: number;
-  updatedAt: string;
+  // updatedAt: string;
   createdAt: string;
   title: string;
   description: string;
@@ -37,6 +39,8 @@ export type TemplateItemMetadata = {
   endDate: string | null;
   thumbnail: string;
   respondents: RespondentsProps;
+  creator: User;
+  templateKey: string;
 };
 
 export type TemplateDetilaPageResponse = {
