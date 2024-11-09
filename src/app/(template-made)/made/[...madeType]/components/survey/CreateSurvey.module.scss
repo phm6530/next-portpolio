@@ -3,3 +3,13 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.disabled {
+  opacity: 0.8;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.info {
+  font-size: 14px;
+}

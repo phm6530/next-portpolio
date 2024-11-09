@@ -26,7 +26,7 @@ import fetchWithAuth from "@/utils/withRefreshToken";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
@@ -80,6 +80,7 @@ export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
   const queryClient = useQueryClient();
   const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
+  const [editPage, setEditPage] = useState<boolean>(false);
 
   const qs = useSearchParams();
 
@@ -96,54 +97,65 @@ export default function CreateSurvey() {
   const editId = qs.get("edit");
 
   //수정시 get해오기
-  const { data: editData } = useQuery<FetchTemplateForm>({
+  const {
+    data: editData,
+    error,
+    isError,
+  } = useQuery<FetchTemplateForm>({
     queryKey: ["test", editId],
     queryFn: async () => {
       const token = SessionStorage.getAccessToken();
       const url = `${BASE_NEST_URL}/template/survey/${editId}`;
-
       const options: RequestInit = {
         headers: {
           authorization: `Bearer ${token}`,
         },
       };
-
       return await fetchWithAuth(url, options);
     },
+
     enabled: !!editId,
     staleTime: 10000,
   });
 
+  //에러 캐치
+  useEffect(() => {
+    if (editId && isError && error) {
+      const errorMessage = error.message || "알 수 없는 오류 발생";
+      alert(`Error: ${errorMessage}`);
+
+      if (window.history.length > 1) {
+        router.back();
+      } else {
+        router.replace("/list");
+      }
+    }
+  }, [isError, editId, error, router]);
+
   useEffect(() => {
     if (!!userData && !editId) {
-      console.log("난실행 안되어야함");
       reset({ ...defaultValues, creator: userData });
+    } else if (editData) {
+      reset({
+        ...defaultValues,
+        title: editData.title,
+        description: editData.description,
+        thumbnail: editData.thumbnail,
+        isGenderCollected: editData.isGenderCollected,
+        isAgeCollected: editData.isAgeCollected,
+        questions: editData.questions,
+        templateKey: editData.templateKey,
+        creator: userData,
+      });
+      setEditPage(true);
     }
-  }, [setValue, userData, reset, editId]);
-
-  useEffect(() => {
-    if (!editData) return;
-
-    reset({
-      ...defaultValues,
-      title: editData.title,
-      description: editData.description,
-      thumbnail: editData.thumbnail,
-      isGenderCollected: editData.isGenderCollected,
-      isAgeCollected: editData.isAgeCollected,
-      questions: editData.questions,
-      templateKey: editData.templateKey,
-      creator: userData,
-    });
-  }, [editData, reset, userData]);
+  }, [editData, reset, userData, editId]);
 
   useEffect(() => {
     /**
      * 수정일때는 key를 서치파람스로 받아서 수정임을 알림,
      * 없을 경우 uuid로 temp Id를 생성해서 저장함
      */
-
-    //수정일경우는
     if (!editId) {
       const newKey = uuid4();
       setValue("templateKey", newKey);
@@ -210,8 +222,17 @@ export default function CreateSurvey() {
             placeholder="설문조사에 대한 설명을 적어주세요!"
             autoComplete="off"
           />
-          <div>
+
+          {/* 썸네일 */}
+          <ThumbNailUploader />
+
+          <div className={editPage ? classes.disabled : undefined}>
             <h2>설정</h2>
+            {editPage && (
+              <p className={classes.info}>
+                진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
+              </p>
+            )}
             {/* 나이 별 수집 */}
             <BooleanGroup<RequestSurveyFormData>
               groupName={"isAgeCollected"}
@@ -227,15 +248,14 @@ export default function CreateSurvey() {
 
             {/* 기간 */}
             {/* <AddDateRange /> */}
+
+            {/* Survey Edit Form + List*/}
+
+            <SurveyList />
+
+            {/* Survey Controller */}
+            <AddQuestionController />
           </div>
-          {/* 썸네일 */}
-          <ThumbNailUploader />
-
-          {/* Survey Edit Form + List*/}
-          <SurveyList />
-
-          {/* Survey Controller */}
-          <AddQuestionController />
           {/* 익명 사용자 - Email 정보동의  */}
           {/* <TemplateAccess /> */}
         </FormProvider>
