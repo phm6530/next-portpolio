@@ -29,7 +29,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
-import TemplateAccess from "@/app/template/made/[templateType]/_component/TemplateAccess";
+
+export enum SURVEY_EDITOR_TYPE {
+  RESPOND = "respond",
+  EDIT = "edit",
+}
 
 //Form
 export type RequestSurveyFormData = {
@@ -107,9 +111,12 @@ export default function CreateSurvey() {
       const token = SessionStorage.getAccessToken();
       const url = `${BASE_NEST_URL}/template/survey/${editId}`;
       const options: RequestInit = {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.EDIT }),
       };
       return await fetchWithAuth(url, options);
     },
@@ -171,8 +178,9 @@ export default function CreateSurvey() {
     mutationFn: async (data) => {
       const token = SessionStorage.getAccessToken();
 
+      //수정은 Patch로
       let options: RequestInit = {
-        method: editId ? "PATCH" : "POST",
+        method: editId ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${token}`,
@@ -180,7 +188,7 @@ export default function CreateSurvey() {
         body: JSON.stringify(data),
       };
 
-      // 메소드 분류해서 요청하기에 URL도 구분하였음 11/9
+      // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
       const url = !editId
         ? `${BASE_NEST_URL}/template/survey`
         : `${BASE_NEST_URL}/template/survey/${editId}`;

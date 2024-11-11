@@ -2,6 +2,7 @@
 import { BASE_NEST_URL } from "@/config/base";
 import { User } from "@/types/auth.type";
 import { QUERY_KEY } from "@/types/constans";
+import classes from "./MyContents.module.scss";
 import {
   RespondentsAndMaxGroup,
   TemplateItemMetadata,
@@ -9,6 +10,7 @@ import {
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function MyContents() {
@@ -16,9 +18,10 @@ export default function MyContents() {
   const queryClient = useQueryClient();
   const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
 
-  const { data, isLoading } = useQuery<
-    TemplateItemMetadata<RespondentsAndMaxGroup>[]
-  >({
+  const { data, isLoading } = useQuery<{
+    data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
+    nextPage: null | number;
+  }>({
     queryKey: [QUERY_KEY.MY_CONTENTS],
     queryFn: async () => {
       const token = SessionStorage.getAccessToken();
@@ -77,17 +80,34 @@ export default function MyContents() {
   };
 
   return (
-    <>
-      <h2>생성한 템플릿</h2>
+    <div>
+      <h3>내가만든 템플릿</h3>
+
+      <button onClick={() => router.push("/made")}>만들기</button>
+
       {isLoading ? (
         <>loading..</>
       ) : (
         <div>
-          {data?.map((e, idx) => {
-            console.log(e);
+          {data?.data.map((e, idx) => {
+            // console.log(e);
             return (
               <div key={idx}>
-                {e.title}
+                {e.thumbnail && (
+                  <div className={classes.imgWrap}>
+                    <Image
+                      src={e.thumbnail}
+                      alt={e.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <span>{e.title}</span>
+                  <span>{e.description}</span>
+                </div>
                 <div>
                   <button
                     onClick={() =>
@@ -96,6 +116,7 @@ export default function MyContents() {
                   >
                     결과페이지
                   </button>
+
                   <button
                     onClick={() =>
                       router.push(`/made/${e.templateType}?edit=${e.id}`)
@@ -103,6 +124,7 @@ export default function MyContents() {
                   >
                     수정
                   </button>
+
                   <button
                     onClick={() =>
                       templateDeleteHanlder({
@@ -119,6 +141,6 @@ export default function MyContents() {
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -10,6 +10,7 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
 import BackButton from "@/components/ui/button/BackButton";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import { SURVEY_EDITOR_TYPE } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -18,7 +19,13 @@ type SurveyDetailTemplateParams = {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.RESPOND }),
+  });
 
   if (!response.ok) {
     return {
@@ -46,7 +53,13 @@ export default async function SurveyDetailTemplate({
 }: SurveyDetailTemplateParams) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.RESPOND }),
+  });
   const data: FetchTemplateForm = await response.json();
 
   if (!data) {

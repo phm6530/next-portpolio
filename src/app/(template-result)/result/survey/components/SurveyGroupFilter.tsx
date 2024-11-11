@@ -1,6 +1,7 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import classes from "./SurveyGroupFilter.module.scss";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ageGroupProps } from "@/types/template";
 const FILTER_GENDER = [
   {
     label: "전체보기",
@@ -49,9 +50,38 @@ const FILTER_Age = [
 
 type test = typeof FILTER_Age;
 
-export default function SurveyGroupFilter() {
+export default function SurveyGroupFilter({
+  setFilter,
+}: {
+  setFilter: Dispatch<
+    SetStateAction<{
+      genderGroup: string;
+      ageGroup: string;
+    }>
+  >;
+}) {
   const [genderGroup, setGenderGroup] = useState<string | null>(null);
   const [ageGroup, setAgeGroup] = useState<string | null>(null);
+
+  console.log(genderGroup);
+
+  // Gender Filter
+  const filterGenderHandler = (btnVal: string) => {
+    if (btnVal === "all" || btnVal === "female" || btnVal === "male") {
+      setGenderGroup(btnVal);
+    }
+  };
+
+  // Age Filter
+  const filterAgeHandler = (btnVal: string) => {
+    if (["all", "10", "20", "30", "40", "50", "60"].includes(btnVal)) {
+      setAgeGroup(
+        btnVal === "all"
+          ? "all"
+          : (parseInt(btnVal) as Exclude<ageGroupProps, "all">)
+      );
+    }
+  };
 
   return (
     <div className={classes.radioWrap}>
@@ -62,7 +92,7 @@ export default function SurveyGroupFilter() {
             <InputTypeStyle.RadioTab
               key={`genderFilter-${idx}`}
               select={genderGroup === e.val + ""}
-              //   onClick={() => filterGenderHandler(e.val)}
+              onClick={() => filterGenderHandler(e.val)}
             >
               {e.label}
             </InputTypeStyle.RadioTab>
@@ -77,7 +107,7 @@ export default function SurveyGroupFilter() {
             <InputTypeStyle.RadioTab
               key={`genderFilter-${idx}`}
               select={ageGroup + "" === e.val + ""}
-              //   onClick={() => filterAgeHandler(e.val + "")}
+              onClick={() => filterAgeHandler(e.val + "")}
             >
               {e.label}
             </InputTypeStyle.RadioTab>

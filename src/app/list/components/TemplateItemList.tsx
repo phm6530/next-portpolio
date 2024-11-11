@@ -38,11 +38,8 @@ export default function TemplateList() {
       staleTime: 10000,
     });
 
-  console.log("isFetchingNextPage::", isFetchingNextPage);
-
   useEffect(() => {
     const target = ref.current;
-
     const ob = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting) {
@@ -63,7 +60,7 @@ export default function TemplateList() {
       }
       ob.disconnect();
     };
-  }, [ref]);
+  }, [ref, fetchNextPage, qs]);
 
   if (isPending) {
     return "loading....";

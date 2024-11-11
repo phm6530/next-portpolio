@@ -10,8 +10,15 @@ import { SurveyResult } from "@/types/surveyResult.type";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
+import { useState } from "react";
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
+  //초깃값
+  const [filter, setFilter] = useState({
+    genderGroup: "all",
+    ageGroup: "all",
+  });
+
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
     queryFn: async () => {
@@ -20,6 +27,9 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
           cache: "no-store",
         });
       });
+    },
+    select: (data) => {
+      return data;
     },
   });
 
@@ -31,9 +41,11 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
   const { questions, respondents } = data;
   const allCnt = respondents.allCnt;
 
+  console.log(data.respondents);
+
   return (
     <>
-      <SurveyGroupFilter />
+      <SurveyGroupFilter setFilter={setFilter} />
       {questions.map((qs, idx) => {
         return (
           <div key={idx}>
