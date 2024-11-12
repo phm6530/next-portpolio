@@ -9,7 +9,11 @@ import SurveyGroupFilter, {
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import { SurveyResult } from "@/types/surveyResult.type";
+import {
+  ResultSelect,
+  ResultSelectOption,
+  SurveyResult,
+} from "@/types/surveyResult.type";
 import { GENDER_GROUP } from "@/types/user";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
@@ -26,7 +30,20 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
     ageGroup: "all",
   });
 
-  console.log(filter);
+  //Filter Group...
+  const filterAge = filter.ageGroup === "all" ? false : filter.ageGroup;
+
+  const filterGenderAndAgeGroup = (
+    option: ResultSelectOption["response"],
+    gender: GENDER_GROUP,
+    age: typeof filterAge
+  ) => {
+    return age && option[gender]![age] !== undefined
+      ? {
+          [age]: option[gender]![age] ?? 0,
+        }
+      : option[gender];
+  };
 
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
@@ -51,7 +68,11 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                       ...option,
                       response: {
                         selectUserCnt: option.response.selectUserCnt,
-                        female: option.response.female, // FEMALE 데이터만 포함
+                        female: filterGenderAndAgeGroup(
+                          option.response,
+                          GENDER_GROUP.FEMALE,
+                          filterAge
+                        ),
                       },
                     };
                   } else if (filter.genderGroup === GENDER_GROUP.MALE) {
@@ -59,13 +80,29 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                       ...option,
                       response: {
                         selectUserCnt: option.response.selectUserCnt,
-                        male: option.response.male, // FEMALE 데이터만 포함
+                        male: filterGenderAndAgeGroup(
+                          option.response,
+                          GENDER_GROUP.MALE,
+                          filterAge
+                        ),
                       },
                     };
                   } else {
                     return {
                       ...option,
-                      response: option.response, // 전체 response 반환
+                      response: {
+                        selectUserCnt: option.response.selectUserCnt,
+                        female: filterGenderAndAgeGroup(
+                          option.response,
+                          GENDER_GROUP.FEMALE,
+                          filterAge
+                        ),
+                        male: filterGenderAndAgeGroup(
+                          option.response,
+                          GENDER_GROUP.MALE,
+                          filterAge
+                        ),
+                      },
                     };
                   }
                 }),
@@ -83,7 +120,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
     },
   });
 
-  // console.log("data:", data?.questions);
+  console.log("data:", data?.questions);
 
   //데이터없으면 notFOund로
   if (!data) {
