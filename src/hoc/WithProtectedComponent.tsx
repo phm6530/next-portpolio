@@ -27,7 +27,7 @@ export default function WithProtectedComponent({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { isSuccess, isLoading } = useQuery({
+  const { isSuccess, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
@@ -44,13 +44,14 @@ export default function WithProtectedComponent({
 
   //로그아웃 시켜버리기
   useEffect(() => {
-    if (!token) {
-      console.log("실행되어야함..");
+    if (!token || isError) {
+      //세션삭제
+      SessionStorage.removeAccessToken();
       router.replace(
         `/auth/login?redirect=${pathname}&code=${ERROR_CODE.AUTH_001}`
       );
     }
-  }, [token, pathname, router]);
+  }, [token, pathname, router, isError]);
 
   if (isLoading) {
     return <>loading.......</>;

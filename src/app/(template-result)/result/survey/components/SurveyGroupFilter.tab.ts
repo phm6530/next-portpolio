@@ -13,7 +13,7 @@ export const FILTER_GENDER = [
   },
 ] as const;
 
-export const FILTER_Age = [
+export const FILTER_AGE = [
   {
     label: "전체보기",
     val: "all",

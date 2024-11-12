@@ -42,10 +42,10 @@ export type ResultSelectOption = {
   optionPicture: null | string;
   response: {
     selectUserCnt: number;
-    female: {
+    female?: {
       [key: string]: number;
     };
-    male: { [key: string]: number };
+    male?: { [key: string]: number };
   };
 };
 

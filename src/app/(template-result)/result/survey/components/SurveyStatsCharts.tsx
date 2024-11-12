@@ -2,11 +2,15 @@
 
 import ResponseSelect from "@/app/(template-result)/result/survey/components/ResponseSelect";
 import { ResponseTexts } from "@/app/(template-result)/result/survey/components/ResponseTexts";
-import SurveyGroupFilter from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
+import SurveyGroupFilter, {
+  AgeOptions,
+  GenderOptions,
+} from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { SurveyResult } from "@/types/surveyResult.type";
+import { GENDER_GROUP } from "@/types/user";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
@@ -14,10 +18,15 @@ import { useState } from "react";
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
   //초깃값
-  const [filter, setFilter] = useState({
+  const [filter, setFilter] = useState<{
+    genderGroup: GenderOptions;
+    ageGroup: AgeOptions;
+  }>({
     genderGroup: "all",
     ageGroup: "all",
   });
+
+  console.log(filter);
 
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
@@ -29,9 +38,52 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
       });
     },
     select: (data) => {
-      return data;
+      return {
+        ...data,
+        questions: data.questions.map((question) => {
+          switch (question.type) {
+            case QUESTION_TYPE.SELECT:
+              return {
+                ...question,
+                options: question.options.map((option) => {
+                  if (filter.genderGroup === GENDER_GROUP.FEMALE) {
+                    return {
+                      ...option,
+                      response: {
+                        selectUserCnt: option.response.selectUserCnt,
+                        female: option.response.female, // FEMALE 데이터만 포함
+                      },
+                    };
+                  } else if (filter.genderGroup === GENDER_GROUP.MALE) {
+                    return {
+                      ...option,
+                      response: {
+                        selectUserCnt: option.response.selectUserCnt,
+                        male: option.response.male, // FEMALE 데이터만 포함
+                      },
+                    };
+                  } else {
+                    return {
+                      ...option,
+                      response: option.response, // 전체 response 반환
+                    };
+                  }
+                }),
+              };
+            case QUESTION_TYPE.TEXT:
+              // TEXT 질문의 경우 textAnswers 필터링
+              return {
+                ...question,
+              };
+            default:
+              throw new Error("알 수 없는 질문 유형입니다.") as never;
+          }
+        }),
+      };
     },
   });
+
+  // console.log("data:", data?.questions);
 
   //데이터없으면 notFOund로
   if (!data) {
@@ -41,11 +93,10 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
   const { questions, respondents } = data;
   const allCnt = respondents.allCnt;
 
-  console.log(data.respondents);
-
   return (
     <>
-      <SurveyGroupFilter setFilter={setFilter} />
+      {/* 필터 */}
+      <SurveyGroupFilter curFilter={filter} setFilter={setFilter} />
       {questions.map((qs, idx) => {
         return (
           <div key={idx}>
@@ -55,7 +106,9 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                 return <ResponseSelect allCnt={allCnt} {...qs} />;
               } else if (qs.type === QUESTION_TYPE.TEXT) {
                 // 주관식 답글
-                return <ResponseTexts allCnt={allCnt} {...qs} />;
+                return (
+                  <ResponseTexts filter={filter} allCnt={allCnt} {...qs} />
+                );
               } else {
                 return null as never;
               }

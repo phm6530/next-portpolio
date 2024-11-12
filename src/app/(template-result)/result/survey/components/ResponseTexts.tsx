@@ -9,16 +9,45 @@ import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useEffect, useState } from "react";
+import {
+  AgeOptions,
+  GenderOptions,
+} from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
+import { GENDER_GROUP } from "@/types/user";
 
 export function ResponseTexts({
   allCnt,
   id: questionId,
   label,
+  filter,
   textAnswers,
-}: { allCnt: number } & ResultText) {
+}: {
+  allCnt: number;
+  filter: {
+    genderGroup: GenderOptions;
+    ageGroup: AgeOptions;
+  };
+} & ResultText) {
   /** 초기에는 database에서 가져옴 */
   const [resultAnswers, setResultTextAnswers] =
     useState<ResultText["textAnswers"]>(textAnswers);
+
+  const [result, setResult] = useState<ResultText["textAnswers"] | null>(null);
+
+  useEffect(() => {
+    if (!resultAnswers || !filter) return;
+
+    const fillterData = resultAnswers.filter((respon) => {
+      if (filter.genderGroup === "all") {
+        return respon;
+      } else if (filter.genderGroup === "female") {
+        return respon.respondent.gender === "female";
+      } else if (filter.genderGroup === "male") {
+        return respon.respondent.gender === "male";
+      }
+    });
+    setResult(fillterData);
+  }, [filter, resultAnswers]);
 
   const {
     data: textQuestions,
@@ -61,11 +90,12 @@ export function ResponseTexts({
   const moreButton = () => {
     return allCnt > resultAnswers.length;
   };
+
   return (
     <>
       <QuestionTitle>{label}</QuestionTitle>
       <div className={classes.textQuestionList}>
-        {resultAnswers.map((e, txtIdx) => {
+        {result?.map((e, txtIdx) => {
           const { respondent, answer } = e;
           const { gender, age } = respondent;
           return (

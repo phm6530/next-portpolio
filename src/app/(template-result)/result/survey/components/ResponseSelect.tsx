@@ -3,7 +3,7 @@ import SurveyResultBar from "@/app/(template-result)/result/survey/components/Su
 import classes from "./ReponseSelect.module.scss";
 import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
-import { ResultSelect } from "@/types/surveyResult.type";
+import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
 
 export default function ResponseSelect({
   allCnt,
@@ -12,11 +12,36 @@ export default function ResponseSelect({
 }: { allCnt: number } & ResultSelect) {
   const isPictrue = options.some((e) => e.optionPicture);
 
-  const maxOption = options.reduce((max: typeof option, option) => {
-    return option.response.selectUserCnt > max.response.selectUserCnt
-      ? option
-      : max;
+  // options.forEach((e) => {
+  //   if(e ==)
+  // });
+
+  const sumFilterUsers = (arr: ResultSelectOption["response"]) => {
+    //남자 합
+    const sumFemale = Object.values(arr.female ?? {}).reduce((arr, cur) => {
+      return (arr += cur);
+    }, 0);
+
+    //여자 합
+    const sumMale = Object.values(arr.male ?? {}).reduce((arr, cur) => {
+      return (arr += cur);
+    }, 0);
+
+    return sumFemale + sumMale;
+  };
+
+  const maxOption = options.reduce((max, option) => {
+    const currentSum = sumFilterUsers(option.response);
+    const maxSum = sumFilterUsers(max.response);
+
+    return currentSum > maxSum ? option : max;
   }, options[0]);
+
+  const sortedOptions = [...options].sort((a, b) => {
+    const sumA = sumFilterUsers(a.response);
+    const sumB = sumFilterUsers(b.response);
+    return sumB - sumA;
+  });
 
   return (
     <>
@@ -26,9 +51,10 @@ export default function ResponseSelect({
           isPictrue ? classes.pictrueGrid : undefined
         }`}
       >
-        {options.map((option, idx) => {
-          const selectUser = option.response.selectUserCnt;
+        {sortedOptions.map((option, idx) => {
           const ixMax = maxOption === option;
+          const sumUser = sumFilterUsers(option.response);
+
           return (
             <div key={idx}>
               <div className={classes.questionLabel}>
@@ -37,13 +63,12 @@ export default function ResponseSelect({
                 ) : (
                   option.label
                 )}
-                <span>{selectUser} 명</span>
+                <span>{sumUser} 명</span>
               </div>
 
               {/* Percent */}
               <SurveyResultBar
-                // triggerContents={[genderGroup, ageGroup]}
-                curCnt={selectUser}
+                curCnt={sumUser}
                 allCnt={allCnt}
                 maxCnt={ixMax}
               />

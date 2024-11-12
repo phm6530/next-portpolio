@@ -1,8 +1,5 @@
 import AniProgressbar from "@/components/animation/AniProgressbar";
 import classes from "./SurveyResultBar.module.scss";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useRef } from "react";
 
 export default function SurveyResultBar({
   // triggerContents, // gsap 갱신하려고 만든거
