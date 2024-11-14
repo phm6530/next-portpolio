@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
 import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
+import { FetchTemplateForm } from "@/types/template.type";
 
 /**
  * template_type : 템플릿 종류
@@ -12,10 +13,10 @@ import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNai
  */
 export default function ThumbNailUploader() {
   const fileRef = useRef<HTMLInputElement>(null);
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch } = useFormContext<FetchTemplateForm>();
   const [imgPending, setImgPending] = useState<boolean>(false);
   const [imgError, setImgError] = useState<boolean>(false);
-  const key = watch("key");
+  const key = watch("templateKey");
   const tempThumbNail = watch("thumbnail");
 
   const {

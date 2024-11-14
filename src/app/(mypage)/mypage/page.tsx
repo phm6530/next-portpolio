@@ -1,8 +1,7 @@
 import MyContents from "@/app/(mypage)/mypage/_components/MyContents";
 import Myprofile from "@/app/(mypage)/mypage/_components/Myprofile";
-
 import { Metadata } from "next";
-import { Suspense } from "react";
+import classes from "./page.module.scss";
 
 export const metadata: Metadata = {
   title: "mypage",
@@ -10,11 +9,9 @@ export const metadata: Metadata = {
 
 export default async function page() {
   return (
-    <>
-      회원정보 변경
-      {/* 내정보 */}
+    <div className={classes.container}>
       <Myprofile />
       <MyContents />
-    </>
+    </div>
   );
 }

@@ -1,35 +1,39 @@
-import { Suspense } from "react";
-
 import Grid from "@/components/ui/Grid";
 import classes from "./page.module.scss";
-import { queryClient } from "@/config/queryClient";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
 import SurveyControler from "@/app/template/_component/survey/SurveyControler";
 import ListPageBanner from "@/app/list/components/ListPageBanner";
 import TemplateList from "@/app/list/components/TemplateItemList";
+import { TEMPLATERLIST_SORT } from "@/types/template.type";
 
-type ResponseError = {
-  message: string;
-  error: string;
-  statusCode: number;
-};
+export default async function page({
+  searchParams,
+}: {
+  searchParams: { sort: TEMPLATERLIST_SORT };
+}) {
+  const sort = searchParams.sort || TEMPLATERLIST_SORT.ALL;
 
-export default async function page() {
   // 고차 컴포넌트
   const PrefetchTemplateList = await WithPrefetchRender(
     TemplateList,
     async (queryClient) => {
-      await queryClient.prefetchQuery({
-        queryKey: [QUERY_KEY.TEMPLATE_LIST],
-        queryFn: async () => {
-          const response = await fetch(`${BASE_NEST_URL}/template`, {
-            cache: "no-store",
+      await queryClient.prefetchInfiniteQuery({
+        queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
+        queryFn: async ({ pageParam = 1 }) => {
+          let url = `${BASE_NEST_URL}/template?sort=${sort}`;
+          url += `&page=${pageParam}`;
+
+          const response = await fetch(url, {
+            cache: "no-cache",
           });
           return await response.json();
         },
-        staleTime: 10000,
+        getNextPageParam: (lastPage: { nextPage: number }) => {
+          return lastPage.nextPage || null;
+        },
+        initialPageParam: 1,
       });
     }
   );

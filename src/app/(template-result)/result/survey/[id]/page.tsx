@@ -67,7 +67,6 @@ export default async function SurveyResultPage({
       return await fetchComments<CommentReponse[]>(id, type);
     },
   });
-  console.log(data.creator);
 
   return (
     <>

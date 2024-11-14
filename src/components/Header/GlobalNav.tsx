@@ -14,6 +14,30 @@ import { QUERY_KEY } from "@/types/constans";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import { useEffect } from "react";
 
+// type ExtendNumber<T extends number> = T;
+// type ExtendLiteral<T extends 0> = T;
+// type Example1 = string | never; // Example1은 string으로 축소됨
+// type Example2 = number | never; // Example2는 number로 축소됨
+
+// type SubTypeliteral = 0;
+// type SuperTypeNumber = number;
+
+// type isNumber = ExtendNumber<SuperTypeNumber | SubTypeliteral>;
+// type isLiteral = ExtendLiteral<SuperTypeNumber>; // Error
+
+// let myAny: any;
+// let num: number = myAny;
+// myAny = num;
+
+// type Func1 = (a: number, b: number) => void;
+// type Func2 = (a: number) => void;
+
+// let func1: Func1 = (a, b) => {};
+// let func2: Func2 = (a) => {};
+
+// func1 = func2; // ✅
+// func2 = func1; // ❌
+
 export default function GlobalNav({ token }: { token: string | null }) {
   const store = useStore();
   const pathname = usePathname();
@@ -64,10 +88,10 @@ export default function GlobalNav({ token }: { token: string | null }) {
             <div className={classes.contentsLink}>
               <Link href={"/about"}>사용법</Link>
               <Link href={"/list"}>
-                설문조사 리스트
+                템플릿 리스트
                 <span className={classes.new}>NEW</span>
               </Link>
-
+              <Link href={"/made"}>템플릿 만들기</Link>
               <Link href={"/contact"}>문의하기</Link>
             </div>
 

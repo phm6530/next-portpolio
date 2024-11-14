@@ -32,11 +32,6 @@ export default function SurveyRadio({
   const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
   const key = watch("templateKey");
 
-  console.log(
-    "watch ::",
-    watch(`questions.${surveyIdx}.options.${optionIdx}.img`)
-  );
-
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {
       const endPoint = `common/image/${key}`;

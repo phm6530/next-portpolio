@@ -1,11 +1,11 @@
 import Image from "next/image";
 import classes from "./thumbnail.module.scss";
 
-export default function ThumbNail({
-  thumbnail,
-}: {
-  thumbnail?: string | null;
-}) {
+export default function ThumbNail({ thumbnail }: { thumbnail: string | null }) {
+  const isUrl = thumbnail?.includes("https:");
+
+  if (!isUrl) return;
+
   return (
     <div className={classes.thumbNailContainer}>
       <>

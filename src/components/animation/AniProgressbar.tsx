@@ -1,5 +1,5 @@
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import classes from "./Aniprogressbar.module.scss";
 
@@ -15,6 +15,11 @@ export default function AniProgressbar({
   const ref = useRef<HTMLDivElement>(null);
   const gsapRef = useRef<gsap.core.Tween | null>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const [bool, setBool] = useState<boolean>(false);
+
+  useEffect(() => {
+    setBool((prev) => !prev);
+  }, []);
 
   useGSAP(
     () => {
@@ -24,14 +29,14 @@ export default function AniProgressbar({
         {
           innerHTML: percent,
           duration: 2,
-          snap: { innerHTML: 1 },
+          snap: { innerHTML: 1.1 },
           color: maxCnt ? `#7b6de7` : `#bfbfbf`,
         }
       );
     },
     {
       scope: textRef,
-      // dependencies: [...trigger]
+      dependencies: [percent],
     }
   );
 
@@ -53,7 +58,7 @@ export default function AniProgressbar({
     },
     {
       scope: ref,
-      //  dependencies: [percent, ...trigger]
+      dependencies: [percent],
     }
   );
 
@@ -75,6 +80,7 @@ export default function AniProgressbar({
   return (
     <div
       ref={ref}
+      key={percent}
       className={`${classes.progressbar} ${maxCnt && classes.maxCnt}`}
     >
       <div className={classes.percentText}>

@@ -1,6 +1,6 @@
 import { User } from "@/types/auth.type";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import { TemplateItemMetadata } from "@/types/template.type";
+import { DetailRespondents, TemplateItemMetadata } from "@/types/template.type";
 
 type BaseResultItem = {
   id: number;
@@ -42,14 +42,14 @@ export type ResultSelectOption = {
   optionPicture: null | string;
   response: {
     selectUserCnt: number;
-    female: {
+    female?: {
       [key: string]: number;
     };
-    male: { [key: string]: number };
+    male?: { [key: string]: number };
   };
 };
 
 //survey 결과페이지
 export type SurveyResult = {
   questions: (ResultText | ResultSelect)[];
-} & TemplateItemMetadata;
+} & TemplateItemMetadata<DetailRespondents>;

@@ -21,7 +21,6 @@ import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
-import { useState } from "react";
 
 export default function SurveyForm({
   id,
@@ -43,8 +42,6 @@ export default function SurveyForm({
       }
     }),
   };
-
-  console.log(questions);
 
   const router = useRouter();
 

@@ -2,13 +2,15 @@ import Grid from "@/components/ui/Grid";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import { BASE_NEST_URL } from "@/config/base";
-import { TemplateDetilaPageResponse } from "@/types/template.type";
+import { FetchTemplateForm } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
 import BackButton from "@/components/ui/button/BackButton";
+import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import { SURVEY_EDITOR_TYPE } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -17,8 +19,13 @@ type SurveyDetailTemplateParams = {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
-  const data: TemplateDetilaPageResponse = await response.json();
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.RESPOND }),
+  });
 
   if (!response.ok) {
     return {
@@ -26,6 +33,8 @@ export async function generateMetadata({
       description: "The requested template was not found.",
     };
   }
+
+  const data: FetchTemplateForm = await response.json();
 
   return {
     title: data.title,
@@ -44,8 +53,14 @@ export default async function SurveyDetailTemplate({
 }: SurveyDetailTemplateParams) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
-  const data: TemplateDetilaPageResponse = await response.json();
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.RESPOND }),
+  });
+  const data: FetchTemplateForm = await response.json();
 
   if (!data) {
     notFound();
@@ -64,12 +79,14 @@ export default async function SurveyDetailTemplate({
     templateKey,
   } = data;
 
+  console.log(thumbnail);
+
   return (
     <>
       <Grid.smallCenter>
         <BackButton />
         <TemplateQuestionWrapper>
-          {/* <ThumbNail thumbnail={thumbnail} /> */}
+          <ThumbNail thumbnail={thumbnail} />
 
           <div className={classes.templateSumeryWrap}>
             <TemplateStatus

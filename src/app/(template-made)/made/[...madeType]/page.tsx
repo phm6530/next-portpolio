@@ -1,4 +1,5 @@
 import CreateSurvey from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import WithProtectedComponent from "@/hoc/WithProtectedComponent";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
@@ -11,7 +12,11 @@ export default function MadeTemplate({ params }: MadeTemplateParams) {
 
   // //설문
   if (template === TEMPLATE_TYPE.SURVEY) {
-    return <CreateSurvey />;
+    return (
+      <WithProtectedComponent>
+        <CreateSurvey />
+      </WithProtectedComponent>
+    );
   }
 
   if (template === TEMPLATE_TYPE.RANK) {
