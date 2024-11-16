@@ -29,7 +29,7 @@ export default function AniProgressbar({
         {
           innerHTML: percent,
           duration: 2,
-          snap: { innerHTML: 1.1 },
+          snap: { innerHTML: 0.1 },
           color: maxCnt ? `#7b6de7` : `#bfbfbf`,
         }
       );

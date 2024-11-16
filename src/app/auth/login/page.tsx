@@ -8,7 +8,7 @@ import { ERROR_CODE, MSG } from "@/codeMsg";
 const Login = async ({
   searchParams,
 }: {
-  searchParams: { redirect: string; code: string };
+  searchParams: { redirect: string; code: ERROR_CODE };
 }) => {
   const { redirect: redirectPath, code } = searchParams;
   const token = serverSession();
@@ -21,13 +21,11 @@ const Login = async ({
     return MSG[code] || "Error";
   };
 
-  console.log(code);
-
   return (
     <>
       <h1>로그인</h1>
       <LoginForm />
-      <p>{code && msg(code as ERROR_CODE)}</p>
+      <p>{code && msg(ERROR_CODE[code])}</p>
       <div className={classes.authLinks}>
         <Link href={"/auth/signup"}>회원가입</Link>|{" "}
         <Link href={""}>비밀번호 찾기</Link>

@@ -10,10 +10,28 @@ import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
+import { GENDER_GROUP } from "@/types/user";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
+
+// type logger<T> = (arg: T) => void;
+
+// let logNumber: logger<number> = (a) => {
+//   console.log(a);
+// };
+
+// let logUnion: logger<number | string> = (a) => {
+//   console.log(a);
+// };
+
+// logNumber = logUnion;
+// logUnion = logNumber;
+
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[];
+};
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
   //초깃값
@@ -30,6 +48,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
     gender: GenderOptions,
     age: AgeOptions
   ) => {
+    //성별 전체 +
     if (gender === "all") {
       return {
         female:
@@ -37,9 +56,11 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
         male: age === "all" ? option.male : { [age]: option.male![age] ?? 0 },
       };
     } else {
-      return age === "all"
-        ? option[gender]
-        : { [age]: option[gender]![age] ?? 0 };
+      if (age === "all") {
+        return { [gender]: option[gender] };
+      } else {
+        return { [gender]: { [age]: option[gender]![age] ?? 0 } };
+      }
     }
   };
 
@@ -86,8 +107,6 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
       };
     },
   });
-
-  console.log("data:", data?.questions);
 
   //데이터없으면 notFOund로
   if (!data) {
