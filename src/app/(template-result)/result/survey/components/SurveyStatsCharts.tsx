@@ -10,7 +10,6 @@ import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
-import { GENDER_GROUP } from "@/types/user";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";

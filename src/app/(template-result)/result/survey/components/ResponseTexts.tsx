@@ -13,7 +13,6 @@ import {
   AgeOptions,
   GenderOptions,
 } from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
-import { GENDER_GROUP } from "@/types/user";
 
 export function ResponseTexts({
   allCnt,
@@ -21,6 +20,7 @@ export function ResponseTexts({
   label,
   filter,
   textAnswers,
+  isNextPage,
 }: {
   allCnt: number;
   filter: {
@@ -28,26 +28,52 @@ export function ResponseTexts({
     ageGroup: AgeOptions;
   };
 } & ResultText) {
-  /** 초기에는 database에서 가져옴 */
-  const [resultAnswers, setResultTextAnswers] =
-    useState<ResultText["textAnswers"]>(textAnswers);
+  // useEffect(() => {
+  //   if (!resultAnswers || !filter) return;
 
-  const [result, setResult] = useState<ResultText["textAnswers"] | null>(null);
+  //   const { genderGroup, ageGroup } = filter;
+  //   const filteredData = resultAnswers.filter((respon) => {
+  //     const { gender, age } = respon.respondent;
 
-  useEffect(() => {
-    if (!resultAnswers || !filter) return;
+  //     // 성별 필터
+  //     if (genderGroup !== "all") {
+  //       if (genderGroup === "female" && gender !== "female") return false;
+  //       if (genderGroup === "male" && gender !== "male") return false;
+  //     }
 
-    const fillterData = resultAnswers.filter((respon) => {
-      if (filter.genderGroup === "all") {
-        return respon;
-      } else if (filter.genderGroup === "female") {
-        return respon.respondent.gender === "female";
-      } else if (filter.genderGroup === "male") {
-        return respon.respondent.gender === "male";
-      }
-    });
-    setResult(fillterData);
-  }, [filter, resultAnswers]);
+  //     // 나이 필터
+  //     if (ageGroup) {
+  //       switch (ageGroup) {
+  //         case 10:
+  //           if (age < 10 || age >= 20) return false;
+  //         case 20:
+  //           if (age < 20 || age >= 30) return false;
+  //           break;
+  //         case 30:
+  //           if (age < 30 || age >= 40) return false;
+  //           break;
+  //         case 40:
+  //           if (age < 40 || age >= 50) return false;
+  //           break;
+  //         case 50:
+  //           if (age < 50 || age >= 60) return false;
+  //           break;
+  //         case 60:
+  //           if (age < 60 || age >= 70) return false;
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     }
+
+  //     // 모든 조건을 만족하면 true 반환
+  //     return true;
+  //   });
+
+  //   setResult(filteredData);
+  // }, [filter, resultAnswers]);
+
+  //초기 length 세팅
 
   const {
     data: textQuestions,
@@ -56,7 +82,7 @@ export function ResponseTexts({
     isFetchingNextPage,
     isPending,
   } = useInfiniteQuery<{
-    isNextPage: number;
+    isNextPage: number | null;
     answers: ResultText["textAnswers"];
   }>({
     queryKey: [QUERY_KEY.QUESTION_TEXT, questionId],
@@ -74,32 +100,42 @@ export function ResponseTexts({
     getNextPageParam: (lastPage) => {
       return lastPage.isNextPage;
     }, // 다음 페이지 결정
-    initialPageParam: 2,
+    initialPageParam: 1,
     enabled: false,
+    initialData: {
+      pages: [{ isNextPage, answers: textAnswers }],
+      pageParams: [1],
+    },
   });
 
-  useEffect(() => {
-    const addTextAnswers = textQuestions?.pages.at(-1);
-    if (addTextAnswers) {
-      setResultTextAnswers((prev) => {
-        return [...prev, ...addTextAnswers.answers];
-      });
-    }
-  }, [textQuestions]);
+  console.log("isPending:", isPending);
+  // useEffect(() => {
+  //   if (textQuestions) {
+  //     const totalAnswers = textQuestions.pages.reduce((sum, page) => {
+  //       return (sum += page.answers.length);
+  //     }, 0);
+  //     setCurrentCount(totalAnswers);
+  //   }
+  // }, [textQuestions]);
 
-  const moreButton = () => {
-    return allCnt > resultAnswers.length;
-  };
+  //하나로합치기
+  const flagList = textQuestions.pages.flatMap((e) => e.answers);
+
+  const getGenderClass = (gender: string) =>
+    gender === "female" ? classes.female : classes.male;
+
+  const getGenderText = (gender: string) =>
+    gender === "female" ? "여성" : "남성";
 
   return (
     <>
       <QuestionTitle>{label}</QuestionTitle>
       <div className={classes.textQuestionList}>
-        {result?.map((e, txtIdx) => {
-          const { respondent, answer } = e;
+        {flagList.map((as, idx) => {
+          const { id, respondent, answer } = as;
           const { gender, age } = respondent;
           return (
-            <div key={txtIdx} className={classes.responseContainer}>
+            <div key={`${id}-${idx}`} className={classes.responseContainer}>
               <div className={classes.anonymous}>
                 <div className={classes.iconWrap}>
                   {gender === "female" && <Female30 />}
@@ -107,12 +143,8 @@ export function ResponseTexts({
                 </div>
 
                 <div className={classes.age}>{age}대 </div>
-                <span
-                  className={
-                    gender === "female" ? classes.female : classes.male
-                  }
-                >
-                  {gender === "female" ? "여성" : "남성"}
+                <span className={getGenderClass(gender)}>
+                  {getGenderText(gender)}
                 </span>
               </div>
 
@@ -120,8 +152,8 @@ export function ResponseTexts({
             </div>
           );
         })}
-      </div>{" "}
-      {moreButton() && (
+      </div>
+      {hasNextPage && (
         <>
           <div
             className={classes.moreButtonWrap}
