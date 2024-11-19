@@ -25,6 +25,7 @@ export interface TextAnswer {
 export type ResultText = {
   type: QUESTION_TYPE.TEXT;
   textAnswers: TextAnswer[];
+  isNextPage: number | null;
 } & BaseResultItem;
 
 //객관식

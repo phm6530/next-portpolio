@@ -9,16 +9,28 @@ import SurveyGroupFilter, {
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import {
-  ResultSelect,
-  ResultSelectOption,
-  SurveyResult,
-} from "@/types/surveyResult.type";
-import { GENDER_GROUP } from "@/types/user";
+import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
 import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
+
+// type logger<T> = (arg: T) => void;
+
+// let logNumber: logger<number> = (a) => {
+//   console.log(a);
+// };
+
+// let logUnion: logger<number | string> = (a) => {
+//   console.log(a);
+// };
+
+// logNumber = logUnion;
+// logUnion = logNumber;
+
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[];
+};
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
   //초깃값
@@ -30,19 +42,25 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
     ageGroup: "all",
   });
 
-  //Filter Group...
-  const filterAge = filter.ageGroup === "all" ? false : filter.ageGroup;
-
   const filterGenderAndAgeGroup = (
     option: ResultSelectOption["response"],
-    gender: GENDER_GROUP,
-    age: typeof filterAge
+    gender: GenderOptions,
+    age: AgeOptions
   ) => {
-    return age && option[gender]![age] !== undefined
-      ? {
-          [age]: option[gender]![age] ?? 0,
-        }
-      : option[gender];
+    //성별 전체 +
+    if (gender === "all") {
+      return {
+        female:
+          age === "all" ? option.female : { [age]: option.female![age] ?? 0 },
+        male: age === "all" ? option.male : { [age]: option.male![age] ?? 0 },
+      };
+    } else {
+      if (age === "all") {
+        return { [gender]: option[gender] };
+      } else {
+        return { [gender]: { [age]: option[gender]![age] ?? 0 } };
+      }
+    }
   };
 
   const { data } = useQuery({
@@ -63,48 +81,17 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
               return {
                 ...question,
                 options: question.options.map((option) => {
-                  if (filter.genderGroup === GENDER_GROUP.FEMALE) {
-                    return {
-                      ...option,
-                      response: {
-                        selectUserCnt: option.response.selectUserCnt,
-                        female: filterGenderAndAgeGroup(
-                          option.response,
-                          GENDER_GROUP.FEMALE,
-                          filterAge
-                        ),
-                      },
-                    };
-                  } else if (filter.genderGroup === GENDER_GROUP.MALE) {
-                    return {
-                      ...option,
-                      response: {
-                        selectUserCnt: option.response.selectUserCnt,
-                        male: filterGenderAndAgeGroup(
-                          option.response,
-                          GENDER_GROUP.MALE,
-                          filterAge
-                        ),
-                      },
-                    };
-                  } else {
-                    return {
-                      ...option,
-                      response: {
-                        selectUserCnt: option.response.selectUserCnt,
-                        female: filterGenderAndAgeGroup(
-                          option.response,
-                          GENDER_GROUP.FEMALE,
-                          filterAge
-                        ),
-                        male: filterGenderAndAgeGroup(
-                          option.response,
-                          GENDER_GROUP.MALE,
-                          filterAge
-                        ),
-                      },
-                    };
-                  }
+                  return {
+                    ...option,
+                    response: {
+                      selectUserCnt: option.response.selectUserCnt,
+                      ...filterGenderAndAgeGroup(
+                        option.response,
+                        filter.genderGroup,
+                        filter.ageGroup
+                      ),
+                    },
+                  };
                 }),
               };
             case QUESTION_TYPE.TEXT:
@@ -119,8 +106,6 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
       };
     },
   });
-
-  console.log("data:", data?.questions);
 
   //데이터없으면 notFOund로
   if (!data) {

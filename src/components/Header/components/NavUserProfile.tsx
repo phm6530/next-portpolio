@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 export default function NavUserProfile() {
   const userData = queryClient.getQueryData([QUERY_KEY.USER_DATA]) as User;
   const router = useRouter();
+  console.log(userData);
 
   return (
     <>

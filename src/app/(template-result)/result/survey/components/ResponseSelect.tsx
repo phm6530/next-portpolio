@@ -63,7 +63,8 @@ export default function ResponseSelect({
                 ) : (
                   option.label
                 )}
-                <span>{sumUser} 명</span>
+                {option.value}
+                <span>({sumUser} 명)</span>
               </div>
 
               {/* Percent */}
