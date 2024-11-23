@@ -28,6 +28,7 @@ export default async function page({
           const response = await fetch(url, {
             cache: "no-cache",
           });
+
           return await response.json();
         },
         getNextPageParam: (lastPage: { nextPage: number }) => {

@@ -83,10 +83,10 @@ export default function GlobalNav({ token }: { token: string | null }) {
         <Grid.center>
           <nav className={classes.nav}>
             <div className="logo">
-              <Link href={"/"}>Project..D</Link>
+              <Link href={"/list"}>Project..D</Link>
             </div>
             <div className={classes.contentsLink}>
-              <Link href={"/about"}>사용법</Link>
+              {/* <Link href={"/about"}>사용법</Link> */}
               <Link href={"/list"}>
                 템플릿 리스트
                 <span className={classes.new}>NEW</span>
