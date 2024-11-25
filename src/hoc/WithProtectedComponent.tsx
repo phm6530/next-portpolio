@@ -15,14 +15,11 @@ export default function WithProtectedComponent({
 }: {
   children: ReactNode;
 }) {
-  const [token, setToken] = useState<string | null>(
+  const [token] = useState<string | null>(
     SessionStorage.getAccessToken() || null
   );
-  const sessionToken = SessionStorage.getAccessToken();
 
-  useEffect(() => {
-    setToken(sessionToken);
-  }, [sessionToken]);
+  console.log("세션 스토리지 토큰 있냐?", token);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -39,7 +36,7 @@ export default function WithProtectedComponent({
       };
       return await fetchWithAuth(endpoint, option);
     },
-    enabled: !!token, //토큰이 있을때만 검사
+    // enabled: !!token, //토큰이 있을때만 검사
   });
 
   //로그아웃 시켜버리기

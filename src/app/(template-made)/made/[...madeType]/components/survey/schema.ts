@@ -19,7 +19,20 @@ const RequestSelectSchema = z.object({
         img: z.string().nullable().optional(),
       })
     )
-    .min(2, "선택 옵션은 최소 2개가 필요합니다."),
+    .min(2, "선택 옵션은 최소 2개가 필요합니다.")
+    .superRefine((options, ctx) => {
+      const duplicates = options
+        .map((o) => o.value)
+        .filter((value, index, self) => self.indexOf(value) !== index);
+      if (duplicates.length > 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `중복된 옵션 값이 있습니다: ${[...new Set(duplicates)].join(
+            ", "
+          )}`,
+        });
+      }
+    }),
 });
 
 const surveySchema = z.object({

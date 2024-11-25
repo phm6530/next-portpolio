@@ -97,7 +97,13 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset } = formState;
+  const {
+    register,
+    setValue,
+    reset,
+    formState: { errors },
+  } = formState;
+
   const editId = qs.get("edit");
 
   //수정시 get해오기
