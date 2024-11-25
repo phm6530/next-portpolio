@@ -29,7 +29,7 @@ export type SurveyQuestionsText = {
 // 객관식- 옵션
 export type SurveyQuestionOption = {
   value: string;
-  optionPicture: string | null;
+  img: string | null;
 } & Omit<BaseQuestionsType, "label">;
 
 // 객관식

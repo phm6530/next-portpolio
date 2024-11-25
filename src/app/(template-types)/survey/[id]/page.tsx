@@ -79,8 +79,6 @@ export default async function SurveyDetailTemplate({
     templateKey,
   } = data;
 
-  console.log(thumbnail);
-
   return (
     <>
       <Grid.smallCenter>

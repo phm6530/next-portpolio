@@ -40,7 +40,7 @@ export type ResultSelectOption = {
   label: string;
   value: string;
   type: QUESTION_TYPE.SELECT;
-  optionPicture: null | string;
+  img: null | string;
   response: {
     selectUserCnt: number;
     female?: {

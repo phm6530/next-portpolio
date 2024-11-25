@@ -2,10 +2,10 @@ import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import Image from "next/image";
 import { FieldError, useFormContext, useWatch } from "react-hook-form";
 import { GetSurveyQuestions } from "@/types/templateSurvey";
+import ImageZoom from "@/app/template/_component/ImageZoom";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
-import ImageZoom from "@/app/template/_component/ImageZoom";
 import ImageViewer from "@/app/template/_component/ImageViewer";
 import {
   AnswerSelect,
@@ -49,8 +49,9 @@ export default function QuestionOptions({
   const errorMsg = error && getErrorMessage(error);
 
   //하나라도 이미지 있으면 UI 변경하기
-  const isPictureOption =
-    options?.some((e) => e.optionPicture !== null) || false;
+  const isPictureOption = options?.some((e) => e.img !== null) || false;
+
+  console.log(options);
 
   return (
     <QuestionsContainer isPicture={isPictureOption}>
@@ -82,9 +83,9 @@ export default function QuestionOptions({
             </div>
 
             {/* 이미지 있으면 */}
-            {e.optionPicture && (
+            {e.img && (
               <>
-                <ImageViewer image={e.optionPicture} alt={e.value} />
+                <ImageViewer image={e.img} alt={e.value} />
               </>
             )}
           </InputTypeStyle.RadioAnswer>

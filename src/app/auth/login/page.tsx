@@ -30,6 +30,7 @@ const Login = async ({
         <Link href={"/auth/signup"}>회원가입</Link>|{" "}
         <Link href={""}>비밀번호 찾기</Link>
       </div>
+      <p>별도의 인증없이 회원가입 가능합니다.</p>
     </>
   );
 };
