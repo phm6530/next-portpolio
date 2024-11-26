@@ -15,44 +15,37 @@ export default function WithProtectedComponent({
 }: {
   children: ReactNode;
 }) {
-  const [token, setToken] = useState<string | null>(
-    SessionStorage.getAccessToken() || null
-  );
   const sessionToken = SessionStorage.getAccessToken();
-
-  useEffect(() => {
-    setToken(sessionToken);
-  }, [sessionToken]);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const { isLoading, isError, isSuccess } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
       const option: RequestInit = {
         cache: "no-store",
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${sessionToken}`,
         },
       };
       return await fetchWithAuth(endpoint, option);
     },
-    // enabled: !!token, //토큰이 있을때만 검사
+    enabled: !!sessionToken, //토큰이 있을때만 검사
   });
 
   //로그아웃 시켜버리기
   useEffect(() => {
-    console.log("token::", token);
-    if (!token || isError) {
+    console.log("token::", sessionToken);
+    if (!sessionToken || isError) {
       //세션삭제
       SessionStorage.removeAccessToken();
       router.replace(
         `/auth/login?redirect=${pathname}&code=${ERROR_CODE.AUTH_001}`
       );
     }
-  }, [token, pathname, router, isError]);
+  }, [sessionToken, pathname, router, isError]);
 
   if (isLoading) {
     return <>loading.......</>;
