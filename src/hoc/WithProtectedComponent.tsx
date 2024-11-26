@@ -2,8 +2,8 @@
 import { ERROR_CODE } from "@/codeMsg";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
-//권한 확인 고차함수
 
+//권한 확인 고차함수
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { useQuery } from "@tanstack/react-query";
@@ -15,16 +15,19 @@ export default function WithProtectedComponent({
 }: {
   children: ReactNode;
 }) {
-  const [token] = useState<string | null>(
+  const [token, setToken] = useState<string | null>(
     SessionStorage.getAccessToken() || null
   );
+  const sessionToken = SessionStorage.getAccessToken();
 
-  console.log("세션 스토리지 토큰 있냐?", token);
+  useEffect(() => {
+    setToken(sessionToken);
+  }, [sessionToken]);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const { isSuccess, isLoading, isError } = useQuery({
+  const { isLoading, isError } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
@@ -41,6 +44,7 @@ export default function WithProtectedComponent({
 
   //로그아웃 시켜버리기
   useEffect(() => {
+    console.log("token::", token);
     if (!token || isError) {
       //세션삭제
       SessionStorage.removeAccessToken();

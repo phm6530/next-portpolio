@@ -13,6 +13,7 @@ import {
 import { BASE_NEST_URL } from "@/config/base";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { QUERY_KEY } from "@/types/constans";
+import { Suspense } from "react";
 
 //메타 데이터
 export const metadata: Metadata = {
