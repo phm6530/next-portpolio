@@ -27,7 +27,7 @@ export default function WithProtectedComponent({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { isLoading, isError } = useQuery({
+  const { isLoading, isError, isSuccess } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
@@ -58,7 +58,8 @@ export default function WithProtectedComponent({
     return <>loading.......</>;
   }
 
-  if (token) {
+  //토큰유효에 성공 했을시에 컴포넌트 반환하기
+  if (isSuccess) {
     return <>{children}</>;
   } else {
     return null;
