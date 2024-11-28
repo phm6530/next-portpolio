@@ -5,3 +5,12 @@
   border-radius: 1rem;
   overflow: hidden;
 }
+.myTemplateItem {
+  display: flex;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

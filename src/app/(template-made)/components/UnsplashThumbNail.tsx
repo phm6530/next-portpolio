@@ -32,14 +32,15 @@ type PixabayApi = {
   }[];
 };
 
-export default function UnSplashThumbNail({
+function UnSplashContents({
   setImgPending,
   setImgError,
+  closeModal,
 }: {
   setImgPending: Dispatch<SetStateAction<boolean>>;
   setImgError: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }) {
-  const { openModal, closeModal, PopupRender } = usePopup();
   const ref = useRef<HTMLInputElement>(null);
 
   const { setValue } = useFormContext<RequestSurveyFormData>();
@@ -78,55 +79,71 @@ export default function UnSplashThumbNail({
     }
   };
 
-  const closeSideEffect = () => {
-    if (ref.current) {
-      ref.current.value = "";
-    }
-  };
-
   const selectSlug = (imgUrl: string) => {
     setValue("thumbnail", imgUrl);
     closeModal();
   };
 
   return (
-    <>
-      <PopupRender className={classes.popupWidth}>
-        <div className={classes.wrap}>
-          <h2>썸네일 검색기</h2>
-          <p></p>
-          <div className={classes.search}>
-            <input ref={ref} />
-            <button type="button" onClick={onSearchHandler}>
-              검색
-            </button>
-          </div>
+    <div className={classes.wrap}>
+      <h2>썸네일 검색기</h2>
+      <p></p>
+      <div className={classes.search}>
+        <input ref={ref} />
+        <button type="button" onClick={onSearchHandler}>
+          검색
+        </button>
+      </div>
 
-          <div>
-            {isPending && "loading....."}
-            {data && (
-              <div className={classes.slugItemsWrap}>
-                {data.results.map((e, key) => {
-                  return (
-                    <div
-                      className={classes.slugItem}
-                      key={`${key}-wrap`}
-                      onClick={() => selectSlug(e.urls.regular)}
-                    >
-                      <Image
-                        src={e.urls.regular}
-                        alt={e.alternative_slugs.ko}
-                        style={{ objectFit: "cover" }}
-                        fill
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+      <div>
+        {isPending && "loading....."}
+        {data && (
+          <div className={classes.slugItemsWrap}>
+            {data.results.map((e, key) => {
+              return (
+                <div
+                  className={classes.slugItem}
+                  key={`${key}-wrap`}
+                  onClick={() => selectSlug(e.urls.regular)}
+                >
+                  <Image
+                    src={e.urls.regular}
+                    alt={e.alternative_slugs.ko}
+                    style={{ objectFit: "cover" }}
+                    fill
+                  />
+                </div>
+              );
+            })}
           </div>
-        </div>
-      </PopupRender>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function UnSplashThumbNail({
+  setImgPending,
+  setImgError,
+}: {
+  setImgPending: Dispatch<SetStateAction<boolean>>;
+  setImgError: Dispatch<SetStateAction<boolean>>;
+}) {
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+
+  return (
+    <>
+      <PopupComponent
+        isOpen={isOpen}
+        closeModal={closeModal}
+        className={classes.popupWidth}
+      >
+        <UnSplashContents
+          setImgPending={setImgPending}
+          setImgError={setImgError}
+          closeModal={closeModal}
+        />
+      </PopupComponent>
 
       <button type="button" onClick={openModal}>
         썸네일 검색기

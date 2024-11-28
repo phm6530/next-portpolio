@@ -13,6 +13,7 @@ import {
 import { BASE_NEST_URL } from "@/config/base";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { QUERY_KEY } from "@/types/constans";
+import { Suspense } from "react";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default async function RootLayout({
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
+        console.log("나호출함?");
         const endpoint = `${BASE_NEST_URL}/user/me`;
         const option: RequestInit = {
           cache: "no-store",
@@ -59,7 +61,7 @@ export default async function RootLayout({
 
         <ProviderContext>
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <GlobalNav token={token || null} />
+            <GlobalNav />
             <main className="container">{children}</main>
           </HydrationBoundary>
         </ProviderContext>

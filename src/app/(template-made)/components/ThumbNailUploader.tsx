@@ -67,7 +67,6 @@ export default function ThumbNailUploader() {
       />
 
       {/* 썸네일 preView */}
-
       <>
         <div className={classes.previewContainer}>
           {!imgError ? (

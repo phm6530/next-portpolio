@@ -28,6 +28,8 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
       }
       const result: RefreshAccessToken = await newAccessToken.json();
 
+      // console.log(result.refreshAccessToken);
+
       //액세스토큰 다시
       SessionStorage.setAccessToken(result.refreshAccessToken);
 

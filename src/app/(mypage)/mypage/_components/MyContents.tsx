@@ -88,53 +88,54 @@ export default function MyContents() {
       {isLoading ? (
         <>loading..</>
       ) : (
-        <div>
+        <div className={classes.container}>
           {data?.data.map((e, idx) => {
-            // console.log(e);
             return (
-              <div key={idx}>
+              <div key={idx} className={classes.myTemplateItem}>
                 {e.thumbnail && (
                   <div className={classes.imgWrap}>
                     <Image
                       src={e.thumbnail}
                       alt={e.title}
                       fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
                       style={{ objectFit: "cover" }}
                     />
                   </div>
                 )}
-
                 <div>
-                  <span>{e.title}</span>
-                  <span>{e.description}</span>
-                </div>
-                <div>
-                  <button
-                    onClick={() =>
-                      router.push(`/result/${e.templateType}/${e.id}`)
-                    }
-                  >
-                    결과페이지
-                  </button>
+                  <div>
+                    <p>{e.title}</p>
+                    <p>{e.description}</p>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() =>
+                        router.push(`/result/${e.templateType}/${e.id}`)
+                      }
+                    >
+                      결과페이지
+                    </button>
 
-                  <button
-                    onClick={() =>
-                      router.push(`/made/${e.templateType}?edit=${e.id}`)
-                    }
-                  >
-                    수정
-                  </button>
+                    <button
+                      onClick={() =>
+                        router.push(`/made/${e.templateType}?edit=${e.id}`)
+                      }
+                    >
+                      수정
+                    </button>
 
-                  <button
-                    onClick={() =>
-                      templateDeleteHanlder({
-                        templateType: e.templateType,
-                        id: e.id,
-                      })
-                    }
-                  >
-                    삭제
-                  </button>
+                    <button
+                      onClick={() =>
+                        templateDeleteHanlder({
+                          templateType: e.templateType,
+                          id: e.id,
+                        })
+                      }
+                    >
+                      삭제
+                    </button>
+                  </div>
                 </div>
               </div>
             );

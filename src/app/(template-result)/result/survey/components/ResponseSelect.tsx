@@ -4,13 +4,14 @@ import classes from "./ReponseSelect.module.scss";
 import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
 import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
+import ImageViewer from "@/app/template/_component/ImageViewer";
 
 export default function ResponseSelect({
   allCnt,
   label,
   options,
 }: { allCnt: number } & ResultSelect) {
-  const isPictrue = options.some((e) => e.optionPicture);
+  const isPictrue = options.some((e) => e.img);
 
   // options.forEach((e) => {
   //   if(e ==)
@@ -54,12 +55,12 @@ export default function ResponseSelect({
         {sortedOptions.map((option, idx) => {
           const ixMax = maxOption === option;
           const sumUser = sumFilterUsers(option.response);
-
+          console.log(option);
           return (
             <div key={idx}>
               <div className={classes.questionLabel}>
                 {ixMax ? (
-                  <IconLabel Icon={Crown}>{option.label}</IconLabel>
+                  <IconLabel Icon={Crown}>{option.value}</IconLabel>
                 ) : (
                   option.label
                 )}
@@ -73,7 +74,9 @@ export default function ResponseSelect({
                 allCnt={allCnt}
                 maxCnt={ixMax}
               />
-              {/* {e.picture && <ImageViewer image={e.picture} alt={e.label} />} */}
+              {option.img && (
+                <ImageViewer image={option.img} alt={option.value} />
+              )}
             </div>
           );
         })}
