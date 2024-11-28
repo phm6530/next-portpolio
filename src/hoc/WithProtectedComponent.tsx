@@ -8,7 +8,7 @@ import { SessionStorage } from "@/utils/sessionStorage-token";
 import fetchWithAuth from "@/utils/withRefreshToken";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 
 export default function WithProtectedComponent({
   children,
@@ -20,7 +20,7 @@ export default function WithProtectedComponent({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  const { isLoading, isError, isSuccess } = useQuery({
     queryKey: [QUERY_KEY.USER_DATA],
     queryFn: async () => {
       const endpoint = `${BASE_NEST_URL}/user/me`;
@@ -32,7 +32,7 @@ export default function WithProtectedComponent({
       };
       return await fetchWithAuth(endpoint, option);
     },
-    enabled: !!sessionToken, //토큰이 있을때만 검사
+    // enabled: !!sessionToken, //토큰이 있을때만 검사
   });
 
   //로그아웃 시켜버리기
