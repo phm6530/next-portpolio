@@ -4,8 +4,36 @@
 @import "user.scss";
 @import "font.scss";
 
+:root {
+  --background-color: #{map-get($colors-white, "default")};
+  --text-color: #{map-get($colors-black, "default")};
+  --background-color-vanner: #{map-get($background-gradients, "vanner")};
+}
+
+:root[data-theme="dark"] {
+  --background-color: #{map-get($colors-black, "default")};
+  --text-color: #{map-get($colors-white, "default")};
+  --background-color-vanner: #{map-get($colors-black, "soft")};
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+  color: var(--text-color);
+
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+  transition: background 0.5s ease;
+}
+
 .body {
-  // font-family: "Pretendard-Regular";
   font-family: "Pretendard Variable";
   color: $color-black;
 }
