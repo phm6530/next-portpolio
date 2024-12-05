@@ -61,4 +61,12 @@
     background: #bdbdbd;
   }
 }
+
+//정사각
+@mixin squareCircle($size) {
+  width: $size;
+  height: $size;
+  border-radius: 100%;
+}
+
 //Template Type

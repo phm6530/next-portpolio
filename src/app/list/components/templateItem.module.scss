@@ -62,7 +62,7 @@
 .templateType {
   @include templateType;
   background: $background-color-white;
-  color: $color-white;
+  color: #{map-get($colors-white, "default")};
   font-size: 0.8rem;
   letter-spacing: 0.5px;
 }

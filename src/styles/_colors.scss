@@ -1,7 +1,25 @@
-//시그니처 Color
-$signiture-color: red;
+//용도-타입-상태
+$colors-white: (
+  default: #ffffff,
+  soft: #fafafa,
+  muted: #f5f5f5,
+  dim: #f0f0f0,
+);
 
-$color-white: #fff;
+$colors-black: (
+  default: #000,
+  soft: #333,
+  muted: #222,
+  dim: #666,
+);
+
+//gradients
+$background-gradients: (
+  vanner: linear-gradient(90deg, #e6f4ff 0%, #fbdfed 100%),
+  test: linear-gradient(90deg, #9a6ce7 0%, #829ee4 100%),
+);
+
+//시그니처 Color
 $color-black: #333;
 $color-font-signiture: #7282a9;
 $color-font-signiture-2: #8b83dd;
@@ -29,5 +47,4 @@ $color-error-1: rgb(192, 67, 67);
 // background
 $background-active: #9aa7f9;
 
-$gradient-main: linear-gradient(84.35deg, #9a6ce7 13.62%, #56b2f4 28.13%);
 $gradient-vanner: linear-gradient(90deg, #e6f4ff 0%, #fbdfed 100%);
