@@ -40,6 +40,8 @@ export default function TemplateList() {
 
   useEffect(() => {
     const target = ref.current;
+    if (!target) return;
+
     const ob = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting) {

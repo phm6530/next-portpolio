@@ -13,10 +13,6 @@ const Login = async ({
   const { redirect: redirectPath, code } = searchParams;
   const token = serverSession();
 
-  if (token) {
-    redirect(redirectPath || "/list");
-  }
-
   const msg = (code: keyof typeof MSG) => {
     return MSG[code] || "Error";
   };

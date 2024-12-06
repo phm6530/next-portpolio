@@ -40,7 +40,6 @@ export default async function RootLayout({
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
-        console.log("나호출함?");
         const endpoint = `${BASE_NEST_URL}/user/me`;
         const option: RequestInit = {
           cache: "no-store",
