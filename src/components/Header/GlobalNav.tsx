@@ -9,10 +9,8 @@ import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import NavUserProfile from "@/components/Header/components/NavUserProfile";
-import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
 import { SessionStorage } from "@/utils/sessionStorage-token";
-import { useEffect } from "react";
 import { User } from "@/types/auth.type";
 
 // type ExtendNumber<T extends number> = T;

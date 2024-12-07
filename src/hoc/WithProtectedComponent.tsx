@@ -32,7 +32,7 @@ export default function WithProtectedComponent({
       };
       return await fetchWithAuth(endpoint, option);
     },
-    // enabled: !!sessionToken, //토큰이 있을때만 검사
+    enabled: !!sessionToken, //토큰이 있을때만 검사
   });
 
   //로그아웃 시켜버리기
