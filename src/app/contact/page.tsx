@@ -1,5 +1,4 @@
 "use client";
-
 import Grid from "@/components/ui/Grid";
 import classes from "./contact.module.scss";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,29 +11,26 @@ import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { BASE_URL, ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
-
 type MailFormData = {
   name: string;
   digit: string;
   textarea: string;
 };
-
 export default function Page() {
   const formMethod = useForm<MailFormData>();
+
   const {
     handleSubmit,
-    formState: { errors },
     reset,
     register,
-    watch,
   } = formMethod;
 
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
       withFetch(async () => {
         const url = `${ENV_NESTBASE_URL}/contact`;
-        console.log(url);
 
+        console.log(url);
         return fetch(url, {
           method: "POST",
           headers: {
@@ -45,9 +41,10 @@ export default function Page() {
       }),
     onSuccess: () => reset(),
   });
-
+  
   const submitHandler = async (data: MailFormData) => {
     mutate(data);
+    
   };
 
   return (
@@ -56,12 +53,13 @@ export default function Page() {
         <>
           <BackDrop />
           <div className={classes.mail}>
-            메일 보내는중..
+            <div>test</div>
+                        dfsafdjss
+                메일 보내는중..
             <LoadingCircle />
           </div>
         </>
       )}
-
       <Grid.smallCenter>
         <div className={classes.contactVanner}>문의하기</div>
         <form
@@ -78,7 +76,6 @@ export default function Page() {
               })}
               inputName="name"
             />
-
             <FormInput
               type="text"
               placeholder="회신 받으실 이메일이나 핸드폰번호를 기재해주세요"
@@ -87,7 +84,6 @@ export default function Page() {
               })}
               inputName="digit"
             />
-
             <label>문의 내용</label>
             <FormTextarea
               placeholder="textarea"
@@ -99,7 +95,6 @@ export default function Page() {
               className={classes.textarea}
             />
           </FormProvider>
-
           <div style={{ textAlign: "center" }}>
             <Button.submit
               type="submit"
