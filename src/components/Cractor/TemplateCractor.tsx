@@ -16,15 +16,16 @@ export default function TemplateCractor() {
         const icons = ref.current.querySelectorAll(".icon");
         const carector = ref.current.querySelectorAll(".carector");
 
-        gsap.set(icons, { autoAlpha: 1 });
-
+        
         // 메인 타임라인
         const mainTimeline = gsap.timeline();
 
+        
+
         // 캐릭터 애니메이션
-        mainTimeline.from(carector, {
+        mainTimeline.from(carector, {         
+          autoAlpha : 0,
           x: 50,
-          opacity: 0,
           ease: "power3.inOut", // 원하는 애니메이션 설정
           direction: 5,
           delay: 0.3,
@@ -38,8 +39,8 @@ export default function TemplateCractor() {
 
           iconTimeline
             .from(icon, {
+              autoAlpha : 0,
               duration: 1,
-              opacity: 0,
               y: 200,
               scale: 0,
               delay: delay, // 개별 delay
