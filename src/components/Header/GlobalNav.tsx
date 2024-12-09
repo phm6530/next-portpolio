@@ -75,6 +75,11 @@ export default function GlobalNav() {
       }); //유저데이터 삭제
 
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEY.USER_DATA] }); 
+
+      //내 템플릿 캐싱 제거 
+      queryClient.removeQueries({
+        queryKey: [QUERY_KEY.MY_CONTENTS],
+      }); 
       
       router.refresh(); // 서버 컴포넌트 새로고침
     },

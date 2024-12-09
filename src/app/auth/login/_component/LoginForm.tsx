@@ -60,7 +60,10 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
         email,
         role,
       });
+      
+
       router.refresh();
+      
       // router.replace(redirectPath ? redirectPath : "/");
     },
   });
