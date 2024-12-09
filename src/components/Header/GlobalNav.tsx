@@ -69,10 +69,13 @@ export default function GlobalNav() {
       // alert("로그아웃 되었습니다.");
       store.setRemoveUser(); // 유저 정보 삭제
       SessionStorage.removeAccessToken();
-
+      
       queryClient.removeQueries({
         queryKey: [QUERY_KEY.USER_DATA],
       }); //유저데이터 삭제
+
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEY.USER_DATA] }); 
+      
       router.refresh(); // 서버 컴포넌트 새로고침
     },
     onError: () => {

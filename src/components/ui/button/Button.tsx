@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from "react";
 import Image from "next/image";
-import DeleteIcon from "/public/asset/icon/close.png";
+// import DeleteIcon from "/public/asset/icon/close.png";
 
 function solid({
   type = "button",
@@ -69,7 +69,8 @@ function normalButton({
 function closeBtn({ ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={classes.closeButton} {...rest}>
-      <Image src={DeleteIcon} alt="close" />
+      삭제
+      {/* <Image src={DeleteIcon} alt="close" /> */}
       {/* <DeleteSvg className={classes.deleteIcon} /> */}
     </div>
   );

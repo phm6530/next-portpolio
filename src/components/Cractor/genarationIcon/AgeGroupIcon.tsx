@@ -1,5 +1,5 @@
 import classes from "./ageGroup.module.scss";
-import ageGroup10 from "/public/asset/icon/person_2.png";
+import AgeGroup from "/public/asset/icon/person_6.png";
 import Image from "next/image";
 
 export default function AgeGroupIcon({
@@ -17,18 +17,18 @@ export default function AgeGroupIcon({
         size === "large"
           ? classes.large
           : size === "small"
-          ? classes.small
-          : classes.extraLarge
+            ? classes.small
+            : classes.extraLarge
       } ${
         gender === "female"
           ? classes.female
           : gender === "male"
-          ? classes.male
-          : undefined
+            ? classes.male
+            : undefined
       }`}
     >
       <div className={classes.iconWrap}>
-        <Image src={ageGroup10} alt="icon" priority width={20} height={20} />
+        <Image src={AgeGroup} alt="icon" priority width={20} height={20} />
       </div>
       <span className={classes.ageGroup}>{ageGroup}</span> 대
     </div>

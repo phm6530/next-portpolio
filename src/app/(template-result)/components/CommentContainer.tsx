@@ -1,9 +1,9 @@
 import Comment from "@/app/(template-result)/components/Comment";
 import classes from "./CommentContainer.module.scss";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Button from "@/components/ui/button/Button";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
-import ReplyIcon from "/public/asset/icon/reply.svg";
+// import ReplyIcon from "/public/asset/icon/reply.svg";
 import { CommentReponse } from "@/types/comment.type";
 
 export default function CommentContainer({
@@ -57,7 +57,7 @@ export default function CommentContainer({
               key={`reply-${commentId}-${idx}`}
               //   onClick={formViewHandler}
             >
-              <ReplyIcon className={classes.replyIcon} />
+              {/* <ReplyIcon className={classes.replyIcon} /> */}
               <Comment
                 contentType="reply"
                 templateId={templateId}

@@ -85,6 +85,7 @@
     ],
     // 최대 1개의 빈 줄만 허용
     // [미사용 변수]
+<<<<<<< Updated upstream
     "no-unused-vars": "error",
     // 사용하지 않는 변수 선언시 에러 표시
     // [구문 사이 간격]
@@ -126,5 +127,48 @@
       //
       // console.log(name);
     ]
+=======
+    "no-unused-vars": "error"
+    // 사용하지 않는 변수 선언시 에러 표시
+    // [구문 사이 간격]
+    // "padding-line-between-statements": [
+    //   "error",
+    //   // 함수 선언 전후 빈 줄
+    //   {
+    //     "blankLine": "always",
+    //     "prev": "*",
+    //     "next": "function"
+    //   },
+    //   {
+    //     "blankLine": "always",
+    //     "prev": "function",
+    //     "next": "*"
+    //   },
+    //   // 예:
+    //   // const name = "john";
+    //   //
+    //   // function hello() {}
+    //   //
+    //   // const age = 20;
+    //   // const 선언들 사이 빈 줄
+    //   {
+    //     "blankLine": "always",
+    //     "prev": "const",
+    //     "next": "const"
+    //   },
+    //   // const 선언과 다른 표현식 사이 빈 줄
+    //   {
+    //     "blankLine": "always",
+    //     "prev": "const",
+    //     "next": "expression"
+    //   }
+    //   // 예:
+    //   // const name = "john";
+    //   //
+    //   // const age = 20;
+    //   //
+    //   // console.log(name);
+    // ]
+>>>>>>> Stashed changes
   }
 }

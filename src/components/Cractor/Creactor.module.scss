@@ -12,23 +12,27 @@
   z-index: 2;
   position: absolute;
 }
+
 .ageGroup20 {
   top: 122px;
   left: 244px;
   position: absolute;
 }
+
 .ageGroup30 {
   top: 286px;
   left: -43px;
   z-index: 1;
   position: absolute;
 }
+
 .ageGroup40 {
   top: 195px;
   left: -70px;
   z-index: 0;
   position: absolute;
 }
+
 .ageGroup50 {
   position: absolute;
   z-index: 0;
@@ -39,7 +43,15 @@
 .CreactorWrap {
   position: absolute;
   bottom: -7px;
+
   img {
     filter: drop-shadow(32px 54px 16px #cda0cd);
   }
+}
+
+.CreactorWrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 320px;
+  margin-top: 1rem;
 }
