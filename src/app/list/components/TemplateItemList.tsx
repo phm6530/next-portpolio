@@ -45,7 +45,7 @@ export default function TemplateList() {
     const ob = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting) {
-          target!.style.backgroundColor = "red";
+          // target!.style.backgroundColor = "red";
           fetchNextPage();
         }
       },
