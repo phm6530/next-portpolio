@@ -2,8 +2,8 @@
 import QuestionTitle from "@/app/(template-result)/components/ui/Queston-title.ui";
 import { ResultText } from "@/types/surveyResult.type";
 import classes from "./ResponseTexts.module.scss";
-import Female30 from "/public/asset/icon/female_30.svg";
-import Male30 from "/public/asset/icon/male_30.svg";
+// import Female30 from "/public/asset/icon/female_30.svg";
+// import Male30 from "/public/asset/icon/male_30.svg";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
@@ -138,8 +138,8 @@ export function ResponseTexts({
             <div key={`${id}-${idx}`} className={classes.responseContainer}>
               <div className={classes.anonymous}>
                 <div className={classes.iconWrap}>
-                  {gender === "female" && <Female30 />}
-                  {gender === "male" && <Male30 />}
+                  {/* {gender === "female" && <Female30 />}
+                  {gender === "male" && <Male30 />} */}
                 </div>
 
                 <div className={classes.age}>{age}대 </div>

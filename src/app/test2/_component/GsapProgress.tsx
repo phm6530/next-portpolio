@@ -12,7 +12,7 @@ export default function GsapProgress() {
   useGSAP(
     () => {
       const animaiton = gsap.to(".boxs", {
-        width: `100%`,
+        width: "100%",
         background: "red",
         duration: 3,
         ease: "power4.inOut",

@@ -18,7 +18,7 @@ export default function TemplateList() {
   const sort = qs.get("sort") || TEMPLATERLIST_SORT.ALL;
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, isPending, fetchNextPage, isFetchingNextPage } =
+  const { data, isPending, fetchNextPage } =
     useInfiniteQuery<{
       data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
       nextPage: number | null;

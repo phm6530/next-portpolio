@@ -16,16 +16,16 @@ const GroupStatus: React.FC<RespondetsDetail> = ({ maxGroup }) => {
   let genderText = "";
 
   switch (genderGroup) {
-    case "female":
-      icon = <FemaleIcon width={17} height={17} alt="femaleIcon" />;
-      genderText = "여성";
-      break;
-    case "male":
-      icon = <MaleIcon width={17} height={17} alt="maleIcon" />;
-      genderText = "남성";
-      break;
-    default:
-      break;
+  case "female":
+    icon = <FemaleIcon width={17} height={17} alt="femaleIcon" />;
+    genderText = "여성";
+    break;
+  case "male":
+    icon = <MaleIcon width={17} height={17} alt="maleIcon" />;
+    genderText = "남성";
+    break;
+  default:
+    break;
   }
 
   return (

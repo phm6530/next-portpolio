@@ -79,7 +79,7 @@ export default function TemplateCractor() {
           <AgeGroupIcon ageGroup={50} size={"small"} />
         </div>
         <div className={`${classes.CreactorWrap} carector`}>
-          <Image src={girlCractor} alt="girlCractor" priority />
+          <Image src={girlCractor} alt="girlCractor" priority fill/>
         </div>
       </div>
     </>
