@@ -3,8 +3,8 @@ import { CONST_PAGING, QUERY_STRING } from "@/types/constans";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 import classes from "./Paging.module.scss";
-import PrevIcon from "/public/asset/icon/prev.png";
-import NextIcon from "/public/asset/icon/next.png";
+// import PrevIcon from "/public/asset/icon/prev.png";
+// import NextIcon from "/public/asset/icon/next.png";
 import Image from "next/image";
 
 interface PagingProps {
@@ -86,7 +86,7 @@ export default function Paging({ cnt = 1 }: PagingProps) {
         onClick={() => pagingHandler("prev")}
         disabled={pageNumber <= 1}
       >
-        <Image src={PrevIcon} alt="prev" priority width={10} />
+        {/* <Image src={PrevIcon} alt="prev" priority width={10} /> */}
       </button>
       {pages.map((page, idx) => {
         return (
@@ -108,7 +108,7 @@ export default function Paging({ cnt = 1 }: PagingProps) {
         disabled={pageNumber >= pageLength}
         aria-label="nextNav"
       >
-        <Image src={NextIcon} alt="next" priority width={10} />
+        {/* <Image src={NextIcon} alt="next" priority width={10} /> */}
       </button>
     </div>
   );
