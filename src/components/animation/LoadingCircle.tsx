@@ -1,3 +1,4 @@
+"use client";
 import { useGSAP } from "@gsap/react";
 import classes from "./loadingCircle.module.scss";
 import { useRef } from "react";

@@ -51,7 +51,6 @@ export async function generateMetadata({
 export default async function SurveyDetailTemplate({
   params: { id },
 }: SurveyDetailTemplateParams) {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
 
   const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
     method: "POST",
@@ -70,13 +69,10 @@ export default async function SurveyDetailTemplate({
     title,
     description,
     thumbnail,
-    questions,
     startDate,
     endDate,
-    createdAt,
-    respondents,
+    createdAt,    
     creator,
-    templateKey,
   } = data;
 
   return (

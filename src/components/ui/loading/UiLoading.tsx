@@ -23,6 +23,7 @@ export default function UiLoading() {
           y: 0,
           duration: 0.5,
           stagger: 0.1,
+          backgroundColor: "#fff",
           ease: "sine.inOut",
         },
         "-=0.3"
@@ -33,18 +34,20 @@ export default function UiLoading() {
 
   return (
     <div className={classes.uiLoadingWrap}>
-      {dotLength.map((_, idx) => (
-        <div
-          key={idx}
-          className={classes.dot}
-          ref={(el) => {
-            if (el) {
-              gsapRefs.current.push(el as HTMLDivElement);
-            }
-          }}
-        />
-      ))}
-      <p>UI 불러오는 중</p>
+      <div className={classes.dotWrapper}>
+        {dotLength.map((_, idx) => (
+          <div
+            key={idx}
+            className={classes.dot}
+            ref={(el) => {
+              if (el) {
+                gsapRefs.current.push(el as HTMLDivElement);
+              }
+            }}
+          />
+        ))}
+      </div>
+      <p>LOADING</p>
     </div>
   );
 }

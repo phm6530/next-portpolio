@@ -1,10 +1,19 @@
 .uiLoadingWrap {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    letter-spacing: 3px;
+  }
+}
+
+.dotWrapper {
+  display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: #f6f6f8;
   padding: 20px;
   min-height: 50px;
   border-radius: 1rem;
@@ -14,5 +23,5 @@
   width: 12px;
   height: 12px;
   border-radius: 100%;
-  background: red;
+  background: rgb(97, 97, 97);
 }

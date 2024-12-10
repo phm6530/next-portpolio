@@ -1,9 +1,5 @@
 "use client";
-import {
-  DetailRespondents,
-  RespondentsAndMaxGroup,
-  TemplateItemMetadata,
-} from "@/types/template.type";
+import { RespondentsAndMaxGroup , TemplateItemMetadata } from "@/types/template.type";
 import classes from "./templateItem.module.scss";
 import Image from "next/image";
 import imgUrlMapper from "@/util/imgUrlMapper";
@@ -30,6 +26,7 @@ const TemplateItem = forwardRef(
   ) => {
     //참여자
     const { allCnt, maxGroup } = respondents;
+
     const router = useRouter();
 
     return (
@@ -45,13 +42,13 @@ const TemplateItem = forwardRef(
               alt="test"
               // sizes=" 100vw"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
-              // unoptimized
               fill
               src={imgUrlMapper({ thumbnail })}
               priority
               // fill
               style={{ objectFit: "cover" }}
             />
+        
           </div>
         )}
 
@@ -62,25 +59,40 @@ const TemplateItem = forwardRef(
             startDate={startDate}
             endDate={endDate}
             createdAt={createdAt}
+            maxGroup={maxGroup}
           />
-          {/* 템플릿 상태 보여주기 */}
-          <div className={classes.templateItemTitle}>{title}</div>
-          <div>{description}</div>
-          <div>{createdAt}</div>
+
+          {/* 템플릿 정보 보여주기 */}
+          <div className={classes.summary}>
+            <div className={classes.title}>{title}</div>
+            <div className={classes.description} >{description}</div>
+            {/* <div className={classes.bottomWrap}>
+              <span className={classes.Participation}>
+                참여자 {allCnt || 0}명
+              </span>
+            </div> */}      
+            {/* 선호 */}
+            {/* {allCnt >= 1 && <GroupStatus {...rest} maxGroup={maxGroup} />} */}
+          </div>
 
           {/* 선호 그룹은 10명이상일때만 생성하기 */}
-          {allCnt >= 10 && <GroupStatus {...rest} maxGroup={maxGroup} />}
+              
+          {/* <div className={classes.gnederChart}>
+            <div className={classes.male}></div>
+            <div className={classes.female}></div>
+          </div> */}
 
-          <div className={classes.bottomWrap}>
-            <span className={classes.Participation}>
-              참여자 {allCnt || 0}명
-            </span>
+          <div className={classes.btnWrapper}>
+            <button>참여하기</button>
+            <button>결과보기</button>
           </div>
+    
         </div>
       </div>
     );
   }
 );
+
 // 명시적으로 기재 안까먹기
 TemplateItem.displayName = "TemplateItem";
 

@@ -5,6 +5,7 @@
 //btn Hover
 @mixin gradient-btn-hover($color, $hover-color) {
   background: $color;
+
   &:hover {
     background: $hover-color;
   }
@@ -12,6 +13,7 @@
 
 @mixin btn-hover($color) {
   background: $color;
+
   &:hover {
     background: darken($color, 50%);
   }
@@ -19,6 +21,7 @@
 
 @mixin font-color-hover($color: #333) {
   color: $color;
+
   &:hover {
     color: ligten($color, 10%);
   }
@@ -30,6 +33,7 @@
   border-radius: $radius;
   font-size: 14px;
   padding: 1rem;
+
   &:focus {
     outline: none;
   }
@@ -69,4 +73,13 @@
   border-radius: 100%;
 }
 
-//Template Type
+// 말줄임
+@mixin textMaxLine($line) {
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+}

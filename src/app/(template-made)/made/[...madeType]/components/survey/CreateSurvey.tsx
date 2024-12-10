@@ -82,15 +82,14 @@ type MyOmit<T, K extends keyof T> = MyPick<T, MyExclude<keyof T, K>>;
 
 export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
+
   const queryClient = useQueryClient();
   const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [editPage, setEditPage] = useState<boolean>(false);
-
   const qs = useSearchParams();
 
   //초기 세션상태
   const router = useRouter();
-
   const formState = useForm<RequestSurveyFormData>({
     defaultValues,
     // userData가 없으면 defaultValues 설정하지 않음
@@ -101,7 +100,6 @@ export default function CreateSurvey() {
     register,
     setValue,
     reset,
-    formState: { errors },
   } = formState;
 
   const editId = qs.get("edit");
@@ -115,7 +113,9 @@ export default function CreateSurvey() {
     queryKey: ["test", editId],
     queryFn: async () => {
       const token = SessionStorage.getAccessToken();
+
       const url = `${BASE_NEST_URL}/template/survey/${editId}`;
+
       const options: RequestInit = {
         method: "POST",
         headers: {
@@ -135,6 +135,7 @@ export default function CreateSurvey() {
   useEffect(() => {
     if (editId && isError && error) {
       const errorMessage = error.message || "알 수 없는 오류 발생";
+
       alert(`Error: ${errorMessage}`);
 
       if (window.history.length > 1) {
@@ -171,11 +172,11 @@ export default function CreateSurvey() {
      */
     if (!editId) {
       const newKey = uuid4();
+
       setValue("templateKey", newKey);
     }
   }, [qs, setValue, editId]);
 
-  //요청
   const { mutate, isPending } = useMutation<
     unknown,
     Error,

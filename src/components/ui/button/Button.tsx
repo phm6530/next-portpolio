@@ -86,7 +86,7 @@ function moveLink({
 }) {
   return (
     <Link href={moveUrl}>
-      <div className={classes.importantButton} style={{ borderRadius: "5rem" }}>
+      <div className={classes.importantButton} style={{ borderRadius: "1rem" }}>
         <span>{children}</span>
       </div>
     </Link>

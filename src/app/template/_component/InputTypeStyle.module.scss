@@ -3,6 +3,7 @@
   input[type="radio"] {
     display: none;
   }
+
   padding: 1rem;
   display: block;
   cursor: pointer;
@@ -10,6 +11,7 @@
   margin-bottom: 0.7rem;
   border: 1px solid #e6e6e6;
   box-sizing: border-box;
+
   &:hover {
     border: 1px solid;
     color: rgb(110, 13, 189);
@@ -37,9 +39,15 @@
 
 //Radio
 .radioLabel {
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+
   input[type="radio"] {
     display: none;
   }
+
   margin-right: 10px;
   padding: 1rem;
   display: inline-block;
@@ -48,6 +56,7 @@
   cursor: pointer;
   border: 1px solid #e6e6e6;
   box-sizing: border-box;
+
   &:hover {
     border: 1px solid;
     color: rgb(110, 13, 189);
@@ -79,6 +88,7 @@
   padding: 0.7rem;
   border-radius: 10px;
   font-size: 14px;
+
   &:hover {
     color: #3270c9;
   }

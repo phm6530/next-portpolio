@@ -1,12 +1,12 @@
-import Image from "next/image";
 import classes from "./QuestionTitle.module.scss";
-// import ChkIcon from "/public/asset/icon/chkCircle.png";
+import ChkIcon from "/public/asset/icon/chk.svg";
 
 export default function QuestionTitle({ children }: { children: string }) {
   return (
     <>
       <div className={classes.label}>
-        {/* <Image src={ChkIcon} alt={"title"} width={30} /> {children} */}
+        <ChkIcon/>
+        {children}
       </div>
     </>
   );
