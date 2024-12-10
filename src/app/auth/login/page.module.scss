@@ -1,0 +1,55 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 0;
+}
+
+.authLinks {
+  text-align: center;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+
+  a {
+    font-size: 14px;
+    color: #000 !important;
+  }
+}
+
+.codeMsgContainer {
+  padding: 1rem;
+  // text-align: center;
+  color: rgb(68, 0, 255);
+}
+
+.signupDescription {
+  font-size: 14px;
+  opacity: .6;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  // border-bottom: 1px solid;
+  padding-bottom: 1rem;
+
+  h1 {
+    text-align: center;
+
+    &:first-child {
+      color: #5d5bf5;
+      font-size: 2.4rem;
+    }
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  // text-align: center;
+}
+
+.loginText {
+  text-align: center;
+}

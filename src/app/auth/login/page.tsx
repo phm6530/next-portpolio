@@ -1,8 +1,6 @@
 import LoginForm from "@/app/auth/login/_component/LoginForm";
 import classes from "./page.module.scss";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { serverSession } from "@/utils/serverSession";
 import { ERROR_CODE, MSG } from "@/codeMsg";
 
 const Login = async ({
@@ -10,24 +8,32 @@ const Login = async ({
 }: {
   searchParams: { redirect: string; code: ERROR_CODE };
 }) => {
-  const { redirect: redirectPath, code } = searchParams;
-  const token = serverSession();
-
+  const { code } = searchParams;
   const msg = (code: keyof typeof MSG) => {
     return MSG[code] || "Error";
   };
 
   return (
-    <>
-      <h1>로그인</h1>
-      <LoginForm />
-      <p>{code && msg(ERROR_CODE[code])}</p>
-      <div className={classes.authLinks}>
-        <Link href={"/auth/signup"}>회원가입</Link>|{" "}
-        <Link href={""}>비밀번호 찾기</Link>
+    <div className={classes.loginContainer}>
+      <div className={classes.titleWrapper}>
+        <h1>PROJECT. D</h1>
+        <div className={classes.loginText}>프로젝트 로그인</div>
+        {/* <p className={classes.signupDescription}>30초만 회원가입이 가능해요!</p> */}
       </div>
-      <p>별도의 인증없이 회원가입 가능합니다.</p>
-    </>
+      {code &&
+      <div className={classes.codeMsgContainer}>
+        <p> {msg(ERROR_CODE[code])}</p>
+      
+      </div>
+      }
+      
+      <LoginForm />  
+     
+      <div className={classes.authLinks}>
+        copyRight @ PHM
+      </div>
+ 
+    </div>
   );
 };
 

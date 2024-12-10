@@ -4,10 +4,12 @@
   @include inputStyles(10px);
   border: 1px solid $border-box-color;
   @include FouceInput(#7975e5, 1px);
+
 }
 
 .error {
   border: 1px solid rgb(255, 123, 123);
+
   &:focus {
     border: 1px solid rgb(255, 76, 5);
     background: rgb(255, 76, 5, 0.3);
