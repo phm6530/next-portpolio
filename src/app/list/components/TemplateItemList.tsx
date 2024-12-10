@@ -57,9 +57,7 @@ export default function TemplateList() {
     }
 
     return () => {
-      if (target) {
-        ob.unobserve(target);
-      }
+      if (target) ob.unobserve(target);
       ob.disconnect();
     };
   }, [ref, fetchNextPage, qs]);

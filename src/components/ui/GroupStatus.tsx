@@ -1,6 +1,5 @@
 import { RespondentsAndMaxGroup } from "@/types/template.type";
 import classes from "./GroupStatus.module.scss";
-import Image from "next/image";
 import FemaleIcon from "/public/asset/icon/female.svg";
 import MaleIcon from "/public/asset/icon/male.svg";
 
@@ -16,22 +15,22 @@ const GroupStatus: React.FC<RespondetsDetail> = ({ maxGroup }) => {
   let genderText = "";
 
   switch (genderGroup) {
-  case "female":
-    icon = <FemaleIcon width={17} height={17} alt="femaleIcon" />;
-    genderText = "여성";
-    break;
-  case "male":
-    icon = <MaleIcon width={17} height={17} alt="maleIcon" />;
-    genderText = "남성";
-    break;
-  default:
-    break;
+    case "female":
+      icon = <FemaleIcon width={17} height={17} alt="femaleIcon" />;
+      genderText = "여성";
+      break;
+    case "male":
+      icon = <MaleIcon width={17} height={17} alt="maleIcon" />;
+      genderText = "남성";
+      break;
+    default:
+      break;
   }
 
   return (
     <>
       <div className={classes.groupParticipants}>
-        {icon}
+        {/* {icon} */}
         {ageGroup && `${ageGroup}대`}
 
         <>

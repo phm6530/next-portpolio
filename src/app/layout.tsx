@@ -28,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const token = serverSession();
+
   const queryClient = new QueryClient();
 
   /**
@@ -41,6 +42,7 @@ export default async function RootLayout({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
         const endpoint = `${BASE_NEST_URL}/user/me`;
+
         const option: RequestInit = {
           cache: "no-store",
           headers: {

@@ -40,10 +40,15 @@ type PixabayApi = {
  */
 export default function ThumbNailUploader() {
   const [thumNailEditor, setThumNailEditor] = useState<Boolean>(false);
+
   const fileRef = useRef<HTMLInputElement>(null);
+
   const [imgKeyword, setImgKeyword] = useState<string>("");
+
   const [imgSearch, setImgSearch] = useState<string | null>(null);
+
   const [touched, setTouched] = useState<boolean>(false);
+
   const [preView, setPreview] = useState<string | null>(null);
 
   const { setValue } = useFormContext();

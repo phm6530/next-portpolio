@@ -1,4 +1,8 @@
 {
+  "plugins": [
+    "react",
+    "import" // 여기에 "import" 추가
+  ],
   "extends": [
     "next/core-web-vitals"
   ],
@@ -10,7 +14,41 @@
     // 예: const sum=a+b  ->  const sum = a + b
     "indent": [
       "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "ignoredNodes": [
+          "TemplateLiteral"
+        ]
+      }
+    ],
+    // JSX 들여쓰기 규칙 추가
+    "react/jsx-indent": [
+      "error",
       2
+    ],
+    // JSX 내부 props 들여쓰기
+    "react/jsx-indent-props": [
+      "error",
+      2
+    ],
+    // JSX 최대 허용 줄 수
+    "react/jsx-max-props-per-line": [
+      1,
+      {
+        "maximum": 1,
+        "when": "multiline"
+      }
+    ],
+    // JSX 첫 번째 prop 새 줄에서 시작
+    "react/jsx-first-prop-new-line": [
+      "error",
+      "multiline"
+    ],
+    // JSX 마지막 괄호 위치
+    "react/jsx-closing-bracket-location": [
+      "error",
+      "tag-aligned"
     ],
     // 모든 들여쓰기는 스페이스 2칸으로 통일
     // 예: 
@@ -30,11 +68,19 @@
       "always"
     ],
     // 예: {name: "john"}  ->  { name: "john" }
+    "import/newline-after-import": [
+      "error",
+      {
+        "count": 1
+      }
+    ],
     "object-curly-newline": [
       "error",
       {
-        "multiline": true, // 여러 줄일 때는 줄바꿈 강제
-        "consistent": true // 열고 닫는 중괄호의 줄바꿈 스타일 일치
+        "ImportDeclaration": {
+          "multiline": true,
+          "consistent": true
+        }
       }
     ],
     // 예: 
@@ -80,12 +126,12 @@
     "no-multiple-empty-lines": [
       "error",
       {
-        "max": 1
+        "max": 1,
+        "maxBOF": 0
       }
     ],
     // 최대 1개의 빈 줄만 허용
     // [미사용 변수]
-<<<<<<< Updated upstream
     "no-unused-vars": "error",
     // 사용하지 않는 변수 선언시 에러 표시
     // [구문 사이 간격]
@@ -102,73 +148,17 @@
         "prev": "function",
         "next": "*"
       },
-      // 예:
-      // const name = "john";
-      //
-      // function hello() {}
-      //
-      // const age = 20;
-      // const 선언들 사이 빈 줄
+      // useEffect와 const 선언 사이 빈 줄
       {
         "blankLine": "always",
-        "prev": "const",
-        "next": "const"
+        "prev": "multiline-expression",
+        "next": "multiline-const"
       },
-      // const 선언과 다른 표현식 사이 빈 줄
       {
         "blankLine": "always",
-        "prev": "const",
-        "next": "expression"
+        "prev": "multiline-const",
+        "next": "multiline-expression"
       }
-      // 예:
-      // const name = "john";
-      //
-      // const age = 20;
-      //
-      // console.log(name);
     ]
-=======
-    "no-unused-vars": "error"
-    // 사용하지 않는 변수 선언시 에러 표시
-    // [구문 사이 간격]
-    // "padding-line-between-statements": [
-    //   "error",
-    //   // 함수 선언 전후 빈 줄
-    //   {
-    //     "blankLine": "always",
-    //     "prev": "*",
-    //     "next": "function"
-    //   },
-    //   {
-    //     "blankLine": "always",
-    //     "prev": "function",
-    //     "next": "*"
-    //   },
-    //   // 예:
-    //   // const name = "john";
-    //   //
-    //   // function hello() {}
-    //   //
-    //   // const age = 20;
-    //   // const 선언들 사이 빈 줄
-    //   {
-    //     "blankLine": "always",
-    //     "prev": "const",
-    //     "next": "const"
-    //   },
-    //   // const 선언과 다른 표현식 사이 빈 줄
-    //   {
-    //     "blankLine": "always",
-    //     "prev": "const",
-    //     "next": "expression"
-    //   }
-    //   // 예:
-    //   // const name = "john";
-    //   //
-    //   // const age = 20;
-    //   //
-    //   // console.log(name);
-    // ]
->>>>>>> Stashed changes
   }
 }

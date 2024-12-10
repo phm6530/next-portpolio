@@ -66,7 +66,7 @@ export default function SurveyControler() {
             value={btn.value}
             onClick={onClickHandler}
           >
-            {btn.icon && <btn.icon className={classes.btnImg} />}
+            {/* {btn.icon && <btn.icon className={classes.btnImg} />} */}
             <span>
               {btn.label}
             </span>
