@@ -68,6 +68,7 @@ export default async function SurveyResultPage({
     },
   });
 
+
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>

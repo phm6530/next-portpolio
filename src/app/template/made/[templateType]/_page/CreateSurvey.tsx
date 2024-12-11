@@ -22,7 +22,7 @@ import { usePathname, useRouter } from "next/navigation";
 import AddDateRange from "@/app/template/made/[templateType]/_component/templateAddOptions/AddDateRange";
 import ThumbNailUploader from "@/app/template/made/[templateType]/_component/ThumbNailUploader";
 import { PathSegments } from "@/types/upload";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
@@ -60,6 +60,7 @@ export default function CreateSurvey({
 
   //초기 세션상태
   const [isSession] = useState<boolean>(session ? !!session : false);
+
   const router = useRouter();
 
   //현재시간
@@ -81,6 +82,7 @@ export default function CreateSurvey({
 
   useEffect(() => {
     const localData = localStorage.getItem(template);
+
     const savedTime = localStorage.getItem("savedTime");
 
     setTimeout(() => {
@@ -98,10 +100,7 @@ export default function CreateSurvey({
     defaultValues: initialFormState,
   });
 
-  const {
-    register,
-    formState: { errors },
-  } = formState;
+  const { register } = formState;
 
   const { mutate, isPending } = useMutation<
     unknown,
@@ -122,7 +121,8 @@ export default function CreateSurvey({
           body: JSON.stringify(data),
         });
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
       router.replace("/template");
       alert("설문조사 개설 완료되었습니다. ");
     },
@@ -131,6 +131,7 @@ export default function CreateSurvey({
   //submit
   const onSubmitHandler = async (data: AddSurveyFormProps) => {
     const curSession = await getSession();
+
     console.log(data);
 
     if (isSession && !curSession) {

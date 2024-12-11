@@ -4,13 +4,13 @@ import classes from "./contact.module.scss";
 import { FormProvider, useForm } from "react-hook-form";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
-import { BASE_URL, ENV_NESTBASE_URL } from "@/config/base";
+import { ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
+
 type MailFormData = {
   name: string;
   digit: string;
@@ -54,8 +54,8 @@ export default function Page() {
           <BackDrop />
           <div className={classes.mail}>
             <div>test</div>
-                        dfsafdjss
-                메일 보내는중..
+            dfsafdjss
+            메일 보내는중..
             <LoadingCircle />
           </div>
         </>

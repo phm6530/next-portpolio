@@ -47,6 +47,7 @@
   position: relative;
   align-items: center;
   display: flex;
+
   &::before {
     content: "";
     left: calc(0% - 10px);
@@ -65,4 +66,67 @@
   color: #{map-get($colors-white, "default")};
   font-size: 0.8rem;
   letter-spacing: 0.5px;
+}
+
+.summary {
+  padding: 1rem 0rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  .title {
+    font-weight: 500;
+    @include textMaxLine(1);
+  }
+
+  .description {
+    font-size: 13px;
+    opacity: .7;
+    // margin-bottom: 1rem;
+    line-height: 1.2rem;
+    min-height: 40px;
+    @include textMaxLine(2);
+  }
+
+  .createAt {
+    font-size: 12px;
+    opacity: .5;
+  }
+}
+
+.gnederChart {
+  margin-bottom: 1rem;
+
+  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  & .male {
+    width: 60%;
+    height: 5px;
+    background: #abc9ff;
+  }
+
+  & .female {
+    background: rgb(248, 170, 242);
+    height: 5px;
+    width: 40%;
+  }
+}
+
+
+.btnWrapper {
+  display: flex;
+  gap: 5px;
+
+  button {
+    flex: 1;
+    padding: .6rem;
+    border-radius: 5px;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+  }
 }

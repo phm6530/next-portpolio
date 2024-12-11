@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import classes from "./NotFoundComponent.module.scss";
-import NotSearch from "/public/asset/icon/notFoundsearch.png";
+// import NotSearch from "/public/asset/icon/notFoundsearch.png";
 import replyIcon from "/public/asset/icon/reply.png";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ function search({ keyword }: { keyword: string }) {
   return (
     <div className={classes.errorDefault}>
       <div className={classes.iconWrap}>
-        <Image src={NotSearch} alt="searchIcon" width={50} />
+        {/* <Image src={NotSearch} alt="searchIcon" width={50} /> */}
       </div>
       <span>&apos;{keyword}&apos;</span> 일치하는 검색어가 없습니다.
     </div>

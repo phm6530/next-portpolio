@@ -1,7 +1,7 @@
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { SignIn, User, USER_ROLE } from "@/types/auth.type";
+import { SignIn, User } from "@/types/auth.type";
 import classes from "./login.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
@@ -11,7 +11,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
-import { TokenLocalStorage } from "@/utils/localstorage-token";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 
 type SignUpResponse = {
@@ -24,7 +23,7 @@ const schema = z.object({
   email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
 });
 
-export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
+export default function LoginForm() {
   const store = useStore();
   const router = useRouter();
 
@@ -60,7 +59,9 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
         email,
         role,
       });
+
       router.refresh();
+      
       // router.replace(redirectPath ? redirectPath : "/");
     },
   });
@@ -79,39 +80,48 @@ export default function LoginForm({ redirectPath }: { redirectPath?: string }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = method;
 
-  const errorMessages = Object.values(errors);
-  const firstErrorMeg = errorMessages[0]?.message;
+  // const errorMessages = Object.values(errors);
+  // const firstErrorMeg = errorMessages[0]?.message;
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmitHandler)} className={classes.form}>
         <FormProvider {...method}>
           {/* Id */}
-          <FormInput
-            type="text"
-            placeholder="아이디"
-            {...register("email")}
-            autoComplete="off"
-            inputName="email"
-          />
+          <div className={classes.inputWrapper}>
+            
+            <FormInput
+              type="text"
+              placeholder="아이디를 입력해주세요"
+              {...register("email")}
+              autoComplete="off"
+              inputName="email"
+            />
 
-          {/* Password */}
-          <FormInput
-            type="password"
-            placeholder="비밀번호"
-            {...register("password")}
-            autoComplete="new-password"
-            inputName="password"
-          />
-
+            {/* Password */}
+            <FormInput
+              type="password"
+              placeholder="비밀번호를 입력해주세요"
+              {...register("password")}
+              autoComplete="new-password"
+              inputName="password"
+            />
+         
+          </div>
+ 
           <Button.submit disabled={isPending}>로그인</Button.submit>
-
+      
+          <div className={classes.passwordRecovery}>
+            <span className={classes.button} onClick={()=>router.push("/auth/signup")} >회원가입</span>
+            <span>비밀번호를 잊으셨나요?</span>
+          </div>
           {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>
       </form>
     </>
   );
 }
+ 

@@ -2,10 +2,7 @@ import classes from "./ResultSummry.module.scss";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import Button from "@/components/ui/button/Button";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import { fetchSurveyData } from "@/app/(template-result)/result/survey/components/test";
-import { QUERY_KEY } from "@/types/constans";
 import { SurveyResult } from "@/types/surveyResult.type";
-import { QueryClient } from "@tanstack/react-query";
 
 export default async function ResultSummry(data: SurveyResult) {
   const {

@@ -38,6 +38,8 @@ export default function CommentEditor({
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
 
+  console.log("유저데이터" , userData);
+
   const AnonymousValues: AnonymousDefaultValue = {
     anonymous: "",
     password: "",
@@ -119,7 +121,6 @@ export default function CommentEditor({
     >
       <FormProvider {...formMethod}>
         <>
-          {userData && <></>}
           {!userData && (
             <>
               <FormInput

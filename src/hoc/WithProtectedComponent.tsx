@@ -37,7 +37,6 @@ export default function WithProtectedComponent({
 
   //로그아웃 시켜버리기
   useEffect(() => {
-    console.log("token::", sessionToken);
     if (!sessionToken || isError) {
       //세션삭제
       SessionStorage.removeAccessToken();

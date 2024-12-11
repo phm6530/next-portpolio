@@ -1,11 +1,11 @@
 "use client";
 import { useTheme } from "next-themes";
-import classes from "./DarkModeHandler.module.scss";
+import classes from "./ModeToggle.module.scss";
 import LightMode from "/public/asset/icon/mode_light.svg";
 import DarkMode from "/public/asset/icon/mode_dark.svg";
 import { useEffect, useState } from "react";
 
-export default function DarkmodeHandler() {
+export default function ModeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -20,7 +20,7 @@ export default function DarkmodeHandler() {
   const curTheme = theme === "light" ? "dark" : "light";
 
   return (
-    <div className={classes.darkmode} onClick={() => setTheme(curTheme)}>
+    <div className={`${classes.darkmode} ${theme === "dark" && classes.dark}`} onClick={() => setTheme(curTheme)}>
       {curTheme === "light" ? <LightMode /> : <DarkMode />}
     </div>
   );

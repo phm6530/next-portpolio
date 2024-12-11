@@ -1,6 +1,5 @@
 import { RespondentsAndMaxGroup } from "@/types/template.type";
 import classes from "./GroupStatus.module.scss";
-import Image from "next/image";
 import FemaleIcon from "/public/asset/icon/female.svg";
 import MaleIcon from "/public/asset/icon/male.svg";
 
@@ -31,7 +30,7 @@ const GroupStatus: React.FC<RespondetsDetail> = ({ maxGroup }) => {
   return (
     <>
       <div className={classes.groupParticipants}>
-        {icon}
+        {/* {icon} */}
         {ageGroup && `${ageGroup}대`}
 
         <>

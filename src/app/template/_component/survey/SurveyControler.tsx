@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import FemaleIcon from "/public/asset/icon/female.svg";
 import MaleIcon from "/public/asset/icon/male.svg";
-import GraphIcon from "/public/asset/icon/graph.svg";
+// import GraphIcon from "/public/asset/icon/graph.svg";
 
 import classes from "./surveyControler.module.scss";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
@@ -18,7 +18,7 @@ const btnArr = [
   {
     label: "참여자 순",
     value: TEMPLATERLIST_SORT.RESPONDENTS,
-    icon: GraphIcon,
+    icon: FemaleIcon,
   },
   {
     label: "남성 선호도",
@@ -34,6 +34,7 @@ const btnArr = [
 
 export default function SurveyControler() {
   const qs = useSearchParams();
+
   const router = useRouter();
   const sortValue = qs.get("sort") || "all";
   const [active, setActive] = useState(sortValue || "all");
@@ -44,11 +45,10 @@ export default function SurveyControler() {
 
   const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const newSortValue = e.currentTarget.value;
-    const newParams = new URLSearchParams(qs.toString()); // 쿼리 파라미터 복사
 
+    const newParams = new URLSearchParams(qs.toString()); // 쿼리 파라미터 복사
     newParams.set("sort", newSortValue);
     newParams.delete("page");
-
     setActive(newSortValue);
 
     router.push(`/list?${newParams.toString()}`, { scroll: false });
@@ -66,8 +66,10 @@ export default function SurveyControler() {
             value={btn.value}
             onClick={onClickHandler}
           >
-            {btn.icon && <btn.icon />}
-            {btn.label}
+            {/* {btn.icon && <btn.icon className={classes.btnImg} />} */}
+            <span>
+              {btn.label}
+            </span>
           </button>
         );
       })}

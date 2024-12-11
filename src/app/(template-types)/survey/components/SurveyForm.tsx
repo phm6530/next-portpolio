@@ -26,8 +26,7 @@ export default function SurveyForm({
   id,
   isGenderCollected,
   isAgeCollected,
-  questions,
-  ...rest
+  questions
 }: SurveyTemplateDetail) {
   const defaultValues: AnswerSurvey = {
     ...(isGenderCollected && { gender: null }),
@@ -50,7 +49,7 @@ export default function SurveyForm({
   });
 
   const { reset } = formMethod;
-  const { mutate, isPending } = useMutation<unknown, Error, AnswerSurvey>({
+  const { mutate, isSuccess } = useMutation<unknown, Error, AnswerSurvey>({
     mutationFn: async (data) => {
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
@@ -87,10 +86,10 @@ export default function SurveyForm({
         {isAgeCollected && <OptionAgeGroup />}
 
         {questions.map((qs) => {
+          
           return (
             <TemplateQuestionWrapper key={`${qs.type}-${qs.id}`}>
               <QuestionTitle>{qs.label}</QuestionTitle>
-
               {(() => {
                 if (qs.type === QUESTION_TYPE.TEXT) {
                   return (
@@ -117,7 +116,7 @@ export default function SurveyForm({
         <Button.submit
           type="button"
           onClick={formMethod.handleSubmit(onSubmitHandler)}
-          disabled={isPending}
+          disabled={isSuccess}
         >
           제출하기
         </Button.submit>

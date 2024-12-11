@@ -89,19 +89,18 @@ export default function Comment({
   };
 
   const isUserCommentAuthor = user?.email === userData?.email; // 현재 사용자가 댓글 작성자인지 확인
-  const canDeleteComment = isUserCommentAuthor;
+  
   return (
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
-        {/* 익명일때 */}
-        {anonymous && !user && (
-          <UserRoleDisplay user_nickname={anonymous} user_role={"anonymous"} />
-        )}
-        {user && "유저"}
+
+        {/* 유저 or 익명 */}
+        <UserRoleDisplay user={user} anonymousNickName={anonymous} />
+        
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
 
         {/* 내 댓글일 경우만 삭제버튼 노출 */}
-        {canDeleteComment && (
+        {isUserCommentAuthor && (
           <>
             {isUserCommentAuthor && <span>내 댓글</span>}
             <Button.closeBtn onClick={deleteMessage} />

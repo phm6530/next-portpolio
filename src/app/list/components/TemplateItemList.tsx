@@ -18,7 +18,7 @@ export default function TemplateList() {
   const sort = qs.get("sort") || TEMPLATERLIST_SORT.ALL;
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, isPending, fetchNextPage, isFetchingNextPage } =
+  const { data, isPending, fetchNextPage } =
     useInfiniteQuery<{
       data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
       nextPage: number | null;
@@ -45,7 +45,7 @@ export default function TemplateList() {
     const ob = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting) {
-          target!.style.backgroundColor = "red";
+          // target!.style.backgroundColor = "red";
           fetchNextPage();
         }
       },
@@ -57,9 +57,7 @@ export default function TemplateList() {
     }
 
     return () => {
-      if (target) {
-        ob.unobserve(target);
-      }
+      if (target) ob.unobserve(target);
       ob.disconnect();
     };
   }, [ref, fetchNextPage, qs]);

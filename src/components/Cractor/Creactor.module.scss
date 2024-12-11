@@ -2,8 +2,11 @@
   margin-right: 5rem;
   position: relative;
   width: 30%;
-
   height: 390px;
+}
+
+.fouc {
+  visibility: hidden;
 }
 
 .ageGroup10 {
@@ -11,35 +14,54 @@
   left: 200px;
   z-index: 2;
   position: absolute;
+  @extend .fouc;
 }
+
 .ageGroup20 {
   top: 122px;
   left: 244px;
   position: absolute;
+  @extend .fouc;
 }
+
 .ageGroup30 {
   top: 286px;
   left: -43px;
   z-index: 1;
   position: absolute;
+  @extend .fouc;
 }
+
 .ageGroup40 {
   top: 195px;
   left: -70px;
   z-index: 0;
   position: absolute;
+  @extend .fouc;
 }
+
 .ageGroup50 {
   position: absolute;
   z-index: 0;
   top: 48px;
   left: 164px;
+  @extend .fouc;
 }
 
 .CreactorWrap {
   position: absolute;
   bottom: -7px;
+
   img {
-    filter: drop-shadow(32px 54px 16px #cda0cd);
+    // filter: drop-shadow(32px 54px 16px #cda0cd);
+    filter: drop-shadow(32px 54px 16px #a58aaa2a);
   }
+}
+
+.CreactorWrap {
+  visibility: hidden;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 320px;
+  margin-top: 1rem;
 }

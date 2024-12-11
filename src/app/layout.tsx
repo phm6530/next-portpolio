@@ -11,10 +11,10 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
-import fetchWithAuth from "@/utils/withRefreshToken";
 import { QUERY_KEY } from "@/types/constans";
-import DarkmodeHandler from "@/components/DarkModeHandler/DarkModeHandler";
+import fetchWithAuth from "@/utils/withRefreshToken";
 import ClientProvider from "@/provider/ClientProvider";
+import ModeToggle from "@/components/ModeToggle/ModeToggle";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -28,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const token = serverSession();
+
   const queryClient = new QueryClient();
 
   /**
@@ -41,6 +42,7 @@ export default async function RootLayout({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
         const endpoint = `${BASE_NEST_URL}/user/me`;
+
         const option: RequestInit = {
           cache: "no-store",
           headers: {
@@ -65,7 +67,7 @@ export default async function RootLayout({
               <GlobalNav />
               <main className="container">{children}</main>
               {/* Dark Mode handler */}
-              <DarkmodeHandler />
+              <ModeToggle />
             </HydrationBoundary>
           </ClientProvider>
         </ProviderContext>
