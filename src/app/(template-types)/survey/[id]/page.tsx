@@ -2,7 +2,7 @@ import Grid from "@/components/ui/Grid";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import { BASE_NEST_URL } from "@/config/base";
-import { FetchTemplateForm } from "@/types/template.type";
+import { FetchTemplateForm, RespondentsAndMaxGroup, TemplateItemMetadata } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
@@ -15,6 +15,29 @@ import { SURVEY_EDITOR_TYPE } from "@/app/(template-made)/made/[...madeType]/com
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
+
+// 동적 생성 
+export const dynamicParams = true; 
+
+export async function generateStaticParams() {
+  let url = `${BASE_NEST_URL}/template?sort=all`;
+  url += "&page=1";
+  
+  /**
+   * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
+   */
+  const response = await fetch(url);
+  const { data: listResponse }: {data :TemplateItemMetadata<RespondentsAndMaxGroup>[] } = await response.json();
+  
+  return listResponse.map((template)=>{
+    if ("id" in template){
+      return { id: template.id.toString() };
+    } else {
+      return null as never;
+    }
+  });
+ 
+}
 
 export async function generateMetadata({
   params: { id },
