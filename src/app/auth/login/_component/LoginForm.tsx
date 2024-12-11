@@ -109,18 +109,19 @@ export default function LoginForm() {
               autoComplete="new-password"
               inputName="password"
             />
-            <div className={classes.passwordRecovery}>
-              <span>비밀번호를 잊으셨나요?</span></div>
+         
           </div>
  
           <Button.submit disabled={isPending}>로그인</Button.submit>
-          
-          <div className={classes.button} onClick={()=>router.push("/auth/signup")} >회원가입</div>
-
+      
+          <div className={classes.passwordRecovery}>
+            <span className={classes.button} onClick={()=>router.push("/auth/signup")} >회원가입</span>
+            <span>비밀번호를 잊으셨나요?</span>
+          </div>
           {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>
       </form>
     </>
   );
 }
-
+ 
