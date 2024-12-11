@@ -18,7 +18,6 @@ type SurveyDetailTemplateParams = {
 
 // 동적 생성 
 export const dynamicParams = true; 
-
 export async function generateStaticParams() {
   let url = `${BASE_NEST_URL}/template?sort=all`;
   url += "&page=1";
@@ -28,12 +27,10 @@ export async function generateStaticParams() {
    */
   const response = await fetch(url);
   const { data: listResponse }: {data :TemplateItemMetadata<RespondentsAndMaxGroup>[] } = await response.json();
-  
+
   return listResponse.map((template)=>{
     if ("id" in template){
-      return { id: template.id.toString() };
-    } else {
-      return null as never;
+      return { id: template.id.toString() }; 
     }
   });
  
