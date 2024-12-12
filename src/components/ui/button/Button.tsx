@@ -6,7 +6,6 @@ import {
   HtmlHTMLAttributes,
   ReactNode,
 } from "react";
-import Image from "next/image";
 // import DeleteIcon from "/public/asset/icon/close.png";
 
 function solid({

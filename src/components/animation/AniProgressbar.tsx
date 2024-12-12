@@ -30,7 +30,7 @@ export default function AniProgressbar({
           innerHTML: percent,
           duration: 2,
           snap: { innerHTML: 0.1 },
-          color: maxCnt ? `#7b6de7` : `#bfbfbf`,
+          color: maxCnt ? "#7b6de7" : "#bfbfbf",
         }
       );
     },
@@ -46,13 +46,13 @@ export default function AniProgressbar({
         ref.current,
         {
           width: 1,
-          background: `#bfbfbf`,
+          background: "#bfbfbf",
         },
 
         {
           width: `${percent === 0 ? 1 : percent}%`,
           duration: 2,
-          background: maxCnt ? `#7b6de7` : `#bfbfbf`,
+          background: maxCnt ? "#7b6de7" : "#bfbfbf",
         }
       );
     },

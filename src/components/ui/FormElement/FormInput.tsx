@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef } from "react";
 import classes from "./FormInput.module.scss";
 import { useFormContext } from "react-hook-form";
 import FormRegisterError from "@/components/Error/FormRegisterError";
@@ -11,9 +11,7 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   const { inputName, ...rest } = props;
-  const {
-    formState: { errors },
-  } = useFormContext();
+  const { formState: { errors }, } = useFormContext();
 
   const err = inputName ? errors[inputName] : false;
 
