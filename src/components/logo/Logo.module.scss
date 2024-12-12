@@ -1,0 +1,10 @@
+.logoWrapper {
+  max-width: 250px;
+  position: relative;
+  padding-bottom: 25%;
+  width: 100%;
+
+  &.cursor {
+    cursor: pointer;
+  }
+}

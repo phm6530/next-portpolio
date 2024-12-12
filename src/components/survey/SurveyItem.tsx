@@ -17,9 +17,7 @@ import MaleIcon from "/public/asset/icon/mdi_face-male.png";
 import imgUrlMapper from "@/util/imgUrlMapper";
 import GroupStatus from "@/components/ui/GroupStatus";
 
-export default function SurveyItem({
-  itemData,
-}: {
+export default function SurveyItem({ itemData, }: {
   itemData: GetTemplateDetail;
   refs?: ForwardedRef<HTMLDivElement[]>;
 }) {
