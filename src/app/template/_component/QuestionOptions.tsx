@@ -1,10 +1,10 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import Image from "next/image";
-import { FieldError, useFormContext, useWatch } from "react-hook-form";
-import { GetSurveyQuestions } from "@/types/templateSurvey";
-import ImageZoom from "@/app/template/_component/ImageZoom";
+import { useFormContext, useWatch } from "react-hook-form";
+// import { GetSurveyQuestions } from "@/types/templateSurvey";
+// import ImageZoom from "@/app/template/_component/ImageZoom";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
+import QuestionsContainer 
+  from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
 import ImageViewer from "@/app/template/_component/ImageViewer";
 import {
@@ -27,7 +27,7 @@ export default function QuestionOptions({
   const {
     register,
     formState: { errors },
-    watch,
+  
     control,
   } = useFormContext<AnswerSurvey>();
 
@@ -51,8 +51,6 @@ export default function QuestionOptions({
   //하나라도 이미지 있으면 UI 변경하기
   const isPictureOption = options?.some((e) => e.img !== null) || false;
 
-  console.log(options);
-
   return (
     <QuestionsContainer isPicture={isPictureOption}>
       {options?.map((e, idx) => {
@@ -66,9 +64,8 @@ export default function QuestionOptions({
               type="radio"
               key={idx}
               value={e.id}
-              {...register(`answers.${curIdx}.optionId`, {
-                required: "필수 항목입니다.",
-              })}
+              {...register(`answers.${curIdx}.optionId`, 
+                { required: "필수 항목입니다.", })}
             />
 
             <div className={styles.chkItemWrap}>
