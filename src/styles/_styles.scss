@@ -43,14 +43,15 @@ body {
   color: $color-black;
 }
 
-textarea {
+textarea,
+input {
   font-family: "Pretendard Variable";
   font-size: 14px;
 
-  &::placeholder {
-    font-family: "Pretendard Variable";
-  }
+  @include placeHolder();
 }
+
+
 
 .container {
   min-height: 100vh;
@@ -61,6 +62,7 @@ button {
   cursor: pointer;
   box-sizing: border-box;
   border: 0;
+  background: transparent;
 }
 
 .box {
@@ -84,10 +86,7 @@ button {
   }
 }
 
-input::placeholder {
-  font-family: "Pretendard Variable";
-  color: rgba(0, 0, 0, 0.3)
-}
+
 
 input:focus {
   outline: none;

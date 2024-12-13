@@ -83,3 +83,9 @@
   -webkit-box-orient: vertical;
   word-break: keep-all;
 }
+
+@mixin placeHolder() {
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.3)
+  }
+}

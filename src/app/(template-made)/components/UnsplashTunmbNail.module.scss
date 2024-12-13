@@ -3,8 +3,54 @@
   width: 95%;
 }
 
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .titleWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .title {
+      line-height: 2.0rem;
+    }
+
+    .titleText {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      p {
+        font-size: 14px;
+        opacity: .5;
+      }
+
+    }
+
+  }
+}
+
 .search {
   display: flex;
+  gap: 10px;
+
+  input {
+    flex: 1;
+    border: transparent;
+    text-indent: 1rem;
+    background: rgb(245, 245, 245);
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid;
+    padding: 1rem 2rem;
+    margin-top: 0 !important;
+
+
+  }
 }
 
 .slugItemsWrap {
@@ -21,6 +67,7 @@
   box-sizing: border-box;
   cursor: pointer;
   border: 2px solid transparent;
+
   &:hover {
     border: 2px solid red;
   }

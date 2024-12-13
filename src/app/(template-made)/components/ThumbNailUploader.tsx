@@ -4,7 +4,8 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
-import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
+import UnSplashThumbNail 
+  from "@/app/(template-made)/components/UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
 
 /**
@@ -68,38 +69,41 @@ export default function ThumbNailUploader() {
 
       {/* 썸네일 preView */}
       <>
-        <div className={classes.previewContainer}>
-          {!imgError ? (
-            <>
-              {imgPending && "loading......"}
-              {tempThumbNail && (
-                <Image
-                  src={tempThumbNail}
-                  sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                  alt="preview"
-                  style={{ objectFit: "cover" }}
-                  fill
-                  onLoad={() => setImgPending(false)}
-                />
-              )}
-            </>
-          ) : (
-            "Error..."
-          )}
-        </div>
-        {/* {ref.current?.value} */}
-        <button type="button" onClick={clearPreview}>
-          이미지 삭제
-        </button>
+        {tempThumbNail && <>
+          <div className={classes.previewContainer}>
+            {!imgError ? (
+              <>
+                {imgPending && "loading......"}
+                {tempThumbNail && (
+                  <Image
+                    src={tempThumbNail}
+                    sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                    alt="preview"
+                    style={{ objectFit: "cover" }}
+                    fill
+                    onLoad={() => setImgPending(false)}
+                  />
+                )}
+              </>
+            ) : (
+              "Error..."
+            )}
+          </div>
+          {/* {ref.current?.value} */}
+          <button type="button" onClick={clearPreview}>
+            이미지 삭제
+          </button></> }
+      
       </>
-
-      <button type="button" onClick={() => fileRef.current?.click()}>
-        썸네일 업로드하기
-      </button>
-      <UnSplashThumbNail
-        setImgPending={setImgPending}
-        setImgError={setImgError}
-      />
+      <div className={classes.buttonWrapper}>
+        <button type="button" onClick={() => fileRef.current?.click()}>
+          썸네일 업로드하기
+        </button>
+        <UnSplashThumbNail
+          setImgPending={setImgPending}
+          setImgError={setImgError}
+        />
+      </div>
       {/* <button type="button" onClick={() => setThumNailEditor(true)}>
         추천 썸네일 이미지
       </button> */}
