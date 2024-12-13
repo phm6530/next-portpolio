@@ -3,22 +3,25 @@
 import classes from "./SelectTemplate.module.scss";
 import { useRouter } from "next/navigation";
 import SurveyIcon from "/public/asset/icon/survey.png";
+import rankIcon from "/public/asset/icon/rank.png";
 import Image from "next/image";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
 const templateList = [
   {
     type: TEMPLATE_TYPE.SURVEY,
+    icon: SurveyIcon,
     name: "Survey",
     path: `/made/${TEMPLATE_TYPE.SURVEY}`,
     description: [
       "주관식 + 객관식 형태의 설문조사 전용 템플릿",
-      "만족도 조사, 간단 설문조사에 적합 ",
+      "설문조사에 적합 , 성별 나이 필터링 제공 ",
     ],
     isActive: true,
   },
   {
     type: TEMPLATE_TYPE.RANK,
+    icon: rankIcon,
     name: "Rank",
     path: `/made/${TEMPLATE_TYPE.RANK}`,
     description: [
@@ -62,16 +65,18 @@ export default function SelectTemplateList() {
           >
             <div className={classes.iconWrap}>
               <Image
-                src={SurveyIcon}
+                src={template.icon}
                 alt="dd"
                 fill
                 style={{ objectFit: "contain" }}
               />
             </div>
             <span className={classes.typeTitle}>{template.name}</span>
-            {template.description.map((e, idx) => {
-              return <p key={`description-${idx}`}>{e}</p>;
-            })}
+            <div className={classes.desciprtionWrapper}>
+              {template.description.map((e, idx) => {
+                return <p key={`description-${idx}`}>{e}</p>;
+              })}
+            </div>
           </div>
         );
       })}

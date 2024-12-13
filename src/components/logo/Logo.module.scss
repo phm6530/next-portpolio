@@ -1,10 +1,29 @@
+@keyframes ani {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .logoWrapper {
   max-width: 250px;
   position: relative;
   padding-bottom: 25%;
   width: 100%;
+  background-image: url("/asset/logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0;
+
 
   &.cursor {
     cursor: pointer;
   }
+
+
+  animation: ani .5s ease forwards;
 }

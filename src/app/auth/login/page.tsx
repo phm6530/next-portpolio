@@ -4,6 +4,7 @@ import classes from "./page.module.scss";
 import Logo from "@/components/logo/logo";
 import LoginMsg from "./LoginMsg";
 import { ERROR_CODE } from "@/codeMsg";
+import { Suspense } from "react";
 
 const Login = async ({ searchParams, }: {
   searchParams: { redirect: string; code: ERROR_CODE };
@@ -13,7 +14,9 @@ const Login = async ({ searchParams, }: {
   return (
     <div className={classes.loginContainer}>
       <div className={classes.titleWrapper}>
-        <Logo/>
+        <Suspense fallback={<div>test..</div>}>
+          <Logo/>
+        </Suspense>
         <div className={classes.loginText}>Do poll, 설문으로 소통하는 공간</div>
         {/* <p className={classes.signupDescription}>30초만 회원가입이 가능해요!</p> */}
       </div>

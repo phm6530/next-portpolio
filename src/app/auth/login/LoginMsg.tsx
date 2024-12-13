@@ -15,11 +15,11 @@ export default function LoginMsg({ code } : {code : ERROR_CODE}){
     if (ref.current){
       // 좌우 흔들림 애니메이션
       gsap.fromTo(ref.current, 
-        { x: 10 , autoAlpha: 1 }, 
+        { y: 13 , autoAlpha: 1 , }, 
         { 
-          x: 0,
-          duration: 0.6,
-          ease: "power1.inOut"
+          y: 0,
+          duration: 0.5,
+          ease: "sine.out"
         }
       );
 
