@@ -14,12 +14,14 @@ import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
-import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
+import SurveyList 
+  from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
 import AddQuestionController, {
   RequestSelect,
   RequestText,
 } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
-import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
+import usePreview 
+  from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import fetchWithAuth from "@/utils/withRefreshToken";
@@ -27,8 +29,11 @@ import fetchWithAuth from "@/utils/withRefreshToken";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEffect, useState } from "react";
-import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
-import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
+import surveySchema from 
+  "@/app/(template-made)/made/[...madeType]/components/survey/schema";
+import ThumbNailUploader 
+  from "@/app/(template-made)/components/ThumbNailUploader";
+import TemplateInputWrapper from "../common/TemplateInputWrapper";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -218,29 +223,39 @@ export default function CreateSurvey() {
   return (
     <>
       <RenderPreview>프리뷰</RenderPreview>
+      <div className={classes.madeHeader}>
+        <h1>생성할 템플릿을 <br></br>
+          기재해주세요</h1>
+      </div>
+      
       <form
         className={classes.formContainer}
         onSubmit={formState.handleSubmit(onSubmitHandler)}
       >
         <FormProvider {...formState}>
           {/* 설문조사 제목 */}
-          <FormInput
-            {...register("title")}
-            inputName={"title"}
-            autoComplete="off"
-            placeholder="제목"
-          />
+          <TemplateInputWrapper title={"템플릿 제목"}>
+            <FormInput
+              {...register("title")}
+              inputName={"title"}
+              autoComplete="off"
+              placeholder="제목"
+            />
+          </TemplateInputWrapper>
+
           {/* 설문조사 설명 */}
-          <FormTextarea
-            {...register("description")}
-            textareaName={"description"}
-            placeholder="설문조사에 대한 설명을 적어주세요!"
-            autoComplete="off"
-          />
+          <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
+            <FormTextarea
+              {...register("description")}
+              textareaName={"description"}
+              placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
+              autoComplete="off"
+            /></TemplateInputWrapper>
 
           {/* 썸네일 */}
-          <ThumbNailUploader />
-
+          <TemplateInputWrapper title={"섬네일"}>
+            <ThumbNailUploader />
+          </TemplateInputWrapper>
           <div className={editPage ? classes.disabled : undefined}>
             <h2>설정</h2>
             {editPage && (

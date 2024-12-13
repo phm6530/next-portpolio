@@ -1,7 +1,7 @@
 .formContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 }
 
 .disabled {
@@ -15,4 +15,9 @@
 
 .info {
   font-size: 14px;
+}
+
+.madeHeader {
+  line-height: 3rem;
+  padding: 30px 0 50px;
 }
