@@ -4,9 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
-import { useForm, useFormContext } from "react-hook-form";
-import { RequestSurveyFormData } from 
-  "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { FieldErrors, useForm, useFormContext } from "react-hook-form";
+import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { object } from "zod";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 type UnsplashApi = {
   total: number;
@@ -33,7 +35,7 @@ type UnsplashApi = {
 //   }[];
 // };
 
-type SearchForm = {keyword: string};
+type SearchForm = { keyword: string };
 
 function UnSplashContents({
   setImgPending,
@@ -49,9 +51,10 @@ function UnSplashContents({
   const { setValue } = useFormContext<RequestSurveyFormData>();
 
   const {
-    handleSubmit, 
+    handleSubmit,
     register,
-    formState: { errors } 
+    watch,
+    formState: { errors, touchedFields },
   } = useForm<SearchForm>({ defaultValues: { keyword: "" } });
 
   const { mutate, data, isPending, isError } = useMutation<
@@ -82,11 +85,8 @@ function UnSplashContents({
     }
   }, [isError, setImgError]);
 
-  const onSearchHandler = (data : SearchForm) => {
-    console.log(data.keyword);
-    if (ref.current?.value) {
-      mutate(ref.current.value);
-    }
+  const onSearchHandler = (data: SearchForm) => {
+    mutate(data.keyword);
   };
 
   const selectSlug = (imgUrl: string) => {
@@ -94,35 +94,40 @@ function UnSplashContents({
     closeModal();
   };
 
+  console.log(data);
+
   return (
     <div className={classes.wrap}>
       <div className={classes.titleWrapper}>
-        <h2 className={classes.title}>사용하실 섬네일 키워드를 <br></br> 
-          아래 검색창에 적어주세요</h2>
+        <h2 className={classes.title}>
+          사용하실 섬네일 키워드를 <br></br>
+          아래 검색창에 적어주세요
+        </h2>
         <div className={classes.titleText}>
-          <p>UnSlash Api 사용으로 영어로 검색하시면 더 정확한 사진을 검색합니다.</p>
+          <p>
+            UnSlash Api 사용으로 영어로 검색하시면 더 정확한 사진을 검색합니다.
+          </p>
           <p>예{")"} 검색은 Search</p>
         </div>
       </div>
       <div className={classes.search}>
-        <form onSubmit={handleSubmit(onSearchHandler)}>
         <input
           placeholder="생성하실 섬네일을 검색해주세요"
-          {...register("keyword" , 
-            { required: "검색어를 기재해주세요!" })}
-      
+          {...register("keyword", { required: "검색어를 기재해주세요!" })}
         />
-        <button type="submit">
+        <button type="button" onClick={handleSubmit(onSearchHandler)}>
           검색
         </button>
-        </form>
       </div>
 
+      {errors && (
+        <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />
+      )}
       <div>
         {isPending && "loading....."}
-        {data && (
+        {touchedFields.keyword && data?.total !== 0 ? (
           <div className={classes.slugItemsWrap}>
-            {data.results.map((e, key) => {
+            {data?.results.map((e, key) => {
               return (
                 <div
                   className={classes.slugItem}
@@ -140,6 +145,8 @@ function UnSplashContents({
               );
             })}
           </div>
+        ) : (
+          `'${watch("keyword")}'은 검색된 이미지가 없네요..`
         )}
       </div>
     </div>

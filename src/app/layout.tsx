@@ -1,25 +1,25 @@
-import Footer from "@/components/ui/Footer";
-import ProviderContext from "@/app/_provider";
-import "@/styles/_styles.scss";
-import { Metadata } from "next";
-import GlobalNav from "@/components/Header/GlobalNav";
+import Footer from '@/components/ui/Footer';
+import ProviderContext from '@/app/_provider';
+import '@/styles/_styles.scss';
+import { Metadata } from 'next';
+import GlobalNav from '@/components/Header/GlobalNav';
 
-import { serverSession } from "@/utils/serverSession";
+import { serverSession } from '@/utils/serverSession';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
-} from "@tanstack/react-query";
-import { BASE_NEST_URL } from "@/config/base";
-import { QUERY_KEY } from "@/types/constans";
-import fetchWithAuth from "@/utils/withRefreshToken";
-import ClientProvider from "@/provider/ClientProvider";
-import ModeToggle from "@/components/ModeToggle/ModeToggle";
+} from '@tanstack/react-query';
+import { BASE_NEST_URL } from '@/config/base';
+import { QUERY_KEY } from '@/types/constans';
+import fetchWithAuth from '@/utils/withRefreshToken';
+import ClientProvider from '@/provider/ClientProvider';
+import ModeToggle from '@/components/ModeToggle/ModeToggle';
 
 //메타 데이터
 export const metadata: Metadata = {
-  title: "나만의 설문조사를 만들어보세요",
-  description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
+  title: '나만의 설문조사를 만들어보세요',
+  description: '익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!',
 };
 
 export default async function RootLayout({
@@ -44,11 +44,11 @@ export default async function RootLayout({
         const endpoint = `${BASE_NEST_URL}/user/me`;
 
         const option: RequestInit = {
-          cache: "no-store",
+          cache: 'no-store',
           headers: {
             authorization: `Bearer ${token}`,
           },
-          credentials: "include",
+          credentials: 'include',
         };
         return await fetchWithAuth(endpoint, option);
       },
