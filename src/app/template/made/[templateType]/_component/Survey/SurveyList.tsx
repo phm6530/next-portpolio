@@ -27,10 +27,6 @@ export default function SurveyList() {
     return questionsWatch.filter((item) => item.type === type).length;
   };
 
-  // //img Params
-  // const params: surveyParams = useParams();
-  // const [_, imgId] = params.templateType;
-
   return (
     <div>
       <div className={classes.questionsStatus}>
@@ -71,7 +67,7 @@ export default function SurveyList() {
             );
           }
         })}
-        {(errors["questions"]?.length || 0) === 0 && (
+        {errors["questions"]?.message && (
           <FormRegisterError errorMsg={errors["questions"]?.message} />
         )}
 

@@ -14,6 +14,8 @@ import QuestionContainer from "@/app/(template-made)/components/QuestionItem/Que
 import QuestionItemHeader, {
   QuestionType,
 } from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
+import imgUpload from "/public/asset/icon/imgUpload.svg";
+import OptionButton from "@/app/(template-made)/components/QuestionOption/OptionButton";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -56,7 +58,9 @@ export default function SurveyTypeText({
     if (files) mutate(files[0]);
   };
 
-  const clearPreview = () => {};
+  const clearPreview = () => {
+    setValue(`questions.${surveyIdx}.img`, "");
+  };
 
   return (
     <>
@@ -79,12 +83,20 @@ export default function SurveyTypeText({
             {...register(`questions.${surveyIdx}.label`)}
             placeholder="질문 제목을 입력해주세요."
           />{" "}
-          {/* delete */}
-          <button type="button" onClick={() => remove(surveyIdx)}>
+          <OptionButton
+            Svg={imgUpload}
+            alt="업로드 버튼"
+            onClick={imgHandler}
+          />
+          <button
+            className={classes.delete}
+            type="button"
+            onClick={() => remove(surveyIdx)}
+          >
             삭제
           </button>
         </QuestionItemHeader>
-        {(isPending || isSuccess) && (
+        {(isPending || (isSuccess && preView)) && (
           <>
             <div className={classes.previewContainer}>
               {isPending && "loading......"}
@@ -99,12 +111,11 @@ export default function SurveyTypeText({
               )}
             </div>
             {imgRef.current?.value}
-            <button onClick={clearPreview}>이미지 삭제</button>
+            <button type="button" onClick={clearPreview}>
+              이미지 삭제
+            </button>
           </>
         )}
-        <button type="button" onClick={imgHandler}>
-          사진
-        </button>
         <div>
           {
             (errors.questions as unknown as { label?: FieldError }[])?.[
@@ -112,6 +123,7 @@ export default function SurveyTypeText({
             ]?.label?.message
           }
         </div>
+        <div className={classes.textAnswer}>응답자 답변 (500자 내외)</div>
       </QuestionContainer>
     </>
   );

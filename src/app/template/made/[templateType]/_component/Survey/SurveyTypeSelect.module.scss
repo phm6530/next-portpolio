@@ -5,7 +5,7 @@
   align-items: center;
   gap: 10px;
   border-radius: 5px;
-
+  color: #576e8b;
   span {
     background: #f3f0f1;
     color: #4f637b;
@@ -22,6 +22,12 @@
   flex-direction: column;
   gap: 10px;
   margin: 10px 0;
+
+  &.pictrueGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
 }
 
 .delete {

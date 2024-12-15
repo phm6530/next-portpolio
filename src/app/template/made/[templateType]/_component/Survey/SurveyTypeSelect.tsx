@@ -27,6 +27,7 @@ export default function SurveyTypeSelect({
   //FormContext
   const {
     control,
+    watch,
     register,
     formState: { errors },
   } = useFormContext<RequestSurveyFormData>();
@@ -50,6 +51,9 @@ export default function SurveyTypeSelect({
       surveyDelete(surveyIdx);
     }
   };
+
+  const test = watch(`questions.${surveyIdx}.options`);
+  const isPicture = test.some((e) => e.img);
 
   return (
     <QuestionContainer>
@@ -77,11 +81,16 @@ export default function SurveyTypeSelect({
         </div>
       )}
 
-      <div className={classes.optionsWrapper}>
+      <div
+        className={`${classes.optionsWrapper} ${
+          isPicture ? classes.pictrueGrid : undefined
+        }`}
+      >
         {/* Radio - List */}
         {fields!.map((_, optionIdx) => {
           return (
             <SurveyRadio
+              key={`${surveyIdx}-option-${optionIdx}`}
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}
               itemRemove={itemRemove}
