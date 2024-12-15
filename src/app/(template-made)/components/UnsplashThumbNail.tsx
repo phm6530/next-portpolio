@@ -4,11 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
-import { FieldErrors, useForm, useFormContext } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
-import { object } from "zod";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import FormRegisterError from "@/components/Error/FormRegisterError";
+import Search from "/public/asset/icon/search.svg";
+import FormToolButton from "./FormToolButton";
 
 type UnsplashApi = {
   total: number;
@@ -53,6 +53,7 @@ function UnSplashContents({
   const {
     handleSubmit,
     register,
+    getValues,
     watch,
     formState: { errors, touchedFields },
   } = useForm<SearchForm>({ defaultValues: { keyword: "" } });
@@ -95,6 +96,7 @@ function UnSplashContents({
   };
 
   console.log(data);
+  console.log("touched :", touchedFields);
 
   return (
     <div className={classes.wrap}>
@@ -103,17 +105,21 @@ function UnSplashContents({
           사용하실 섬네일 키워드를 <br></br>
           아래 검색창에 적어주세요
         </h2>
+
         <div className={classes.titleText}>
           <p>
-            UnSlash Api 사용으로 영어로 검색하시면 더 정확한 사진을 검색합니다.
+            UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를
+            검색합니다.
           </p>
           <p>예{")"} 검색은 Search</p>
         </div>
       </div>
+
       <div className={classes.search}>
         <input
           placeholder="생성하실 섬네일을 검색해주세요"
           {...register("keyword", { required: "검색어를 기재해주세요!" })}
+          autoComplete="off"
         />
         <button type="button" onClick={handleSubmit(onSearchHandler)}>
           검색
@@ -124,29 +130,35 @@ function UnSplashContents({
         <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />
       )}
       <div>
-        {isPending && "loading....."}
-        {touchedFields.keyword && data?.total !== 0 ? (
-          <div className={classes.slugItemsWrap}>
-            {data?.results.map((e, key) => {
-              return (
-                <div
-                  className={classes.slugItem}
-                  key={`${key}-wrap`}
-                  onClick={() => selectSlug(e.urls.regular)}
-                >
-                  <Image
-                    src={e.urls.regular}
-                    alt={e.alternative_slugs.ko}
-                    style={{ objectFit: "cover" }}
-                    fill
-                    sizes="(max-width : 768px) 100vw"
-                  />
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          `'${watch("keyword")}'은 검색된 이미지가 없네요..`
+        {touchedFields?.keyword && (
+          <>
+            {isPending && "loading....."}
+            {data?.total !== 0 ? (
+              <div className={classes.slugItemsWrap}>
+                {data?.results.map((e, key) => {
+                  return (
+                    <div
+                      className={classes.slugItem}
+                      key={`${key}-wrap`}
+                      onClick={() => selectSlug(e.urls.regular)}
+                    >
+                      <Image
+                        src={e.urls.regular}
+                        alt={e.alternative_slugs.ko}
+                        style={{ objectFit: "cover" }}
+                        fill
+                        sizes="(max-width : 768px) 100vw"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className={classes.notfoundSearch}>
+                '{getValues("keyword")}'과 일치하는 이미지가 없습니다.
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -176,9 +188,9 @@ export default function UnSplashThumbNail({
         />
       </PopupComponent>
 
-      <button type="button" onClick={openModal}>
+      <FormToolButton clickEvent={() => openModal()} Svg={Search}>
         썸네일 검색기
-      </button>
+      </FormToolButton>
     </>
   );
 }

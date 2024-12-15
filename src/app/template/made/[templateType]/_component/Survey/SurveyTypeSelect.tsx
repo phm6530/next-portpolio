@@ -1,7 +1,9 @@
+import QuestionItemHeader from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
+import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import SurveyRadio from "@/app/template/made/[templateType]/_component/Survey/SurveyRadio";
+
 import { QUESTION_TYPE } from "@/types/survey.type";
-import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import {
   useFieldArray,
@@ -52,31 +54,20 @@ export default function SurveyTypeSelect({
   };
 
   return (
-    <>
-      Q.
-      <input
-        type="text"
-        autoComplete="off"
-        {...register(`questions.${surveyIdx}.label`, {
-          required: "질문 제목은 필수항목 입니다.",
-        })}
-      />
+    <QuestionContainer>
+      <QuestionItemHeader QuestionNum={surveyIdx + 1}>
+        <input
+          type="text"
+          autoComplete="off"
+          {...register(`questions.${surveyIdx}.label`)}
+          placeholder="문항 제목을 입력해주세요."
+        />
+      </QuestionItemHeader>
       {/* 제목에러 */}
       <div>
         {errors.questions?.[surveyIdx]?.label?.message as string | null}
       </div>
-      <div>
-        {/* <>
-          <input
-            type="number"
-            placeholder="최대 20개"
-            min={2}
-            max={20}
-            onChange={validateNumber}
-            ref={ref}
-          />
-        </> */}
-      </div>
+      <div></div>
       {/* Radio - List */}
       {fields!.map((_, optionIdx) => {
         return (
@@ -97,6 +88,6 @@ export default function SurveyTypeSelect({
       <button type="button" onClick={() => surveyDelete(surveyIdx)}>
         삭제
       </button>
-    </>
+    </QuestionContainer>
   );
 }

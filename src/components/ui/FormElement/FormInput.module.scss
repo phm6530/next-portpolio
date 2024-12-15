@@ -1,10 +1,9 @@
 @import "mixin";
 
 .FormInput {
-  @include inputStyles(10px);
-  border: 1px solid $border-box-color;
+  @include inputStyles();
+  border: 1px solid rgb(208, 218, 228);
   @include FouceInput(#7975e5, 1px);
-
 }
 
 .error {

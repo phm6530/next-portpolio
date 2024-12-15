@@ -1,5 +1,5 @@
 .RadioWrap {
-  padding: 1rem;
-  border: 1px solid $border-box-color;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }

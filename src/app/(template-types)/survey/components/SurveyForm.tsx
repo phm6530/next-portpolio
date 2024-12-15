@@ -26,8 +26,11 @@ export default function SurveyForm({
   id,
   isGenderCollected,
   isAgeCollected,
-  questions
+  questions,
 }: SurveyTemplateDetail) {
+  console.log(isAgeCollected);
+  console.log(isGenderCollected);
+
   const defaultValues: AnswerSurvey = {
     ...(isGenderCollected && { gender: null }),
     ...(isAgeCollected && { ageGroup: null }),
@@ -86,7 +89,6 @@ export default function SurveyForm({
         {isAgeCollected && <OptionAgeGroup />}
 
         {questions.map((qs) => {
-          
           return (
             <TemplateQuestionWrapper key={`${qs.type}-${qs.id}`}>
               <QuestionTitle>{qs.label}</QuestionTitle>

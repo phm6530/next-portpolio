@@ -11,10 +11,10 @@
   .titleWrapper {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px;
 
     .title {
-      line-height: 2rem;
+      line-height: 2.3rem;
     }
 
     .titleText {
@@ -55,6 +55,13 @@
   gap: 20px;
   max-height: 400px;
   overflow-y: scroll;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  div {
+    &:only-child {
+      width: 100%;
+      grid-template-columns: initial !important;
+    }
+  }
 }
 
 .slugItem {
@@ -67,4 +74,11 @@
   &:hover {
     border: 2px solid red;
   }
+}
+
+.notfoundSearch {
+  text-align: center;
+  padding: 3rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
 }

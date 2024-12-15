@@ -8,9 +8,11 @@
   --background-color: #{map-get($colors-white, "default")};
   --text-color: #{map-get($colors-black, "default")};
   --background-color-vanner: #{map-get($background-gradients, "vanner")};
-  --background-color-questionhead: linear-gradient(84.35deg,
-      #0a001a 13.62%,
-      #373038 28.13%);
+  --background-color-questionhead: linear-gradient(
+    84.35deg,
+    #0a001a 13.62%,
+    #373038 28.13%
+  );
 }
 
 :root[data-theme="dark"] {
@@ -39,19 +41,18 @@ body {
 }
 
 body {
-  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, sans-serif;
   color: $color-black;
 }
 
 textarea,
-input {
+input,
+button {
   font-family: "Pretendard Variable";
   font-size: 14px;
-
   @include placeHolder();
 }
-
-
 
 .container {
   min-height: 100vh;
@@ -85,8 +86,6 @@ button {
     @include font-color-hover();
   }
 }
-
-
 
 input:focus {
   outline: none;

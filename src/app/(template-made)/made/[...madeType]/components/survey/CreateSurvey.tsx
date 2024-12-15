@@ -14,14 +14,12 @@ import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
-import SurveyList 
-  from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
+import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
 import AddQuestionController, {
   RequestSelect,
   RequestText,
 } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
-import usePreview 
-  from "@/app/template/made/[templateType]/_component/Preview/usePreview";
+import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import fetchWithAuth from "@/utils/withRefreshToken";
@@ -29,11 +27,10 @@ import fetchWithAuth from "@/utils/withRefreshToken";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEffect, useState } from "react";
-import surveySchema from 
-  "@/app/(template-made)/made/[...madeType]/components/survey/schema";
-import ThumbNailUploader 
-  from "@/app/(template-made)/components/ThumbNailUploader";
+import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
+import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 import TemplateInputWrapper from "../common/TemplateInputWrapper";
+import InfoSvg from "/public/asset/icon/info.svg";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -44,7 +41,7 @@ export enum SURVEY_EDITOR_TYPE {
 export type RequestSurveyFormData = {
   title: string;
   description: string;
-  thumbnail: string;
+  thumbnail: string | null;
   startDate?: Date | null; // 시작일
   endDate?: Date | null; //종료일
   isGenderCollected: boolean;
@@ -59,7 +56,7 @@ export type RequestSurveyFormData = {
 const defaultValues = {
   title: "",
   description: "",
-  thumbnail: "",
+  thumbnail: null,
   startDate: null,
   endDate: null,
   isGenderCollected: true,
@@ -101,11 +98,7 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const {
-    register,
-    setValue,
-    reset,
-  } = formState;
+  const { register, setValue, reset } = formState;
 
   const editId = qs.get("edit");
 
@@ -224,67 +217,114 @@ export default function CreateSurvey() {
     <>
       <RenderPreview>프리뷰</RenderPreview>
       <div className={classes.madeHeader}>
-        <h1>생성할 템플릿을 <br></br>
-          기재해주세요</h1>
+        {/* <div className={classes.imgWrapper}>
+          <Image
+            src={SurveyIcon}
+            alt="dd"
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </div> */}
+
+        <h1>
+          생성하실 템플릿 서식을 <br></br>
+          기재해주세요
+        </h1>
+        <div className={classes.description}>
+          <InfoSvg />
+          아래의 서식의 정보를 전부 적어주세요!
+        </div>
       </div>
-      
+
       <form
         className={classes.formContainer}
         onSubmit={formState.handleSubmit(onSubmitHandler)}
       >
         <FormProvider {...formState}>
-          {/* 설문조사 제목 */}
-          <TemplateInputWrapper title={"템플릿 제목"}>
-            <FormInput
-              {...register("title")}
-              inputName={"title"}
-              autoComplete="off"
-              placeholder="제목"
-            />
-          </TemplateInputWrapper>
+          <section className={classes.formSection}>
+            <div className={classes.header}>
+              <h3>설문조사 정보</h3>
+              <p className={classes.description}>
+                가장 먼저 노출되는 항목이에요
+              </p>
+            </div>
+            {/* 설문조사 제목 */}
+            <TemplateInputWrapper title={"템플릿 제목"}>
+              <FormInput
+                {...register("title")}
+                inputName={"title"}
+                autoComplete="off"
+                placeholder="제목"
+              />
+            </TemplateInputWrapper>
 
-          {/* 설문조사 설명 */}
-          <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
-            <FormTextarea
-              {...register("description")}
-              textareaName={"description"}
-              placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
-              autoComplete="off"
-            /></TemplateInputWrapper>
+            {/* 설문조사 설명 */}
+            <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
+              <FormTextarea
+                {...register("description")}
+                textareaName={"description"}
+                placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
+                autoComplete="off"
+              />
+            </TemplateInputWrapper>
 
-          {/* 썸네일 */}
-          <TemplateInputWrapper title={"섬네일"}>
-            <ThumbNailUploader />
-          </TemplateInputWrapper>
-          <div className={editPage ? classes.disabled : undefined}>
-            <h2>설정</h2>
+            {/* 썸네일 */}
+            <TemplateInputWrapper title={"섬네일"}>
+              <ThumbNailUploader />
+            </TemplateInputWrapper>
+          </section>
+          <div
+            className={`${classes.gapWrapper} ${
+              editPage ? classes.disabled : undefined
+            }`}
+          >
             {editPage && (
               <p className={classes.info}>
                 진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
               </p>
             )}
-            {/* 나이 별 수집 */}
-            <BooleanGroup<RequestSurveyFormData>
-              groupName={"isAgeCollected"}
-              label="나이 집계 하시겠습니까"
-              description="흠"
-            />
+            <section className={classes.formSection}>
+              <div className={classes.header}>
+                <h3>2. 응답자 필터 설정</h3>
+                <p className={classes.description}>
+                  설문 결과를 더 자세히 분석하기 위한 설정입니다.
+                </p>
+              </div>
+              {/* 나이 별 수집 */}
+              <BooleanGroup<RequestSurveyFormData>
+                label="연령대별 분석을 진행할까요?"
+                groupName={"isAgeCollected"}
+                // description="연령대별 필터링이 가능합니다."
+              />
 
-            {/* 성별 별 수집 */}
-            <BooleanGroup<RequestSurveyFormData>
-              label="성별 집계 하시겠습니까"
-              groupName={"isGenderCollected"}
-            />
-
+              {/* 성별 별 수집 */}
+              <BooleanGroup<RequestSurveyFormData>
+                label="성별별 분석을 진행할까요?"
+                groupName={"isGenderCollected"}
+                // description="성별 필터링이 가능합니다."
+              />
+            </section>
             {/* 기간 */}
             {/* <AddDateRange /> */}
 
             {/* Survey Edit Form + List*/}
 
-            <SurveyList />
+            <section className={classes.formSection}>
+              <div className={classes.header}>
+                <h3>3. 설문 문항 구성</h3>
+                <p className={classes.description}>
+                  설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
+                </p>
+              </div>
+
+              {/* List.. */}
+              <SurveyList />
+
+              {/* 항목 추가 */}
+              <AddQuestionController />
+            </section>
 
             {/* Survey Controller */}
-            <AddQuestionController />
           </div>
           {/* 익명 사용자 - Email 정보동의  */}
           {/* <TemplateAccess /> */}

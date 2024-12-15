@@ -11,7 +11,9 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   const { inputName, ...rest } = props;
-  const { formState: { errors }, } = useFormContext();
+  const {
+    formState: { errors },
+  } = useFormContext();
 
   const err = inputName ? errors[inputName] : false;
 

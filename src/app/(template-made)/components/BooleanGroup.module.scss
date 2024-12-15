@@ -1,0 +1,44 @@
+.booleanContainer {
+  display: flex;
+  flex-direction: column;
+
+  & > div {
+    display: flex;
+    gap: 10px;
+  }
+  span {
+    opacity: 0.4;
+    font-size: 14px;
+  }
+  label {
+    cursor: pointer;
+    border: 1px solid;
+    padding: 0.8rem 1.7rem;
+    display: inline-block;
+    border-radius: 10px;
+    color: #495057;
+    border: 1px solid;
+
+    &.active {
+      background: #495057;
+      color: #fff;
+    }
+
+    input {
+      display: none;
+    }
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    span {
+      color: rgb(74, 80, 85);
+    }
+  }
+}
+
+.description {
+  font-size: 14px;
+  opacity: 0.7;
+}
