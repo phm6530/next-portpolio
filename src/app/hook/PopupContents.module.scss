@@ -19,12 +19,15 @@
   max-width: 800px;
 
   .modalContents {
-    padding: 2rem 1rem;
+    padding: 2rem 1.5rem;
     background: #fff;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
 
     overflow: hidden;
     animation: ani 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s 1 forwards;
 
+    .closeBtnWrapper {
+      // text-align: center;
+    }
   }
 }

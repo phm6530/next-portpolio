@@ -96,8 +96,9 @@ export default function CreateSurvey({
     }, 500);
   }, []);
 
-  const formState = 
-    useForm<AddSurveyFormProps>({ defaultValues: initialFormState, });
+  const formState = useForm<AddSurveyFormProps>({
+    defaultValues: initialFormState,
+  });
 
   const { register } = formState;
 
@@ -114,7 +115,7 @@ export default function CreateSurvey({
       withFetch(async () => {
         return fetch(`${BASE_URL}/api/template`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
       }),
@@ -182,7 +183,6 @@ export default function CreateSurvey({
       >
         <FormProvider {...formState}>
           <div>
-            <h2>설정</h2>
             {/* 연령 별 체크*/}
 
             {/* 기간 */}
@@ -191,7 +191,7 @@ export default function CreateSurvey({
 
           {/* 설문조사 제목 */}
           <FormInput
-            {...register("title", { required: "제목은 필수 입니다!", })}
+            {...register("title", { required: "제목은 필수 입니다!" })}
             inputName={"title"}
             autoComplete="off"
             placeholder="제목"
@@ -199,7 +199,9 @@ export default function CreateSurvey({
 
           {/* 설문조사 설명 */}
           <FormTextarea
-            {...register("description", { required: "간단한 설명을 적어주세요!", })}
+            {...register("description", {
+              required: "간단한 설명을 적어주세요!",
+            })}
             textareaName={"description"}
             placeholder="설문조사에 대한 설명을 적어주세요!"
             autoComplete="off"

@@ -32,7 +32,7 @@ export default function SurveyRadio({
   const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
   const key = watch("templateKey");
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (file: File) => {
       const endPoint = `common/image/${key}`;
       return await ImageUploadHandler(endPoint, file);
@@ -57,7 +57,7 @@ export default function SurveyRadio({
     if (curRadio.length > 2) {
       itemRemove(idx);
     } else {
-      alert("객관식은 최소 2개 이상 항목으로 줄일 수 없음");
+      alert("객관식은 최소 2개 이상 항목으로 줄일 수 없습니다");
       return;
     }
   };
@@ -80,7 +80,7 @@ export default function SurveyRadio({
   };
 
   return (
-    <div>
+    <>
       항목 {optionIdx + 1}
       <input
         type="text"
@@ -104,9 +104,10 @@ export default function SurveyRadio({
       </button>
       {/* Error  */}
       <>
-        <div className={classes.previewContainer}>
-          {isPending && "loading......"}
-          {preView && (
+        {preView && (
+          <div className={classes.previewContainer}>
+            {isPending && "loading......"}
+
             <Image
               src={preView}
               sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
@@ -114,14 +115,14 @@ export default function SurveyRadio({
               style={{ objectFit: "cover" }}
               fill
             />
-          )}
-        </div>
+          </div>
+        )}
         {ref.current?.value}
         <button onClick={clearPreview}>이미지 삭제</button>
       </>
       <div>
         {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
       </div>
-    </div>
+    </>
   );
 }

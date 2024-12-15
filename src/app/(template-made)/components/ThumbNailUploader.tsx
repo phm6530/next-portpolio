@@ -6,6 +6,9 @@ import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
 import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
+import Upload from "/public/asset/icon/upload.svg";
+import FormToolButton from "./FormToolButton";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 /**
  * template_type : 템플릿 종류
@@ -13,7 +16,12 @@ import { FetchTemplateForm } from "@/types/template.type";
  */
 export default function ThumbNailUploader() {
   const fileRef = useRef<HTMLInputElement>(null);
-  const { setValue, watch } = useFormContext<FetchTemplateForm>();
+  const {
+    setValue,
+    watch,
+    register,
+    formState: { errors },
+  } = useFormContext<FetchTemplateForm>();
   const [imgPending, setImgPending] = useState<boolean>(false);
   const [imgError, setImgError] = useState<boolean>(false);
   const key = watch("templateKey");
@@ -96,15 +104,23 @@ export default function ThumbNailUploader() {
           </>
         )}
       </>
+
       <div className={classes.buttonWrapper}>
-        <button type="button" onClick={() => fileRef.current?.click()}>
+        <FormToolButton
+          clickEvent={() => fileRef.current?.click()}
+          Svg={Upload}
+        >
           썸네일 업로드하기
-        </button>
+        </FormToolButton>
+
         <UnSplashThumbNail
           setImgPending={setImgPending}
           setImgError={setImgError}
         />
       </div>
+      {errors["thumbnail"] && (
+        <FormRegisterError errorMsg={errors["thumbnail"]?.message} />
+      )}
       {/* <button type="button" onClick={() => setThumNailEditor(true)}>
         추천 썸네일 이미지
       </button> */}
