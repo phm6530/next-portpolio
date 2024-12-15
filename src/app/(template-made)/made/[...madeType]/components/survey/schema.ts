@@ -3,13 +3,13 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
 const RequestTextSchema = z.object({
-  label: z.string().min(1, "질문 라벨은 필수입니다."),
+  label: z.string().min(1, "질문 제목은 필수입니다"),
   type: z.literal(QUESTION_TYPE.TEXT),
   img: z.string().nullable().optional(),
 });
 
 const RequestSelectSchema = z.object({
-  label: z.string().min(1, "질문 라벨은 필수입니다."),
+  label: z.string().min(1, "질문 제목은 필수입니다"),
   type: z.literal(QUESTION_TYPE.SELECT),
   options: z
     .array(
@@ -44,7 +44,7 @@ const surveySchema = z.object({
   thumbnail: z
     .string()
     .nullable()
-    .refine((val) => val !== null, "썸네일을 선택해주세요"),
+    .refine((val) => val !== null, "썸네일을 업로드하거나 검색등록 해주세요!"),
   startDate: z.string().nullable().optional(),
   endDate: z.string().nullable().optional(),
   isGenderCollected: z.boolean().optional(),

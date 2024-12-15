@@ -7,6 +7,7 @@ import ImageUploadHandler from "@/utils/img-uploader";
 import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
 import Upload from "/public/asset/icon/upload.svg";
+import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 
@@ -108,7 +109,7 @@ export default function ThumbNailUploader() {
       <div className={classes.buttonWrapper}>
         <FormToolButton
           clickEvent={() => fileRef.current?.click()}
-          Svg={Upload}
+          Svg={imgUpload}
         >
           썸네일 업로드하기
         </FormToolButton>

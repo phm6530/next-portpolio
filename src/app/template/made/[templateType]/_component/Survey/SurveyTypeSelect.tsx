@@ -1,4 +1,6 @@
-import QuestionItemHeader from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
+import QuestionItemHeader, {
+  QuestionType,
+} from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import SurveyRadio from "@/app/template/made/[templateType]/_component/Survey/SurveyRadio";
@@ -10,6 +12,8 @@ import {
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
+import classes from "./SurveyTypeSelect.module.scss";
+import FormRegisterError from "@/components/Error/FormRegisterError";
 
 export default function SurveyTypeSelect({
   surveyDelete,
@@ -37,57 +41,64 @@ export default function SurveyTypeSelect({
     name: `questions.${surveyIdx}.options`,
   });
 
-  //숫자 2~20
-  //   const validateNumber = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //     const value = parseInt(e.target.value, 10);
-  //     if (value < 2 || value > 20) {
-  //       alert("값은 2 이상 20 이하여야 합니다.");
-
-  //       //초기화
-  //       e.target.value = "";
-  //       return;
-  //     }
-  //   };
-
   const handleArrAppend = () => {
     append({ label: "", value: "", type: QUESTION_TYPE.SELECT });
   };
 
+  const confimDelete = () => {
+    if (confirm(`${surveyIdx + 1}번 문항을 삭제하시겠습니까?`)) {
+      surveyDelete(surveyIdx);
+    }
+  };
+
   return (
     <QuestionContainer>
-      <QuestionItemHeader QuestionNum={surveyIdx + 1}>
+      <QuestionItemHeader
+        type={QuestionType.MULTIPLE_CHOICE}
+        QuestionNum={surveyIdx + 1}
+      >
         <input
           type="text"
           autoComplete="off"
           {...register(`questions.${surveyIdx}.label`)}
-          placeholder="문항 제목을 입력해주세요."
+          placeholder="질문 제목을 입력해주세요."
         />
+        <button className={classes.delete} type="button" onClick={confimDelete}>
+          삭제
+        </button>
       </QuestionItemHeader>
+
       {/* 제목에러 */}
-      <div>
-        {errors.questions?.[surveyIdx]?.label?.message as string | null}
-      </div>
-      <div></div>
-      {/* Radio - List */}
-      {fields!.map((_, optionIdx) => {
-        return (
-          <div key={`option-${optionIdx}`}>
+      {errors.questions?.[surveyIdx]?.label?.message && (
+        <div>
+          <FormRegisterError
+            errorMsg={errors.questions?.[surveyIdx]?.label?.message}
+          />
+        </div>
+      )}
+
+      <div className={classes.optionsWrapper}>
+        {/* Radio - List */}
+        {fields!.map((_, optionIdx) => {
+          return (
             <SurveyRadio
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}
               itemRemove={itemRemove}
             />
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+
       {/* 항목추가 */}
-      <button type="button" onClick={handleArrAppend}>
-        Add
+      <button
+        className={classes.AddBtn}
+        type="button"
+        onClick={handleArrAppend}
+      >
+        <span>+</span> 항목추가
       </button>
       {/* Radio 전체삭제  */}
-      <button type="button" onClick={() => surveyDelete(surveyIdx)}>
-        삭제
-      </button>
     </QuestionContainer>
   );
 }

@@ -217,15 +217,6 @@ export default function CreateSurvey() {
     <>
       <RenderPreview>프리뷰</RenderPreview>
       <div className={classes.madeHeader}>
-        {/* <div className={classes.imgWrapper}>
-          <Image
-            src={SurveyIcon}
-            alt="dd"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </div> */}
-
         <h1>
           생성하실 템플릿 서식을 <br></br>
           기재해주세요
@@ -329,9 +320,14 @@ export default function CreateSurvey() {
           {/* 익명 사용자 - Email 정보동의  */}
           {/* <TemplateAccess /> */}
         </FormProvider>
-        <Button.submit type="submit" disabled={isPending}>
-          설문조사 생성하기
-        </Button.submit>
+
+        <div className={classes.buttonsWrapper}>
+          <button type="button">미리보기</button>
+          <Button.submit type="submit" disabled={isPending}>
+            설문조사 생성하기
+          </Button.submit>
+        </div>
+
         {/* <button type="button" onClick={tempSave}>
           임시저장
         </button> */}
