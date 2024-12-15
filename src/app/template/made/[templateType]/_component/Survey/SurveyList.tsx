@@ -71,7 +71,7 @@ export default function SurveyList() {
             );
           }
         })}
-        {errors["questions"] && (
+        {(errors["questions"]?.length || 0) === 0 && (
           <FormRegisterError errorMsg={errors["questions"]?.message} />
         )}
 

@@ -11,6 +11,13 @@ import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import classes from "./SurveyRadio.module.scss";
+import OptionContainer from "@/app/(template-made)/components/QuestionOption/OptionContainer";
+import OptionButton from "@/app/(template-made)/components/QuestionOption/OptionButton";
+import Upload from "/public/asset/icon/upload.svg";
+import Delete from "/public/asset/icon/delete.svg";
+import imgUpload from "/public/asset/icon/imgUpload.svg";
+import FormRegisterError from "@/components/Error/FormRegisterError";
+import FormInput from "@/components/ui/FormElement/FormInput";
 
 export default function SurveyRadio({
   surveyIdx,
@@ -81,48 +88,64 @@ export default function SurveyRadio({
 
   return (
     <>
-      항목 {optionIdx + 1}
-      <input
-        type="text"
-        {...register(`questions.${surveyIdx}.options.${optionIdx}.value`, {
-          required: "선택 항목을 입력해주세요",
-        })}
-        autoComplete="off"
-      />
-      <input
-        type="file"
-        ref={ref}
-        onChange={imgPreview}
-        className="hidden"
-        autoComplete="off"
-      />
-      <button type="button" onClick={imgHandler}>
-        사진
-      </button>
-      <button type="button" onClick={() => removeOptions(optionIdx)}>
-        삭제!
-      </button>
-      {/* Error  */}
-      <>
-        {preView && (
-          <div className={classes.previewContainer}>
-            {isPending && "loading......"}
+      <OptionContainer>
+        <input
+          type="file"
+          ref={ref}
+          onChange={imgPreview}
+          className="hidden"
+          autoComplete="off"
+        />
 
-            <Image
-              src={preView}
-              sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-              alt="preview"
-              style={{ objectFit: "cover" }}
-              fill
-            />
-          </div>
-        )}
-        {ref.current?.value}
-        <button onClick={clearPreview}>이미지 삭제</button>
-      </>
-      <div>
-        {optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message}
-      </div>
+        <input
+          type="text"
+          {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
+          autoComplete="off"
+          placeholder={`항목 ${optionIdx + 1}`}
+        />
+
+        <div className={classes.buttonsWrapper}>
+          {/* upload */}
+          <OptionButton
+            Svg={imgUpload}
+            alt="업로드 버튼"
+            onClick={imgHandler}
+          />
+          <OptionButton
+            Svg={Delete}
+            alt="삭제 버튼"
+            onClick={() => removeOptions(optionIdx)}
+          />
+        </div>
+
+        {/* Error  */}
+        <>
+          {preView && (
+            <div className={classes.previewContainer}>
+              {isPending && "loading......"}
+
+              <Image
+                src={preView}
+                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                alt="preview"
+                style={{ objectFit: "cover" }}
+                fill
+              />
+            </div>
+          )}
+          {/* {ref.current?.value} */}
+          {/* <button onClick={clearPreview}>이미지 삭제</button> */}
+        </>
+      </OptionContainer>
+      {optionError?.[surveyIdx]?.options?.[optionIdx] && (
+        <div>
+          <FormRegisterError
+            errorMsg={
+              optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message
+            }
+          />
+        </div>
+      )}
     </>
   );
 }

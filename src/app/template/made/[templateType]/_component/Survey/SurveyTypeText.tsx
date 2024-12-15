@@ -11,7 +11,9 @@ import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
-import QuestionItemHeader from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
+import QuestionItemHeader, {
+  QuestionType,
+} from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -57,8 +59,10 @@ export default function SurveyTypeText({
   const clearPreview = () => {};
 
   return (
-    <QuestionContainer>
-      <QuestionItemHeader QuestionNum={surveyIdx + 1}>
+    <>
+      <QuestionContainer>
+        {" "}
+        {/* img Hidden */}
         <input
           type="file"
           className="hidden"
@@ -66,40 +70,49 @@ export default function SurveyTypeText({
           autoComplete="off"
           ref={imgRef}
         />
-      </QuestionItemHeader>
-
-      {(isPending || isSuccess) && (
-        <>
-          <div className={classes.previewContainer}>
-            {isPending && "loading......"}
-            {isSuccess && preView && (
-              <Image
-                src={preView}
-                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                alt="preview"
-                style={{ objectFit: "cover" }}
-                fill
-              />
-            )}
-          </div>
-          {imgRef.current?.value}
-          <button onClick={clearPreview}>이미지 삭제</button>
-        </>
-      )}
-      <input type="text" {...register(`questions.${surveyIdx}.label`)} />
-      <button type="button" onClick={imgHandler}>
-        사진
-      </button>
-      {/* delete */}
-      <button type="button" onClick={() => remove(surveyIdx)}>
-        삭제
-      </button>
-      <div>
-        {
-          (errors.questions as unknown as { label?: FieldError }[])?.[surveyIdx]
-            ?.label?.message
-        }
-      </div>
-    </QuestionContainer>
+        <QuestionItemHeader
+          type={QuestionType.SHORT_ANSWER}
+          QuestionNum={surveyIdx + 1}
+        >
+          <input
+            type="text"
+            {...register(`questions.${surveyIdx}.label`)}
+            placeholder="질문 제목을 입력해주세요."
+          />{" "}
+          {/* delete */}
+          <button type="button" onClick={() => remove(surveyIdx)}>
+            삭제
+          </button>
+        </QuestionItemHeader>
+        {(isPending || isSuccess) && (
+          <>
+            <div className={classes.previewContainer}>
+              {isPending && "loading......"}
+              {isSuccess && preView && (
+                <Image
+                  src={preView}
+                  sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
+                  alt="preview"
+                  style={{ objectFit: "cover" }}
+                  fill
+                />
+              )}
+            </div>
+            {imgRef.current?.value}
+            <button onClick={clearPreview}>이미지 삭제</button>
+          </>
+        )}
+        <button type="button" onClick={imgHandler}>
+          사진
+        </button>
+        <div>
+          {
+            (errors.questions as unknown as { label?: FieldError }[])?.[
+              surveyIdx
+            ]?.label?.message
+          }
+        </div>
+      </QuestionContainer>
+    </>
   );
 }

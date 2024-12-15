@@ -47,6 +47,14 @@
   }
 }
 
+.buttonsWrapper {
+  margin-top: 2rem;
+  display: flex;
+  button {
+    flex: 1;
+  }
+}
+
 .gapWrapper {
   display: flex;
   flex-direction: column;

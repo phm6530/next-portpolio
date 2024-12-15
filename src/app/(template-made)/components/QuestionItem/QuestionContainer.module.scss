@@ -1,6 +1,58 @@
 .questionArticle {
-  padding: 16px 20px;
+  padding: 1.4rem 1.4rem;
   border-radius: 16px;
   border: 1px solid #e5eaff;
   box-shadow: 0px 2px 8px 0px #4950570f;
+
+  &:focus-within {
+    outline: 2px solid #8b7bcd;
+  }
+
+  .headInputWrapper {
+    display: flex;
+    align-items: center;
+
+    h1 {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .tag {
+    font-size: 13px;
+    color: #6d5cff;
+    border: 1px solid;
+    padding: 1rem;
+    display: inline-block;
+  }
 }
+
+.header {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  margin-bottom: 1rem;
+  // align-items: center;
+  h1 {
+    font-size: 20px;
+  }
+  input {
+    font-size: 20px;
+    border: 0;
+    flex: 1;
+  }
+}
+
+// .FormInput {
+//   @include inputStyles();
+//   border: 1px solid rgb(208, 218, 228);
+//   @include FouceInput(#7975e5, 1px);
+// }
+
+// .error {
+//   border: 1px solid rgb(255, 123, 123);
+
+//   &:focus {
+//     border: 1px solid rgb(255, 76, 5);
+//     background: rgb(255, 76, 5, 0.3);
+//   }
+// }
