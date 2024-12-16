@@ -33,7 +33,7 @@ export type SurveyText = {
 } & SurveyType;
 
 //객관식 타입
-export type SurveyRadioProps = {
+export type SurveyOptionItemProps = {
   id: number;
   label: string;
   options: {
@@ -50,7 +50,7 @@ export type AddSurveyFormProps = {
   thumbnail: string;
   genderChk: IuputBoolean;
   ageChk: IuputBoolean;
-  items: (SurveyText | SurveyRadioProps)[];
+  items: (SurveyText | SurveyOptionItemProps)[];
 
   //기한
   dateRange: Date[] | null;

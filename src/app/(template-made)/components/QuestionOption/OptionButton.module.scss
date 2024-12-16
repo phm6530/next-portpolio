@@ -2,12 +2,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   svg {
     width: 17px;
     height: 17px;
-    fill: #647487;
+    fill: #a7b9cd;
   }
   g {
-    fill: #647487;
+    fill: #a7b9cd;
+  }
+
+  &:hover {
+    svg,
+    g {
+      fill: #647487;
+    }
   }
 }
