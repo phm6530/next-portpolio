@@ -7,12 +7,12 @@ export default function TemplateStatus({
   startDate,
   endDate,
   createdAt,
-  maxGroup
+  maxGroup,
 }: {
   startDate: string | null;
   endDate: string | null;
   createdAt: string;
-  maxGroup? : RespondentsAndMaxGroup["maxGroup"];
+  maxGroup?: RespondentsAndMaxGroup["maxGroup"];
 }) {
   const todayCompare = DateCompareToday();
 
@@ -32,16 +32,18 @@ export default function TemplateStatus({
     }
   };
 
-  const GenderMapper = (genderGroup :GENDER_GROUP) =>{
-    switch (genderGroup){
-      case GENDER_GROUP.FEMALE :  
+  const GenderMapper = (genderGroup: GENDER_GROUP) => {
+    switch (genderGroup) {
+      case GENDER_GROUP.FEMALE:
         return "여자";
-      case GENDER_GROUP.MALE :
+      case GENDER_GROUP.MALE:
         return "남자";
-      default :
-        return null as never; 
+      default:
+        return null as never;
     }
   };
+
+  console.log(maxGroup?.genderGroup);
 
   return (
     <>
@@ -50,16 +52,18 @@ export default function TemplateStatus({
         {todayCompare.isNew(createdAt) && (
           <div className={classes.new}>New</div>
         )}
-        {curState(startDate, endDate)}      
 
-        {maxGroup && 
-          maxGroup.maxCnt !== null && maxGroup.maxCnt >= 1 && 
-            <div className={classes.maleMaxGroup}>{maxGroup.ageGroup}대 {GenderMapper(maxGroup.genderGroup as GENDER_GROUP)} 선호</div> 
-          
-        }
-      
+        {curState(startDate, endDate)}
+
+        {maxGroup?.maxCnt && (maxGroup?.ageGroup || maxGroup?.genderGroup) && (
+          <div className={classes.maleMaxGroup}>
+            {maxGroup.ageGroup && `${maxGroup.ageGroup}대`}
+            {maxGroup.genderGroup &&
+              `${GenderMapper(maxGroup.genderGroup as GENDER_GROUP)}`}{" "}
+            선호
+          </div>
+        )}
       </div>
-
     </>
   );
 }

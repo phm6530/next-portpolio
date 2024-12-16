@@ -1,0 +1,21 @@
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    fill: #a7b9cd;
+  }
+  g {
+    fill: #a7b9cd;
+  }
+
+  &:hover {
+    svg,
+    g {
+      fill: #647487;
+    }
+  }
+}

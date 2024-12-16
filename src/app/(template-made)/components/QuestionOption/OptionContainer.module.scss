@@ -1,0 +1,22 @@
+@import "mixin";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(208, 218, 228);
+  border-radius: 5px;
+  overflow: hidden;
+  &:focus-within {
+    border: 1px solid #7975e5;
+    background: #f3f0ff;
+  }
+
+  input {
+    font-size: 16px;
+    border: 0;
+    flex: 1;
+    height: 40px;
+    text-indent: 0.5rem;
+    background: transparent;
+  }
+}

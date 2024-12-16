@@ -24,13 +24,15 @@ export const PopupComponent: React.FC<PopupComponentProps> = React.memo(
           >
             <div className={classes.modalContents}>
               {children}
-              <button
-                onClick={() => {
-                  closeModal();
-                }}
-              >
-                닫기
-              </button>
+              <div className={classes.closeBtnWrapper}>
+                <button
+                  onClick={() => {
+                    closeModal();
+                  }}
+                >
+                  닫기
+                </button>
+              </div>
             </div>
           </div>,
           document.getElementById("modal-portal") as HTMLDivElement

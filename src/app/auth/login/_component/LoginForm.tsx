@@ -36,9 +36,7 @@ export default function LoginForm() {
       return await requestHandler<SignUpResponse>(async () => {
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json", },
           body: JSON.stringify(data),
           credentials: "include", // AccessToken
           // credentials: "include",
@@ -67,9 +65,7 @@ export default function LoginForm() {
   });
 
   //zodResolver
-  const method = useForm<SignIn>({
-    resolver: zodResolver(schema),
-  });
+  const method = useForm<SignIn>({ resolver: zodResolver(schema), });
 
   //제출
   const onSubmitHandler = (data: SignIn) => {
@@ -111,12 +107,11 @@ export default function LoginForm() {
             />
          
           </div>
- 
+        
           <Button.submit disabled={isPending}>로그인</Button.submit>
-      
           <div className={classes.passwordRecovery}>
-            <span className={classes.button} onClick={()=>router.push("/auth/signup")} >회원가입</span>
-            <span>비밀번호를 잊으셨나요?</span>
+            <span>비밀번호 찾기</span>
+            <span onClick={()=>router.push("/auth/signup")} >회원가입</span>
           </div>
           {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>

@@ -115,9 +115,7 @@ export default function CreateSurvey({
       withFetch(async () => {
         return fetch(`${BASE_URL}/api/template`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
       }),
@@ -185,7 +183,6 @@ export default function CreateSurvey({
       >
         <FormProvider {...formState}>
           <div>
-            <h2>설정</h2>
             {/* 연령 별 체크*/}
 
             {/* 기간 */}
@@ -194,9 +191,7 @@ export default function CreateSurvey({
 
           {/* 설문조사 제목 */}
           <FormInput
-            {...register("title", {
-              required: "제목은 필수 입니다!",
-            })}
+            {...register("title", { required: "제목은 필수 입니다!" })}
             inputName={"title"}
             autoComplete="off"
             placeholder="제목"

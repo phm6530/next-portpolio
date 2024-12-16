@@ -1,0 +1,29 @@
+.formToolbutton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fff;
+  padding: 1rem;
+  letter-spacing: -0.5px;
+  border: 1px solid #8d94af;
+  box-shadow: 0px 2px 8px 0px #4950570f;
+  color: #495057;
+  border-radius: 8px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: #495057;
+  }
+
+  &:hover {
+    color: #b67ad8;
+    border: 1px solid #b67ad8;
+
+    svg {
+      fill: #b67ad8;
+    }
+  }
+}

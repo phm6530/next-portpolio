@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef } from "react";
 import classes from "./FormInput.module.scss";
 import { useFormContext } from "react-hook-form";
 import FormRegisterError from "@/components/Error/FormRegisterError";

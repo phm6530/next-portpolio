@@ -12,6 +12,7 @@ import NavUserProfile from "@/components/Header/components/NavUserProfile";
 import { QUERY_KEY } from "@/types/constans";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import { User } from "@/types/auth.type";
+import Logo from "../logo/logo";
 
 // type ExtendNumber<T extends number> = T;
 // type ExtendLiteral<T extends 0> = T;
@@ -58,8 +59,7 @@ export default function GlobalNav() {
       return requestHandler(async () => {
         return await fetch(`${BASE_NEST_URL}/auth/logout`, {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json", // Content-Type 설정 필요
+          headers: { "Content-Type": "application/json", // Content-Type 설정 필요
           },
           credentials: "include", // HttpOnly 리프래시  토큰 삭제를 위해 설정했음
         });
@@ -70,16 +70,12 @@ export default function GlobalNav() {
       store.setRemoveUser(); // 유저 정보 삭제
       SessionStorage.removeAccessToken();
       
-      queryClient.removeQueries({
-        queryKey: [QUERY_KEY.USER_DATA],
-      }); //유저데이터 삭제
+      queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] }); //유저데이터 삭제
 
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEY.USER_DATA] }); 
 
       //내 템플릿 캐싱 제거 
-      queryClient.removeQueries({
-        queryKey: [QUERY_KEY.MY_CONTENTS],
-      }); 
+      queryClient.removeQueries({ queryKey: [QUERY_KEY.MY_CONTENTS], }); 
       
       router.refresh(); // 서버 컴포넌트 새로고침
     },
@@ -93,8 +89,8 @@ export default function GlobalNav() {
       <header className={classes.header}>
         <Grid.center>
           <nav className={classes.nav}>
-            <div className="logo">
-              <Link href={"/list"}>Project..D</Link>
+            <div className={classes.logoWrapper}>
+              <Logo link/>
             </div>
             <div className={classes.contentsLink}>
               {/* <Link href={"/about"}>사용법</Link> */}

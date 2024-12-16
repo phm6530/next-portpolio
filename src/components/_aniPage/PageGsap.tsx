@@ -39,7 +39,9 @@ export default function PageGsap({
               ease: "back.inOut",
             }),
           onLeave: (batch) =>
-            gsap.set(batch, { opacity: 0, y: -100, overwrite: true }),
+            gsap.set(batch, {
+              opacity: 0, y: -100, overwrite: true 
+            }),
           start: "top 90%",
         });
       }

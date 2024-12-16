@@ -1,0 +1,24 @@
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  button {
+    padding: 5px;
+  }
+}
+
+.imageWrapper {
+  padding: 1rem;
+  background: #fafafa;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgb(208, 218, 228);
+  border-bottom: 1px solid rgb(208, 218, 228);
+}

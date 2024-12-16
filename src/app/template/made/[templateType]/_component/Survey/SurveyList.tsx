@@ -5,14 +5,22 @@ import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import classes from "./SurveyList.module.scss";
+import FormRegisterError from "@/components/Error/FormRegisterError";
+import QuestionListWrapper from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyList() {
-  const { control, watch } = useFormContext<RequestSurveyFormData>();
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext<RequestSurveyFormData>();
 
   const { remove } = useFieldArray({
     control,
     name: "questions",
   });
+
+  console.log("questions :::", watch());
 
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
@@ -22,17 +30,27 @@ export default function SurveyList() {
     return questionsWatch.filter((item) => item.type === type).length;
   };
 
-  // //img Params
-  // const params: surveyParams = useParams();
-  // const [_, imgId] = params.templateType;
+  console.log(errors);
 
   return (
-    <>
-      <p>총 항목 : {questionsWatch.length}</p>
-      <p>주관식 항목 : {cntType(QUESTION_TYPE.TEXT)}</p>
-      <p>객관식 항목 : {cntType(QUESTION_TYPE.SELECT)}</p>
+    <div>
+      <div className={classes.questionsStatus}>
+        <div>
+          총 항목{" "}
+          <span className={classes.QuestionsCnt}>{questionsWatch.length}</span>
+          개
+        </div>
 
-      <div className={classes.list}>
+        <div>
+          주관식 항목 <span>{cntType(QUESTION_TYPE.TEXT)}</span>개
+        </div>
+
+        <div>
+          객관식 항목 <span>{cntType(QUESTION_TYPE.SELECT)}</span>개
+        </div>
+      </div>
+
+      <div className={classes.createQuestionsList}>
         {questionsWatch.map((field, qsIdx) => {
           if (field.type === QUESTION_TYPE.TEXT) {
             return (
@@ -45,20 +63,24 @@ export default function SurveyList() {
           } else if (field.type === QUESTION_TYPE.SELECT) {
             //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
             return (
-              <div key={qsIdx}>
-                <h1> Q.{qsIdx + 1} </h1>
-                <SurveyTypeSelect
-                  surveyDelete={remove}
-                  surveyIdx={qsIdx}
-                  // imgId={imgId}
-                />
-              </div>
+              <SurveyTypeSelect
+                key={`typeSelect-${qsIdx}`}
+                surveyDelete={remove}
+                surveyIdx={qsIdx}
+                // imgId={imgId}
+              />
             );
           }
         })}
 
-        {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."}
+        {errors["questions"]?.message && (
+          <QuestionListWrapper>
+            <FormRegisterError errorMsg={errors["questions"]?.message} />
+          </QuestionListWrapper>
+        )}
+
+        {/* {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."} */}
       </div>
-    </>
+    </div>
   );
 }

@@ -3,6 +3,12 @@ import { useFormContext, useFieldArray } from "react-hook-form";
 import classes from "./AddQuestionController.module.scss";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
+import Lists from "/public/asset/icon/lists.svg";
+import pen from "/public/asset/icon/pen.svg";
+import FormToolButton from "@/app/(template-made)/components/FormToolButton";
+import Upload from "/public/asset/icon/upload.svg";
+import select from "/public/asset/icon/select.svg";
+import checkbox from "/public/asset/icon/checkbox.svg";
 
 export type RequestSelectOption = {
   label: string;
@@ -59,20 +65,19 @@ export default function AddQuestionController() {
 
   return (
     <div className={classes.controllerWrapper}>
-      <div className={classes.buttonWrap}>
-        <button type="button" onClick={() => addSurveyItem(QUESTION_TYPE.TEXT)}>
-          + 주관식 추가
-        </button>
-      </div>
+      <FormToolButton
+        clickEvent={() => addSurveyItem(QUESTION_TYPE.TEXT)}
+        Svg={pen}
+      >
+        주관식 추가
+      </FormToolButton>
 
-      <div className={classes.buttonWrap}>
-        <button
-          type="button"
-          onClick={() => addSurveyItem(QUESTION_TYPE.SELECT)}
-        >
-          + 객관식 추가
-        </button>
-      </div>
+      <FormToolButton
+        clickEvent={() => addSurveyItem(QUESTION_TYPE.SELECT)}
+        Svg={checkbox}
+      >
+        객관식 추가
+      </FormToolButton>
     </div>
   );
 }

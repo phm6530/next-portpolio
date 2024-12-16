@@ -3,8 +3,20 @@
   height: auto;
   border-radius: 1rem;
   overflow: hidden;
-  max-width: 500px;
-  margin: 1rem 0;
+  max-width: 300px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 50%;
+  padding-bottom: 30%;
+}
+
+.buttonWrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.thumbnailWrapper {
+  border: 1px solid rgb(208, 218, 228);
+  max-width: 400px;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  overflow: hidden;
 }

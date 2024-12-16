@@ -1,0 +1,35 @@
+.AddBtn {
+  margin-top: 1rem;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  color: #576e8b;
+  span {
+    background: #f3f0f1;
+    color: #4f637b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 10px 0;
+
+  &.pictureGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+}
+
+.delete {
+  color: #647487;
+}

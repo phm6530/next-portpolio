@@ -16,13 +16,13 @@
 .submitButton {
   color: #fff;
   padding: 1rem 1.5rem;
-  box-shadow: 5px 14px 24.9px rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  // margin-top: 2em;
+  box-shadow: 5px 14px 29px rgb(100 63 255 / 25%);
+  border-radius: 6px;
   font-size: 14px;
+  background: #6f5bc5;
   @include disabledButton();
-  // @include btn-hover(#5d5bf5);
-  background: linear-gradient(180deg, #7b69e7 0%, #7498de 100%, #c981cb 100.01%);
+  @include btn-hover(#6D5CFF);
+  // background: linear-gradient(180deg, #7b69e7 0%, #7498de 100%, #c981cb 100.01%);
 }
 
 .closeButton {

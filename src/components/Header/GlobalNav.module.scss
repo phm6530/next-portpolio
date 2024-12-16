@@ -1,5 +1,11 @@
 @import "mixin";
 
+.logoWrapper {
+  max-width: 80px;
+  width: 100%;
+
+}
+
 .header {
   position: fixed;
   width: 100%;
@@ -10,15 +16,18 @@
 
   backdrop-filter: blur(20px);
   border-bottom: 1px solid #cbd5e1;
+
   nav {
     height: 100%;
     display: flex;
     justify-content: space-between;
+
     div {
       gap: 30px;
       display: flex;
       align-items: center;
     }
+
     .contentsLink {
       display: flex;
       gap: 30px;
@@ -34,6 +43,7 @@
         margin-bottom: 1px;
       }
     }
+
     a {
       text-decoration: none;
       color: var(--text-color);
