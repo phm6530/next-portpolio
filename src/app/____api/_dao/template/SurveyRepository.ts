@@ -1,4 +1,7 @@
-import { AddSurveyFormProps, SurveyRadioProps } from "@/types/templateSurvey";
+import {
+  AddSurveyFormProps,
+  SurveyOptionItemProps,
+} from "@/types/templateSurvey";
 import { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 // 응답 갯수 가져오기
@@ -65,7 +68,7 @@ export const insertQuestion = async (
     if (type === "select") {
       const ID_question = rows.insertId;
 
-      for (const option of options as SurveyRadioProps["options"]) {
+      for (const option of options as SurveyOptionItemProps["options"]) {
         const { idx, value, img } = option;
 
         const sql = `

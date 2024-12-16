@@ -3,7 +3,7 @@ import QuestionItemHeader, {
 } from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
-import SurveyRadio from "@/app/template/made/[templateType]/_component/Survey/SurveyRadio";
+import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Survey/SurveyOptionItem";
 
 import { QUESTION_TYPE } from "@/types/survey.type";
 
@@ -18,11 +18,9 @@ import FormRegisterError from "@/components/Error/FormRegisterError";
 export default function SurveyTypeSelect({
   surveyDelete,
   surveyIdx,
-}: // imgId,
-{
+}: {
   surveyDelete: UseFieldArrayRemove;
   surveyIdx: number;
-  // imgId: string;
 }) {
   //FormContext
   const {
@@ -81,15 +79,16 @@ export default function SurveyTypeSelect({
         </div>
       )}
 
+      {/* Option에 img가 있다면 grid 변경하기 */}
       <div
         className={`${classes.optionsWrapper} ${
-          isPicture ? classes.pictrueGrid : undefined
+          isPicture ? classes.pictureGrid : undefined
         }`}
       >
         {/* Radio - List */}
         {fields!.map((_, optionIdx) => {
           return (
-            <SurveyRadio
+            <SurveyOptionItem
               key={`${surveyIdx}-option-${optionIdx}`}
               surveyIdx={surveyIdx}
               optionIdx={optionIdx}

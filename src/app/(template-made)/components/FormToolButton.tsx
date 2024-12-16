@@ -6,7 +6,7 @@ export default function FormToolButton({
   children,
 }: {
   clickEvent: () => any;
-  Svg: React.ComponentType;
+  Svg?: React.ComponentType;
   children: string;
 }) {
   return (
@@ -16,7 +16,7 @@ export default function FormToolButton({
       className={classes.formToolbutton}
     >
       {/* svg Icon */}
-      <Svg /> {children}
+      {Svg && <Svg />} {children}
     </button>
   );
 }

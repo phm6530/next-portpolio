@@ -4,8 +4,11 @@ import classes from "./AddQuestionController.module.scss";
 import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import Lists from "/public/asset/icon/lists.svg";
-import pencil from "/public/asset/icon/pencil.svg";
+import pen from "/public/asset/icon/pen.svg";
 import FormToolButton from "@/app/(template-made)/components/FormToolButton";
+import Upload from "/public/asset/icon/upload.svg";
+import select from "/public/asset/icon/select.svg";
+import checkbox from "/public/asset/icon/checkbox.svg";
 
 export type RequestSelectOption = {
   label: string;
@@ -64,14 +67,14 @@ export default function AddQuestionController() {
     <div className={classes.controllerWrapper}>
       <FormToolButton
         clickEvent={() => addSurveyItem(QUESTION_TYPE.TEXT)}
-        Svg={pencil}
+        Svg={pen}
       >
         주관식 추가
       </FormToolButton>
 
       <FormToolButton
         clickEvent={() => addSurveyItem(QUESTION_TYPE.SELECT)}
-        Svg={Lists}
+        Svg={checkbox}
       >
         객관식 추가
       </FormToolButton>

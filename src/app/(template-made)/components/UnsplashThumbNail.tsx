@@ -9,6 +9,8 @@ import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import Search from "/public/asset/icon/search.svg";
 import FormToolButton from "./FormToolButton";
+import { resolve } from "path";
+import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 
 type UnsplashApi = {
   total: number;
@@ -46,15 +48,12 @@ function UnSplashContents({
   setImgError: Dispatch<SetStateAction<boolean>>;
   closeModal: () => void;
 }) {
-  const ref = useRef<HTMLInputElement>(null);
-
   const { setValue } = useFormContext<RequestSurveyFormData>();
 
   const {
     handleSubmit,
     register,
     getValues,
-    watch,
     formState: { errors, touchedFields },
   } = useForm<SearchForm>({ defaultValues: { keyword: "" } });
 
@@ -66,6 +65,7 @@ function UnSplashContents({
     mutationFn: async (searchText: string) => {
       return requestHandler(async () => {
         const encodingText = encodeURI(searchText);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return fetch(
           `https://api.unsplash.com/search/photos?query=${encodingText}&client_id=PIkUJ8qatZ2000yVp0DzplIL15unNYVPJ3GsjXtWDSE&per_page=30&page=1`,
           { cache: "no-cache" }
@@ -95,9 +95,6 @@ function UnSplashContents({
     closeModal();
   };
 
-  console.log(data);
-  console.log("touched :", touchedFields);
-
   return (
     <div className={classes.wrap}>
       <div className={classes.titleWrapper}>
@@ -126,40 +123,55 @@ function UnSplashContents({
         </button>
       </div>
 
-      {errors && (
+      {Object.values(errors)[0]?.message && (
         <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />
       )}
       <div>
-        {touchedFields?.keyword && (
-          <>
-            {isPending && "loading....."}
-            {data?.total !== 0 ? (
-              <div className={classes.slugItemsWrap}>
-                {data?.results.map((e, key) => {
-                  return (
-                    <div
-                      className={classes.slugItem}
-                      key={`${key}-wrap`}
-                      onClick={() => selectSlug(e.urls.regular)}
-                    >
-                      <Image
-                        src={e.urls.regular}
-                        alt={e.alternative_slugs.ko}
-                        style={{ objectFit: "cover" }}
-                        fill
-                        sizes="(max-width : 768px) 100vw"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className={classes.notfoundSearch}>
-                '{getValues("keyword")}'과 일치하는 이미지가 없습니다.
-              </div>
-            )}
-          </>
-        )}
+        {/* 한번 touch 해야 div 생성하게 함 */}
+        {touchedFields?.keyword ? (
+          // 로딩 시 스켈레톤 띄움
+          isPending ? (
+            <div className={classes.slugItemsWrap}>
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+            </div>
+          ) : (
+            <>
+              {data?.total !== 0 ? (
+                <div className={classes.slugItemsWrap}>
+                  {data?.results.map((e, key) => {
+                    return (
+                      <div
+                        className={classes.slugItem}
+                        key={`${key}-wrap`}
+                        onClick={() => selectSlug(e.urls.regular)}
+                      >
+                        <Image
+                          src={e.urls.regular}
+                          alt={e.alternative_slugs.ko}
+                          style={{ objectFit: "cover" }}
+                          fill
+                          sizes="(max-width : 768px) 100vw"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className={classes.notfoundSearch}>
+                  '{getValues("keyword")}'과 일치하는 이미지가 없습니다.
+                </div>
+              )}
+            </>
+          )
+        ) : null}
       </div>
     </div>
   );

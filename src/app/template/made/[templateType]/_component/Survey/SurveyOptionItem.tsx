@@ -9,17 +9,20 @@ import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/
 import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
-import classes from "./SurveyRadio.module.scss";
+import classes from "./SurveyOptionItem.module.scss";
 import OptionContainer from "@/app/(template-made)/components/QuestionOption/OptionContainer";
 import OptionButton from "@/app/(template-made)/components/QuestionOption/OptionButton";
-import Upload from "/public/asset/icon/upload.svg";
 import Delete from "/public/asset/icon/delete.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import FormInput from "@/components/ui/FormElement/FormInput";
+import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import UploadedImagePreview from "@/app/(template-made)/components/ImageContainer/UploadedImagePreview";
 
-export default function SurveyRadio({
+const MIN_OPTION_COUNT = 2;
+const MIN_OPTION_ERROR_MESSAGE =
+  "객관식은 최소 2개 이상 항목으로 줄일 수 없습니다";
+
+export default function SurveyOptionItem({
   surveyIdx,
   optionIdx,
   itemRemove,
@@ -39,7 +42,7 @@ export default function SurveyRadio({
   const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
   const key = watch("templateKey");
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {
       const endPoint = `common/image/${key}`;
       return await ImageUploadHandler(endPoint, file);
@@ -61,10 +64,10 @@ export default function SurveyRadio({
 
   //options 제거
   const removeOptions = (idx: number): void => {
-    if (curRadio.length > 2) {
+    if (curRadio.length > MIN_OPTION_COUNT) {
       itemRemove(idx);
     } else {
-      alert("객관식은 최소 2개 이상 항목으로 줄일 수 없습니다");
+      alert(MIN_OPTION_ERROR_MESSAGE);
       return;
     }
   };
@@ -76,8 +79,6 @@ export default function SurveyRadio({
     }
   };
 
-  const clearPreview = () => {};
-
   //미리보기
   const imgPreview = async (
     e: ChangeEvent<HTMLInputElement>
@@ -85,10 +86,13 @@ export default function SurveyRadio({
     const files = e.currentTarget.files;
     if (files) mutate(files[0]);
   };
-
+  const clearPreview = () => {
+    setValue(`questions.${surveyIdx}.options.${optionIdx}.img`, "");
+  };
   return (
-    <>
+    <div className={classes.wrapper}>
       <OptionContainer>
+        {/* Hidden Input */}
         <input
           type="file"
           ref={ref}
@@ -97,46 +101,41 @@ export default function SurveyRadio({
           autoComplete="off"
         />
 
-        <input
-          type="text"
-          {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
-          autoComplete="off"
-          placeholder={`항목 ${optionIdx + 1}`}
-        />
+        {/* 입력구간 */}
+        <div className={classes.inputWrapper}>
+          {/* 질문  명 */}
+          <input
+            type="text"
+            {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
+            autoComplete="off"
+            placeholder={`항목 ${optionIdx + 1}을 입력해주세요`}
+          />
 
-        <div className={classes.buttonsWrapper}>
-          {/* upload */}
-          <OptionButton
-            Svg={imgUpload}
-            alt="업로드 버튼"
-            onClick={imgHandler}
-          />
-          <OptionButton
-            Svg={Delete}
-            alt="삭제 버튼"
-            onClick={() => removeOptions(optionIdx)}
-          />
+          <div className={classes.buttonsWrapper}>
+            {/* upload */}
+            <OptionButton
+              Svg={imgUpload}
+              alt="업로드 버튼"
+              onClick={imgHandler}
+            />
+            <OptionButton
+              Svg={Delete}
+              alt="삭제 버튼"
+              onClick={() => removeOptions(optionIdx)}
+            />
+          </div>
         </div>
 
-        {/* Error  */}
         <>
-          {preView && (
-            <div className={classes.previewContainer}>
-              {isPending && "loading......"}
-
-              <Image
-                src={preView}
-                sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                alt="preview"
-                style={{ objectFit: "cover" }}
-                fill
-              />
-            </div>
-          )}
-          {/* {ref.current?.value} */}
-          {/* <button onClick={clearPreview}>이미지 삭제</button> */}
+          {isPending ? (
+            <LoadingSkeleton loadingText="UP LOADING..." />
+          ) : isSuccess && preView ? (
+            // 미리보기 + 삭제버튼
+            <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
+          ) : null}
         </>
       </OptionContainer>
+      {/* Error  */}
       {optionError?.[surveyIdx]?.options?.[optionIdx] && (
         <div>
           <FormRegisterError
@@ -146,6 +145,6 @@ export default function SurveyRadio({
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
