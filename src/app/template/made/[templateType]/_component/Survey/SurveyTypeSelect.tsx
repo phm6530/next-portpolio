@@ -55,29 +55,35 @@ export default function SurveyTypeSelect({
 
   return (
     <QuestionContainer>
-      <QuestionItemHeader
-        type={QuestionType.MULTIPLE_CHOICE}
-        QuestionNum={surveyIdx + 1}
-      >
-        <input
-          type="text"
-          autoComplete="off"
-          {...register(`questions.${surveyIdx}.label`)}
-          placeholder="질문 제목을 입력해주세요."
-        />
-        <button className={classes.delete} type="button" onClick={confimDelete}>
-          삭제
-        </button>
-      </QuestionItemHeader>
-
-      {/* 제목에러 */}
-      {errors.questions?.[surveyIdx]?.label?.message && (
-        <div>
-          <FormRegisterError
-            errorMsg={errors.questions?.[surveyIdx]?.label?.message}
+      <div>
+        <QuestionItemHeader
+          type={QuestionType.MULTIPLE_CHOICE}
+          QuestionNum={surveyIdx + 1}
+        >
+          <input
+            type="text"
+            autoComplete="off"
+            {...register(`questions.${surveyIdx}.label`)}
+            placeholder="질문 제목을 입력해주세요."
           />
-        </div>
-      )}
+          <button
+            className={classes.delete}
+            type="button"
+            onClick={confimDelete}
+          >
+            삭제
+          </button>
+        </QuestionItemHeader>
+
+        {/* 제목에러 */}
+        {errors.questions?.[surveyIdx]?.label?.message && (
+          <div>
+            <FormRegisterError
+              errorMsg={errors.questions?.[surveyIdx]?.label?.message}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Option에 img가 있다면 grid 변경하기 */}
       <div

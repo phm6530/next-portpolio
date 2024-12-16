@@ -4,6 +4,10 @@
   border: 1px solid #e5eaff;
   box-shadow: 0px 2px 8px 0px #4950570f;
   border: 1px solid #dbe0f19e;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
   &:focus-within {
     outline: 2px solid #8b7bcd;
   }

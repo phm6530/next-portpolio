@@ -78,35 +78,37 @@ export default function SurveyTypeText({
           ref={imgRef}
         />
 
-        <QuestionItemHeader
-          type={QuestionType.SHORT_ANSWER}
-          QuestionNum={surveyIdx + 1}
-        >
-          <input
-            type="text"
-            {...register(`questions.${surveyIdx}.label`)}
-            placeholder="질문 제목을 입력해주세요."
-          />
-
-          <OptionButton
-            Svg={imgUpload}
-            alt="업로드 버튼"
-            onClick={imgHandler}
-          />
-          <button
-            className={classes.delete}
-            type="button"
-            onClick={() => remove(surveyIdx)}
+        <div>
+          <QuestionItemHeader
+            type={QuestionType.SHORT_ANSWER}
+            QuestionNum={surveyIdx + 1}
           >
-            삭제
-          </button>
-        </QuestionItemHeader>
+            <input
+              type="text"
+              {...register(`questions.${surveyIdx}.label`)}
+              placeholder="질문 제목을 입력해주세요."
+            />
 
-        {errors?.questions?.[surveyIdx]?.label?.message && (
-          <FormRegisterError
-            errorMsg={errors?.questions[surveyIdx]?.label?.message}
-          />
-        )}
+            <OptionButton
+              Svg={imgUpload}
+              alt="업로드 버튼"
+              onClick={imgHandler}
+            />
+            <button
+              className={classes.delete}
+              type="button"
+              onClick={() => remove(surveyIdx)}
+            >
+              삭제
+            </button>
+          </QuestionItemHeader>
+
+          {errors?.questions?.[surveyIdx]?.label?.message && (
+            <FormRegisterError
+              errorMsg={errors?.questions[surveyIdx]?.label?.message}
+            />
+          )}
+        </div>
 
         {isPending ? (
           <div className={classes.previewWrapper}>

@@ -6,6 +6,7 @@ import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/
 import { QUESTION_TYPE } from "@/types/survey.type";
 import classes from "./SurveyList.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
+import QuestionListWrapper from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyList() {
   const {
@@ -19,6 +20,8 @@ export default function SurveyList() {
     name: "questions",
   });
 
+  console.log("questions :::", watch());
+
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
 
@@ -26,6 +29,8 @@ export default function SurveyList() {
   const cntType = (type: QUESTION_TYPE) => {
     return questionsWatch.filter((item) => item.type === type).length;
   };
+
+  console.log(errors);
 
   return (
     <div>
@@ -67,8 +72,11 @@ export default function SurveyList() {
             );
           }
         })}
+
         {errors["questions"]?.message && (
-          <FormRegisterError errorMsg={errors["questions"]?.message} />
+          <QuestionListWrapper>
+            <FormRegisterError errorMsg={errors["questions"]?.message} />
+          </QuestionListWrapper>
         )}
 
         {/* {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."} */}
