@@ -10,6 +10,7 @@ import Upload from "/public/asset/icon/upload.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
+import UploadedImagePreview from "./ImageContainer/UploadedImagePreview";
 
 /**
  * template_type : 템플릿 종류
@@ -20,7 +21,6 @@ export default function ThumbNailUploader() {
   const {
     setValue,
     watch,
-    register,
     formState: { errors },
   } = useFormContext<FetchTemplateForm>();
   const [imgPending, setImgPending] = useState<boolean>(false);
@@ -78,31 +78,12 @@ export default function ThumbNailUploader() {
       {/* 썸네일 preView */}
       <>
         {tempThumbNail && (
-          <>
-            <div className={classes.previewContainer}>
-              {!imgError ? (
-                <>
-                  {imgPending && "loading......"}
-                  {tempThumbNail && (
-                    <Image
-                      src={tempThumbNail}
-                      sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
-                      alt="preview"
-                      style={{ objectFit: "cover" }}
-                      fill
-                      onLoad={() => setImgPending(false)}
-                    />
-                  )}
-                </>
-              ) : (
-                "Error..."
-              )}
-            </div>
-            {/* {ref.current?.value} */}
-            <button type="button" onClick={clearPreview}>
-              이미지 삭제
-            </button>
-          </>
+          <div className={classes.thumbnailWrapper}>
+            <UploadedImagePreview
+              src={tempThumbNail}
+              deleteFunc={clearPreview}
+            />
+          </div>
         )}
       </>
 

@@ -12,3 +12,11 @@
   display: flex;
   gap: 10px;
 }
+
+.thumbnailWrapper {
+  border: 1px solid rgb(208, 218, 228);
+  max-width: 400px;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  overflow: hidden;
+}

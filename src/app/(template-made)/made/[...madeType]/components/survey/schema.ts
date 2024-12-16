@@ -53,7 +53,10 @@ const surveySchema = z.object({
   templateKey: z.string(),
   questions: z
     .array(z.union([RequestTextSchema, RequestSelectSchema]))
-    .min(1, "질문 문항은 최소 하나이상 등록되어야 합니다."),
+    .refine((questions) => questions.length > 0, {
+      message: "질문 문항은 최소 하나이상 등록되어야 합니다.",
+      path: [""], // question root로 고정
+    }),
   creator: z.object({
     id: z.number().min(1, "사용자 ID는 필수입니다."),
     email: z.string().email("유효한 이메일 형식이어야 합니다."),
