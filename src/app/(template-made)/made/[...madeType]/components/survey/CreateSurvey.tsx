@@ -100,7 +100,6 @@ export default function CreateSurvey() {
   });
 
   const { register, setValue, reset, watch } = formState;
-  console.log(watch());
 
   const editId = qs.get("edit");
 
@@ -112,17 +111,9 @@ export default function CreateSurvey() {
   } = useQuery<FetchTemplateForm>({
     queryKey: ["test", editId],
     queryFn: async () => {
-      const url = `template/survey/${editId}`;
-      const options: RequestInit = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.EDIT }),
-      };
-      return await withAuthFetch(url, options);
+      const url = `template/survey/${editId}?type=${SURVEY_EDITOR_TYPE.EDIT}`;
+      return await withAuthFetch(url);
     },
-
     enabled: !!editId,
     staleTime: 10000,
   });
@@ -188,7 +179,7 @@ export default function CreateSurvey() {
       };
 
       // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
-      const url = `template/survey${editId ? `/${editId}` : ""}`;
+      let url = `template/survey${editId ? `/${editId}` : ""}`;
       return await withAuthFetch(url, options);
     },
     onSuccess: () => {
