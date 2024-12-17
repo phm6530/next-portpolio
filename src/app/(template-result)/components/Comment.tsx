@@ -12,7 +12,7 @@ import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { CommentReponse } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
-import fetchWithAuth from "@/utils/withRefreshToken";
+import { fetchWithAuth } from "@/utils/withRefreshToken";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import { headers } from "next/headers";
 
@@ -89,14 +89,13 @@ export default function Comment({
   };
 
   const isUserCommentAuthor = user?.email === userData?.email; // 현재 사용자가 댓글 작성자인지 확인
-  
+
   return (
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
-
         {/* 유저 or 익명 */}
         <UserRoleDisplay user={user} anonymousNickName={anonymous} />
-        
+
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
 
         {/* 내 댓글일 경우만 삭제버튼 노출 */}

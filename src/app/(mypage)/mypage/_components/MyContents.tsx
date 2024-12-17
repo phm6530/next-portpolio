@@ -8,10 +8,11 @@ import {
   TemplateItemMetadata,
 } from "@/types/template.type";
 import { SessionStorage } from "@/utils/sessionStorage-token";
-import fetchWithAuth from "@/utils/withRefreshToken";
+import { fetchWithAuth } from "@/utils/withRefreshToken";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import withAuthFetch from "@/utils/withAuthFetch";
 
 export default function MyContents() {
   const router = useRouter();
@@ -24,14 +25,11 @@ export default function MyContents() {
   }>({
     queryKey: [QUERY_KEY.MY_CONTENTS],
     queryFn: async () => {
-      const token = SessionStorage.getAccessToken();
-      const url = `${BASE_NEST_URL}/user/me/contents`;
+      const url = `user/me/contents`;
       const options: RequestInit = {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       };
-      return await fetchWithAuth(url, options);
+      return await withAuthFetch(url, options);
     },
     enabled: !!userdata,
     staleTime: Infinity,
@@ -43,17 +41,13 @@ export default function MyContents() {
     Pick<TemplateItemMetadata<RespondentsAndMaxGroup>, "id" | "templateType">
   >({
     mutationFn: async ({ templateType, id }) => {
-      const url = `${BASE_NEST_URL}/template/${templateType}/${id}`;
-      const token = SessionStorage.getAccessToken();
+      const url = `template/${templateType}/${id}`;
+
       const options: RequestInit = {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
       };
-      const response = await fetchWithAuth(url, options);
-      console.log(response);
+      const response = await withAuthFetch(url, options);
       return response;
     },
     onSuccess: () => {

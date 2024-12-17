@@ -18,7 +18,7 @@ export default async function requestHandler<T>(
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(error.message); // 이게 왜 실행됨?
+      throw new Error(error.message);
     } else {
       throw new Error("알수 없는 오류");
     }

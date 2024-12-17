@@ -3,8 +3,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 // import { GetSurveyQuestions } from "@/types/templateSurvey";
 // import ImageZoom from "@/app/template/_component/ImageZoom";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import QuestionsContainer 
-  from "@/app/template/_component/survey/QuestionsContainer";
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
 import ImageViewer from "@/app/template/_component/ImageViewer";
 import {
@@ -27,7 +26,7 @@ export default function QuestionOptions({
   const {
     register,
     formState: { errors },
-  
+
     control,
   } = useFormContext<AnswerSurvey>();
 
@@ -64,8 +63,9 @@ export default function QuestionOptions({
               type="radio"
               key={idx}
               value={e.id}
-              {...register(`answers.${curIdx}.optionId`, 
-                { required: "필수 항목입니다.", })}
+              {...register(`answers.${curIdx}.optionId`, {
+                required: "필수 항목입니다.",
+              })}
             />
 
             <div className={styles.chkItemWrap}>

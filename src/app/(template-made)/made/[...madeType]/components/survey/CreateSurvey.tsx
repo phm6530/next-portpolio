@@ -22,7 +22,7 @@ import AddQuestionController, {
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
 import { SessionStorage } from "@/utils/sessionStorage-token";
-import fetchWithAuth from "@/utils/withRefreshToken";
+import { fetchWithAuth } from "@/utils/withRefreshToken";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -31,6 +31,7 @@ import surveySchema from "@/app/(template-made)/made/[...madeType]/components/su
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 import TemplateInputWrapper from "../common/TemplateInputWrapper";
 import InfoSvg from "/public/asset/icon/info.svg";
+import withAuthFetch from "@/utils/withAuthFetch";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -98,7 +99,8 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset } = formState;
+  const { register, setValue, reset, watch } = formState;
+  console.log(watch());
 
   const editId = qs.get("edit");
 
@@ -110,19 +112,15 @@ export default function CreateSurvey() {
   } = useQuery<FetchTemplateForm>({
     queryKey: ["test", editId],
     queryFn: async () => {
-      const token = SessionStorage.getAccessToken();
-
-      const url = `${BASE_NEST_URL}/template/survey/${editId}`;
-
+      const url = `template/survey/${editId}`;
       const options: RequestInit = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ type: SURVEY_EDITOR_TYPE.EDIT }),
       };
-      return await fetchWithAuth(url, options);
+      return await withAuthFetch(url, options);
     },
 
     enabled: !!editId,
@@ -170,7 +168,6 @@ export default function CreateSurvey() {
      */
     if (!editId) {
       const newKey = uuid4();
-
       setValue("templateKey", newKey);
     }
   }, [qs, setValue, editId]);
@@ -181,24 +178,18 @@ export default function CreateSurvey() {
     RequestSurveyFormData
   >({
     mutationFn: async (data) => {
-      const token = SessionStorage.getAccessToken();
-
       //수정은 Patch로
       let options: RequestInit = {
         method: editId ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       };
 
       // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
-      const url = !editId
-        ? `${BASE_NEST_URL}/template/survey`
-        : `${BASE_NEST_URL}/template/survey/${editId}`;
-
-      return await fetchWithAuth(url, options);
+      const url = `template/survey${editId ? `/${editId}` : ""}`;
+      return await withAuthFetch(url, options);
     },
     onSuccess: () => {
       router.replace("/list");
@@ -269,11 +260,13 @@ export default function CreateSurvey() {
               editPage ? classes.disabled : undefined
             }`}
           >
+            {/* 진행 중인 설문은 수정 불가 안내문구 */}
             {editPage && (
               <p className={classes.info}>
                 진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
               </p>
             )}
+
             <section className={classes.formSection}>
               <div className={classes.header}>
                 <h3>2. 응답자 필터 설정</h3>
@@ -327,13 +320,6 @@ export default function CreateSurvey() {
             설문조사 생성하기
           </Button.submit>
         </div>
-
-        {/* <button type="button" onClick={tempSave}>
-          임시저장
-        </button> */}
-        {/* <button type="button" onClick={previewSurvey}>
-          Preview
-        </button> */}
       </form>
     </>
   );

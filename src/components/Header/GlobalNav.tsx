@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";
 import useStore from "@/store/store";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import { QUERY_KEY } from "@/types/constans";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import { User } from "@/types/auth.type";
 import Logo from "../logo/logo";
+import withAuthFetch from "@/utils/withAuthFetch";
 
 // type ExtendNumber<T extends number> = T;
 // type ExtendLiteral<T extends 0> = T;
@@ -46,38 +47,28 @@ export default function GlobalNav() {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
 
-  //리프래시는 없는데 엑세스는 남았을떄 정리해버리기
-  // useEffect(() => {
-  //   if (!token && SessionStorage.getAccessToken()) {
-  //     SessionStorage.removeAccessToken();
-  //   }
-  // }, [token]);
-
   /** 로그아웃 */
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       return requestHandler(async () => {
         return await fetch(`${BASE_NEST_URL}/auth/logout`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json", // Content-Type 설정 필요
+          headers: {
+            "Content-Type": "application/json", // Content-Type 설정 필요
           },
           credentials: "include", // HttpOnly 리프래시  토큰 삭제를 위해 설정했음
         });
       });
     },
-    onSuccess: async () => {
-      // alert("로그아웃 되었습니다.");
+    onSuccess: async (data) => {
+      console.log(data);
+      queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] });
+      queryClient.removeQueries({ queryKey: [QUERY_KEY.MY_CONTENTS] });
+
       store.setRemoveUser(); // 유저 정보 삭제
-      SessionStorage.removeAccessToken();
-      
-      queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] }); //유저데이터 삭제
+      SessionStorage.removeAccessToken(); // Session Storage 삭제
 
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEY.USER_DATA] }); 
-
-      //내 템플릿 캐싱 제거 
-      queryClient.removeQueries({ queryKey: [QUERY_KEY.MY_CONTENTS], }); 
-      
-      router.refresh(); // 서버 컴포넌트 새로고침
+      router.refresh();
     },
     onError: () => {
       router.refresh();
@@ -90,7 +81,7 @@ export default function GlobalNav() {
         <Grid.center>
           <nav className={classes.nav}>
             <div className={classes.logoWrapper}>
-              <Logo link/>
+              <Logo link />
             </div>
             <div className={classes.contentsLink}>
               {/* <Link href={"/about"}>사용법</Link> */}

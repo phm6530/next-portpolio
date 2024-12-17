@@ -17,6 +17,7 @@ import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import UploadedImagePreview from "@/app/(template-made)/components/ImageContainer/UploadedImagePreview";
+import { useSearchParams } from "next/navigation";
 
 const MIN_OPTION_COUNT = 2;
 const MIN_OPTION_ERROR_MESSAGE =
@@ -32,15 +33,21 @@ export default function SurveyOptionItem({
   itemRemove: UseFieldArrayRemove;
   // imgId: string;
 }) {
+  const qs = useSearchParams();
+  const editMode = qs.size > 0;
+
   const {
     register,
     formState: { errors },
     setValue,
     watch,
   } = useFormContext<RequestSurveyFormData>();
-  const curRadio = watch(`questions.${surveyIdx}.options`);
-  const preView = watch(`questions.${surveyIdx}.options.${optionIdx}.img`);
-  const key = watch("templateKey");
+
+  const [curRadio, preView, key] = watch([
+    `questions.${surveyIdx}.options`,
+    `questions.${surveyIdx}.options.${optionIdx}.img`,
+    "templateKey",
+  ]);
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {
@@ -59,7 +66,6 @@ export default function SurveyOptionItem({
   });
 
   const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
-
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
@@ -89,6 +95,27 @@ export default function SurveyOptionItem({
   const clearPreview = () => {
     setValue(`questions.${surveyIdx}.options.${optionIdx}.img`, "");
   };
+
+  const renderPreview = () => {
+    // 수정모드
+    if (editMode) {
+      return preView ? (
+        <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
+      ) : null;
+    }
+
+    // 생성모드
+    if (isPending) {
+      return <LoadingSkeleton loadingText="UP LOADING..." />;
+    }
+
+    if (isSuccess && preView) {
+      return <UploadedImagePreview src={preView} deleteFunc={clearPreview} />;
+    }
+
+    return null;
+  };
+
   return (
     <div className={classes.wrapper}>
       <OptionContainer>
@@ -126,15 +153,9 @@ export default function SurveyOptionItem({
           </div>
         </div>
 
-        <>
-          {isPending ? (
-            <LoadingSkeleton loadingText="UP LOADING..." />
-          ) : isSuccess && preView ? (
-            // 미리보기 + 삭제버튼
-            <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
-          ) : null}
-        </>
+        <>{renderPreview()}</>
       </OptionContainer>
+
       {/* Error  */}
       {optionError?.[surveyIdx]?.options?.[optionIdx] && (
         <div>
