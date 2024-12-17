@@ -12,9 +12,8 @@ import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { CommentReponse } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
-import { fetchWithAuth } from "@/utils/withRefreshToken";
 import { SessionStorage } from "@/utils/sessionStorage-token";
-import { headers } from "next/headers";
+import withAuthFetch from "@/utils/withAuthFetch";
 
 //import
 dayjs.extend(relativeTime);
@@ -38,27 +37,25 @@ export default function Comment({
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
-  if (contentType === "reply") {
-    console.log(user);
-  }
-
   const { mutate } = useMutation({
     mutationFn: async (data?: string) => {
       //userData가 있으면 로그인상태
-      const url = `${BASE_NEST_URL}/${contentType}/${id}`;
-      const token = SessionStorage.getAccessToken();
-      const userDelete = !!(userData && token);
+      const url = `${contentType}/${id}`;
 
-      const options: RequestInit = {
+      let options: RequestInit = {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          ...(userDelete && { authorization: `Bearer ${token}` }),
         },
-        body: userDelete ? undefined : JSON.stringify({ password: data }),
+
+        ...(!!userData
+          ? { credentials: "include" }
+          : {
+              body: JSON.stringify({ password: data }),
+            }),
       };
 
-      await fetchWithAuth(url, options);
+      await withAuthFetch(url, options);
     },
     onError: (error) => {
       alert(error.message);

@@ -14,6 +14,7 @@ import { SessionStorage } from "@/utils/sessionStorage-token";
 import { User } from "@/types/auth.type";
 import Logo from "../logo/logo";
 import withAuthFetch from "@/utils/withAuthFetch";
+import { useQueryReset } from "@/utils/queryClientReset";
 
 // type ExtendNumber<T extends number> = T;
 // type ExtendLiteral<T extends 0> = T;
@@ -40,12 +41,13 @@ import withAuthFetch from "@/utils/withAuthFetch";
 // func2 = func1; // ❌
 
 export default function GlobalNav() {
-  const store = useStore();
   const pathname = usePathname();
   const router = useRouter();
 
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
+
+  const { resetUserQueries } = useQueryReset();
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({
@@ -60,14 +62,8 @@ export default function GlobalNav() {
         });
       });
     },
-    onSuccess: async (data) => {
-      console.log(data);
-      queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] });
-      queryClient.removeQueries({ queryKey: [QUERY_KEY.MY_CONTENTS] });
-
-      store.setRemoveUser(); // 유저 정보 삭제
-      SessionStorage.removeAccessToken(); // Session Storage 삭제
-
+    onSuccess: async () => {
+      resetUserQueries();
       router.refresh();
     },
     onError: () => {

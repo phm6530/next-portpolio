@@ -4,14 +4,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import classes from "./CommentEditor.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BASE_NEST_URL } from "@/config/base";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
 import { useEffect } from "react";
 import { User } from "@/types/auth.type";
-import { fetchWithAuth } from "@/utils/withRefreshToken";
-import { SessionStorage } from "@/utils/sessionStorage-token";
 import withAuthFetch from "@/utils/withAuthFetch";
 
 //익명은 Password도 받음

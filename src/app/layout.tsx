@@ -10,16 +10,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { BASE_NEST_URL, BASE_URL } from "@/config/base";
 import { AUTH, QUERY_KEY } from "@/types/constans";
-// import { fetchAccessToken, fetchWithAuth } from "@/utils/withRefreshToken";
 import ClientProvider from "@/provider/ClientProvider";
 import ModeToggle from "@/components/ModeToggle/ModeToggle";
-import {
-  fetchAccessToken,
-  fetchWithAuth,
-  RefreshAccessToken,
-} from "@/utils/withRefreshToken";
+
 import withAuthFetch from "@/utils/withAuthFetch";
 
 //메타 데이터

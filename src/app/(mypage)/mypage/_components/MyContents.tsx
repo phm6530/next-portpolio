@@ -7,8 +7,7 @@ import {
   RespondentsAndMaxGroup,
   TemplateItemMetadata,
 } from "@/types/template.type";
-import { SessionStorage } from "@/utils/sessionStorage-token";
-import { fetchWithAuth } from "@/utils/withRefreshToken";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -50,15 +49,12 @@ export default function MyContents() {
       const response = await withAuthFetch(url, options);
       return response;
     },
+
     onSuccess: () => {
       alert("삭제되었습니다.");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.MY_CONTENTS],
       });
-    },
-    onError: (error) => {
-      console.error(error);
-      alert(`삭제 중 오류 발생: ${error.message}`);
     },
   });
 

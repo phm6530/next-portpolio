@@ -1,6 +1,7 @@
 import { serverSession } from "@/utils/serverSession";
 import { NextRequest, NextResponse } from "next/server";
 import { ERROR_CODE } from "./codeMsg";
+import withAuthFetch from "./utils/withAuthFetch";
 
 const PATH = {
   LOGIN: "/auth/login",
@@ -25,9 +26,26 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     pathname.startsWith(path)
   );
 
-  if (authPath && !token) {
-    const path = `/auth/login?redirect=${pathname}&code=${ERROR_CODE.AUTH_001}`;
-    return NextResponse.redirect(new URL(path, req.nextUrl.origin));
+  if (authPath) {
+    const encodedPath = encodeURIComponent(pathname);
+    const redirectPath = `/auth/login?redirect=${encodedPath}&code=${ERROR_CODE.UNAUTHORIZED}`;
+
+    if (!token)
+      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+
+    try {
+      const isAuthenticated = await withAuthFetch("auth/verify", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!isAuthenticated) {
+        return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+      }
+    } catch (error) {
+      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+    }
   }
 }
 

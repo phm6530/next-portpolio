@@ -21,8 +21,6 @@ import AddQuestionController, {
 } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
-import { SessionStorage } from "@/utils/sessionStorage-token";
-import { fetchWithAuth } from "@/utils/withRefreshToken";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -30,8 +28,9 @@ import { useEffect, useState } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 import TemplateInputWrapper from "../common/TemplateInputWrapper";
-import InfoSvg from "/public/asset/icon/info.svg";
+
 import withAuthFetch from "@/utils/withAuthFetch";
+import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -187,6 +186,9 @@ export default function CreateSurvey() {
       alert(
         !editId ? "설문조사 개설 완료되었습니다." : "수정 완료 되었습니다."
       );
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.MY_CONTENTS],
+      });
     },
   });
 
@@ -198,16 +200,11 @@ export default function CreateSurvey() {
   return (
     <>
       <RenderPreview>프리뷰</RenderPreview>
-      <div className={classes.madeHeader}>
-        <h1>
-          생성하실 템플릿 서식을 <br></br>
-          기재해주세요
-        </h1>
-        <div className={classes.description}>
-          <InfoSvg />
-          아래의 서식의 정보를 전부 적어주세요!
-        </div>
-      </div>
+
+      <HeaderTitle
+        title={`생성하실 템플릿 서식을\n기재해주세요`}
+        description="아래의 서식에 맞춰 정보를 적어주세요!"
+      />
 
       <form
         className={classes.formContainer}

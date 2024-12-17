@@ -1,13 +1,15 @@
+import HeaderTitle from "../components/Header/HeaderTitle";
 import classes from "./page.module.scss";
-import SelectTemplateList from 
-  "@/app/(template-made)/components/SelectTemplateList";
+import SelectTemplateList from "@/app/(template-made)/components/SelectTemplateList";
 
 export default function page() {
   return (
     <div className={classes.wrap}>
-      <div className={classes.title}>
-        <p>만드실 템플릿을 선택해주세요</p>
-      </div>
+      <HeaderTitle
+        title={`만드실 템플릿을 \n선택해주세요`}
+        description="현재 Survey 만 제공하고 있으며 개발 중 입니다."
+      />
+
       <SelectTemplateList />
     </div>
   );

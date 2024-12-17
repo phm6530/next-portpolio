@@ -44,7 +44,7 @@ export default function WithProtectedComponent({
       router.refresh();
 
       router.replace(
-        `/auth/login?redirect=${pathname}&code=${ERROR_CODE.AUTH_001}`
+        `/auth/login?redirect=${pathname}&code=${ERROR_CODE.UNAUTHORIZED}`
       );
     }
   }, [sessionToken, pathname, router, isError]);

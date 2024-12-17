@@ -13,10 +13,7 @@ const templateList = [
     icon: SurveyIcon,
     name: "Survey",
     path: `/made/${TEMPLATE_TYPE.SURVEY}`,
-    description: [
-      "주관식 + 객관식 형태의 설문조사 전용 템플릿",
-      "설문조사에 적합 , 성별 나이 필터링 제공 ",
-    ],
+    description: ["주관식 + 객관식 형태의 설문조사 전용 템플릿"],
     isActive: true,
   },
   {
@@ -24,10 +21,7 @@ const templateList = [
     icon: rankIcon,
     name: "Rank",
     path: `/made/${TEMPLATE_TYPE.RANK}`,
-    description: [
-      "주관식 + 객관식 형태의 설문조사 전용 템플릿",
-      "만족도 조사, 간단 설문조사에 적합 ",
-    ],
+    description: ["주관식 + 객관식 형태의 설문조사 전용 템플릿"],
     isActive: false,
   },
 ];
@@ -66,11 +60,12 @@ export default function SelectTemplateList() {
             <div className={classes.iconWrap}>
               <Image
                 src={template.icon}
-                alt="dd"
+                alt={template.name}
                 fill
                 style={{ objectFit: "contain" }}
               />
             </div>
+
             <span className={classes.typeTitle}>{template.name}</span>
             <div className={classes.desciprtionWrapper}>
               {template.description.map((e, idx) => {
