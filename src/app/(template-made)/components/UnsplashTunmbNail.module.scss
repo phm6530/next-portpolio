@@ -35,18 +35,21 @@
 .search {
   display: flex;
   gap: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  overflow: hidden;
 
   input {
     flex: 1;
     border: transparent;
-    text-indent: 1rem;
-    background: rgb(245, 245, 245);
+    padding: 14px 16px 14px 16px;
+    // text-indent: 1rem;
+    // background: rgb(245, 245, 245);
   }
 
   button {
     background: transparent;
-    border: 1px solid;
-    padding: 1rem 2rem;
+
     margin-top: 0 !important;
   }
 }

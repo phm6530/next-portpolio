@@ -1,12 +1,24 @@
 import Link from "next/link";
 import classes from "./Button.module.scss";
 import {
+  ButtonHTMLAttributes,
   CSSProperties,
   HTMLAttributes,
   HtmlHTMLAttributes,
   ReactNode,
 } from "react";
 // import DeleteIcon from "/public/asset/icon/close.png";
+
+function outlineButton({
+  children,
+  ...rest
+}: { children: string } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button type="button" {...rest} className={classes.outlineButton}>
+      {children}
+    </button>
+  );
+}
 
 function solid({
   type = "button",
@@ -113,6 +125,7 @@ interface ButtonProps extends React.FC<{ children: string }> {
   normalButton: typeof normalButton;
   noneStyleButton: typeof noneStyleButton;
   solid: typeof solid;
+  outlineButton: typeof outlineButton;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -125,5 +138,6 @@ Button.closeBtn = closeBtn;
 Button.normalButton = normalButton;
 Button.noneStyleButton = noneStyleButton;
 Button.solid = solid;
+Button.outlineButton = outlineButton;
 
 export default Button;

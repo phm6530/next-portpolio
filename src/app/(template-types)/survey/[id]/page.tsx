@@ -14,7 +14,6 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
 import BackButton from "@/components/ui/button/BackButton";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
-import { SURVEY_EDITOR_TYPE } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -47,11 +46,9 @@ export async function generateMetadata({
 }: SurveyDetailTemplateParams): Promise<Metadata> {
   const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
 
+  //존재하지 않는  페이지면 Redirect 시켜버림
   if (!response.ok) {
-    return {
-      title: "Page Not Found",
-      description: "The requested template was not found.",
-    };
+    notFound();
   }
 
   const data: FetchTemplateForm = await response.json();
@@ -59,7 +56,6 @@ export async function generateMetadata({
   return {
     title: data.title,
     description: data.description,
-
     openGraph: {
       title: data.title,
       description: data.description,
