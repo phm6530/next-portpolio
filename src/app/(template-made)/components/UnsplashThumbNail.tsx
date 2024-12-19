@@ -11,6 +11,7 @@ import Search from "/public/asset/icon/search.svg";
 import FormToolButton from "./FormToolButton";
 import { resolve } from "path";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import SearchBar from "@/components/ui/SearchBar/SearchBar";
 
 type UnsplashApi = {
   total: number;
@@ -95,6 +96,12 @@ function UnSplashContents({
     closeModal();
   };
 
+  console.log({
+    ...register("keyword", {
+      required: "검색어를 기재해주세요!",
+    }),
+  });
+
   return (
     <div className={classes.wrap}>
       <div className={classes.titleWrapper}>
@@ -112,16 +119,14 @@ function UnSplashContents({
         </div>
       </div>
 
-      <div className={classes.search}>
-        <input
-          placeholder="생성하실 섬네일을 검색해주세요"
-          {...register("keyword", { required: "검색어를 기재해주세요!" })}
-          autoComplete="off"
-        />
-        <button type="button" onClick={handleSubmit(onSearchHandler)}>
-          검색
-        </button>
-      </div>
+      {/* Search Bar */}
+      <SearchBar
+        placeholder="생성하실 섬네일을 검색해주세요"
+        clickEvent={handleSubmit(onSearchHandler)}
+        register={register("keyword", {
+          required: "검색어를 기재해주세요!",
+        })}
+      />
 
       {Object.values(errors)[0]?.message && (
         <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />

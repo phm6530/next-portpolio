@@ -104,12 +104,6 @@ export default async function SurveyDetailTemplate({
             <div className={classes.description}>{description}</div>
             {/* date */}
             <div className={classes.userDisplayWrapper}>
-              {/* User Info + Role Display  */}
-              {/* <UserRoleDisplay
-                user_nickname={user_nickname}
-                user_role={user_role}
-              /> */}
-              {/* <span>{todayCompare.fromNow(createdAt)}</span> */}
               <div> {creator?.nickname}</div>
             </div>
           </div>

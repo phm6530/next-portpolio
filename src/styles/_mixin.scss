@@ -52,9 +52,10 @@
 }
 
 @mixin FouceInput($color: #7975e5, $borderWeight) {
-  &:focus {
+  &:focus,
+  &:focus-within {
     border: $borderWeight solid darken($color, 10);
-    background: #f3f0ff;
+    background: #fbfaff;
   }
 }
 

@@ -3,7 +3,7 @@ import classes from "./page.module.scss";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
-import SurveyControler from "@/app/template/_component/survey/SurveyControler";
+import ListFilterControls from "./components/ListFilterControls";
 import ListPageBanner from "@/app/list/components/ListPageBanner";
 import TemplateList from "@/app/list/components/TemplateItemList";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
@@ -47,7 +47,7 @@ export default async function page({
       <Grid.center>
         {/* 검색 or 정렬 */}
         <div className={classes.searchFilterWrapper}>
-          <SurveyControler />
+          <ListFilterControls />
           {/* <SearchInput search={search} /> */}
         </div>
 

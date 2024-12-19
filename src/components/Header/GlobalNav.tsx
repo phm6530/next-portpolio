@@ -86,7 +86,7 @@ export default function GlobalNav() {
                 <span className={classes.new}>NEW</span>
               </Link>
               <Link href={"/made"}>템플릿 만들기</Link>
-              <Link href={"/community"}>자유게시판</Link>
+              <Link href={"/community"}>커뮤니티</Link>
             </div>
 
             <div>

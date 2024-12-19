@@ -1,6 +1,9 @@
-import { redirect } from "next/navigation";
+import BoardPage, { BoardKeys } from "./[board]/page";
 
-//Redriect 시켜버리기
+type TempParams = { board: BoardKeys };
+
+//초기 게시판은 Free로 추후에 추가하던...
 export default function Page() {
-  redirect("/community/free");
+  const params: TempParams = { board: "free" };
+  return <BoardPage params={params} />;
 }

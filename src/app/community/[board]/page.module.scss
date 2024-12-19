@@ -1,0 +1,13 @@
+.boardTitle {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.actionArea {
+  display: flex;
+  gap: 20px;
+
+  & > div:first-child {
+    flex: 1;
+  }
+}
