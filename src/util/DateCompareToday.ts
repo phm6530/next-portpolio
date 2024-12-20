@@ -1,4 +1,12 @@
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import localeData from "dayjs/plugin/localeData";
+import "dayjs/locale/ko"; // 한국어 로케일
+
+// 플러그인 활성화
+dayjs.extend(relativeTime);
+dayjs.extend(localeData);
+dayjs.locale("ko");
 
 export default function DateCompareToday() {
   const today = dayjs();

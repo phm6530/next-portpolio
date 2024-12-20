@@ -1,7 +1,7 @@
 @import "_mixin";
 .search {
   display: flex;
-
+  flex: 1;
   border: 1px solid #dee2e6;
   border-radius: 12px;
   overflow: hidden;

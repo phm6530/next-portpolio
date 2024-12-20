@@ -1,0 +1,50 @@
+.postHeader {
+  .postTitle {
+    font-size: 1.4rem;
+    border-left: 6px solid #e2ddf3;
+    /* margin-left: 20px; */
+    padding-left: 10px;
+  }
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  padding: 30px 0;
+
+  .postInfo {
+    display: flex;
+    align-items: center;
+    span {
+      font-size: 13px;
+      opacity: 0.6;
+    }
+  }
+}
+
+.postContents {
+  padding: 50px 0 10px;
+  margin: 0px 0 30px;
+  line-height: 1.7rem;
+
+  .contents {
+    min-height: 150px;
+  }
+  .lastUpdate {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  border-top: 1px solid #e3e3eb;
+  border-bottom: 1px solid #e3e3eb;
+}
+
+.userDisplay {
+  background: #f6f9ff;
+  border-radius: 5px;
+  padding: 1rem;
+}
+
+.boardCategory {
+  font-weight: 600;
+}

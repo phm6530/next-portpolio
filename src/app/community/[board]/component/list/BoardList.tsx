@@ -8,8 +8,8 @@ import Button from "@/components/ui/button/Button";
 
 export type ListItemType = {
   id: number;
-  updateAt: number;
-  createAt: number;
+  updateAt: string;
+  createAt: string;
   title: string;
   category: BoardKeys;
   creator: { role: USER_ROLE; nickname: string };

@@ -4,8 +4,8 @@ import SearchIcon from "/public/asset/icon/searchIcon.svg";
 
 interface SearchBarProps {
   placeholder: string;
-  clickEvent: () => void;
-  register: UseFormRegisterReturn;
+  clickEvent: (e: React.FormEvent<HTMLFormElement>) => void;
+  register?: UseFormRegisterReturn;
 }
 
 export default function SearchBar({
@@ -14,11 +14,17 @@ export default function SearchBar({
   register,
 }: SearchBarProps) {
   return (
-    <div className={classes.search}>
+    <form
+      className={classes.search}
+      onSubmit={(e) => {
+        e.preventDefault(); // 기본 새로고침 방지
+        clickEvent(e);
+      }}
+    >
       <input autoComplete="off" placeholder={placeholder} {...register} />
-      <button type="button" onClick={clickEvent}>
+      <button type="submit">
         <SearchIcon />
       </button>
-    </div>
+    </form>
   );
 }
