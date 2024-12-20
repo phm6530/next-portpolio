@@ -4,10 +4,12 @@
   padding: 1.4rem 2rem;
   margin-top: 2rem;
   display: inline-block;
-  background: linear-gradient(180deg,
-      #7b69e7 0%,
-      #7498de 100%,
-      #c981cb 100.01%);
+  background: linear-gradient(
+    180deg,
+    #7b69e7 0%,
+    #7498de 100%,
+    #c981cb 100.01%
+  );
   color: #fff;
   box-shadow: 0px 0px 30px rgba(51, 144, 202, 0.25);
   border-radius: 13px;
@@ -21,7 +23,7 @@
   font-size: 14px;
   background: #6f5bc5;
   @include disabledButton();
-  @include btn-hover(#6D5CFF);
+  @include btn-hover(#6d5cff);
   // background: linear-gradient(180deg, #7b69e7 0%, #7498de 100%, #c981cb 100.01%);
 }
 
@@ -76,4 +78,28 @@
   color: #fff;
   @include btn-hover(#592bc4);
   @include disabledButton();
+}
+
+.outlineButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fff;
+  padding: 1rem;
+  letter-spacing: -0.5px;
+  border: 1px solid #8d94af;
+  box-shadow: 0px 2px 8px 0px #4950570f;
+  color: #495057;
+  border-radius: 8px;
+
+  &:hover {
+    color: #b67ad8;
+    border: 1px solid #b67ad8;
+
+    svg {
+      fill: #b67ad8;
+    }
+  }
 }

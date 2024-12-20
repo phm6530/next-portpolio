@@ -20,8 +20,6 @@ export default function SurveyList() {
     name: "questions",
   });
 
-  console.log("questions :::", watch());
-
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
 
@@ -29,8 +27,6 @@ export default function SurveyList() {
   const cntType = (type: QUESTION_TYPE) => {
     return questionsWatch.filter((item) => item.type === type).length;
   };
-
-  console.log(errors);
 
   return (
     <div>

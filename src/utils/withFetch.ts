@@ -1,3 +1,5 @@
+import { queryClient } from "@/config/queryClient";
+
 export default async function requestHandler<T>(
   cb: () => Promise<Response>
 ): Promise<T> {
@@ -6,6 +8,11 @@ export default async function requestHandler<T>(
     if (!response.ok) {
       if (response.status === 401) {
         // 401 에러 처리
+        if (typeof window !== "undefined") {
+          console.log("실행되냐?");
+          queryClient.clear();
+        }
+
         throw new Error("UNAUTHORIZED");
       } else if (response.status === 404) {
         throw new Error("NOT_FOUND");
@@ -18,7 +25,7 @@ export default async function requestHandler<T>(
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(error.message); // 이게 왜 실행됨?
+      throw new Error(error.message);
     } else {
       throw new Error("알수 없는 오류");
     }

@@ -4,14 +4,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import classes from "./CommentEditor.module.scss";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BASE_NEST_URL } from "@/config/base";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
 import { useEffect } from "react";
 import { User } from "@/types/auth.type";
-import fetchWithAuth from "@/utils/withRefreshToken";
-import { SessionStorage } from "@/utils/sessionStorage-token";
+import withAuthFetch from "@/utils/withAuthFetch";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -38,7 +36,7 @@ export default function CommentEditor({
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
 
-  console.log("유저데이터" , userData);
+  console.log("유저데이터", userData);
 
   const AnonymousValues: AnonymousDefaultValue = {
     anonymous: "",
@@ -82,25 +80,23 @@ export default function CommentEditor({
     mutationFn: async (data) => {
       const url = (() => {
         if (commentId) {
-          return `${BASE_NEST_URL}/reply/${commentId}`;
+          return `reply/${commentId}`;
         } else if (!commentId) {
-          return `${BASE_NEST_URL}/comment/${templateType}/${templateId}`;
+          return `comment/${templateType}/${templateId}`;
         } else {
           return null as never;
         }
       })();
-      const token = SessionStorage.getAccessToken();
 
       const options = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       };
 
-      return await fetchWithAuth(url, options);
+      return await withAuthFetch(url, options);
     },
     onSuccess: async () => {
       reset();

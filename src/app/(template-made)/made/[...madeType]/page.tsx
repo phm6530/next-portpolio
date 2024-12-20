@@ -12,13 +12,10 @@ export default function MadeTemplate({ params }: MadeTemplateParams) {
 
   // //설문
   if (template === TEMPLATE_TYPE.SURVEY) {
-    return (
-      <WithProtectedComponent>
-        <CreateSurvey />
-      </WithProtectedComponent>
-    );
+    return <CreateSurvey />;
   }
 
+  //Rank
   if (template === TEMPLATE_TYPE.RANK) {
     return <></>;
   } else {

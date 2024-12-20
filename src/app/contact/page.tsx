@@ -10,6 +10,7 @@ import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
+import HeaderTitle from "../(template-made)/components/Header/HeaderTitle";
 
 type MailFormData = {
   name: string;
@@ -19,11 +20,7 @@ type MailFormData = {
 export default function Page() {
   const formMethod = useForm<MailFormData>();
 
-  const {
-    handleSubmit,
-    reset,
-    register,
-  } = formMethod;
+  const { handleSubmit, reset, register } = formMethod;
 
   const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
@@ -41,10 +38,9 @@ export default function Page() {
       }),
     onSuccess: () => reset(),
   });
-  
+
   const submitHandler = async (data: MailFormData) => {
     mutate(data);
-    
   };
 
   return (
@@ -54,19 +50,18 @@ export default function Page() {
           <BackDrop />
           <div className={classes.mail}>
             <div>test</div>
-            dfsafdjss
-            메일 보내는중..
+            dfsafdjss 메일 보내는중..
             <LoadingCircle />
           </div>
         </>
       )}
       <Grid.smallCenter>
-        <div className={classes.contactVanner}>문의하기</div>
+        <HeaderTitle title={"궁금한 점이 있으신가요?"} />
+
         <form
           className={classes.mailForm}
           onSubmit={handleSubmit(submitHandler)}
         >
-          <h2>문의</h2>
           <FormProvider {...formMethod}>
             <FormInput
               type="text"
@@ -84,7 +79,7 @@ export default function Page() {
               })}
               inputName="digit"
             />
-            <label>문의 내용</label>
+
             <FormTextarea
               placeholder="textarea"
               {...register("textarea", {

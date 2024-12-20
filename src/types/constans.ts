@@ -25,3 +25,7 @@ export enum NEXTAUTH_ID {
   CREDENTIALS = "credentials",
   ANONYMOUS = "anonymous",
 }
+
+export enum AUTH {
+  ACCESS_TOKEN = "ACCESS_TOKEN",
+}

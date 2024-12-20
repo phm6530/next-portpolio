@@ -11,7 +11,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
-import { SessionStorage } from "@/utils/sessionStorage-token";
 
 type SignUpResponse = {
   accessToken: string;
@@ -36,36 +35,27 @@ export default function LoginForm() {
       return await requestHandler<SignUpResponse>(async () => {
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
-          credentials: "include", // AccessToken
-          // credentials: "include",
-          //브라우저가 서버와의 요청에서 쿠키를 포함할지 여부를 결정하는 옵션
+          credentials: "include", // Client만 가능하다이거 AccessToken
         });
       });
     },
     onSuccess: (data) => {
       //초기 로그인 시에 사용자 정보 + 토큰 반영
       const { nickname, email, role, id } = data.user;
-
-      //세션 저장
-      SessionStorage.setAccessToken(data.accessToken);
-
       store.setAuthUser({
         id,
         nickname,
         email,
         role,
       });
-
       router.refresh();
-      
-      // router.replace(redirectPath ? redirectPath : "/");
     },
   });
 
   //zodResolver
-  const method = useForm<SignIn>({ resolver: zodResolver(schema), });
+  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
 
   //제출
   const onSubmitHandler = (data: SignIn) => {
@@ -88,7 +78,6 @@ export default function LoginForm() {
         <FormProvider {...method}>
           {/* Id */}
           <div className={classes.inputWrapper}>
-            
             <FormInput
               type="text"
               placeholder="아이디를 입력해주세요"
@@ -105,13 +94,12 @@ export default function LoginForm() {
               autoComplete="new-password"
               inputName="password"
             />
-         
           </div>
-        
+
           <Button.submit disabled={isPending}>로그인</Button.submit>
           <div className={classes.passwordRecovery}>
             <span>비밀번호 찾기</span>
-            <span onClick={()=>router.push("/auth/signup")} >회원가입</span>
+            <span onClick={() => router.push("/auth/signup")}>회원가입</span>
           </div>
           {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>
@@ -119,4 +107,3 @@ export default function LoginForm() {
     </>
   );
 }
- 

@@ -1,11 +1,14 @@
 //Asnwer Radio
 .answerLabel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   input[type="radio"] {
     display: none;
   }
 
   padding: 1rem;
-  display: block;
+
   cursor: pointer;
   border-radius: 1rem;
   margin-bottom: 0.7rem;

@@ -11,6 +11,7 @@ import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import UploadedImagePreview from "./ImageContainer/UploadedImagePreview";
+import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 
 /**
  * template_type : 템플릿 종류
@@ -32,6 +33,7 @@ export default function ThumbNailUploader() {
     mutate,
     isPending: thumnbNailPending,
     isError,
+
     reset,
   } = useMutation({
     mutationFn: async (file: File) => {
@@ -74,19 +76,23 @@ export default function ThumbNailUploader() {
         ref={fileRef}
         onChange={thumbNailhandler}
       />
-
       {/* 썸네일 preView */}
       <>
-        {tempThumbNail && (
+        {thumnbNailPending ? (
           <div className={classes.thumbnailWrapper}>
-            <UploadedImagePreview
-              src={tempThumbNail}
-              deleteFunc={clearPreview}
-            />
+            <LoadingSkeleton loadingText="UP LOADING..." />
           </div>
+        ) : (
+          tempThumbNail && (
+            <div className={classes.thumbnailWrapper}>
+              <UploadedImagePreview
+                src={tempThumbNail}
+                deleteFunc={clearPreview}
+              />
+            </div>
+          )
         )}
-      </>
-
+      </>{" "}
       <div className={classes.buttonWrapper}>
         <FormToolButton
           clickEvent={() => fileRef.current?.click()}

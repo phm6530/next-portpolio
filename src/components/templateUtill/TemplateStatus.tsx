@@ -43,8 +43,6 @@ export default function TemplateStatus({
     }
   };
 
-  console.log(maxGroup?.genderGroup);
-
   return (
     <>
       <div className={classes.statusIcon}>
