@@ -1,11 +1,11 @@
 import { withFetch } from "@/util/clientUtil";
-import { ListItemType } from "../component/list/BoardList";
+import { ListItemType } from "../../component/BoardList";
 import { BASE_NEST_URL } from "@/config/base";
-import { boardCateogries, CategoriesKey } from "../page";
 import classes from "./page.module.scss";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import DateCompareToday from "@/util/DateCompareToday";
+import { boardCateogries, CategoriesKey } from "@/types/board";
 
 type DetailBoardItemType = {
   contents: string;
@@ -16,7 +16,6 @@ export default async function Page({
 }: {
   params: { board: CategoriesKey; id: string };
 }) {
-  console.log(boardCateogries);
   const data = await withFetch<DetailBoardItemType>(async () => {
     return await fetch(`${BASE_NEST_URL}/board/${params.board}/${params.id}`, {
       cache: "no-store",
@@ -42,9 +41,16 @@ export default async function Page({
 
       <div className={classes.postContents}>
         <div className={classes.contents}>{data.contents}</div>
-        <div className={classes.lastUpdate}>
-          수정 최종일자 {dayCompare.fromNow(data.updateAt)}
-        </div>
+        {data.updateAt !== data.createAt && (
+          <div className={classes.lastUpdate}>
+            수정 최종일자 {dayCompare.fromNow(data.updateAt)}
+          </div>
+        )}
+
+        {/* <BoardCreatorUser
+          role={data.creator.role}
+          nickname={data.creator.nickname}
+        /> */}
       </div>
 
       <CommentEditor templateId={params.id} templateType={params.board} />

@@ -1,5 +1,5 @@
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-import { ListItemType } from "../[board]/component/list/BoardList";
+import { ListItemType } from "./BoardList";
 import classes from "./BoardListItem.module.scss";
 import Link from "next/link";
 

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import classes from "./TemplateInputWrapper.module.scss";
+import classes from "./InputWrapper.module.scss";
 
-export default function TemplateInputWrapper({
+export default function InputWrapper({
   title,
   children,
 }: {

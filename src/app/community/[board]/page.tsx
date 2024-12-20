@@ -1,19 +1,12 @@
-import { notFound, redirect } from "next/navigation";
-import BoardList from "./component/list/BoardList";
+import { notFound } from "next/navigation";
+import BoardList from "../component/BoardList";
 import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
 import Button from "@/components/ui/button/Button";
 import classes from "./page.module.scss";
-import BoardCategories from "./component/BoardCategories";
-import dynamic from "next/dynamic";
-import SearchBarWrapper from "./component/SearchBarWrapper";
-
-export const boardCateogries = {
-  free: "자유",
-  notice: "공지사항",
-  qa: "Q&A",
-} as const;
-export type CategoriesKey = keyof typeof boardCateogries;
-export type CategoriesValues = (typeof boardCateogries)[CategoriesKey];
+import BoardCategories from "../component/BoardCategories";
+import SearchBarWrapper from "../component/SearchBarWrapper";
+import Link from "next/link";
+import { boardCateogries, CategoriesKey } from "@/types/board";
 
 export default async function Board({
   params,
@@ -43,7 +36,9 @@ export default async function Board({
       <div className={classes.actionArea}>
         {/* 검색처리를 위해 CLinet 한번더 감쌓았음 */}
         <SearchBarWrapper />
-        <Button.solid>글쓰기</Button.solid>
+        <Link href={`/community/${params.board}/write`}>
+          <Button.solid>글쓰기</Button.solid>
+        </Link>
       </div>
       {/* list */}
       <BoardList boardCategory={params.board} />

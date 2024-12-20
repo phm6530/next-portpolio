@@ -1,0 +1,31 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid #d5dfe6;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  /* padding-bottom: 3rem; */
+  border-bottom: 1px solid #d5dfe6;
+  /* margin-bottom: 3rem; */
+  border: 1px solid #d5dfe6;
+  margin: 1.5rem 0;
+  padding: 3rem;
+}
+
+.guestIdenty {
+  display: flex;
+  gap: 20px;
+  div {
+    flex: 1;
+  }
+}

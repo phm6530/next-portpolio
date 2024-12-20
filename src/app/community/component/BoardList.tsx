@@ -1,24 +1,23 @@
 import { withFetch } from "@/util/clientUtil";
 import classes from "./BoardList.module.scss";
 import { BASE_NEST_URL } from "@/config/base";
-import { BoardKeys } from "../../page";
+import { CategoriesKey } from "../[board]/page";
 import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
-import Button from "@/components/ui/button/Button";
 
 export type ListItemType = {
   id: number;
   updateAt: string;
   createAt: string;
   title: string;
-  category: BoardKeys;
+  category: CategoriesKey;
   creator: { role: USER_ROLE; nickname: string };
 };
 
 export default async function BoardList({
   boardCategory,
 }: {
-  boardCategory: BoardKeys;
+  boardCategory: CategoriesKey;
 }) {
   const data = await withFetch<ListItemType[]>(async () => {
     return await fetch(`${BASE_NEST_URL}/board/${boardCategory}`, {

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { boardCateogries, CategoriesValues } from "../page";
+import { boardCateogries, CategoriesValues } from "../[board]/page";
 import classes from "./BoardCategories.module.scss";
 
 type BoardCategoriesType = typeof boardCateogries;

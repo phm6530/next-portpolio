@@ -11,14 +11,20 @@ export default function SearchBarWrapper() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { register, handleSubmit } = useForm<SearchForm>();
+
+  const keyword = searchParams.get("search");
+
+  const { register, handleSubmit } = useForm<SearchForm>({
+    defaultValues: {
+      keyword: keyword ? keyword : "",
+    },
+  });
 
   const serSearchKeyword: SubmitHandler<SearchForm> = (data) => {
     const params = new URLSearchParams(
-      searchParams.size > 0 ? searchParams.toString() : ""
+      searchParams.size ? searchParams.toString() : ""
     );
 
-    // 'search' 처리 로직
     if (data.keyword.trim() === "") {
       params.delete("search");
     } else {
