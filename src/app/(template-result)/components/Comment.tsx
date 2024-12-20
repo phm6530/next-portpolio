@@ -91,7 +91,10 @@ export default function Comment({
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
         {/* 유저 or 익명 */}
-        <UserRoleDisplay user={user} anonymousNickName={anonymous} />
+        <UserRoleDisplay
+          role={user?.role}
+          nickname={user?.nickname || anonymous}
+        />
 
         <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
 

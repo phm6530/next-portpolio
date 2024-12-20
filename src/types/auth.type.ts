@@ -1,8 +1,8 @@
 //user Role
 export enum USER_ROLE {
   ADMIN = "admin",
-  user = "user",
-  anonymous ="anonymous"
+  USER = "user",
+  ANONYMOUS = "anonymous",
 }
 
 //UserData

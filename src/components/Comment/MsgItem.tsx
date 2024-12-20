@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import Button from "@/components/ui/button/Button";
 import { BASE_URL } from "@/config/base";
+import { USER_ROLE } from "@/types/auth.type";
 
 //import
 dayjs.extend(relativeTime);
@@ -84,7 +85,7 @@ export default function MsgItem({
   return (
     <div className={classes.MsgWrap}>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <UserRoleDisplay user_nickname={username} user_role={role} />
+        <UserRoleDisplay nickname={username} role={role as USER_ROLE} />
         <span style={{ marginRight: "20px" }}>
           {dayjs(create_at).fromNow()}
         </span>

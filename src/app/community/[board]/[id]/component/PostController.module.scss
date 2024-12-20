@@ -1,0 +1,18 @@
+.controller {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin: 10px 0 20px;
+  color: #bdbdbd;
+  button {
+    padding: 0.5rem 0.3rem;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #686868;
+
+    &:hover {
+      color: #583aff;
+    }
+  }
+}

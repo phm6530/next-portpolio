@@ -2,13 +2,17 @@
   display: inline-flex;
   gap: 4px;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 1em;
   margin-right: 1rem;
-  font-weight: 600;
+
   color: #333;
 }
 
-
 .nickName {
-  color: rgb(54, 4, 172);
+  // font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  max-width: 100px;
 }

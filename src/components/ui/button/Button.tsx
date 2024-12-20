@@ -21,22 +21,17 @@ function outlineButton({
 }
 
 function solid({
-  type = "button",
-  style,
   children,
-  disabled,
+  className,
+  ...rest
 }: {
-  type?: "submit" | "button";
-  style: CSSProperties;
   children: string;
-  disabled?: boolean;
-}) {
+  className?: string;
+} & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      type={type}
-      style={style}
-      disabled={disabled}
-      className={classes.solidButton}
+      {...rest}
+      className={`${classes.solidButton} ${className ? className : undefined}`}
     >
       {children}
     </button>

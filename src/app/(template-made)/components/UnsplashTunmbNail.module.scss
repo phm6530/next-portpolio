@@ -32,28 +32,6 @@
   }
 }
 
-.search {
-  display: flex;
-  gap: 10px;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-  overflow: hidden;
-
-  input {
-    flex: 1;
-    border: transparent;
-    padding: 14px 16px 14px 16px;
-    // text-indent: 1rem;
-    // background: rgb(245, 245, 245);
-  }
-
-  button {
-    background: transparent;
-
-    margin-top: 0 !important;
-  }
-}
-
 @keyframes opacity {
   from {
     opacity: 0;

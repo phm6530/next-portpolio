@@ -1,0 +1,30 @@
+.boardTitle {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.actionArea {
+  display: flex;
+  gap: 20px;
+
+  & > div:first-child {
+    flex: 1;
+  }
+}
+
+.categoriesWrapper {
+  padding: 20px 0;
+
+  display: flex;
+  gap: 10px;
+  button {
+    outline: 1px solid #696969;
+    padding: 0.7rem 0.8rem;
+    border-radius: 3rem;
+    opacity: 0.4;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}

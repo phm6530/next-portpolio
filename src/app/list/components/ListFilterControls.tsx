@@ -7,7 +7,7 @@ import FemaleIcon from "/public/asset/icon/female.svg";
 import MaleIcon from "/public/asset/icon/male.svg";
 // import GraphIcon from "/public/asset/icon/graph.svg";
 
-import classes from "./surveyControler.module.scss";
+import classes from "./ListFilterControls.module.scss";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
 
 const btnArr = [
@@ -32,7 +32,7 @@ const btnArr = [
   },
 ];
 
-export default function SurveyControler() {
+export default function ListFilterControls() {
   const qs = useSearchParams();
 
   const router = useRouter();
@@ -67,9 +67,7 @@ export default function SurveyControler() {
             onClick={onClickHandler}
           >
             {/* {btn.icon && <btn.icon className={classes.btnImg} />} */}
-            <span>
-              {btn.label}
-            </span>
+            <span>{btn.label}</span>
           </button>
         );
       })}

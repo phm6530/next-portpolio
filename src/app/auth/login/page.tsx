@@ -25,15 +25,12 @@ const Login = async ({
           <div className={classes.loginText}>
             Do poll, 설문으로 소통하는 공간
           </div>
-          {/* <p className={classes.signupDescription}>30초만 회원가입이 가능해요!</p> */}
         </div>
         {code && <LoginMsg code={code} />}
 
         <LoginForm />
 
-        {/* <div className={classes.authLinks}>
-        copyRight @ PHM
-      </div> */}
+        {/* <div className={classes.authLinks}>copyRight @ PHM</div> */}
       </div>
     </>
   );

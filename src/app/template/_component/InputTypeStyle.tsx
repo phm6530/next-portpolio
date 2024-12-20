@@ -34,8 +34,8 @@ function RadioAnswer({
         selectId == null
           ? classes.answer_null // null일 때 적용할 클래스
           : selectId === curid
-            ? classes.answer_active // true일 때 적용할 클래스
-            : classes.answer_noneActive // false 또는 undefined일 때 적용할 클래스
+          ? classes.answer_active // true일 때 적용할 클래스
+          : classes.answer_noneActive // false 또는 undefined일 때 적용할 클래스
       }
     >
       {children}
@@ -60,8 +60,8 @@ function Radio<T extends HTMLLabelElement>({
         selectLabel == null
           ? classes.radio_null // null일 때 적용할 클래스
           : selectLabel === curLabel
-            ? classes.radio_active // true일 때 적용할 클래스
-            : classes.radio_noneActive // false 또는 undefined일 때 적용할 클래스
+          ? classes.radio_active // true일 때 적용할 클래스
+          : classes.radio_noneActive // false 또는 undefined일 때 적용할 클래스
       }
       {...rest}
     >

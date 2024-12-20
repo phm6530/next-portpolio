@@ -21,9 +21,11 @@
   box-shadow: 5px 14px 29px rgb(100 63 255 / 25%);
   border-radius: 6px;
   font-size: 14px;
-  background: #6f5bc5;
+  cursor: pointer;
+
   @include disabledButton();
-  @include btn-hover(#6d5cff);
+  // @include btn-hover(#6d5cff);
+  @include btn-hover(#755cff);
   // background: linear-gradient(180deg, #7b69e7 0%, #7498de 100%, #c981cb 100.01%);
 }
 
@@ -73,7 +75,7 @@
 .solidButton {
   padding: 1rem 2rem;
   border-radius: 7px;
-  font-size: 12px;
+  font-size: 14px;
   display: inline-block;
   color: #fff;
   @include btn-hover(#592bc4);

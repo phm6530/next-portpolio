@@ -9,22 +9,26 @@ type TextAreaProps = {
 } & TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const FormTextarea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, textareaName, ...rest }, ref) => {
+  ({ className, name, ...rest }, ref) => {
     const [rows, rowsHandler] = useRows();
     const {
       formState: { errors },
     } = useFormContext();
 
-    const err = textareaName ? errors[textareaName] : false;
+    const err = name && errors ? errors[name] : null;
 
     return (
       <>
         <textarea
-          className={`${classes.FormInput} ${
-            className ? className : undefined
-          } ${!!err ? classes.error : undefined}`}
-          onChange={rowsHandler}
+          className={`${classes.FormInput} ${className || ""} ${
+            err ? classes.error : ""
+          }`}
           ref={ref}
+          name={name}
+          onChange={(e) => {
+            rowsHandler(e);
+            rest?.onChange?.(e);
+          }}
           rows={rows}
           {...rest}
         />

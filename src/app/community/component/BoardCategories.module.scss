@@ -1,0 +1,16 @@
+.categoriesWrapper {
+  padding: 20px 0;
+
+  display: flex;
+  gap: 10px;
+  button {
+    outline: 1px solid #696969;
+    padding: 0.7rem 1rem;
+    border-radius: 3rem;
+    opacity: 0.4;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}

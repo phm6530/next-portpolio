@@ -27,13 +27,7 @@ export default function SurveySlide({ idx }: { idx: number }) {
 
   return (
     <div className={`ts ${idx ? classes.slideTop : classes.slideBottom}`}>
-      <div className={`test ${classes.test}`}>
-        {/* {DUMMY_DATA.map((item, idx) => (
-          <div key={`surveyItem-${idx}`}>
-            <SurveyItem itemData={item} />
-          </div>
-        ))} */}
-      </div>
+      <div className={`test ${classes.test}`}></div>
     </div>
   );
 }

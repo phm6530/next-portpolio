@@ -1,19 +1,16 @@
 .masterIcon {
   display: inline-flex;
   align-items: center;
-  font-size: 0.6rem;
-  background: rgb(134, 85, 231);
-
-  background: linear-gradient(180deg, #8e26ff 0%, #6158cd 100%);
-
+  background: linear-gradient(180deg, #8e26ff 0%, #7b73d1 100%);
+  font-size: 10px;
   color: #{map-get($colors-white, "default")};
-  padding: 2px 3px;
+  padding: 1px 3px 2px;
   border-radius: 4px;
 }
 
 .anonymousIcon {
   display: flex;
-
+  font-size: 0.5rem;
   svg {
     width: 15px;
     opacity: 0.6;

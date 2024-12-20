@@ -1,8 +1,5 @@
 import { ReactNode } from "react";
 import classes from "./NotFoundComponent.module.scss";
-// import NotSearch from "/public/asset/icon/notFoundsearch.png";
-import replyIcon from "/public/asset/icon/reply.png";
-import Image from "next/image";
 
 function search({ keyword }: { keyword: string }) {
   return (
