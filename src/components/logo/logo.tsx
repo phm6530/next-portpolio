@@ -29,7 +29,7 @@ export default function Logo({ link = false }: { link?: boolean }) {
 
   // mount 된 후에는 resolvedTheme 사용
   const transformThemeLogo = theme === "dark" ? LogoWhite : logoInital;
-  
+
   const handleClick = () => {
     if (link) {
       router.push("/");
@@ -37,13 +37,13 @@ export default function Logo({ link = false }: { link?: boolean }) {
   };
 
   return (
-    <div 
+    <div
       className={`${classes.logoWrapper} ${link ? classes.cursor : undefined}`}
       onClick={handleClick}
-    >      
-      <Image 
-        src={transformThemeLogo} 
-        alt="logo" 
+    >
+      <Image
+        src={transformThemeLogo}
+        alt="logo"
         fill
         priority
         style={{ objectFit: "contain" }}

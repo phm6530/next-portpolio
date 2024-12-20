@@ -5,5 +5,5 @@ export default function FormRegisterError({
 }: {
   errorMsg?: string | undefined;
 }) {
-  return <div className={classes.errorMsg}>! {errorMsg}</div>;
+  return <div className={classes.errorMsg}>{errorMsg}</div>;
 }

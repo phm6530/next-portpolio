@@ -1,11 +1,13 @@
 import { withFetch } from "@/util/clientUtil";
-import { ListItemType } from "../../component/BoardList";
+import { ExcludeUser, ListItemType } from "../../component/BoardList";
 import { BASE_NEST_URL } from "@/config/base";
 import classes from "./page.module.scss";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import DateCompareToday from "@/util/DateCompareToday";
 import { boardCateogries, CategoriesKey } from "@/types/board";
+import PostController from "./component/PostController";
+import { USER_ROLE } from "@/types/auth.type";
 
 type DetailBoardItemType = {
   contents: string;
@@ -21,8 +23,8 @@ export default async function Page({
       cache: "no-store",
     });
   });
-  const dayCompare = DateCompareToday();
 
+  const dayCompare = DateCompareToday();
   const boardName = boardCateogries[params.board];
 
   return (
@@ -39,19 +41,26 @@ export default async function Page({
         </div>
       </div>
 
-      <div className={classes.postContents}>
-        <div className={classes.contents}>{data.contents}</div>
-        {data.updateAt !== data.createAt && (
-          <div className={classes.lastUpdate}>
-            수정 최종일자 {dayCompare.fromNow(data.updateAt)}
-          </div>
-        )}
-
-        {/* <BoardCreatorUser
-          role={data.creator.role}
-          nickname={data.creator.nickname}
-        /> */}
+      <div className={classes.contentsWrapper}>
+        <div className={classes.postContents}>
+          <div className={classes.contents}>{data.contents}</div>
+          {data.updateAt !== data.createAt && (
+            <div className={classes.lastUpdate}>
+              수정 최종일자 {dayCompare.fromNow(data.updateAt)}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Controller */}
+      <PostController
+        id={params.id}
+        category={params.board}
+        creatorRole={data.creator.role}
+        creatorEmail={
+          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
+        }
+      />
 
       <CommentEditor templateId={params.id} templateType={params.board} />
       {/* <ResultCommentSection id={params.id} type={"test"} /> */}

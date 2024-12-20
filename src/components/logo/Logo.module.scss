@@ -19,11 +19,9 @@
   background-position: center center;
   opacity: 0;
 
-
   &.cursor {
     cursor: pointer;
   }
 
-
-  animation: ani .5s ease forwards;
+  animation: ani 0.5s ease forwards;
 }

@@ -64,6 +64,7 @@ export default function GlobalNav() {
     },
     onSuccess: async () => {
       resetUserQueries();
+      alert("로그아웃 되었습니다.");
       router.refresh();
     },
     onError: () => {

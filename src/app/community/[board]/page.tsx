@@ -37,9 +37,10 @@ export default async function Board({
         {/* 검색처리를 위해 CLinet 한번더 감쌓았음 */}
         <SearchBarWrapper />
         <Link href={`/community/${params.board}/write`}>
-          <Button.solid>글쓰기</Button.solid>
+          <Button.submit>글쓰기</Button.submit>
         </Link>
       </div>
+
       {/* list */}
       <BoardList boardCategory={params.board} />
     </>

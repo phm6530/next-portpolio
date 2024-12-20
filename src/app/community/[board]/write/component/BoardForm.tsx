@@ -134,7 +134,7 @@ export default function BoardForm({
           />
         </InputWrapper>
 
-        <Button.solid>글쓰기</Button.solid>
+        <Button.submit>글쓰기</Button.submit>
       </form>
     </FormProvider>
   );

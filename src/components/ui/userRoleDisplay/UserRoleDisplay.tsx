@@ -12,8 +12,8 @@ export default function UserRoleDisplay({
   return (
     <div className={classes.userDisplayContainer}>
       {/* Icon 임의로 반영함 */}
-      {role === USER_ROLE.user && <UserMarker.anonymonus />}
-      {role === USER_ROLE.anonymous && <UserMarker.anonymonus />}
+      {role === USER_ROLE.USER && <UserMarker.anonymonus />}
+      {role === USER_ROLE.ANONYMOUS && <UserMarker.anonymonus />}
       {role === "admin" && <UserMarker.Master />}
 
       {/* 닉네임 */}

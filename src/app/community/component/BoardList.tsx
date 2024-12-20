@@ -1,9 +1,11 @@
 import { withFetch } from "@/util/clientUtil";
 import classes from "./BoardList.module.scss";
 import { BASE_NEST_URL } from "@/config/base";
-import { CategoriesKey } from "../[board]/page";
 import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
+import { CategoriesKey } from "@/types/board";
+
+export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
 export type ListItemType = {
   id: number;
@@ -11,7 +13,9 @@ export type ListItemType = {
   createAt: string;
   title: string;
   category: CategoriesKey;
-  creator: { role: USER_ROLE; nickname: string };
+  creator:
+    | { role: USER_ROLE.ANONYMOUS; nickname: string }
+    | { role: ExcludeUser; nickname: string; email: string };
 };
 
 export default async function BoardList({

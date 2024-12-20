@@ -9,8 +9,9 @@
   align-items: flex-start;
 
   h1 {
-    font-size: 2.1rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 500;
+    text-shadow: 0px 0px 1px;
     white-space: pre-line;
   }
 
@@ -24,7 +25,7 @@
 .description {
   background: #f8f9fa;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 10px;
   margin: 10px 0;
   font-size: 14px;
   display: flex;
@@ -35,5 +36,6 @@
   svg {
     width: 20px;
     height: 20px;
+    filter: drop-shadow(4px 4px 3px rgba(0, 0, 0, 0.23));
   }
 }

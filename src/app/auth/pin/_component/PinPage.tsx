@@ -2,22 +2,14 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
-import { FormEvent, useEffect } from "react";
-
-type SessionAnanonymous = {
-  access_email: string;
-  template_key: string;
-  role: "anonymous";
-};
+import { FormEvent } from "react";
 
 export default function PinPage({
   template_key,
   redirectPath,
-  session,
 }: {
   template_key: string;
   redirectPath: string;
-  session: SessionAnanonymous | null;
 }) {
   const { mutate } = useMutation({
     mutationFn: async (data: { pin: number; template_key: string }) => {
@@ -37,11 +29,6 @@ export default function PinPage({
       window.location.href = redirectPath;
     },
   });
-
-  useEffect(() => {
-    if (session) {
-    }
-  }, [session]);
 
   const onSubmithandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

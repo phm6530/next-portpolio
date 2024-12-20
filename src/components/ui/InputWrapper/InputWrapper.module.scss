@@ -1,5 +1,17 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
+}
+
+.titleHeader {
+  span {
+    font-size: 13px;
+    opacity: 0.5;
+  }
+}
+
+.description {
+  font-size: 13px;
+  color: #6c757d;
 }

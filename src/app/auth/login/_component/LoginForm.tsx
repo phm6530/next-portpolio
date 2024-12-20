@@ -97,9 +97,15 @@ export default function LoginForm() {
           </div>
 
           <Button.submit disabled={isPending}>로그인</Button.submit>
+
           <div className={classes.passwordRecovery}>
-            <span>비밀번호 찾기</span>
-            <span onClick={() => router.push("/auth/signup")}>회원가입</span>
+            <button type="button" onClick={() => router.push("/auth/pin")}>
+              비밀번호 찾기
+            </button>
+            |
+            <button type="button" onClick={() => router.push("/auth/signup")}>
+              회원가입
+            </button>
           </div>
           {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>

@@ -10,5 +10,9 @@
 
 .nickName {
   // font-weight: 600;
-  font-size: 0.9em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  max-width: 100px;
 }
