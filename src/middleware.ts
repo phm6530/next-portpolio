@@ -3,7 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { ERROR_CODE } from "./codeMsg";
 import withAuthFetch from "./utils/withAuthFetch";
 
-const AUTH_REDIRECT_PATHS = ["/auth/login", "/auth/signup"] as const;
+const AUTH_REDIRECT_PATHS = [
+  "/auth/login",
+  "/auth/signup",
+  "/auth/pin",
+] as const;
 const AUTH_REQUIRED_PATHS = ["/made", "/mypage"] as const;
 
 type Pathname = (typeof AUTH_REDIRECT_PATHS)[number];
