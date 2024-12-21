@@ -100,7 +100,7 @@ export default function LoginForm() {
 
           <div className={classes.passwordRecovery}>
             <button type="button" onClick={() => router.push("/auth/pin")}>
-              비밀번호 찾기
+              비밀번호를 잊어버리셨나요?
             </button>
             |
             <button type="button" onClick={() => router.push("/auth/signup")}>

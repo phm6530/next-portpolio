@@ -2,17 +2,14 @@
 import Button from "@/components/ui/button/Button";
 import FormInput from "@/components/ui/FormElement/FormInput";
 import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
-import addPin from "@/utils/addPin.utill";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import classes from "./PasswordFindForm.module.scss";
+import classes from "./FindmenberAndSendPin.module.scss";
 import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { resolve } from "path";
 import { BASE_NEST_URL } from "@/config/base";
 import { withFetch } from "@/util/clientUtil";
-import PinTimer from "./PinTimer";
 
 const schema = z.object({
   email: z.string().email("유효한 이메일주소가 아닙니다."),
@@ -27,9 +24,14 @@ type FormType = {
   email: string;
 };
 
-export default function PasswordFindForm() {
+export default function FindmenberAndSendPin({
+  nextStep,
+  setPin,
+}: {
+  nextStep: () => void;
+  setPin: Dispatch<SetStateAction<string | null>>;
+}) {
   const method = useForm<FormType>({ resolver: zodResolver(schema) });
-  const [pin, setPin] = useState<string | null>(null);
 
   const {
     mutate,
@@ -50,6 +52,7 @@ export default function PasswordFindForm() {
     onSuccess: (data) => {
       // 4자리 Pin 번호
       setPin(data.authPin);
+      nextStep();
     },
   });
 
@@ -86,15 +89,7 @@ export default function PasswordFindForm() {
         </FormProvider>
       )}
 
-      <PinTimer />
-
-      {/* {pin && isPinSuccess && ()} */}
-      {/* <FormInput
-        type="text"
-        placeholder="가입 하셨던 이메일을 기재해주세요"
-        disabled={isPending}
-        name="test"
-      /> */}
+      {/* 타이머 */}
     </>
   );
 }

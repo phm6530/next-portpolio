@@ -12,7 +12,7 @@ import {
 function outlineButton({
   children,
   ...rest
-}: { children: string } & ButtonHTMLAttributes<HTMLButtonElement>) {
+}: { children: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button type="button" {...rest} className={classes.outlineButton}>
       {children}
