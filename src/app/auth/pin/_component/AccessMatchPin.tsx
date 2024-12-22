@@ -6,8 +6,9 @@ import Button from "@/components/ui/button/Button";
 import classes from "./AccessMatchPin.module.scss";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import Verified from "/public/asset/icon/Verified.svg";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import AuthComplete from "./AuthComplete";
+import useStore from "@/store/store";
 
 const createSchema = (pin: string) =>
   z.object({
@@ -17,14 +18,21 @@ const createSchema = (pin: string) =>
       .refine((val) => val === pin, "입력한 PIN 번호가 일치하지 않습니다."),
   });
 
+type NavType = "next" | "prev";
+
 export default function AccessMatchPin({
   pin,
   nextStep,
+  setPin,
 }: {
   pin: string;
-  nextStep: () => void;
+  nextStep: (arg: NavType) => void;
+  setPin: Dispatch<SetStateAction<string | null>>;
 }) {
+  const store = useStore();
+
   const schema = createSchema(pin || ""); // PIN을 동적으로 전달
+
   const methods = useForm<{ pin: string }>({
     resolver: zodResolver(schema),
   });
@@ -35,22 +43,17 @@ export default function AccessMatchPin({
     formState: { isValid },
   } = methods;
 
-  useEffect(() => {
-    if (isValid) {
-      setTimeout(() => {
-        nextStep();
-      }, 1000);
-    }
-  }, [isValid]);
-
   const matchPin = (e: { pin: string }) => {
-    console.log(e.pin);
     if (parseInt(e.pin, 10) === parseInt(pin)) {
-      console.log("일치함");
+      nextStep("next");
     }
   };
 
-  console.log(isValid);
+  const Timeout = () => {
+    setPin(null); // 핀번호 리셋
+    nextStep("prev");
+    store.setResetUser();
+  };
 
   return (
     <>
@@ -69,14 +72,11 @@ export default function AccessMatchPin({
                 disabled={isValid}
               />
             </InputWrapper>
-            <PinTimer />
+            <PinTimer timeout={Timeout} />
           </div>
-          {isValid && (
-            <div className={classes.success}>
-              <Verified />
-              인증 완료
-            </div>
-          )}
+
+          {/* 인증완료 */}
+          {isValid && <AuthComplete complateText="인증 완료" />}
 
           <Button.outlineButton type="submit">인증</Button.outlineButton>
         </form>
