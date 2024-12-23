@@ -4,6 +4,7 @@ import { BASE_NEST_URL } from "@/config/base";
 import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
+import { useSearchParams } from "next/navigation";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
@@ -13,6 +14,7 @@ export type ListItemType = {
   createAt: string;
   title: string;
   category: CategoriesKey;
+  view: number;
   creator:
     | { role: USER_ROLE.ANONYMOUS; nickname: string }
     | { role: ExcludeUser; nickname: string; email: string };
@@ -20,11 +22,16 @@ export type ListItemType = {
 
 export default async function BoardList({
   boardCategory,
+  keyword,
 }: {
   boardCategory: CategoriesKey;
+  keyword?: string;
 }) {
   const data = await withFetch<ListItemType[]>(async () => {
-    return await fetch(`${BASE_NEST_URL}/board/${boardCategory}`, {
+    const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
+    const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}`;
+
+    return await fetch(url, {
       cache: "no-store",
     });
   });

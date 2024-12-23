@@ -10,8 +10,12 @@ import { boardCateogries, CategoriesKey } from "@/types/board";
 
 export default async function Board({
   params,
+  keyword,
+  searchParams,
 }: {
   params: { board: CategoriesKey };
+  keyword?: string;
+  searchParams?: Record<string, string | undefined>;
 }) {
   function isBoardCategory(key: string): key is keyof typeof boardCateogries {
     return key in boardCateogries;
@@ -42,7 +46,10 @@ export default async function Board({
       </div>
 
       {/* list */}
-      <BoardList boardCategory={params.board} />
+      <BoardList
+        boardCategory={params.board}
+        keyword={keyword || searchParams?.search}
+      />
     </>
   );
 }

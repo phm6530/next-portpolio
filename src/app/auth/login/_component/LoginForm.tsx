@@ -44,12 +44,6 @@ export default function LoginForm() {
     onSuccess: (data) => {
       //초기 로그인 시에 사용자 정보 + 토큰 반영
       const { nickname, email, role, id } = data.user;
-      store.setAuthUser({
-        id,
-        nickname,
-        email,
-        role,
-      });
       router.refresh();
     },
   });

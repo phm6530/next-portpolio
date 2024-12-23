@@ -8,8 +8,66 @@ import DateCompareToday from "@/util/DateCompareToday";
 import { boardCateogries, CategoriesKey } from "@/types/board";
 import PostController from "./component/PostController";
 import { USER_ROLE } from "@/types/auth.type";
+import { QueryClient } from "@tanstack/react-query";
+import PostContents from "./component/PostContents";
+import { cookies } from "next/headers";
 
-type DetailBoardItemType = {
+//list Id 뽑아서 전달
+
+//이건 배포할떄 테스트해보자
+// export async function generateStaticParams() {
+//   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
+//   const allParams = [];
+
+//   for (const category of categories) {
+//     const response = await fetch(`${BASE_NEST_URL}/board/${category}`);
+//     const listResponse: ListItemType[] = await response.json();
+
+//     const params = listResponse.map((item) => ({
+//       category,
+//       id: item.id.toString(),
+//     }));
+
+//     allParams.push(...params);
+//   }
+
+//   return allParams;
+// }
+
+//서버에서 하이듀레이션하려고 생성
+// const queryClient = new QueryClient();
+
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { board: CategoriesKey; id: number };
+// }) {
+//   const { board, id } = params;
+//   const cookie = cookies();
+//   const boardToken = cookie.get(`board_${board}_${id}`);
+
+//   const data = await queryClient.fetchQuery({
+//     queryKey: [`post-${board}-${id}`],
+//     queryFn: async () => {
+//       return await withFetch<DetailBoardItemType>(async () => {
+//         return await fetch(`${BASE_NEST_URL}/board/${board}/${id}`, {
+//           cache: "no-cache",
+//           headers: {
+//             authorization: `Bearer ${boardToken?.name}`,
+//           },
+//         });
+//       });
+//     },
+//     // staleTime: 24 * 60 * 1000,
+//   });
+
+//   return {
+//     title: `게시판 -  ${data.title}`,
+//     description: data.contents,
+//   };
+// }
+
+export type DetailBoardItemType = {
   contents: string;
 } & ListItemType;
 
@@ -18,52 +76,30 @@ export default async function Page({
 }: {
   params: { board: CategoriesKey; id: string };
 }) {
-  const data = await withFetch<DetailBoardItemType>(async () => {
-    return await fetch(`${BASE_NEST_URL}/board/${params.board}/${params.id}`, {
-      cache: "no-store",
-    });
-  });
+  const { board, id } = params;
+  // const cookie = cookies();
+  // const boardToken = cookie.get(`board_${board}_${id}`);
 
-  const dayCompare = DateCompareToday();
-  const boardName = boardCateogries[params.board];
+  // await queryClient.prefetchQuery({
+  //   queryKey: [`post-${board}-${id}`],
+  //   queryFn: async () => {
+  //     return await withFetch<DetailBoardItemType>(async () => {
+  //       return await fetch(`${BASE_NEST_URL}/board/${board}/${id}`, {
+  //         cache: "no-cache",
+  //         headers: {
+  //           authorization: `Bearer ${boardToken}`,
+  //         },
+  //       });
+  //     });
+  //   },
+  // });
 
   return (
     <>
-      <div className={classes.postHeader}>
-        <div className={classes.boardCategory}>{boardName}</div>
-        <div className={classes.postTitle}>{data.title}</div>
-        <div className={classes.postInfo}>
-          <UserRoleDisplay
-            role={data.creator.role}
-            nickname={data.creator.nickname}
-          />
-          <span>{dayCompare.fromNow(data.createAt)}</span>
-        </div>
-      </div>
-
-      <div className={classes.contentsWrapper}>
-        <div className={classes.postContents}>
-          <div className={classes.contents}>{data.contents}</div>
-          {data.updateAt !== data.createAt && (
-            <div className={classes.lastUpdate}>
-              수정 최종일자 {dayCompare.fromNow(data.updateAt)}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Controller */}
-      <PostController
-        id={params.id}
-        category={params.board}
-        creatorRole={data.creator.role}
-        creatorEmail={
-          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
-        }
-      />
-
-      <CommentEditor templateId={params.id} templateType={params.board} />
+      {/* <Request id={params.id} category={params.board}/> */}
+      <PostContents category={board} postId={id} />
       {/* <ResultCommentSection id={params.id} type={"test"} /> */}
+      {/* <HydrationBoundary state={dehydrate(queryClient)}></HydrationBoundary> */}
     </>
   );
 }

@@ -40,6 +40,7 @@ export default function BoardForm({
   boardName,
 }: {
   boardKey: CategoriesKey;
+  searchParams?: string;
   boardName: CategoriesValues;
 }) {
   const queryClient = useQueryClient();
