@@ -23,7 +23,7 @@ export default function BoardListItem({
         />
 
         <div className={classes.createAt}>{itemData.createAt}</div>
-        <div className={classes.viewCnt}>조회수 0</div>
+        <div className={classes.viewCnt}>조회수 {itemData.view}</div>
       </div>
     </div>
   );

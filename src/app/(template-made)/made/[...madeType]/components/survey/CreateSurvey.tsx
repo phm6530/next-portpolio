@@ -98,7 +98,7 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset, watch } = formState;
+  const { register, setValue, reset } = formState;
 
   const editId = qs.get("edit");
 
@@ -206,10 +206,7 @@ export default function CreateSurvey() {
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <form
-        className={classes.formContainer}
-        onSubmit={formState.handleSubmit(onSubmitHandler)}
-      >
+      <div className={classes.formContainer}>
         <FormProvider {...formState}>
           <section className={classes.formSection}>
             <div className={classes.header}>
@@ -232,7 +229,6 @@ export default function CreateSurvey() {
             <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
               <FormTextarea
                 {...register("description")}
-                textareaName={"description"}
                 placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
                 autoComplete="off"
               />
@@ -276,10 +272,6 @@ export default function CreateSurvey() {
                 // description="성별 필터링이 가능합니다."
               />
             </section>
-            {/* 기간 */}
-            {/* <AddDateRange /> */}
-
-            {/* Survey Edit Form + List*/}
 
             <section className={classes.formSection}>
               <div className={classes.header}>
@@ -304,11 +296,15 @@ export default function CreateSurvey() {
 
         <div className={classes.buttonsWrapper}>
           <button type="button">미리보기</button>
-          <Button.submit type="submit" disabled={isPending}>
+          <Button.submit
+            type="submit"
+            disabled={isPending}
+            onClick={formState.handleSubmit(onSubmitHandler)}
+          >
             설문조사 생성하기
           </Button.submit>
         </div>
-      </form>
+      </div>
     </>
   );
 }

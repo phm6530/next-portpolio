@@ -3,10 +3,6 @@ import Myprofile from "@/app/(mypage)/mypage/_components/Myprofile";
 import { Metadata } from "next";
 import classes from "./page.module.scss";
 
-export const metadata: Metadata = {
-  title: "mypage",
-};
-
 export default async function page() {
   return (
     <div className={classes.container}>

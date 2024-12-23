@@ -28,9 +28,8 @@ const Login = async ({
         </div>
         {code && <LoginMsg code={code} />}
 
+        {/* Login */}
         <LoginForm />
-
-        {/* <div className={classes.authLinks}>copyRight @ PHM</div> */}
       </div>
     </>
   );

@@ -102,10 +102,7 @@ function moveLink({
 function submit({
   children,
   ...rest
-}: {
-  children: string;
-  [key: string]: any;
-}) {
+}: { children: string } & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button {...rest} className={classes.submitButton}>
       <div className={classes.btns}>{children}</div>

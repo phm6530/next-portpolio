@@ -10,6 +10,7 @@ import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
 import { withFetch } from "@/util/clientUtil";
+import useStore from "@/store/store";
 
 const schema = z.object({
   email: z.string().email("유효한 이메일주소가 아닙니다."),
@@ -18,20 +19,23 @@ const schema = z.object({
 type Response = {
   menber: boolean;
   authPin: string;
+  userEmail: string;
 };
 
 type FormType = {
   email: string;
 };
+type NavType = "next" | "prev";
 
 export default function FindmenberAndSendPin({
   nextStep,
   setPin,
 }: {
-  nextStep: () => void;
+  nextStep: (arg: NavType) => void;
   setPin: Dispatch<SetStateAction<string | null>>;
 }) {
   const method = useForm<FormType>({ resolver: zodResolver(schema) });
+  const store = useStore();
 
   const {
     mutate,
@@ -52,7 +56,8 @@ export default function FindmenberAndSendPin({
     onSuccess: (data) => {
       // 4자리 Pin 번호
       setPin(data.authPin);
-      nextStep();
+      nextStep("next");
+      store.setPasswordUser(data.userEmail);
     },
   });
 

@@ -29,6 +29,10 @@ export type DetailRespondents = {
 export type RespondentsAndMaxGroup = {
   tag: RESPONDENT_TAG.MAXGROUP;
   allCnt: number;
+  participants: {
+    male: number;
+    female: number;
+  };
   maxGroup: {
     maxCnt: number;
     genderGroup?: GENDER_GROUP;

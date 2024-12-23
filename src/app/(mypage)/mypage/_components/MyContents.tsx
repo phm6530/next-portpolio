@@ -1,5 +1,4 @@
 "use client";
-import { BASE_NEST_URL } from "@/config/base";
 import { User } from "@/types/auth.type";
 import { QUERY_KEY } from "@/types/constans";
 import classes from "./MyContents.module.scss";
@@ -8,20 +7,27 @@ import {
   TemplateItemMetadata,
 } from "@/types/template.type";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import withAuthFetch from "@/utils/withAuthFetch";
+import Button from "@/components/ui/button/Button";
+import MyContentsItem from "./MyContentsItem";
+import { useState } from "react";
+import { never } from "zod";
+
+type returnData = {
+  data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
+  nextPage: null | number;
+};
 
 export default function MyContents() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
+  const [filter, setFilter] = useState<"new" | "users">("new");
 
-  const { data, isLoading } = useQuery<{
-    data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
-    nextPage: null | number;
-  }>({
+  // get List..
+  const { data, isLoading } = useQuery<returnData>({
     queryKey: [QUERY_KEY.MY_CONTENTS],
     queryFn: async () => {
       const url = `user/me/contents`;
@@ -32,104 +38,72 @@ export default function MyContents() {
     },
     enabled: !!userdata,
     staleTime: Infinity,
-  });
+    select: (data: returnData) => {
+      if (!data) {
+        return {
+          data: [],
+          nextPage: null,
+        };
+      }
 
-  const { mutate } = useMutation<
-    unknown,
-    Error,
-    Pick<TemplateItemMetadata<RespondentsAndMaxGroup>, "id" | "templateType">
-  >({
-    mutationFn: async ({ templateType, id }) => {
-      const url = `template/${templateType}/${id}`;
+      switch (filter) {
+        case "new":
+          return data;
 
-      const options: RequestInit = {
-        method: "DELETE",
-        credentials: "include",
-      };
-      const response = await withAuthFetch(url, options);
-      return response;
+        case "users":
+          return {
+            ...data,
+            data: [...data.data].sort(
+              (a, b) =>
+                (b.respondents.allCnt || 0) - (a.respondents.allCnt || 0)
+            ),
+          };
+
+        default:
+          throw new Error("Invalid filter value");
+      }
     },
-
-    onSuccess: () => {
-      alert("삭제되었습니다.");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.MY_CONTENTS],
-      });
-    },
   });
-
-  const templateDeleteHanlder = ({
-    templateType,
-    id,
-  }: Pick<
-    TemplateItemMetadata<RespondentsAndMaxGroup>,
-    "id" | "templateType"
-  >) => {
-    confirm("삭제 하시겠습니까? \n삭제 시 영구 삭제되어 복구할 수 없습니다.") &&
-      mutate({ templateType, id });
-  };
 
   return (
     <div>
-      <h3>내가만든 템플릿</h3>
+      {/* <h3>내가 만든 템플릿</h3> */}
 
-      <button onClick={() => router.push("/made")}>만들기</button>
+      <div className={classes.categoriesWrapper}>
+        <div className={classes.buttonWrapper}>
+          <div
+            className={`${filter === "new" ? classes.active : undefined}`}
+            onClick={() => setFilter("new")}
+          >
+            최신 순
+          </div>
+          <div
+            className={`${filter === "users" ? classes.active : undefined}`}
+            onClick={() => setFilter("users")}
+          >
+            참여자 순
+          </div>
+        </div>
+        <Button.submit onClick={() => router.push("/made")}>
+          템플릿 만들기
+        </Button.submit>
+      </div>
+
+      {/* <h2>생성한 템플릿</h2> */}
 
       {isLoading ? (
         <>loading..</>
       ) : (
         <div className={classes.container}>
-          {data?.data.map((e, idx) => {
-            return (
-              <div key={idx} className={classes.myTemplateItem}>
-                {e.thumbnail && (
-                  <div className={classes.imgWrap}>
-                    <Image
-                      src={e.thumbnail}
-                      alt={e.title}
-                      fill
-                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                )}
-                <div>
-                  <div>
-                    <p>{e.title}</p>
-                    <p>{e.description}</p>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() =>
-                        router.push(`/result/${e.templateType}/${e.id}`)
-                      }
-                    >
-                      결과페이지
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        router.push(`/made/${e.templateType}?edit=${e.id}`)
-                      }
-                    >
-                      수정
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        templateDeleteHanlder({
-                          templateType: e.templateType,
-                          id: e.id,
-                        })
-                      }
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {data && data.data.length > 0 ? (
+            data?.data.map((item) => {
+              return <MyContentsItem key={item.id} item={item} />;
+            })
+          ) : (
+            <div className={classes.madeNotTemolate}>
+              생성하신 템플릿이 없습니다.
+            </div>
+          )}
         </div>
       )}
     </div>

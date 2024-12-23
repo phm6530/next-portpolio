@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import classes from "./PinTimer.module.scss";
-import { useRouter } from "next/navigation";
 
-export default function PinTimer({ countDown = 3 }: { countDown?: number }) {
+export default function PinTimer({
+  countDown = 300,
+  timeout,
+}: {
+  countDown?: number;
+  timeout: () => void;
+}) {
   const [countdown, setCountdown] = useState<number>(countDown);
   const endTime = useRef<number>(Date.now() + countDown * 1000); // 종료 시각 계산
-  const router = useRouter();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -17,8 +21,7 @@ export default function PinTimer({ countDown = 3 }: { countDown?: number }) {
       setCountdown(remainingTime);
 
       if (remainingTime === 0) {
-        console.log("test");
-        router.replace("/auth/pin"); //리다이렉트
+        timeout();
       }
     }, 1000);
 
@@ -33,7 +36,6 @@ export default function PinTimer({ countDown = 3 }: { countDown?: number }) {
       <span>
         {Math.floor(countdown / 60)}분 {countdown % 60}초
       </span>
-      <div className={classes.timerProgress}></div>
     </div>
   );
 }
