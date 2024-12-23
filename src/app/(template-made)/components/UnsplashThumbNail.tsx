@@ -55,7 +55,8 @@ function UnSplashContents({
     handleSubmit,
     register,
     getValues,
-    formState: { errors, touchedFields },
+    watch,
+    formState: { errors },
   } = useForm<SearchForm>({ defaultValues: { keyword: "" } });
 
   const { mutate, data, isPending, isError } = useMutation<
@@ -68,8 +69,7 @@ function UnSplashContents({
         const encodingText = encodeURI(searchText);
         await new Promise((resolve) => setTimeout(resolve, 1000));
         return fetch(
-          `https://api.unsplash.com/search/photos?query=${encodingText}&client_id=PIkUJ8qatZ2000yVp0DzplIL15unNYVPJ3GsjXtWDSE&per_page=30&page=1`,
-          { cache: "no-cache" }
+          `https://api.unsplash.com/search/photos?query=${encodingText}&client_id=PIkUJ8qatZ2000yVp0DzplIL15unNYVPJ3GsjXtWDSE&per_page=30&page=1`
         );
       });
     },
@@ -95,12 +95,6 @@ function UnSplashContents({
     setValue("thumbnail", imgUrl);
     closeModal();
   };
-
-  console.log({
-    ...register("keyword", {
-      required: "검색어를 기재해주세요!",
-    }),
-  });
 
   return (
     <div className={classes.wrap}>
@@ -133,7 +127,7 @@ function UnSplashContents({
       )}
       <div>
         {/* 한번 touch 해야 div 생성하게 함 */}
-        {touchedFields?.keyword ? (
+        {getValues("keyword") ? (
           // 로딩 시 스켈레톤 띄움
           isPending ? (
             <div className={classes.slugItemsWrap}>

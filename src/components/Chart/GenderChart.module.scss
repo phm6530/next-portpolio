@@ -1,0 +1,82 @@
+.chartWrapper {
+  background: rgba(247, 247, 247, 0);
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  gap: 5px;
+  border: 3px solid rgb(234, 235, 241);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  align-items: flex-start;
+
+  .chartTitle {
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+
+    span {
+      font-size: 12px;
+      color: rgb(157, 136, 248);
+    }
+  }
+
+  .chartItem {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 20px;
+    &:nth-child(2) svg {
+      filter: drop-shadow(3px 5px 5px rgb(146, 166, 252));
+    }
+
+    &:last-child svg {
+      filter: drop-shadow(3px 5px 5px rgb(210, 146, 252));
+    }
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.chart {
+  overflow: hidden;
+  width: 0%;
+
+  height: 7px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  justify-content: flex-end;
+  border-radius: 0 15px 15px 0;
+
+  div {
+    display: inline-block;
+    padding: 0px 10px;
+
+    span {
+      font-size: 11px;
+    }
+  }
+}
+
+.male {
+  @extend .chart;
+  background: #365ddb;
+}
+
+.female {
+  @extend .chart;
+  background: #ad91eb;
+}
+
+.prograssBar {
+  background: rgb(243, 243, 243);
+  border-radius: 1rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cnt {
+  font-size: 12px;
+  font-weight: bold;
+}

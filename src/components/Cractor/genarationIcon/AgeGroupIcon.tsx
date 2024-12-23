@@ -17,14 +17,14 @@ export default function AgeGroupIcon({
         size === "large"
           ? classes.large
           : size === "small"
-            ? classes.small
-            : classes.extraLarge
+          ? classes.small
+          : classes.extraLarge
       } ${
         gender === "female"
           ? classes.female
           : gender === "male"
-            ? classes.male
-            : undefined
+          ? classes.male
+          : undefined
       }`}
     >
       <div className={classes.iconWrap}>

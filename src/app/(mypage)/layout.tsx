@@ -5,5 +5,5 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default function layout({ children }: { children: ReactNode }) {
-  return <Grid.center>{children}</Grid.center>;
+  return <Grid.smallCenter>{children}</Grid.smallCenter>;
 }

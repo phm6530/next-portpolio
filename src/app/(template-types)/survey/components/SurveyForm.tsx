@@ -28,9 +28,6 @@ export default function SurveyForm({
   isAgeCollected,
   questions,
 }: SurveyTemplateDetail) {
-  console.log(isAgeCollected);
-  console.log(isGenderCollected);
-
   const defaultValues: AnswerSurvey = {
     ...(isGenderCollected && { gender: null }),
     ...(isAgeCollected && { ageGroup: null }),

@@ -4,6 +4,7 @@ import { User } from "@/types/auth.type";
 import { QUERY_KEY } from "@/types/constans";
 import { useQueryClient } from "@tanstack/react-query";
 import classes from "./Myprofile.module.scss";
+import UserIcon from "/public/asset/icon/user.svg";
 
 export default function Myprofile() {
   const queryclient = useQueryClient();
@@ -11,13 +12,16 @@ export default function Myprofile() {
 
   return (
     <div className={classes.container}>
-      <div className={classes.myProfilePictrue}></div>
-      <div>
+      <div className={classes.myProfilePictrue}>
+        <UserIcon />
+      </div>
+      <div className={classes.userInfo}>
         <div className={classes.wrap}>
-          {user?.nickname} {user?.email}
+          <span>{user?.nickname}</span>{" "}
+          <span className={classes.email}>( {user?.email} )</span>
         </div>
-        <div>{user?.role}</div>
-        <div>가입일 {user?.createAt}</div>
+        <div className={classes.roles}>{user?.role}</div>
+        <div className={classes.createAt}> 가입일 {user?.createAt}</div>
       </div>
     </div>
   );
