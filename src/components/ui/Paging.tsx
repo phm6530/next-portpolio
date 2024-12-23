@@ -1,11 +1,8 @@
+"use client";
 import React, { useEffect, useMemo } from "react";
 import { CONST_PAGING, QUERY_STRING } from "@/types/constans";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-
 import classes from "./Paging.module.scss";
-// import PrevIcon from "/public/asset/icon/prev.png";
-// import NextIcon from "/public/asset/icon/next.png";
-import Image from "next/image";
 
 interface PagingProps {
   cnt: number;

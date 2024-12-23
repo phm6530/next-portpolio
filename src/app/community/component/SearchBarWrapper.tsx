@@ -21,16 +21,14 @@ export default function SearchBarWrapper() {
   });
 
   const serSearchKeyword: SubmitHandler<SearchForm> = (data) => {
-    const params = new URLSearchParams(
-      searchParams.size ? searchParams.toString() : ""
-    );
-
+    // const params = new URLSearchParams(
+    //   searchParams.size ? searchParams.toString() : ""
+    // );
     if (data.keyword.trim() === "") {
-      params.delete("search");
+      router.push(`${pathname}`);
     } else {
-      params.set("search", data.keyword);
+      router.push(`${pathname}?search=${data.keyword}`);
     }
-    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (

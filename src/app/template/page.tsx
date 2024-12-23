@@ -6,7 +6,7 @@ import Button from "@/components/ui/button/Button";
 
 import classes from "./surveyPage.module.scss";
 import TemplateCractor from "@/components/Cractor/TemplateCractor";
-import TemplateList from "@/app/template/_component/TemplateList";
+import TemplateList from "../list/components/TemplateItemList";
 import { Suspense } from "react";
 
 type Extract<T, U> = T extends U ? T : never;

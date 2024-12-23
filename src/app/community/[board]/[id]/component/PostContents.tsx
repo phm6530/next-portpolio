@@ -75,7 +75,7 @@ export default function PostContents({
         }
       />
 
-      {/* <CommentEditor templateId={postId} templateType={category} /> */}
+      <CommentEditor templateId={postId} templateType={category} />
     </>
   );
 }

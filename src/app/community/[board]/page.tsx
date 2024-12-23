@@ -11,11 +11,13 @@ import { boardCateogries, CategoriesKey } from "@/types/board";
 export default async function Board({
   params,
   keyword,
+  curPage,
   searchParams,
 }: {
   params: { board: CategoriesKey };
   keyword?: string;
-  searchParams?: Record<string, string | undefined>;
+  curPage?: string;
+  searchParams?: { search: string; page: string };
 }) {
   function isBoardCategory(key: string): key is keyof typeof boardCateogries {
     return key in boardCateogries;
@@ -24,6 +26,13 @@ export default async function Board({
   if (!isBoardCategory(params.board)) {
     notFound();
   }
+
+  const page =
+    curPage !== undefined
+      ? +curPage
+      : searchParams?.page !== undefined
+      ? +searchParams.page
+      : 0;
 
   const boardName = boardCateogries[params.board];
   return (
@@ -49,6 +58,7 @@ export default async function Board({
       <BoardList
         boardCategory={params.board}
         keyword={keyword || searchParams?.search}
+        curPage={page}
       />
     </>
   );

@@ -7,8 +7,16 @@ type TempParams = { board: CategoriesKey };
 export default function Page({
   searchParams,
 }: {
-  searchParams: { search: string };
+  searchParams: { search: string; page: string };
 }) {
   const params: TempParams = { board: "free" };
-  return <BoardPage params={params} keyword={searchParams.search} />;
+  const curPage = searchParams?.page;
+
+  return (
+    <BoardPage
+      params={params}
+      keyword={searchParams.search}
+      curPage={curPage}
+    />
+  );
 }
