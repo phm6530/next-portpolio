@@ -5,6 +5,8 @@ import { QUERY_KEY } from "@/types/constans";
 import { useQueryClient } from "@tanstack/react-query";
 import classes from "./Myprofile.module.scss";
 import UserIcon from "/public/asset/icon/user.svg";
+import UserMarker from "@/components/ui/usericon/UserMarker";
+import AnonymousIcon from "/public/asset/icon/anonymous.svg";
 
 export default function Myprofile() {
   const queryclient = useQueryClient();
@@ -13,7 +15,7 @@ export default function Myprofile() {
   return (
     <div className={classes.container}>
       <div className={classes.myProfilePictrue}>
-        <UserIcon />
+        <AnonymousIcon />
       </div>
       <div className={classes.userInfo}>
         <div className={classes.wrap}>

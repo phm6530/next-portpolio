@@ -25,8 +25,16 @@
     font-size: 14px;
   }
 
-  span {
+  .pageNum {
     font-size: 14px;
     border-radius: 4px;
+
+    span {
+      opacity: 0.5;
+    }
   }
+}
+.emptyState {
+  text-align: center;
+  padding: 2rem;
 }

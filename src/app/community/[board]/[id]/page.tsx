@@ -6,11 +6,8 @@ import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import DateCompareToday from "@/util/DateCompareToday";
 import { boardCateogries, CategoriesKey } from "@/types/board";
-import PostController from "./component/PostController";
-import { USER_ROLE } from "@/types/auth.type";
-import { QueryClient } from "@tanstack/react-query";
+
 import PostContents from "./component/PostContents";
-import { cookies } from "next/headers";
 
 //list Id 뽑아서 전달
 

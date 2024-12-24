@@ -10,7 +10,7 @@
     grid-column: 1 / -1;
     grid-template-columns: repeat(5, 1fr);
     border: 1px solid $border-box-color;
-    border-radius: 1rem;
+    border-radius: 10px;
     overflow: hidden;
 
     & > textarea {
@@ -36,7 +36,7 @@
     }
 
     & > .textLength {
-      max-width: 100px;
+      margin-top: 4px;
       font-size: 14px;
       align-items: center;
       display: flex;
@@ -67,11 +67,6 @@
 }
 
 .replyWrap {
-  svg {
-    width: 17px;
-    height: 17px;
-    margin-right: 0.5rem;
-  }
   .replyIcon {
     opacity: 0.3;
   }
@@ -105,7 +100,7 @@
   }
 }
 .msgContents {
-  background: #f1f1f1;
+  background: #f7f7f7;
   padding: 0.7rem 1rem;
   min-width: 50px;
   margin: 5px 0;

@@ -48,12 +48,21 @@ type testProps = StringToNumber<typeof test>;
 //   };
 // }
 
+export enum COMMENT_EDITOR_TYPE {
+  COMMENT = "comment",
+  REPLY = "reply",
+}
+
+export enum COMMENT_NEED_PATH {
+  TEMPLATE = "template",
+  BOARD = "board",
+}
+
 export default async function SurveyResultPage({
   params: { id },
 }: {
   params: { id: string };
 }) {
-  const type = "survey";
   // 싱글톤
   const queryClient = new QueryClient();
   const data = await queryClient.fetchQuery({
@@ -64,7 +73,10 @@ export default async function SurveyResultPage({
   await queryClient.prefetchQuery({
     queryKey: [QUERY_KEY.COMMENTS, id],
     queryFn: async () => {
-      return await fetchComments<CommentReponse[]>(id, type);
+      return await fetchComments<CommentReponse[]>(
+        +id,
+        COMMENT_NEED_PATH.TEMPLATE
+      );
     },
   });
 
@@ -77,10 +89,14 @@ export default async function SurveyResultPage({
         <ResultSurveyCharts id={id} />
 
         {/* 메인 Comment Editor */}
-        <CommentEditor templateId={id} templateType={type} />
+        <CommentEditor
+          editorType={COMMENT_EDITOR_TYPE.COMMENT}
+          parentsType={COMMENT_NEED_PATH.TEMPLATE}
+          parentsId={+id}
+        />
 
         {/* Comments */}
-        <ResultCommentSection id={id} type={type} />
+        <ResultCommentSection id={+id} type={COMMENT_NEED_PATH.TEMPLATE} />
       </HydrationBoundary>
     </>
   );

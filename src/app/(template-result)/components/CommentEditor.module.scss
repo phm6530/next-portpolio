@@ -11,7 +11,7 @@
   grid-column: 1 / -1;
   grid-template-columns: repeat(5, 1fr);
   border: 1px solid $border-box-color;
-  border-radius: 1rem;
+  border-radius: 10px;
   overflow: hidden;
 
   & > .errorDiv {
@@ -46,11 +46,6 @@
 }
 
 .replyWrap {
-  svg {
-    width: 17px;
-    height: 17px;
-    margin-right: 0.5rem;
-  }
   .replyIcon {
     opacity: 0.3;
   }
@@ -115,7 +110,7 @@
 .replyCount {
   font-size: 18px;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   span {
     color: #0eaadd;
   }

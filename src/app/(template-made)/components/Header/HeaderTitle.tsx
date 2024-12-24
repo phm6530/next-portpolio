@@ -1,5 +1,5 @@
 import classes from "./HeaderTitle.module.scss";
-import InfoSvg from "/public/asset/icon/info.svg";
+import InfoSvg from "/public/asset/icon/info_2.svg";
 
 export default function HeaderTitle({
   title,

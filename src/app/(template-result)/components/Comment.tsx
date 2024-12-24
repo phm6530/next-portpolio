@@ -21,16 +21,16 @@ dayjs.locale("ko");
 
 export default function Comment({
   contentType,
-  templateId,
+  parentId,
   id,
   createAt,
   content,
   user,
-  anonymous,
+  creator,
   onClickEvent,
 }: {
   contentType: "reply" | "comment";
-  templateId: string;
+  parentId: number;
   onClickEvent?: () => void;
 } & Omit<CommentReponse, "replies">) {
   const queryClient = useQueryClient();
@@ -64,7 +64,7 @@ export default function Comment({
     onSuccess: () => {
       alert("댓글이 삭제되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.COMMENTS, templateId],
+        queryKey: [QUERY_KEY.COMMENTS, parentId],
       });
     },
   });
@@ -85,25 +85,36 @@ export default function Comment({
     }
   };
 
-  const isUserCommentAuthor = user?.email === userData?.email; // 현재 사용자가 댓글 작성자인지 확인
+  const isUserCommentAuthor = !!(
+    creator?.email &&
+    userData?.email &&
+    creator.email === userData.email
+  );
 
   return (
     <div className={classes.commentContainer}>
       <div className={classes.commentSurmmry}>
         {/* 유저 or 익명 */}
-        <UserRoleDisplay
-          role={user?.role}
-          nickname={user?.nickname || anonymous}
-        />
+        <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
-        <span style={{ marginRight: "20px" }}>{dayjs(createAt).fromNow()}</span>
+        <span style={{ marginRight: "10px" }}>{dayjs(createAt).fromNow()}</span>
 
         {/* 내 댓글일 경우만 삭제버튼 노출 */}
         {isUserCommentAuthor && (
           <>
-            {isUserCommentAuthor && <span>내 댓글</span>}
-            <Button.closeBtn onClick={deleteMessage} />
+            {isUserCommentAuthor && (
+              <span className={classes.myComment}>내 댓글</span>
+            )}
+            <div className={classes.btnWRapper}>
+              <Button.closeBtn onClick={deleteMessage} />
+            </div>
           </>
+        )}
+
+        {!userData && creator.role === "anonymous" && (
+          <div className={classes.btnWRapper}>
+            <Button.closeBtn onClick={deleteMessage} />
+          </div>
         )}
       </div>
       <div className={classes.comment} onClick={onClickEvent}>

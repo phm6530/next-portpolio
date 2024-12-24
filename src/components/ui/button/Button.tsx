@@ -9,6 +9,8 @@ import {
 } from "react";
 // import DeleteIcon from "/public/asset/icon/close.png";
 
+import Delete from "/public/asset/icon/delete_3.svg";
+
 function outlineButton({
   children,
   ...rest
@@ -75,9 +77,9 @@ function normalButton({
 function closeBtn({ ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={classes.closeButton} {...rest}>
-      삭제
+      {/* 삭제 */}
       {/* <Image src={DeleteIcon} alt="close" /> */}
-      {/* <DeleteSvg className={classes.deleteIcon} /> */}
+      <Delete className={classes.deleteIcon} />
     </div>
   );
 }

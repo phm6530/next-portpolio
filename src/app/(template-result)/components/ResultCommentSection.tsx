@@ -1,20 +1,21 @@
 "use client";
 import { QUERY_KEY } from "@/types/constans";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import classes from "./ResultCommentSection.module.scss";
 import { useState } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
 import CommentContainer from "@/app/(template-result)/components/CommentContainer";
 import { fetchComments } from "@/app/(template-result)/result/survey/components/test";
 import { CommentReponse } from "@/types/comment.type";
+import { COMMENT_NEED_PATH } from "../result/survey/[id]/page";
 
 //tempalte ID
 export default function ResultCommentSection({
   type,
   id,
 }: {
-  type: string;
-  id: string;
+  type: COMMENT_NEED_PATH;
+  id: number;
 }) {
   const [touchFormIdx, setTouchFormIdx] = useState<null | number>(null);
 
@@ -29,6 +30,8 @@ export default function ResultCommentSection({
   if (isLoading) {
     return <>loading......</>;
   }
+
+  console.log(data);
 
   if (isError) {
     throw new Error("에러");
@@ -46,7 +49,7 @@ export default function ResultCommentSection({
             return (
               <CommentContainer
                 {...comment}
-                templateId={id}
+                parentId={id}
                 touchIdx={touchFormIdx}
                 key={`comment-${id}-${idx}`}
                 setTouch={setTouchFormIdx}

@@ -7,11 +7,6 @@
 .replyWrapper {
   display: flex;
 
-  svg {
-    width: 17px;
-    height: 17px;
-    margin-right: 0.5rem;
-  }
   .replyIcon {
     opacity: 0.3;
   }
@@ -20,10 +15,12 @@
 .repliesContainer {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   &.leftMargin {
-    margin-left: 2rem;
-    margin-top: 10px;
+    margin-left: 1rem;
+    margin-top: 20px;
+    border-left: 2px solid rgba(0, 0, 0, 0.05);
+    padding-left: 2rem;
     margin-bottom: 10px;
   }
 }

@@ -14,6 +14,7 @@ import { User } from "@/types/auth.type";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
+import QuillEditor from "./QuillEditor";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
@@ -33,7 +34,7 @@ const guestSchema = baseScheme.extend({
     .optional(),
 });
 
-type WriteBoardProps = z.infer<typeof guestSchema>;
+export type WriteBoardProps = z.infer<typeof guestSchema>;
 
 export default function BoardForm({
   boardKey,
@@ -119,22 +120,16 @@ export default function BoardForm({
           </div>
         )}
 
-        <InputWrapper title="글 제목">
-          <FormInput
-            placeholder="글 제목을 입력해주세요"
-            {...register("title")}
-            autoComplete="off"
-          />
-        </InputWrapper>
-
-        <InputWrapper title="내용">
-          <FormTextarea
-            {...register("contents")}
-            placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
-            autoComplete="off"
-          />
-        </InputWrapper>
-
+        <div>
+          <InputWrapper title="제목">
+            <FormInput
+              placeholder="글 제목을 입력해주세요"
+              {...register("title")}
+              autoComplete="off"
+            />
+            <QuillEditor control={method.control} name={"contents"} />
+          </InputWrapper>
+        </div>
         <Button.submit>글쓰기</Button.submit>
       </form>
     </FormProvider>

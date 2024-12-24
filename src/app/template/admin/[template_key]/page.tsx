@@ -36,8 +36,6 @@ export default async function adminResult({
     staleTime: 10000,
   });
 
-  console.log(templateId);
-
   //댓글
   await queryClient.prefetchQuery({
     queryKey: ["comment", templateId],
