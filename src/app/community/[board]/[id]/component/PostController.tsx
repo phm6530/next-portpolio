@@ -31,7 +31,7 @@ export default function PostController({
   const authrozationPost =
     creatorRole === USER_ROLE.ADMIN || creatorRole === USER_ROLE.USER;
 
-  const { mutate } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: async (data?: { password: string }) => {
       let options: RequestInit = {
         method: "DELETE",
@@ -56,7 +56,7 @@ export default function PostController({
     },
   });
 
-  const postDeleteHandler = () => {
+  const postDeleteHandler = async () => {
     let body: { password: string } | undefined;
 
     // Test 추후 Modal 로 처리 예정
@@ -75,7 +75,7 @@ export default function PostController({
         return;
       }
     }
-    mutate(authrozationPost ? undefined : body);
+    await mutateAsync(authrozationPost ? undefined : body);
   };
 
   return (

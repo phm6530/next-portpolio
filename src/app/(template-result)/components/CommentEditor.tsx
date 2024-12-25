@@ -10,6 +10,10 @@ import { QUERY_KEY } from "@/types/constans";
 import { useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+} from "../result/survey/[id]/page";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -24,14 +28,24 @@ type AuthUserDefaultValue = {
   content: string;
 };
 
+/**
+ * Editor Type = Comment / Reply 유니온
+ * Comment Id = Reply가 의존
+ * parentType , parentId = Comment Id가 의존
+ */
 export default function CommentEditor({
+  editorType,
+  parentsType,
+  parentsId,
+
   commentId,
-  templateId,
-  templateType,
 }: {
-  commentId?: string;
-  templateId?: string;
-  templateType?: string;
+  editorType: COMMENT_EDITOR_TYPE;
+
+  parentsType?: COMMENT_NEED_PATH;
+  parentsId?: number;
+
+  commentId?: number;
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
@@ -76,13 +90,15 @@ export default function CommentEditor({
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data) => {
+      // 분기 Url 생성..
       const url = (() => {
-        if (commentId) {
-          return `reply/${commentId}`;
-        } else if (!commentId) {
-          return `comment/${templateType}/${templateId}`;
-        } else {
-          return null as never;
+        switch (editorType) {
+          case COMMENT_EDITOR_TYPE.COMMENT:
+            return `comment/${parentsType}/${parentsId}`;
+          case COMMENT_EDITOR_TYPE.REPLY:
+            return `reply/${commentId}`;
+          default:
+            return null as never;
         }
       })();
 
@@ -99,7 +115,7 @@ export default function CommentEditor({
     onSuccess: async () => {
       reset();
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.COMMENTS, templateId],
+        queryKey: [QUERY_KEY.COMMENTS, parentsId],
       });
     },
   });

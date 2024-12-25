@@ -14,6 +14,8 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
 import BackButton from "@/components/ui/button/BackButton";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import QuillViewer from "@/components/Editor/QuillViewer";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -101,10 +103,14 @@ export default async function SurveyDetailTemplate({
             {/* <DateRange dateRange={dateRange} /> */}
 
             {/* Desciprtion */}
-            <div className={classes.description}>{description}</div>
+            <QuillViewer contents={description} />
+
             {/* date */}
             <div className={classes.userDisplayWrapper}>
-              <div> {creator?.nickname}</div>
+              <UserRoleDisplay
+                role={creator.role}
+                nickname={creator.nickname}
+              />
             </div>
           </div>
         </TemplateQuestionWrapper>

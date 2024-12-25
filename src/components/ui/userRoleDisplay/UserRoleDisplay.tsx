@@ -9,6 +9,8 @@ export default function UserRoleDisplay({
   role?: USER_ROLE;
   nickname: string | null;
 }) {
+  console.log(role, nickname);
+
   return (
     <div className={classes.userDisplayContainer}>
       {/* Icon 임의로 반영함 */}

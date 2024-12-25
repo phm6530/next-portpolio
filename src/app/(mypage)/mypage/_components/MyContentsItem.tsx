@@ -8,6 +8,7 @@ import {
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import GenderChart from "@/components/Chart/GenderChart";
 import Timer from "/public/asset/icon/times.svg";
+import TransformPlainText from "@/components/TransformPlainText";
 
 export default function MyContentsItem({
   item,
@@ -40,7 +41,10 @@ export default function MyContentsItem({
           <div className={classes.title}>
             <span>{item.title} </span>
           </div>
-          <p className={classes.description}>{item.description}</p>
+
+          <p className={classes.description}>
+            <TransformPlainText html={item.description} />
+          </p>
           {/* Gender Charts */}
 
           {/* <div className={classes.cnt}>

@@ -1,10 +1,10 @@
 @import "_mixin";
 
 .textarea {
-  @include FouceInput(#32323d, 1px);
+  @include FouceInput(#7975e5, 1px);
   outline: none;
   border: 0;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 10px 10px 0 0;
   grid-column: 1 / -1;
   box-sizing: border-box;
   padding: 20px;

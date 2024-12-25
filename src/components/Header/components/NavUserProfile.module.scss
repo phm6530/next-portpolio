@@ -4,11 +4,14 @@
   text-align: right;
   align-items: center;
   justify-content: flex-end;
+  display: flex;
+  gap: 30px;
 
   .nickName {
     font-weight: 700;
   }
   .mypageNav {
+    font-size: 13px;
     &:hover {
       color: red;
       cursor: pointer;

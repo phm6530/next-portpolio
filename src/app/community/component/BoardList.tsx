@@ -4,7 +4,6 @@ import { BASE_NEST_URL } from "@/config/base";
 import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
-import { useSearchParams } from "next/navigation";
 import Paging from "@/components/ui/Paging";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
@@ -16,6 +15,7 @@ export type ListItemType = {
   title: string;
   category: CategoriesKey;
   view: number;
+  commentCnt: number;
   creator:
     | { role: USER_ROLE.ANONYMOUS; nickname: string }
     | { role: ExcludeUser; nickname: string; email: string };
@@ -34,8 +34,6 @@ export default async function BoardList({
   const data = await withFetch<[ListItemType[], number]>(async () => {
     const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
     const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}&page=${curPage}`;
-
-    console.log(url);
     return await fetch(url, {
       cache: "no-store",
     });
@@ -46,7 +44,10 @@ export default async function BoardList({
       {/* <h3>자유게시판</h3> */}
       <section className={classes.container}>
         <div className={classes.listHeader}>
-          <h3>최신 순</h3>
+          <h3>최신 순 </h3>
+          {/* <div className={classes.pageNum}>
+            page {curPage} <span>/ 2</span>
+          </div> */}
         </div>
         <div>
           {data[0].length > 0 ? (
@@ -61,7 +62,7 @@ export default async function BoardList({
               })}
             </>
           ) : (
-            <>작성된 게시물이 없습니다.</>
+            <div className={classes.emptyState}>작성된 게시물이 없습니다.</div>
           )}
         </div>
 

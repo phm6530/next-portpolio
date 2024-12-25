@@ -31,6 +31,7 @@ import TemplateInputWrapper from "../common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
 import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import QuillEditor from "@/components/Editor/QuillEditor";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -98,7 +99,7 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset } = formState;
+  const { register, setValue, reset, control } = formState;
 
   const editId = qs.get("edit");
 
@@ -227,11 +228,12 @@ export default function CreateSurvey() {
 
             {/* 설문조사 설명 */}
             <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
-              <FormTextarea
+              {/* <FormTextarea
                 {...register("description")}
                 placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
                 autoComplete="off"
-              />
+              /> */}
+              <QuillEditor control={control} name={"description"} />
             </TemplateInputWrapper>
 
             {/* 썸네일 */}
@@ -295,7 +297,7 @@ export default function CreateSurvey() {
         </FormProvider>
 
         <div className={classes.buttonsWrapper}>
-          <button type="button">미리보기</button>
+          {/* <button type="button">미리보기</button> */}
           <Button.submit
             type="submit"
             disabled={isPending}

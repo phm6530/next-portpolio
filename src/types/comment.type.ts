@@ -1,20 +1,15 @@
-import { User } from "@/types/auth.type";
-
-export type Reply = {
-  id: number;
-  updateAt: string;
-  createAt: string;
-  content: string;
-  user: User | null;
-  anonymous: string | null;
-};
+import { User, USER_ROLE } from "@/types/auth.type";
 
 export type CommentReponse = {
   id: number;
   updateAt: string;
   createAt: string;
   content: string;
-  replies: Reply[];
+  replies: CommentReponse[];
   user: User | null;
   anonymous: string | null;
+  creator: {
+    role: USER_ROLE;
+    nickname: string;
+  } & { email?: string };
 };

@@ -12,7 +12,10 @@ export default function BoardListItem({
     <div className={classes.BoardListItemContainer}>
       <Link href={`/community/${itemData.category}/${itemData.id}`}>
         <div className={classes.title}>
-          {itemData.title} <span className={classes.commentCnt}>[12]</span>
+          {itemData.title}{" "}
+          {itemData.commentCnt > 0 && (
+            <span className={classes.commentCnt}>[{itemData.commentCnt}]</span>
+          )}
         </div>
       </Link>
       <div className={classes.itemInfo}>

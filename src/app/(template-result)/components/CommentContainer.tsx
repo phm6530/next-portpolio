@@ -5,18 +5,19 @@ import Button from "@/components/ui/button/Button";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 // import ReplyIcon from "/public/asset/icon/reply.svg";
 import { CommentReponse } from "@/types/comment.type";
+import { COMMENT_EDITOR_TYPE } from "../result/survey/[id]/page";
 
 export default function CommentContainer({
   touchIdx,
-  templateId,
+  parentId,
   setTouch,
   ...props
 }: {
   touchIdx: number | null;
-  templateId: string;
+  parentId: number;
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
-  const { id: commentId, replies } = props;
+  const { id: commentId, replies, creator } = props;
 
   const formViewHandler = () => {
     setTouch((prev) => {
@@ -33,7 +34,7 @@ export default function CommentContainer({
       {/* Comment */}
       <Comment
         contentType="comment"
-        templateId={templateId}
+        parentId={parentId}
         {...props}
         onClickEvent={formViewHandler}
       />
@@ -55,12 +56,10 @@ export default function CommentContainer({
             <div
               className={classes.replyWrapper}
               key={`reply-${commentId}-${idx}`}
-              //   onClick={formViewHandler}
             >
-              {/* <ReplyIcon className={classes.replyIcon} /> */}
               <Comment
                 contentType="reply"
-                templateId={templateId}
+                parentId={parentId}
                 content={content}
                 onClickEvent={formViewHandler}
                 {...rest}
@@ -70,7 +69,11 @@ export default function CommentContainer({
         })}
         {touchIdx === commentId && (
           <div className={classes.replyFormContainer}>
-            <CommentEditor templateId={templateId} commentId={commentId + ""} />
+            <CommentEditor
+              editorType={COMMENT_EDITOR_TYPE.REPLY}
+              commentId={commentId}
+              parentsId={parentId}
+            />
           </div>
         )}
       </div>

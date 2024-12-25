@@ -7,16 +7,17 @@
 }
 
 .myProfilePictrue {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   background: #f5f5f5;
   border-radius: 5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
+  margin-right: 0.4rem;
   svg {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     z-index: 1;
     left: 0;
     top: 0;
@@ -27,7 +28,7 @@
   font-size: 16px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 .roles {

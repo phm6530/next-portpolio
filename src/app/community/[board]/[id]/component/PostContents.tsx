@@ -9,10 +9,16 @@ import { BASE_NEST_URL } from "@/config/base";
 import PostController from "./PostController";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-import { redirect } from "next/navigation";
 import { USER_ROLE } from "@/types/auth.type";
 import { DetailBoardItemType } from "../page";
 import LoadingStreming from "@/components/loading/LoadingStreming";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+} from "@/app/(template-result)/result/survey/[id]/page";
+import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
+
+import QuillViewer from "@/components/Editor/QuillViewer";
 
 export default function PostContents({
   category,
@@ -40,6 +46,7 @@ export default function PostContents({
     return <LoadingStreming />;
   }
 
+  console.log(data.creator);
   // console.log(data.updateAt);
 
   return (
@@ -58,7 +65,8 @@ export default function PostContents({
 
       <div className={classes.contentsWrapper}>
         <div className={classes.postContents}>
-          <div className={classes.contents}>{data.contents}</div>
+          <QuillViewer contents={data.contents} />
+
           {data.updateAt !== data.createAt && (
             <div className={classes.lastUpdate}>조회수 {data.view}</div>
           )}
@@ -75,7 +83,14 @@ export default function PostContents({
         }
       />
 
-      <CommentEditor templateId={postId} templateType={category} />
+      {/* 댓글 */}
+      <CommentEditor
+        editorType={COMMENT_EDITOR_TYPE.COMMENT}
+        parentsType={COMMENT_NEED_PATH.BOARD}
+        parentsId={parseInt(postId, 10)}
+      />
+
+      <ResultCommentSection id={+postId} type={COMMENT_NEED_PATH.BOARD} />
     </>
   );
 }

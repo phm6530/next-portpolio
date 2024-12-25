@@ -39,7 +39,7 @@ export default async function Board({
     <>
       <HeaderTitle
         title={`${boardName} 게시판 \n`}
-        description="한줄 남겨주시면 감사드릴께요!"
+        description="한줄 남겨주시면 저에게 큰 힘이 됩니다 ..!"
       />
 
       {/* Category button */}
