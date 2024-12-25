@@ -8,6 +8,8 @@ import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
+import usePopup from "@/app/hook/usePopup";
+import DeleteItemForm from "@/components/DeleteItemForm";
 
 export default function PostController({
   id,
@@ -23,6 +25,7 @@ export default function PostController({
   const router = useRouter();
 
   const queryClient = useQueryClient();
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
@@ -31,7 +34,7 @@ export default function PostController({
   const authrozationPost =
     creatorRole === USER_ROLE.ADMIN || creatorRole === USER_ROLE.USER;
 
-  const { mutateAsync } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data?: { password: string }) => {
       let options: RequestInit = {
         method: "DELETE",
@@ -56,48 +59,45 @@ export default function PostController({
     },
   });
 
-  const postDeleteHandler = async () => {
-    let body: { password: string } | undefined;
+  // const postDeleteHandler = async () => {
+  //   let body: { password: string } | undefined;
 
-    // Test 추후 Modal 로 처리 예정
-    if (!authrozationPost) {
-      const msgPassword = prompt("비밀번호를 입력해주세요");
-      if (msgPassword !== null && msgPassword.trim() !== "") {
-        body = { password: msgPassword.trim() };
-      } else {
-        alert("비밀번호를 입력해야 합니다.  ");
-        return;
-      }
-    }
+  //   // Test 추후 Modal 로 처리 예정
+  //   if (!authrozationPost) {
+  //   }
 
-    if (authrozationPost) {
-      if (!confirm(`삭제하시겠습니까?\n삭제 시 복구 불가합니다.`)) {
-        return;
-      }
-    }
-    await mutateAsync(authrozationPost ? undefined : body);
-  };
+  //   if (authrozationPost) {
+  //     if (!confirm(`삭제하시겠습니까?\n삭제 시 복구 불가합니다.`)) {
+  //       return;
+  //     }
+  //   }
+  //   mutate(authrozationPost ? undefined : body);
+  // };
 
+  const deleteFunc = (password: string) => mutate({ password });
   return (
-    <div className={classes.controller}>
-      {/* Edit  */}
-      <button onClick={() => router.push(`/community/${category}`)}>
-        목록
-      </button>
+    <>
+      <PopupComponent isOpen={isOpen} closeModal={closeModal}>
+        <DeleteItemForm action={deleteFunc} isPending={isPending} />
+      </PopupComponent>
+      <div className={classes.controller}>
+        {/* Edit  */}
+        <button onClick={() => router.push(`/community/${category}`)}>
+          목록
+        </button>
 
-      {(!authrozationPost ||
-        (creatorEmail === userData?.email &&
-          (creatorRole === USER_ROLE.ADMIN ||
-            creatorRole === USER_ROLE.USER))) && (
-        <>
-          <button onClick={() => router.push("/")}>수정</button>
-          <button onClick={postDeleteHandler}>삭제</button>
-        </>
-      )}
-
-      {/* Edit  */}
-
-      {/* Delete */}
-    </div>
+        {(!authrozationPost ||
+          (creatorEmail === userData?.email &&
+            (creatorRole === USER_ROLE.ADMIN ||
+              creatorRole === USER_ROLE.USER))) && (
+          <>
+            <button onClick={() => router.push("/")}>수정</button>
+            <button onClick={openModal}>삭제</button>
+          </>
+        )}
+        {/* Edit  */}
+        {/* Delete */}
+      </div>
+    </>
   );
 }

@@ -74,7 +74,7 @@ export default function MsgItem({
     }
 
     //익명
-    const msgPassword = prompt("비밀번호를 입력해주세요");
+    const msgPassword = prompt("비밀번호를 입력해주세요!");
     if (msgPassword) {
       if (comment_id || reply_id) {
         mutate({ comment_id, reply_id, msgPassword, msgRole: role });

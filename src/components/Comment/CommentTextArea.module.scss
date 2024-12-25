@@ -19,4 +19,8 @@
   justify-content: center;
   margin-left: auto;
   padding: 0px 10px;
+
+  &.errorColor {
+    color: rgb(243, 39, 32);
+  }
 }

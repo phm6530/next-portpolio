@@ -40,7 +40,7 @@ export default function CommentContainer({
       />
       <div className={classes.commentBtnWrap}>
         <Button.noneStyleButton onClick={formViewHandler}>
-          답글쓰기
+          <span>답글쓰기</span>
         </Button.noneStyleButton>
       </div>
 

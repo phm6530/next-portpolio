@@ -7,17 +7,18 @@ import FormRegisterError from "@/components/Error/FormRegisterError";
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputName?: string;
   error?: string;
+  notErrorText?: boolean;
 }
 
 const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
-  const { inputName, name, ...rest } = props;
+  const { inputName, name, notErrorText, ...rest } = props;
   const {
     formState: { errors },
   } = useFormContext();
 
   const err = name && errors ? errors[name] : false;
   return (
-    <>
+    <div className={classes.inputWrapper}>
       <input
         autoComplete="off"
         className={`${classes.FormInput} ${!!err ? classes.error : undefined}`}
@@ -25,8 +26,10 @@ const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         ref={ref}
         {...rest}
       />
-      {err && <FormRegisterError errorMsg={err.message as string} />}
-    </>
+      {err && !notErrorText && (
+        <FormRegisterError errorMsg={err.message as string} />
+      )}
+    </div>
   );
 });
 

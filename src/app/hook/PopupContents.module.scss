@@ -25,9 +25,16 @@
 
     overflow: hidden;
     animation: ani 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s 1 forwards;
+    box-shadow: 5px 55px 44.9px rgb(0 0 0 / 55%);
 
     .closeBtnWrapper {
       // text-align: center;
+      margin-top: 1rem;
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }
