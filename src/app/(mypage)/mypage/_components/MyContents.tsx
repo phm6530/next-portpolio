@@ -14,6 +14,7 @@ import Button from "@/components/ui/button/Button";
 import MyContentsItem from "./MyContentsItem";
 import { useState } from "react";
 import { never } from "zod";
+import LoadingStreming from "@/components/loading/LoadingStreming";
 
 type returnData = {
   data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
@@ -92,7 +93,9 @@ export default function MyContents() {
       {/* <h2>생성한 템플릿</h2> */}
 
       {isLoading ? (
-        <>loading..</>
+        <>
+          <LoadingStreming />
+        </>
       ) : (
         <div className={classes.container}>
           {data && data.data.length > 0 ? (

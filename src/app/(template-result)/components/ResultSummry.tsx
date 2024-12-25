@@ -37,9 +37,9 @@ export default async function ResultSummry(data: SurveyResult) {
           <span className={classes.userCnt}>{allCnt || 0}</span> 명
         </div>
 
-        <Button.moveLink moveUrl={`/${templateType}/${id}`}>
+        {/* <Button.moveLink moveUrl={`/${templateType}/${id}`}>
           참여하기
-        </Button.moveLink>
+        </Button.moveLink> */}
       </div>
     </div>
   );

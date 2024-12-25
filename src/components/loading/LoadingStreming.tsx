@@ -3,11 +3,10 @@ import { useGSAP } from "@gsap/react";
 import classes from "./LoadingStreming.module.scss";
 import UiLoading from "../ui/loading/UiLoading";
 
-export default function LoadingStreming(){
-  useGSAP({});
+export default function LoadingStreming() {
   return (
     <div className={classes.loading}>
-      <UiLoading/>
+      <UiLoading />
     </div>
   );
 }

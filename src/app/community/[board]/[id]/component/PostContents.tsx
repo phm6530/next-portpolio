@@ -18,7 +18,7 @@ import {
 } from "@/app/(template-result)/result/survey/[id]/page";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 
-import QuillViewer from "./QuillViewer";
+import QuillViewer from "@/components/Editor/QuillViewer";
 
 export default function PostContents({
   category,

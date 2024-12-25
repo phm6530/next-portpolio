@@ -1,26 +1,30 @@
 "use client";
 
-import { Control, Controller, useFormContext } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  PathValue,
+  useFormContext,
+} from "react-hook-form";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import classes from "./QuillEditor.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import { WriteBoardProps } from "./BoardForm";
 
-export default function QuillEditor({
+export default function QuillEditor<T extends FieldValues>({
   control,
   name,
 }: {
-  control: Control<WriteBoardProps, any>;
-  name: string;
+  control: Control<T, any>;
+  name: Path<T>;
 }) {
   const {
     formState: { errors },
   } = useFormContext();
 
   const err = name && errors ? errors[name] : null;
-
-  console.log(err);
 
   return (
     <>
@@ -30,9 +34,9 @@ export default function QuillEditor({
         }`}
       >
         <Controller
-          name={name as "contents"}
+          name={name}
           control={control}
-          defaultValue="" // 초기 값 설정
+          defaultValue={"" as PathValue<T, Path<T>>}
           render={({ field }) => (
             <ReactQuill
               theme="snow"

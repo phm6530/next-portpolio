@@ -61,17 +61,17 @@
 
 .male {
   @extend .chart;
-  background: #365ddb;
+  background: linear-gradient(90deg, #e2d5f8, #9a6ce7, #8047e2);
 }
 
 .female {
   @extend .chart;
-  background: #ad91eb;
+  background: linear-gradient(90deg, #e2d5f8, #9a6ce7, #8047e2);
 }
 
 .prograssBar {
   background: rgb(243, 243, 243);
-  border: 1px solid #d7d7d794;
+  border: 1px solid #9779a31c;
   border-radius: 1rem;
   overflow: hidden;
   width: 100%;

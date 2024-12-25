@@ -3,6 +3,7 @@ import Grid from "@/components/ui/Grid";
 import PageTitle from "@/components/ui/PageTitle";
 import Button from "@/components/ui/button/Button";
 import TemplateCractor from "@/components/Cractor/TemplateCractor";
+import Link from "next/link";
 
 export default function ListPageBanner() {
   return (
@@ -17,8 +18,11 @@ export default function ListPageBanner() {
           <p className={classes.description}>
             평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
           </p>
-
-          <Button.moveLink moveUrl={"/made"}>+ 설문조사 만들기</Button.moveLink>
+          <div className={classes.buttonWrapper}>
+            <Link href={"/made"}>
+              <Button.submit>+ 설문조사 만들기</Button.submit>
+            </Link>
+          </div>
         </div>
 
         {/* 캐릭터 */}

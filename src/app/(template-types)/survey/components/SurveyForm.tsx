@@ -49,7 +49,11 @@ export default function SurveyForm({
   });
 
   const { reset } = formMethod;
-  const { mutate, isSuccess } = useMutation<unknown, Error, AnswerSurvey>({
+  const { mutate, isSuccess, isPending } = useMutation<
+    unknown,
+    Error,
+    AnswerSurvey
+  >({
     mutationFn: async (data) => {
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
@@ -62,7 +66,6 @@ export default function SurveyForm({
       });
     },
     onSuccess: async () => {
-      reset(defaultValues);
       await queryClient.refetchQueries({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
       });
@@ -115,7 +118,7 @@ export default function SurveyForm({
         <Button.submit
           type="button"
           onClick={formMethod.handleSubmit(onSubmitHandler)}
-          disabled={isSuccess}
+          disabled={isPending || isSuccess}
         >
           제출하기
         </Button.submit>

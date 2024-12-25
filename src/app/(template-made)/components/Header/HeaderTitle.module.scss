@@ -24,18 +24,31 @@
 
 .description {
   background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 10px;
+  padding: 0.8rem;
+  border-radius: 1rem;
   margin: 10px 0;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   width: calc(100% - 2rem);
-
+  background: #fff;
+  box-shadow: 0px 5px 20px rgb(117 92 255 / 6%);
   svg {
     width: 20px;
     height: 20px;
-    filter: drop-shadow(4px 4px 3px rgba(0, 0, 0, 0.23));
+    // filter: drop-shadow(4px 4px 3px rgba(0, 0, 0, 0.23));
+    fill: #7557cf;
   }
+}
+.iconWrapper {
+  background: rgb(244 242 252);
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

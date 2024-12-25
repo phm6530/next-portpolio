@@ -14,7 +14,7 @@ import { User } from "@/types/auth.type";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
-import QuillEditor from "./QuillEditor";
+import QuillEditor from "@/components/Editor/QuillEditor";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
