@@ -3,17 +3,14 @@ import classes from "./GlobalNav.module.scss";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";
-import useStore from "@/store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import NavUserProfile from "@/components/Header/components/NavUserProfile";
 import { QUERY_KEY } from "@/types/constans";
-import { SessionStorage } from "@/utils/sessionStorage-token";
 import { User } from "@/types/auth.type";
 import Logo from "../logo/logo";
-import withAuthFetch from "@/utils/withAuthFetch";
 import { useQueryReset } from "@/utils/queryClientReset";
 
 // type ExtendNumber<T extends number> = T;

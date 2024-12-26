@@ -3,8 +3,11 @@
   align-items: center;
   justify-content: center;
 
+  svg,
   g {
     fill: #a7b9cd;
+    width: 20px;
+    height: 20px;
   }
 
   &:hover {

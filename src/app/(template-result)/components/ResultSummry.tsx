@@ -3,6 +3,8 @@ import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import Button from "@/components/ui/button/Button";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import { SurveyResult } from "@/types/surveyResult.type";
+import QuillViewer from "@/components/Editor/QuillViewer";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 
 export default async function ResultSummry(data: SurveyResult) {
   const {
@@ -14,14 +16,17 @@ export default async function ResultSummry(data: SurveyResult) {
     endDate,
     createdAt,
     respondents,
+    creator,
   } = data;
   const { allCnt } = respondents;
 
+  console.log("creator::", creator);
+
   return (
     <div className={classes.summeryDetail}>
-      <div className={classes.relative}>
+      {/* <div className={classes.relative}>
         <div className={classes.Badge}>결과페이지</div>
-      </div>
+      </div> */}
       <div className={classes.summeryInfoWrapper}>
         <TemplateStatus
           startDate={startDate}
@@ -29,13 +34,16 @@ export default async function ResultSummry(data: SurveyResult) {
           createdAt={createdAt}
         />
 
-        <TemplateTitle>{title}</TemplateTitle>
-        <div className={classes.description}>{description}</div>
+        <TemplateTitle role={creator.role} nickname={creator.nickname}>
+          {title}
+        </TemplateTitle>
 
-        <div>
+        <QuillViewer contents={description} />
+
+        {/* <div>
           <span>참여자 </span>
           <span className={classes.userCnt}>{allCnt || 0}</span> 명
-        </div>
+        </div> */}
 
         {/* <Button.moveLink moveUrl={`/${templateType}/${id}`}>
           참여하기

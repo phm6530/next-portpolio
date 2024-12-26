@@ -1,6 +1,5 @@
 "use client";
 
-import LoadingSpier from "@/components/ui/loading/LoadingSpiner";
 import { fetchTemplateDetail } from "@/lib/surveySerivce";
 // import { TemplateUnionType } from "@/app/template/[...detail]/page";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";

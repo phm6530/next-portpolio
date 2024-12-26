@@ -14,6 +14,9 @@ import { CommentReponse } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
 import { SessionStorage } from "@/utils/sessionStorage-token";
 import withAuthFetch from "@/utils/withAuthFetch";
+import usePopup from "@/app/hook/usePopup";
+import FormInput from "@/components/ui/FormElement/FormInput";
+import DeleteItemForm from "@/components/DeleteItemForm";
 
 //import
 dayjs.extend(relativeTime);
@@ -37,7 +40,9 @@ export default function Comment({
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
-  const { mutate } = useMutation({
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data?: string) => {
       //userData가 있으면 로그인상태
       const url = `${contentType}/${id}`;
@@ -57,15 +62,14 @@ export default function Comment({
 
       await withAuthFetch(url, options);
     },
-    onError: (error) => {
-      alert(error.message);
-    },
-
     onSuccess: () => {
       alert("댓글이 삭제되었습니다.");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.COMMENTS, parentId],
       });
+    },
+    onError: (data) => {
+      alert(data.message);
     },
   });
 
@@ -78,10 +82,11 @@ export default function Comment({
         return null;
       }
     } else {
-      const msgPassword = prompt("비밀번호를 입력해주세요");
-      if (msgPassword) {
-        mutate(msgPassword);
-      }
+      openModal();
+      // const msgPassword = prompt("비밀번호를 입력해주세요!!");
+      // if (msgPassword) {
+      //   mutate(msgPassword);
+      // }
     }
   };
 
@@ -92,34 +97,42 @@ export default function Comment({
   );
 
   return (
-    <div className={classes.commentContainer}>
-      <div className={classes.commentSurmmry}>
-        {/* 유저 or 익명 */}
-        <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
+    <>
+      <PopupComponent isOpen={isOpen} closeModal={closeModal}>
+        <DeleteItemForm action={mutate} isPending={isPending} />
+      </PopupComponent>
 
-        <span style={{ marginRight: "10px" }}>{dayjs(createAt).fromNow()}</span>
+      <div className={classes.commentContainer}>
+        <div className={classes.commentSurmmry}>
+          {/* 유저 or 익명 */}
+          <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
-        {/* 내 댓글일 경우만 삭제버튼 노출 */}
-        {isUserCommentAuthor && (
-          <>
-            {isUserCommentAuthor && (
-              <span className={classes.myComment}>내 댓글</span>
-            )}
+          <span style={{ marginRight: "10px" }}>
+            {dayjs(createAt).fromNow()}
+          </span>
+
+          {/* 내 댓글일 경우만 삭제버튼 노출 */}
+          {isUserCommentAuthor && (
+            <>
+              {isUserCommentAuthor && (
+                <span className={classes.myComment}>내 댓글</span>
+              )}
+              <div className={classes.btnWRapper}>
+                <Button.closeBtn onClick={deleteMessage} />
+              </div>
+            </>
+          )}
+
+          {!userData && creator.role === "anonymous" && (
             <div className={classes.btnWRapper}>
               <Button.closeBtn onClick={deleteMessage} />
             </div>
-          </>
-        )}
-
-        {!userData && creator.role === "anonymous" && (
-          <div className={classes.btnWRapper}>
-            <Button.closeBtn onClick={deleteMessage} />
-          </div>
-        )}
+          )}
+        </div>
+        <div className={classes.comment} onClick={onClickEvent}>
+          {content}
+        </div>
       </div>
-      <div className={classes.comment} onClick={onClickEvent}>
-        {content}
-      </div>
-    </div>
+    </>
   );
 }

@@ -57,7 +57,7 @@ export type RequestSurveyFormData = {
 const defaultValues = {
   title: "",
   description: "",
-  thumbnail: null,
+  thumbnail: "",
   startDate: null,
   endDate: null,
   isGenderCollected: true,
@@ -99,7 +99,13 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset, control } = formState;
+  const {
+    register,
+    setValue,
+    reset,
+    control,
+    formState: { errors },
+  } = formState;
 
   const editId = qs.get("edit");
 
@@ -195,8 +201,12 @@ export default function CreateSurvey() {
 
   //submit
   const onSubmitHandler = async (data: RequestSurveyFormData) => {
+    console.log(data);
     mutate(data);
   };
+
+  console.log(formState.watch());
+  console.log();
 
   return (
     <>

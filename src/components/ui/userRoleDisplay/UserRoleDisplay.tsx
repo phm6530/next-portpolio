@@ -1,6 +1,6 @@
 import UserMarker from "../usericon/UserMarker";
 import classes from "./UserRoleDisplay.module.scss";
-import { User, USER_ROLE } from "@/types/auth.type";
+import { USER_ROLE } from "@/types/auth.type";
 
 export default function UserRoleDisplay({
   role,
@@ -9,8 +9,6 @@ export default function UserRoleDisplay({
   role?: USER_ROLE;
   nickname: string | null;
 }) {
-  console.log(role, nickname);
-
   return (
     <div className={classes.userDisplayContainer}>
       {/* Icon 임의로 반영함 */}

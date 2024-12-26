@@ -1,0 +1,11 @@
+.item {
+  opacity: 0;
+  animation: ani 0.4s ease forwards;
+}
+
+.wrapper {
+  margin: 3rem 0 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}

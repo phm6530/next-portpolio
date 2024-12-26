@@ -19,15 +19,51 @@
   max-width: 800px;
 
   .modalContents {
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.4rem;
     background: #fff;
     border-radius: 0.5rem;
-
-    overflow: hidden;
+    max-height: calc(100vh - 100px);
+    overflow-y: scroll;
     animation: ani 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s 1 forwards;
+    box-shadow: 5px 55px 44.9px rgb(0 0 0 / 55%);
+
+    /* 전체 스크롤바 스타일 */
+    &::-webkit-scrollbar {
+      width: 12px; /* 스크롤바 너비 */
+      height: 12px; /* 가로 스크롤바 높이 */
+    }
+
+    /* 스크롤바의 트랙 (배경) */
+    &::-webkit-scrollbar-track {
+      background: #f0f0f0; /* 트랙 배경색 */
+      border-radius: 10px; /* 둥근 모서리 */
+    }
+
+    /* 스크롤바의 thumb (움직이는 부분) */
+    &::-webkit-scrollbar-thumb {
+      background: #888; /* thumb 색상 */
+      border-radius: 10px; /* 둥근 모서리 */
+      border: 3px solid #f0f0f0; /* thumb과 트랙 사이의 간격 */
+    }
+
+    /* hover 시 thumb 스타일 */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555; /* hover 시 색상 변경 */
+    }
+
+    /* active 상태 (클릭 중) thumb 스타일 */
+    &::-webkit-scrollbar-thumb:active {
+      background: #333; /* 클릭 시 색상 변경 */
+    }
 
     .closeBtnWrapper {
       // text-align: center;
+      margin-top: 1rem;
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }

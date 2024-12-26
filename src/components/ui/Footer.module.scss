@@ -2,5 +2,18 @@
 
 .footer {
   padding: 4rem 0;
-  line-height: 1.4rem;
+  line-height: 1.7rem;
+  font-size: 14px;
+  text-align: center;
+
+  & p:nth-of-type(2) {
+    font-size: 13px;
+    line-height: 1.4rem;
+  }
+}
+
+.logoWrapper {
+  max-width: 100px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
 }

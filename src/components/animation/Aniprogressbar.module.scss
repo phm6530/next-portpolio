@@ -4,11 +4,11 @@
   bottom: 0;
   left: 0;
 
-  background: #bfbfbf;
-
+  background: #f9f9f9;
+  border-radius: 1.2rem;
   position: absolute;
-  border-radius: 4px;
 
+  // border: 1px solid rgba(151, 121, 163, 0.1098039216);
   .percentText {
     position: absolute;
     left: calc(100% + 20px);
@@ -18,6 +18,45 @@
   }
 }
 
-.maxCnt {
-  background: linear-gradient(270deg, #7595df 0%, #7b6de7 100%);
+.ResultBarWrap {
+  position: relative;
+  height: 20px;
+
+  border-radius: 1.2rem;
+  background: #f9f9f9;
+  border-radius: 25px;
+  width: calc(100% - 40px);
+  // border: 1px solid rgba(182, 82, 177, 0.11);
+  .curCnt {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  /* Rectangle 879 */
+
+  .perCent {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+  }
+  .label {
+    position: absolute;
+    z-index: 10;
+    color: #26376d;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+  .maxCntColor {
+    color: #fff;
+  }
 }

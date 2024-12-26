@@ -14,7 +14,10 @@ import requestHandler from "@/utils/withFetch";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-
+import classes from "./SuveyStatusCharts.module.scss";
+import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
+import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
+import { random } from "gsap";
 // type logger<T> = (arg: T) => void;
 
 // let logNumber: logger<number> = (a) => {
@@ -118,26 +121,45 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
   return (
     <>
       {/* 필터 */}
-      <SurveyGroupFilter curFilter={filter} setFilter={setFilter} />
-      {questions.map((qs, idx) => {
-        return (
-          <div key={idx}>
-            {(() => {
-              if (qs.type === QUESTION_TYPE.SELECT) {
-                // 객관식 차트
-                return <ResponseSelect allCnt={allCnt} {...qs} />;
-              } else if (qs.type === QUESTION_TYPE.TEXT) {
-                // 주관식 답글
-                return (
-                  <ResponseTexts filter={filter} allCnt={allCnt} {...qs} />
-                );
-              } else {
-                return null as never;
-              }
-            })()}
-          </div>
-        );
-      })}
+      <SurveyGroupFilter
+        curFilter={filter}
+        setFilter={setFilter}
+        respondents={data?.respondents}
+      />
+      <div className={classes.wrapper}>
+        {questions.map((qs, idx) => {
+          return (
+            <QuestionDetailWrapper key={`${idx}`}>
+              {(() => {
+                if (qs.type === QUESTION_TYPE.SELECT) {
+                  // 객관식 차트
+                  return (
+                    <ResponseSelect
+                      idx={idx}
+                      selectAgeGroup={filter.ageGroup}
+                      selectGenderGroup={filter.genderGroup}
+                      allCnt={allCnt}
+                      {...qs}
+                    />
+                  );
+                } else if (qs.type === QUESTION_TYPE.TEXT) {
+                  // 주관식 답글
+                  return (
+                    <ResponseTexts
+                      idx={idx}
+                      filter={filter}
+                      allCnt={allCnt}
+                      {...qs}
+                    />
+                  );
+                } else {
+                  return null as never;
+                }
+              })()}
+            </QuestionDetailWrapper>
+          );
+        })}
+      </div>
     </>
   );
 }

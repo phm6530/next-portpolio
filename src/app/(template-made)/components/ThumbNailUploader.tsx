@@ -1,4 +1,3 @@
-import Image from "next/image";
 import classes from "./ThumbNailUploader.module.scss";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -6,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
 import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
-import Upload from "/public/asset/icon/upload.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
@@ -23,17 +21,24 @@ export default function ThumbNailUploader() {
     setValue,
     watch,
     formState: { errors },
+    trigger,
   } = useFormContext<FetchTemplateForm>();
   const [imgPending, setImgPending] = useState<boolean>(false);
   const [imgError, setImgError] = useState<boolean>(false);
   const key = watch("templateKey");
   const tempThumbNail = watch("thumbnail");
 
+  /**배치 때문인지 썸네일 에러 검사 안함 triiger 처리 */
+  useEffect(() => {
+    if (tempThumbNail) {
+      trigger("thumbnail");
+    }
+  }, [tempThumbNail]);
+
   const {
     mutate,
     isPending: thumnbNailPending,
     isError,
-
     reset,
   } = useMutation({
     mutationFn: async (file: File) => {
@@ -67,6 +72,9 @@ export default function ThumbNailUploader() {
     setValue("thumbnail", "");
     reset();
   };
+
+  console.log(errors.thumbnail);
+  console.log(tempThumbNail);
 
   return (
     <>
@@ -106,12 +114,9 @@ export default function ThumbNailUploader() {
           setImgError={setImgError}
         />
       </div>
-      {errors["thumbnail"] && (
-        <FormRegisterError errorMsg={errors["thumbnail"]?.message} />
+      {errors.thumbnail && (
+        <FormRegisterError errorMsg={errors.thumbnail?.message} />
       )}
-      {/* <button type="button" onClick={() => setThumNailEditor(true)}>
-        추천 썸네일 이미지
-      </button> */}
     </>
   );
 }

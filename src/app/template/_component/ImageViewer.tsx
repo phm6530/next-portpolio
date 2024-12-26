@@ -16,6 +16,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({ image, alt }) => {
         alt="preview"
         fill
         priority
+        sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"
       />
       {/* Image Zoom Button */}
       <ImageZoom alt={alt} image={image} />

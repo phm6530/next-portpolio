@@ -88,10 +88,10 @@ const TemplateItem = forwardRef(
             <div className={classes.female}></div>
           </div> */}
 
-          <div className={classes.btnWrapper}>
+          {/* <div className={classes.btnWrapper}>
             <button>참여하기</button>
             <button>결과보기</button>
-          </div>
+          </div> */}
         </div>
       </div>
     );

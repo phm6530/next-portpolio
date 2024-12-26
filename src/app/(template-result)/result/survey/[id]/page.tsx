@@ -63,8 +63,8 @@ export default async function SurveyResultPage({
 }: {
   params: { id: string };
 }) {
-  // 싱글톤
   const queryClient = new QueryClient();
+
   const data = await queryClient.fetchQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
     queryFn: async () => await fetchSurveyData<SurveyResult>(id),
@@ -88,15 +88,15 @@ export default async function SurveyResultPage({
 
         <ResultSurveyCharts id={id} />
 
+        {/* Comments */}
+        <ResultCommentSection id={+id} type={COMMENT_NEED_PATH.TEMPLATE} />
+
         {/* 메인 Comment Editor */}
         <CommentEditor
           editorType={COMMENT_EDITOR_TYPE.COMMENT}
           parentsType={COMMENT_NEED_PATH.TEMPLATE}
           parentsId={+id}
         />
-
-        {/* Comments */}
-        <ResultCommentSection id={+id} type={COMMENT_NEED_PATH.TEMPLATE} />
       </HydrationBoundary>
     </>
   );

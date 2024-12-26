@@ -13,7 +13,6 @@ type PopupComponentProps = {
 export const PopupComponent: React.FC<PopupComponentProps> = React.memo(
   ({ isOpen, closeModal, className, children }) => {
     if (!isOpen) return null;
-    console.log("랜더?");
     return (
       <>
         {createPortal(

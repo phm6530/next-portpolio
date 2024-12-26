@@ -137,6 +137,7 @@ export default function CommentEditor({
                 type="text"
                 placeholder="이름"
                 autoComplete="off"
+                notErrorText={true}
                 {...register("anonymous", {
                   required: "이름은 필수입니다.",
                   minLength: {
@@ -147,6 +148,7 @@ export default function CommentEditor({
               />
               <FormInput
                 type="password"
+                notErrorText={true}
                 {...register("password", {
                   required: "비밀번호는 필수입니다.",
                   minLength: {

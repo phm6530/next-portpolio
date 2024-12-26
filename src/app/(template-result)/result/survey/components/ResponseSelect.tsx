@@ -1,21 +1,29 @@
-import QuestionTitle from "@/app/(template-result)/components/ui/Queston-title.ui";
 import SurveyResultBar from "@/app/(template-result)/result/survey/components/SurveyResultBar";
 import classes from "./ReponseSelect.module.scss";
 import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
+import Person from "/public/asset/icon/person.svg";
 import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
 import ImageViewer from "@/app/template/_component/ImageViewer";
+import AniNumbering from "@/components/animation/AniNumbering";
+import AniProgressbar from "@/components/animation/AniProgressbar";
+import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
+import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
 export default function ResponseSelect({
+  idx,
   allCnt,
   label,
+  selectAgeGroup,
+  selectGenderGroup,
   options,
-}: { allCnt: number } & ResultSelect) {
+}: { allCnt: number } & ResultSelect & {
+    idx: number;
+    selectAgeGroup: AgeOptions;
+    selectGenderGroup: GenderOptions;
+  }) {
   const isPictrue = options.some((e) => e.img);
-
-  // options.forEach((e) => {
-  //   if(e ==)
-  // });
 
   const sumFilterUsers = (arr: ResultSelectOption["response"]) => {
     //남자 합
@@ -46,34 +54,36 @@ export default function ResponseSelect({
 
   return (
     <>
-      <QuestionTitle>{label}</QuestionTitle>
+      {/* <HeaderTitle title={"test 게시판"} description={label} /> */}
+      <QuestionTitle idx={idx}>{label}</QuestionTitle>
       <div
-        className={`${classes.optionsContainer} ${
+        className={`${classes.gridWrapper} ${
           isPictrue ? classes.pictrueGrid : undefined
         }`}
       >
         {sortedOptions.map((option, idx) => {
           const ixMax = maxOption === option;
           const sumUser = sumFilterUsers(option.response);
-          console.log(option);
+          const percent = Math.round((sumUser / allCnt) * 100);
+
           return (
-            <div key={idx}>
+            <div className={classes.item} key={`${option.label}-${idx}`}>
               <div className={classes.questionLabel}>
                 {ixMax ? (
                   <IconLabel Icon={Crown}>{option.value}</IconLabel>
                 ) : (
-                  option.label
+                  option.value
                 )}
-                {option.value}
-                <span>({sumUser} 명)</span>
+                <span className={classes.cnt}>
+                  <Person /> {sumUser}
+                </span>
               </div>
 
-              {/* Percent */}
-              <SurveyResultBar
-                curCnt={sumUser}
-                allCnt={allCnt}
-                maxCnt={ixMax}
-              />
+              <div className={classes.animationWrapper}>
+                {/* Percent */}
+                <AniProgressbar maxCnt={ixMax} percent={percent} />
+              </div>
+
               {option.img && (
                 <ImageViewer image={option.img} alt={option.value} />
               )}

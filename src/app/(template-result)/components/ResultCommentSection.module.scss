@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+  // margin-top: 3rem;
   //   margin: 2rem 0;
 }
 
@@ -29,6 +30,8 @@
 .commentCount {
   font-size: 18px;
   font-weight: 500;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 1rem;
   margin-bottom: 20px;
   span {
     color: #680edd;

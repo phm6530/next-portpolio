@@ -15,10 +15,21 @@
   }
 }
 
-.imgWrap {
-  width: 800px;
-  height: 500px;
+.imgContainer {
   border-radius: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.imgWrap {
+  border-radius: 0.5rem;
   overflow: hidden;
   position: relative;
+  width: 100%;
+  // max-width: 600px;
+  padding-bottom: 70%;
+}
+
+.customPopup {
+  width: 100%;
 }
