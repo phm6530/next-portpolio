@@ -1,9 +1,15 @@
 .label {
   display: flex;
   align-items: center;
-  font-size: 1.3rem;
+  flex-direction: row;
+  font-size: 1.1rem;
+  text-shadow: 0px 0px 1px;
+  background: var(--background-color-questionhead);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  gap: 10px;
   margin-bottom: 1rem;
-  font-weight: 600;
   img {
     margin-right: 0.4rem;
   }
@@ -12,4 +18,13 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  span {
+    background: #dfe6ff;
+    color: #4162db;
+    font-size: 13px;
+    padding: 0.6rem 1rem;
+    border-radius: 2rem;
+    display: inline-block;
+  }
 }

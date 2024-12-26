@@ -1,12 +1,18 @@
-import Image from "next/image";
+import { ReactNode } from "react";
 import classes from "./Question-title.module.scss";
-// import ChkIcon from "/public/asset/icon/chkCircle.png";
 
-export default function QuestionTitle({ children }: { children: string }) {
+export default function QuestionTitle({
+  idx,
+  children,
+}: {
+  idx: number;
+  children: ReactNode;
+}) {
   return (
     <>
       <div className={classes.label}>
-        {/* <Image src={ChkIcon} alt={"title"} width={30} /> {children} */}
+        <span>Q{idx + 1}.</span>
+        <div>{children}</div>
       </div>
     </>
   );

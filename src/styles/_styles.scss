@@ -38,6 +38,10 @@ body {
   overflow-x: hidden;
   background-color: var(--background-color);
   transition: background 0.5s ease;
+
+  @include respond("medium") {
+    font-size: 14px;
+  }
 }
 
 body {

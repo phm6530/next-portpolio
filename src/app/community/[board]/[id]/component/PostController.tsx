@@ -59,20 +59,21 @@ export default function PostController({
     },
   });
 
-  // const postDeleteHandler = async () => {
-  //   let body: { password: string } | undefined;
+  const postDeleteHandler = async () => {
+    let body: { password: string } | undefined;
 
-  //   // Test 추후 Modal 로 처리 예정
-  //   if (!authrozationPost) {
-  //   }
+    // Test 추후 Modal 로 처리 예정
+    if (!authrozationPost) {
+      openModal();
+    }
 
-  //   if (authrozationPost) {
-  //     if (!confirm(`삭제하시겠습니까?\n삭제 시 복구 불가합니다.`)) {
-  //       return;
-  //     }
-  //   }
-  //   mutate(authrozationPost ? undefined : body);
-  // };
+    if (authrozationPost) {
+      if (!confirm(`삭제하시겠습니까?\n삭제 시 복구 불가합니다.`)) {
+        return;
+      }
+      mutate(authrozationPost ? undefined : body);
+    }
+  };
 
   const deleteFunc = (password: string) => mutate({ password });
   return (
@@ -92,7 +93,7 @@ export default function PostController({
               creatorRole === USER_ROLE.USER))) && (
           <>
             <button onClick={() => router.push("/")}>수정</button>
-            <button onClick={openModal}>삭제</button>
+            <button onClick={postDeleteHandler}>삭제</button>
           </>
         )}
         {/* Edit  */}

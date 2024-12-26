@@ -1,5 +1,6 @@
 import { User } from "@/types/auth.type";
 import { GENDER_GROUP } from "@/types/user";
+import { ageGroupProps } from "./template";
 
 export enum TEMPLATE_TYPE {
   SURVEY = "survey",
@@ -22,7 +23,11 @@ export enum RESPONDENT_TAG {
 export type DetailRespondents = {
   tag: RESPONDENT_TAG.DETAIL;
   allCnt: number;
-  detail: Record<GENDER_GROUP, { [key: string]: number }>;
+  detail: {
+    [key in GENDER_GROUP]: {
+      [key in ageGroupProps]: number;
+    };
+  };
 };
 
 // MaxGroup + 참여자

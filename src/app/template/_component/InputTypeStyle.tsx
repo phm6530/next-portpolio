@@ -1,5 +1,6 @@
 import { HTMLAttributes, ReactNode } from "react";
 import classes from "./InputTypeStyle.module.scss";
+import Chk from "/public/asset/icon/check.svg";
 
 // Tab
 interface RadioTabProps extends HTMLAttributes<HTMLDivElement> {
@@ -38,6 +39,16 @@ function RadioAnswer({
           : classes.answer_noneActive // false 또는 undefined일 때 적용할 클래스
       }
     >
+      <div className={classes.chkItemWrap}>
+        <div
+          className={`${classes.chkItem} ${
+            selectId === curid ? classes.active : undefined
+          }`}
+        >
+          <Chk />
+        </div>
+      </div>
+
       {children}
     </label>
   );

@@ -10,7 +10,7 @@ import { QUERY_KEY } from "@/types/constans";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_URL } from "@/config/base";
 
-type FilterDataProps = {
+export type FilterDataProps = {
   gender: Gender;
   age: 10 | 20 | 30 | 40 | 50 | 60;
   value: string;

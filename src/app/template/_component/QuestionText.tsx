@@ -70,16 +70,18 @@ export default function QuestionText({
           <ImageZoom alt={"preview"} image={qsImg} />
         </div>
       )}
-      <FormTextarea
-        className={classes.textArea}
-        placeholder={`${description}을 기재해주세요!`}
-        {...register(`answers.${curIdx}.answer`, {
-          required: "필수 항목입니다.",
-        })}
-        autoComplete="off"
-      />
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <FormTextarea
+          className={classes.textArea}
+          placeholder={`${description}을 기재해주세요!`}
+          {...register(`answers.${curIdx}.answer`, {
+            required: "필수 항목입니다.",
+          })}
+          autoComplete="off"
+        />
 
-      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
+        {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
+      </div>
     </>
   );
 }

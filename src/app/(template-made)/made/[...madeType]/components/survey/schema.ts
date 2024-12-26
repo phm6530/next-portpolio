@@ -21,15 +21,25 @@ const RequestSelectSchema = z.object({
     )
     .min(2, "선택 옵션은 최소 2개가 필요합니다.")
     .superRefine((options, ctx) => {
-      const duplicates = options
+      // 비어 있지 않은 값만 중복 검사
+      const nonEmptyValues = options
         .map((o) => o.value)
-        .filter((value, index, self) => self.indexOf(value) !== index);
+        .filter((value) => value.trim() !== "");
+
+      // 중복 값 찾기
+      const duplicates = nonEmptyValues.filter(
+        (value, index, self) => self.indexOf(value) !== index
+      );
+      console.log(duplicates);
+
       if (duplicates.length > 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `중복된 옵션 값이 있습니다: ${[...new Set(duplicates)].join(
-            ", "
-          )}`,
+          message: `중복된 옵션 값이 있습니다 `,
+
+          // "${[...new Set(duplicates)].join(
+          //   ", "
+          // )}"`,
         });
       }
     }),
@@ -41,10 +51,7 @@ const surveySchema = z.object({
     .min(1, "제목은 필수 입니다.")
     .min(4, "제목은 최소 4글자 이상으로 적어주세요"),
   description: z.string().min(1, "해당 조사의 설명을 적어주세요"),
-  thumbnail: z
-    .string()
-    .nullable()
-    .refine((val) => val !== null, "썸네일을 업로드하거나 검색등록 해주세요!"),
+  thumbnail: z.string().min(1, "썸네일을 업로드하거나 검색등록 해주세요!"),
   startDate: z.string().nullable().optional(),
   endDate: z.string().nullable().optional(),
   isGenderCollected: z.boolean().optional(),

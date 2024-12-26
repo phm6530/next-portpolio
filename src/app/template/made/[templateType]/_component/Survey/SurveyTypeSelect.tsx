@@ -8,12 +8,14 @@ import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Surv
 import { QUESTION_TYPE } from "@/types/survey.type";
 
 import {
+  FieldErrorsImpl,
   useFieldArray,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
 import classes from "./SurveyTypeSelect.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
+import { RequestSelect } from "./AddQuestionController";
 
 export default function SurveyTypeSelect({
   surveyDelete,
@@ -50,8 +52,17 @@ export default function SurveyTypeSelect({
     }
   };
 
-  const test = watch(`questions.${surveyIdx}.options`);
-  const isPicture = test.some((e) => e.img);
+  const optionWatch = watch(`questions.${surveyIdx}.options`);
+  const isPicture = optionWatch.some((e) => e.img);
+  const values = optionWatch
+    .map((e) => e.value.trim())
+    .filter((value) => value !== ""); // 빈 문자열 필터링
+
+  console.log(values);
+
+  const hasDuplicates = new Set(values).size !== values.length;
+  console.log(hasDuplicates);
+  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (
     <QuestionContainer>
@@ -104,6 +115,11 @@ export default function SurveyTypeSelect({
         })}
       </div>
 
+      {hasDuplicates && (
+        <div>
+          <FormRegisterError errorMsg={"중복된 옵션 값이 있습니다"} />
+        </div>
+      )}
       {/* 항목추가 */}
       <button
         className={classes.AddBtn}

@@ -1,7 +1,5 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { useFormContext, useWatch } from "react-hook-form";
-// import { GetSurveyQuestions } from "@/types/templateSurvey";
-// import ImageZoom from "@/app/template/_component/ImageZoom";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
@@ -68,16 +66,7 @@ export default function QuestionOptions({
               })}
             />
 
-            <div className={styles.chkItemWrap}>
-              <div
-                className={`${styles.chkItem} ${
-                  selectOption && +selectOption === e.id
-                    ? styles.active
-                    : undefined
-                }`}
-              />
-              {e.value}
-            </div>
+            <div className={styles.chkItemWrap}>{e.value}</div>
 
             {/* 이미지 있으면 */}
             {e.img && (

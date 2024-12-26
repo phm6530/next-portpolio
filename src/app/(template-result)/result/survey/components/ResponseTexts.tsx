@@ -1,5 +1,4 @@
 "use client";
-import QuestionTitle from "@/app/(template-result)/components/ui/Queston-title.ui";
 import { ResultText } from "@/types/surveyResult.type";
 import classes from "./ResponseTexts.module.scss";
 // import Female30 from "/public/asset/icon/female_30.svg";
@@ -8,13 +7,30 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import {
   AgeOptions,
   GenderOptions,
 } from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
+import dynamic from "next/dynamic";
+import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
+
+import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
+import Male from "/public/asset/icon/man.png";
+import Female from "/public/asset/icon/woman.png";
+import Image from "next/image";
+
+const DynamicMasonryLayout = dynamic(() => import("@/utils/MasonryLayout"), {
+  ssr: false,
+  loading: () => (
+    <div>
+      <LoadingTextSkeleton />
+    </div>
+  ),
+});
 
 export function ResponseTexts({
+  idx,
   allCnt,
   id: questionId,
   label,
@@ -22,77 +38,57 @@ export function ResponseTexts({
   textAnswers,
   isNextPage,
 }: {
+  idx: number;
   allCnt: number;
   filter: {
     genderGroup: GenderOptions;
     ageGroup: AgeOptions;
   };
 } & ResultText) {
-  // useEffect(() => {
-  //   if (!resultAnswers || !filter) return;
+  const [mount, setMount] = useState<boolean>(false);
+  const isFirstMount = useRef(true);
 
-  //   const { genderGroup, ageGroup } = filter;
-  //   const filteredData = resultAnswers.filter((respon) => {
-  //     const { gender, age } = respon.respondent;
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false; // 초기 마운트 이후로 상태 변경
+      return;
+    }
 
-  //     // 성별 필터
-  //     if (genderGroup !== "all") {
-  //       if (genderGroup === "female" && gender !== "female") return false;
-  //       if (genderGroup === "male" && gender !== "male") return false;
-  //     }
-
-  //     // 나이 필터
-  //     if (ageGroup) {
-  //       switch (ageGroup) {
-  //         case 10:
-  //           if (age < 10 || age >= 20) return false;
-  //         case 20:
-  //           if (age < 20 || age >= 30) return false;
-  //           break;
-  //         case 30:
-  //           if (age < 30 || age >= 40) return false;
-  //           break;
-  //         case 40:
-  //           if (age < 40 || age >= 50) return false;
-  //           break;
-  //         case 50:
-  //           if (age < 50 || age >= 60) return false;
-  //           break;
-  //         case 60:
-  //           if (age < 60 || age >= 70) return false;
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     }
-
-  //     // 모든 조건을 만족하면 true 반환
-  //     return true;
-  //   });
-
-  //   setResult(filteredData);
-  // }, [filter, resultAnswers]);
-
-  //초기 length 세팅
+    refetch();
+  }, [filter.ageGroup, filter.genderGroup]);
 
   const {
     data: textQuestions,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isPending,
+    refetch,
   } = useInfiniteQuery<{
     isNextPage: number | null;
     answers: ResultText["textAnswers"];
   }>({
-    queryKey: [QUERY_KEY.QUESTION_TEXT, questionId],
+    queryKey: [
+      QUERY_KEY.QUESTION_TEXT,
+      questionId + "",
+      filter.ageGroup,
+      filter.genderGroup,
+    ],
     queryFn: ({ pageParam }) => {
+      console.count("실행되지 않아야함...");
       return requestHandler(
         async () =>
           await fetch(
             `${BASE_NEST_URL}/answer/question/${questionId}/${pageParam}`,
             {
               cache: "no-store",
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                genderGroup: filter.genderGroup,
+                ageGroup: filter.ageGroup,
+              }),
             }
           )
       );
@@ -101,24 +97,24 @@ export function ResponseTexts({
       return lastPage.isNextPage;
     }, // 다음 페이지 결정
     initialPageParam: 1,
-    enabled: false,
+    enabled: false, // 초기 패칭 방지..
     initialData: {
       pages: [{ isNextPage, answers: textAnswers }],
       pageParams: [1],
     },
   });
 
-  console.log("isPending:", isPending);
-  // useEffect(() => {
-  //   if (textQuestions) {
-  //     const totalAnswers = textQuestions.pages.reduce((sum, page) => {
-  //       return (sum += page.answers.length);
-  //     }, 0);
-  //     setCurrentCount(totalAnswers);
-  //   }
-  // }, [textQuestions]);
+  // 초기 마운트 방지
+  useEffect(() => {
+    if (!mount) {
+      console.log(mount);
+      setMount(true);
+      return;
+    }
 
-  //하나로합치기
+    refetch();
+  }, [filter.ageGroup, filter.genderGroup]);
+
   const flagList = textQuestions.pages.flatMap((e) => e.answers);
 
   const getGenderClass = (gender: string) =>
@@ -129,30 +125,55 @@ export function ResponseTexts({
 
   return (
     <>
-      <QuestionTitle>{label}</QuestionTitle>
-      <div className={classes.textQuestionList}>
-        {flagList.map((as, idx) => {
-          const { id, respondent, answer } = as;
-          const { gender, age } = respondent;
-          return (
-            <div key={`${id}-${idx}`} className={classes.responseContainer}>
-              <div className={classes.anonymous}>
-                <div className={classes.iconWrap}>
-                  {/* {gender === "female" && <Female30 />}
-                  {gender === "male" && <Male30 />} */}
+      <div className={classes.container}>
+        <QuestionTitle idx={idx}>{label}</QuestionTitle>
+
+        <Suspense fallback={<>loading......</>}>
+          <DynamicMasonryLayout>
+            {flagList.map((as, idx) => {
+              const { id, respondent, answer } = as;
+              const { gender, age } = respondent;
+
+              return (
+                <div key={`${id}-${idx}`} className={classes.answerWrapper}>
+                  <div className={classes.respondent}>
+                    <div className={classes.iconWrap}>
+                      {gender === "female" && (
+                        <Image
+                          src={Female}
+                          alt="logo"
+                          fill
+                          priority
+                          style={{ objectFit: "contain" }}
+                          sizes="(max-width: 768px) 100vw"
+                        />
+                      )}
+                      {gender === "male" && (
+                        <Image
+                          src={gender === "male" ? Male : Female}
+                          alt="logo"
+                          fill
+                          priority
+                          style={{ objectFit: "contain" }}
+                          sizes="(max-width: 768px) 100vw"
+                        />
+                      )}
+                    </div>
+
+                    <div className={classes.age}>{age}대 </div>
+                    <span className={getGenderClass(gender)}>
+                      {getGenderText(gender)}
+                    </span>
+                  </div>
+
+                  <div className={classes.respondentText}>{answer}</div>
                 </div>
-
-                <div className={classes.age}>{age}대 </div>
-                <span className={getGenderClass(gender)}>
-                  {getGenderText(gender)}
-                </span>
-              </div>
-
-              <div className={classes.anonymousResponse}>{answer}</div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </DynamicMasonryLayout>
+        </Suspense>
       </div>
+
       {hasNextPage && (
         <>
           <div
@@ -161,7 +182,9 @@ export function ResponseTexts({
               fetchNextPage();
             }}
           >
-            {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
+            <button type="button">
+              {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
+            </button>
           </div>
         </>
       )}

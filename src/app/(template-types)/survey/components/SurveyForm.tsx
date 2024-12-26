@@ -1,7 +1,6 @@
 "use client";
 
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
-import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import {
   AnswerSurvey,
   QUESTION_TYPE,
@@ -21,6 +20,8 @@ import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
+import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
+import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
 
 export default function SurveyForm({
   id,
@@ -66,10 +67,9 @@ export default function SurveyForm({
       });
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({
+      await queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
       });
-      // queryClient.setQueryData()
 
       router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
@@ -82,38 +82,45 @@ export default function SurveyForm({
   return (
     <>
       <FormProvider {...formMethod}>
-        {/* Gender Chk  */}
-        {isGenderCollected && <OptionGenderGroup />}
+        <div className={classes.requireds}>
+          {/* Gender Chk  */}
+          {isGenderCollected && <OptionGenderGroup />}
 
-        {/* age Chk  */}
-        {isAgeCollected && <OptionAgeGroup />}
+          {/* age Chk  */}
+          {isAgeCollected && <OptionAgeGroup />}
+        </div>
 
-        {questions.map((qs) => {
+        {questions.map((qs, idx) => {
           return (
-            <TemplateQuestionWrapper key={`${qs.type}-${qs.id}`}>
-              <QuestionTitle>{qs.label}</QuestionTitle>
-              {(() => {
-                if (qs.type === QUESTION_TYPE.TEXT) {
-                  return (
-                    <QuestionText
-                      description={qs.label}
-                      qsImg={qs.pictrue}
-                      qsId={qs.id}
-                    />
-                  );
-                } else if (
-                  qs.type === QUESTION_TYPE.SELECT &&
-                  "options" in qs
-                ) {
-                  return <QuestionOptions qsId={qs.id} options={qs.options} />;
-                } else {
-                  return null as never;
-                }
-              })()}
-            </TemplateQuestionWrapper>
+            <QuestionsAnswersWrapper key={`${qs.label}-${idx}`}>
+              <QuestionDetailWrapper>
+                <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
+                {(() => {
+                  if (qs.type === QUESTION_TYPE.TEXT) {
+                    return (
+                      <QuestionText
+                        description={qs.label}
+                        qsImg={qs.pictrue}
+                        qsId={qs.id}
+                      />
+                    );
+                  } else if (
+                    qs.type === QUESTION_TYPE.SELECT &&
+                    "options" in qs
+                  ) {
+                    return (
+                      <QuestionOptions qsId={qs.id} options={qs.options} />
+                    );
+                  } else {
+                    return null as never;
+                  }
+                })()}
+              </QuestionDetailWrapper>
+            </QuestionsAnswersWrapper>
           );
         })}
       </FormProvider>
+
       <div className={classes.buttonWrapper}>
         <Button.submit
           type="button"

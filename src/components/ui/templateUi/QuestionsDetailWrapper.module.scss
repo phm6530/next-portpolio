@@ -1,0 +1,18 @@
+@keyframes ani {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.chartsWrapper {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0px 5px 20px rgb(88 72 174 / 11%);
+  animation: ani 1s ease forwards;
+  //   margin: 1rem;
+  //   box-shadow: 0px 10px 20px #eaecf3;
+}

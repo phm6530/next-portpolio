@@ -1,8 +1,6 @@
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
-import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-
 import { useFormContext } from "react-hook-form";
 
 export default function OptionGenderGroup() {
@@ -17,25 +15,27 @@ export default function OptionGenderGroup() {
   const errorMsg = errors.gender?.message;
 
   return (
-    <TemplateQuestionWrapper>
-      <QuestionTitle>성별</QuestionTitle>
-      {gender.map((e) => {
-        return (
-          <InputTypeStyle.Radio
-            key={`gender-${e}`}
-            selectLabel={selectGender}
-            curLabel={e}
-          >
-            <input
-              type="radio"
-              value={e}
-              {...register("gender", { required: "필수 항목입니다." })}
-            />
-            {e === "male" ? "남" : "여"}
-          </InputTypeStyle.Radio>
-        );
-      })}
+    <div>
+      <QuestionTitle>성별이 어떻게 되시나요?</QuestionTitle>
+      <div style={{ display: "flex", gap: "10px" }}>
+        {gender.map((e) => {
+          return (
+            <InputTypeStyle.RadioAnswer
+              key={`gender-${e}`}
+              selectId={selectGender}
+              curid={e}
+            >
+              <input
+                type="radio"
+                value={e}
+                {...register("gender", { required: "필수 항목입니다." })}
+              />
+              {e === "male" ? "남" : "여"}
+            </InputTypeStyle.RadioAnswer>
+          );
+        })}
+      </div>{" "}
       {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
-    </TemplateQuestionWrapper>
+    </div>
   );
 }

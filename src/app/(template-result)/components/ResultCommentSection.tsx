@@ -7,7 +7,11 @@ import NotFoundComponent from "@/components/NotFoundComponent";
 import CommentContainer from "@/app/(template-result)/components/CommentContainer";
 import { fetchComments } from "@/app/(template-result)/result/survey/components/test";
 import { CommentReponse } from "@/types/comment.type";
-import { COMMENT_NEED_PATH } from "../result/survey/[id]/page";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+} from "../result/survey/[id]/page";
+import CommentEditor from "./CommentEditor";
 
 //tempalte ID
 export default function ResultCommentSection({
@@ -30,8 +34,6 @@ export default function ResultCommentSection({
   if (isLoading) {
     return <>loading......</>;
   }
-
-  console.log(data);
 
   if (isError) {
     throw new Error("에러");

@@ -2,9 +2,10 @@
   // background: #bfbfbf;
   margin-bottom: 1rem;
   position: relative;
-  height: 25px;
+  height: 7px;
   overflow: hidden;
-
+  border-radius: 2rem;
+  border: 1px solid rgba(151, 121, 163, 0.1098039216);
   .curCnt {
     position: absolute;
     right: 80px;

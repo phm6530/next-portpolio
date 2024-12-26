@@ -33,7 +33,7 @@ npm i axios
 npm i sass
 npm i dayjs
 npm i zustand
-
+npm install masonry-layout
 ```
 
 save-dev Svg 사용
