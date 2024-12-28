@@ -1,4 +1,5 @@
 import { queryClient } from "@/config/queryClient";
+import { resolve } from "path";
 
 export default async function requestHandler<T>(
   cb: () => Promise<Response>

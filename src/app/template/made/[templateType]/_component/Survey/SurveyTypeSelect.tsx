@@ -58,10 +58,8 @@ export default function SurveyTypeSelect({
     .map((e) => e.value.trim())
     .filter((value) => value !== ""); // 빈 문자열 필터링
 
-  console.log(values);
-
   const hasDuplicates = new Set(values).size !== values.length;
-  console.log(hasDuplicates);
+
   const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (

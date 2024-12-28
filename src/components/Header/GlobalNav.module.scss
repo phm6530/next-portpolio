@@ -16,7 +16,12 @@
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgb(242, 242, 244);
-
+  a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+  }
   // @include respond("medium") {
   //   height: 100vh;
   // }
@@ -47,13 +52,6 @@
         margin-bottom: 1px;
       }
     }
-
-    a {
-      text-decoration: none;
-      color: var(--text-color);
-      display: flex;
-      align-items: center;
-    }
   }
 }
 
@@ -64,4 +62,34 @@
   padding: 0.4rem;
   border-radius: 5px;
   font-size: 11px;
+}
+
+.burgerMenu {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  display: none;
+  span {
+    background: red;
+    height: 2px;
+    width: 100%;
+    display: block;
+  }
+
+  @include respond("medium") {
+    display: flex;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.loginWrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

@@ -57,17 +57,16 @@ export enum COMMENT_NEED_PATH {
   TEMPLATE = "template",
   BOARD = "board",
 }
-
+const queryClient = new QueryClient();
 export default async function SurveyResultPage({
   params: { id },
 }: {
   params: { id: string };
 }) {
-  const queryClient = new QueryClient();
-
   const data = await queryClient.fetchQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
     queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+    staleTime: 10000,
   });
 
   await queryClient.prefetchQuery({
@@ -78,6 +77,7 @@ export default async function SurveyResultPage({
         COMMENT_NEED_PATH.TEMPLATE
       );
     },
+    staleTime: 10000,
   });
 
   return (

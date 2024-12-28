@@ -18,6 +18,7 @@ import classes from "./SuveyStatusCharts.module.scss";
 import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
 import { random } from "gsap";
+import { fetchSurveyData } from "./test";
 // type logger<T> = (arg: T) => void;
 
 // let logNumber: logger<number> = (a) => {
@@ -68,13 +69,8 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
 
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => {
-      return requestHandler<SurveyResult>(async () => {
-        return await fetch(`${BASE_NEST_URL}/answer/survey/${id}`, {
-          cache: "no-store",
-        });
-      });
-    },
+    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+    staleTime: 10000,
     select: (data) => {
       return {
         ...data,
@@ -131,6 +127,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
           return (
             <QuestionDetailWrapper key={`${idx}`}>
               {(() => {
+                console.log(qs);
                 if (qs.type === QUESTION_TYPE.SELECT) {
                   // 객관식 차트
                   return (

@@ -19,6 +19,7 @@ import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 import Male from "/public/asset/icon/man.png";
 import Female from "/public/asset/icon/woman.png";
 import Image from "next/image";
+import { queryClient } from "@/config/queryClient";
 
 const DynamicMasonryLayout = dynamic(() => import("@/utils/MasonryLayout"), {
   ssr: false,
@@ -45,23 +46,21 @@ export function ResponseTexts({
     ageGroup: AgeOptions;
   };
 } & ResultText) {
-  const [mount, setMount] = useState<boolean>(false);
-  const isFirstMount = useRef(true);
+  const isFirstMount = useRef<boolean>(false);
 
   useEffect(() => {
-    if (isFirstMount.current) {
-      isFirstMount.current = false; // 초기 마운트 이후로 상태 변경
-      return;
+    if (!isFirstMount.current) {
+      isFirstMount.current = true;
     }
-
-    refetch();
-  }, [filter.ageGroup, filter.genderGroup]);
+  }, [isFirstMount]);
 
   const {
     data: textQuestions,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isPending,
+    isLoading,
     refetch,
   } = useInfiniteQuery<{
     isNextPage: number | null;
@@ -73,8 +72,8 @@ export function ResponseTexts({
       filter.ageGroup,
       filter.genderGroup,
     ],
+
     queryFn: ({ pageParam }) => {
-      console.count("실행되지 않아야함...");
       return requestHandler(
         async () =>
           await fetch(
@@ -97,25 +96,27 @@ export function ResponseTexts({
       return lastPage.isNextPage;
     }, // 다음 페이지 결정
     initialPageParam: 1,
-    enabled: false, // 초기 패칭 방지..
-    initialData: {
-      pages: [{ isNextPage, answers: textAnswers }],
-      pageParams: [1],
-    },
+    enabled:
+      isFirstMount.current &&
+      (filter.ageGroup !== "all" || filter.genderGroup !== "all"), // 초기 패칭 방지..
+    staleTime: 10000,
   });
 
-  // 초기 마운트 방지
   useEffect(() => {
-    if (!mount) {
-      console.log(mount);
-      setMount(true);
-      return;
-    }
-
-    refetch();
-  }, [filter.ageGroup, filter.genderGroup]);
-
-  const flagList = textQuestions.pages.flatMap((e) => e.answers);
+    console.log("한번만 실행하지?");
+    queryClient.setQueryData(
+      [
+        QUERY_KEY.QUESTION_TEXT,
+        questionId + "",
+        "all", // 초기 데이터 기준
+        "all", // 초기 데이터 기준
+      ],
+      {
+        pages: [{ isNextPage, answers: textAnswers }],
+        pageParams: [1],
+      }
+    );
+  }, [questionId, textAnswers, queryClient]);
 
   const getGenderClass = (gender: string) =>
     gender === "female" ? classes.female : classes.male;
@@ -123,55 +124,71 @@ export function ResponseTexts({
   const getGenderText = (gender: string) =>
     gender === "female" ? "여성" : "남성";
 
+  const resultList = textQuestions?.pages.flatMap((page) => page.answers);
+
   return (
     <>
+      <button
+        onClick={() =>
+          queryClient.invalidateQueries({
+            queryKey: [QUERY_KEY.QUESTION_TEXT],
+          })
+        }
+      >
+        초기화
+      </button>
       <div className={classes.container}>
         <QuestionTitle idx={idx}>{label}</QuestionTitle>
+        {resultList?.length === 0 && (
+          <div className={classes.answerWrapper}>
+            <div className={classes.emptyRespondents}>
+              {filter.ageGroup}대 {getGenderText(filter.genderGroup)} 참여자가
+              없어요!
+            </div>
+          </div>
+        )}
+        <DynamicMasonryLayout pending={isPending} loading={isLoading}>
+          {resultList?.map((as, idx) => {
+            const { id, respondent, answer } = as;
+            const { gender, age } = respondent;
 
-        <Suspense fallback={<>loading......</>}>
-          <DynamicMasonryLayout>
-            {flagList.map((as, idx) => {
-              const { id, respondent, answer } = as;
-              const { gender, age } = respondent;
-
-              return (
-                <div key={`${id}-${idx}`} className={classes.answerWrapper}>
-                  <div className={classes.respondent}>
-                    <div className={classes.iconWrap}>
-                      {gender === "female" && (
-                        <Image
-                          src={Female}
-                          alt="logo"
-                          fill
-                          priority
-                          style={{ objectFit: "contain" }}
-                          sizes="(max-width: 768px) 100vw"
-                        />
-                      )}
-                      {gender === "male" && (
-                        <Image
-                          src={gender === "male" ? Male : Female}
-                          alt="logo"
-                          fill
-                          priority
-                          style={{ objectFit: "contain" }}
-                          sizes="(max-width: 768px) 100vw"
-                        />
-                      )}
-                    </div>
-
-                    <div className={classes.age}>{age}대 </div>
-                    <span className={getGenderClass(gender)}>
-                      {getGenderText(gender)}
-                    </span>
+            return (
+              <div key={`${id}-${idx}`} className={classes.answerWrapper}>
+                <div className={classes.respondent}>
+                  <div className={classes.iconWrap}>
+                    {gender === "female" && (
+                      <Image
+                        src={Female}
+                        alt="logo"
+                        fill
+                        priority
+                        style={{ objectFit: "contain" }}
+                        sizes="(max-width: 768px) 100vw"
+                      />
+                    )}
+                    {gender === "male" && (
+                      <Image
+                        src={gender === "male" ? Male : Female}
+                        alt="logo"
+                        fill
+                        priority
+                        style={{ objectFit: "contain" }}
+                        sizes="(max-width: 768px) 100vw"
+                      />
+                    )}
                   </div>
 
-                  <div className={classes.respondentText}>{answer}</div>
+                  <div className={classes.age}>{age}대 </div>
+                  <span className={getGenderClass(gender)}>
+                    {getGenderText(gender)}
+                  </span>
                 </div>
-              );
-            })}
-          </DynamicMasonryLayout>
-        </Suspense>
+
+                <div className={classes.respondentText}>{answer}</div>
+              </div>
+            );
+          })}
+        </DynamicMasonryLayout>
       </div>
 
       {hasNextPage && (

@@ -1,3 +1,10 @@
 .container {
   display: flex;
 }
+
+.ageGroupWrapper {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

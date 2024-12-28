@@ -19,8 +19,8 @@ export default function OptionAgeGroup() {
 
   return (
     <div>
-      <QuestionTitle noneIdx>연령대를 선택해주세요</QuestionTitle>
-      <div style={{ display: "flex", gap: "10px" }}>
+      <QuestionTitle>연령대를 선택해주세요</QuestionTitle>
+      <div className={classes.ageGroupWrapper}>
         {AgeGroups.map((range) => {
           return (
             <InputTypeStyle.RadioAnswer

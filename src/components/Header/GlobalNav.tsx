@@ -73,21 +73,30 @@ export default function GlobalNav() {
     <>
       <header className={classes.header}>
         <Grid.center>
-          <nav className={classes.nav}>
-            <div className={classes.logoWrapper}>
-              <Logo link />
-            </div>
-            <div className={classes.contentsLink}>
-              {/* <Link href={"/about"}>사용법</Link> */}
-              <Link href={"/list"}>
-                템플릿 리스트
-                <span className={classes.new}>NEW</span>
-              </Link>
-              <Link href={"/made"}>템플릿 만들기</Link>
-              <Link href={"/community"}>커뮤니티</Link>
+          <div className={classes.grid}>
+            {/* Burger Menu */}
+            <div className={classes.burgerMenu}>
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
 
-            <div>
+            <nav className={classes.nav}>
+              <div className={classes.logoWrapper}>
+                <Logo link />
+              </div>
+              <div className={classes.contentsLink}>
+                {/* <Link href={"/about"}>사용법</Link> */}
+                <Link href={"/list"}>
+                  템플릿 리스트
+                  <span className={classes.new}>NEW</span>
+                </Link>
+                <Link href={"/made"}>템플릿 만들기</Link>
+                <Link href={"/community"}>커뮤니티</Link>
+              </div>
+            </nav>
+
+            <div className={classes.loginWrapper}>
               {user ? (
                 <>
                   <NavUserProfile />
@@ -99,7 +108,7 @@ export default function GlobalNav() {
                 <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
               )}
             </div>
-          </nav>
+          </div>
         </Grid.center>
       </header>
     </>
