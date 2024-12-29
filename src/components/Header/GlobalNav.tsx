@@ -129,7 +129,7 @@ export default function GlobalNav() {
                 <Link href={"/community"}>커뮤니티</Link>
               </div>
 
-              {isMobile && (
+              {isMobile && user && (
                 <div className={classes.mobileMypage}>마이페이지</div>
               )}
             </nav>
