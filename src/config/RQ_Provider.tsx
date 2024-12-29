@@ -8,7 +8,7 @@ import { queryClient } from "./queryClient";
 export default function RQProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools /> */}
+      <ReactQueryDevtools />
       {children}
     </QueryClientProvider>
   );
