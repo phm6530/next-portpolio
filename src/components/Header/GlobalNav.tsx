@@ -12,6 +12,9 @@ import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import Logo from "../logo/logo";
 import { useQueryReset } from "@/utils/queryClientReset";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import BackDrop from "../modal/BackDrop";
 
 // type ExtendNumber<T extends number> = T;
 // type ExtendLiteral<T extends 0> = T;
@@ -44,6 +47,14 @@ export default function GlobalNav() {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
 
+  useEffect(() => {
+    setView(false);
+  }, [pathname]);
+
+  const [view, setView] = useState<boolean>(false);
+  const [mount, setMount] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
   const { resetUserQueries } = useQueryReset();
 
   /** 로그아웃 */
@@ -69,19 +80,42 @@ export default function GlobalNav() {
     },
   });
 
+  useEffect(() => {
+    setMount(true);
+
+    // 모바일 여부 판단
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // 768px 이하일 경우 모바일로 판단
+    };
+
+    handleResize(); // 초기 실행
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <header className={classes.header}>
         <Grid.center>
           <div className={classes.grid}>
             {/* Burger Menu */}
-            <div className={classes.burgerMenu}>
+            <div
+              className={classes.burgerMenu}
+              onClick={() => setView((prev) => !prev)}
+            >
               <span></span>
               <span></span>
               <span></span>
             </div>
 
-            <nav className={classes.nav}>
+            <nav
+              className={`${classes.nav} ${
+                view ? classes.view : classes.noneView
+              }`}
+            >
               <div className={classes.logoWrapper}>
                 <Logo link />
               </div>
@@ -94,6 +128,10 @@ export default function GlobalNav() {
                 <Link href={"/made"}>템플릿 만들기</Link>
                 <Link href={"/community"}>커뮤니티</Link>
               </div>
+
+              {isMobile && (
+                <div className={classes.mobileMypage}>마이페이지</div>
+              )}
             </nav>
 
             <div className={classes.loginWrapper}>
@@ -111,6 +149,13 @@ export default function GlobalNav() {
           </div>
         </Grid.center>
       </header>
+      {mount &&
+        view &&
+        isMobile && // 모바일 환경에서만 렌더링
+        createPortal(
+          <BackDrop onClick={() => setView((prev) => !prev)} />,
+          document.getElementById("backdrop-portal") as HTMLDivElement
+        )}
     </>
   );
 }

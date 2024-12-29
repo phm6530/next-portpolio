@@ -3,6 +3,10 @@
 .logoWrapper {
   max-width: 80px;
   width: 100%;
+
+  @include respond("medium") {
+    margin-bottom: 2rem;
+  }
 }
 
 .header {
@@ -16,6 +20,11 @@
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgb(242, 242, 244);
+
+  @include respond("medium") {
+    background: #fff;
+  }
+
   a {
     text-decoration: none;
     color: var(--text-color);
@@ -31,17 +40,48 @@
     display: flex;
     justify-content: space-between;
 
+    @include respond("medium") {
+      width: calc(70% - 40px);
+      transition: left 0.5s ease;
+
+      padding: 20px;
+      &.view {
+        left: 0;
+      }
+
+      &.noneView {
+        left: -70%;
+      }
+
+      height: 100vh;
+      background: #fff;
+      position: fixed;
+      top: 61px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
     & > div {
       gap: 30px;
       display: flex;
       align-items: center;
+
+      @include respond("medium") {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     .contentsLink {
       display: flex;
       gap: 30px;
       font-size: 15px;
-
+      @include respond("medium") {
+        // gap: 20px;
+      }
       .new {
         background: rgb(255, 218, 218);
         font-size: 9px;
@@ -53,6 +93,10 @@
       }
     }
   }
+}
+
+.mobileMypage {
+  border: 1px solid;
 }
 
 .logOut {
@@ -86,6 +130,10 @@
 .grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
+  @include respond("medium") {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .loginWrapper {
