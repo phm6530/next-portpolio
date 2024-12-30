@@ -1,0 +1,8 @@
+@import "mixin";
+
+.mobileWrapper {
+  display: none;
+  @include respond("medium") {
+    display: block;
+  }
+}
