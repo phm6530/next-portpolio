@@ -1,0 +1,14 @@
+@import "mixin";
+
+.active {
+  color: #755cff !important;
+}
+
+.link {
+  &:hover {
+    color: #755cff;
+  }
+  @include respond("medium") {
+    width: 100%;
+  }
+}
