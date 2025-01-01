@@ -43,8 +43,8 @@
     @include respond("medium") {
       width: calc(70% - 40px);
       transition: left 0.5s ease;
-
       padding: 20px;
+
       &.view {
         left: 0;
       }
