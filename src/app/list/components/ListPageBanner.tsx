@@ -11,17 +11,29 @@ export default function ListPageBanner() {
       <Grid.center className={classes.bannerGrid}>
         <div>
           <PageTitle>
-            질문을 만들고 <br></br>다른 사람들의{" "}
-            <div className="pointText">생각</div>을 확인해보세요!
+            다른사람들은<br></br> 어떤
+            <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
           </PageTitle>
 
           <p className={classes.description}>
-            이메일로 간단히 가입하고, 별도의 인증 없이 바로 시작하세요.
+            평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
           </p>
           <div className={classes.buttonWrapper}>
             <Link href={"/made"}>
               <Button.submit>+ 설문조사 만들기</Button.submit>
             </Link>
+            {/* 
+            <Link href={"/made"}>
+              <Button.BannerBtn>
+                <AnonymousIcon /> 설문조사 만들기
+              </Button.BannerBtn>
+            </Link>
+            <Link href={"/made"}>
+              <Button.BannerBtn>+ 랭킹 만들기</Button.BannerBtn>
+            </Link>
+            <Link href={"/made"}>
+              <Button.BannerBtn>+ 테스트 만들기</Button.BannerBtn>
+            </Link> */}
           </div>
         </div>
 

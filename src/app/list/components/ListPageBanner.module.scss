@@ -1,16 +1,27 @@
+@import "mixin";
+
 .container {
   background: var(--background-color-vanner);
   min-height: 400px;
   display: flex;
   align-items: center;
   overflow: hidden;
+
+  @include respond("large") {
+    min-height: initial;
+  }
 }
 
 .bannerGrid {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+  // max-width: 1024px;
+
+  @include respond("medium") {
+    flex-direction: column;
+    padding: 5rem 0 0;
+  }
 }
 
 .description {
@@ -19,4 +30,9 @@
 }
 .buttonWrapper {
   margin-top: 3rem;
+  display: flex;
+  gap: 20px;
+  a {
+    flex: 1;
+  }
 }

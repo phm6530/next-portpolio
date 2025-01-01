@@ -73,9 +73,6 @@ export default function ThumbNailUploader() {
     reset();
   };
 
-  console.log(errors.thumbnail);
-  console.log(tempThumbNail);
-
   return (
     <>
       <input
