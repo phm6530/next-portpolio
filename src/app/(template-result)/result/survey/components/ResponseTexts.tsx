@@ -61,7 +61,6 @@ export function ResponseTexts({
     isFetchingNextPage,
     isPending,
     isLoading,
-    refetch,
   } = useInfiniteQuery<{
     isNextPage: number | null;
     answers: ResultText["textAnswers"];
@@ -128,15 +127,6 @@ export function ResponseTexts({
 
   return (
     <>
-      <button
-        onClick={() =>
-          queryClient.invalidateQueries({
-            queryKey: [QUERY_KEY.QUESTION_TEXT],
-          })
-        }
-      >
-        초기화
-      </button>
       <div className={classes.container}>
         <QuestionTitle idx={idx}>{label}</QuestionTitle>
         {resultList?.length === 0 && (

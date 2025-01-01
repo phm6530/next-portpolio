@@ -15,6 +15,10 @@ import { useQueryReset } from "@/utils/queryClientReset";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import BackDrop from "../modal/BackDrop";
+import NavLink from "./NavLink";
+import MobilenavWrapper from "./MobileNavWrapper";
+import MobileNavWrapper from "./MobileNavWrapper";
+import useStore from "@/store/store";
 
 // type ExtendNumber<T extends number> = T;
 // type ExtendLiteral<T extends 0> = T;
@@ -43,19 +47,17 @@ import BackDrop from "../modal/BackDrop";
 export default function GlobalNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const store = useStore();
 
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
-
-  useEffect(() => {
-    setView(false);
-  }, [pathname]);
-
-  const [view, setView] = useState<boolean>(false);
   const [mount, setMount] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
   const { resetUserQueries } = useQueryReset();
+
+  useEffect(() => {
+    store.setClose();
+  }, [pathname]);
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({
@@ -81,11 +83,11 @@ export default function GlobalNav() {
   });
 
   useEffect(() => {
-    setMount(true);
+    setMount(true); //초기마운트시
 
     // 모바일 여부 판단
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // 768px 이하일 경우 모바일로 판단
+      setIsMobile(window.innerWidth <= 768);
     };
 
     handleResize(); // 초기 실행
@@ -104,7 +106,7 @@ export default function GlobalNav() {
             {/* Burger Menu */}
             <div
               className={classes.burgerMenu}
-              onClick={() => setView((prev) => !prev)}
+              onClick={() => store.setToggle()}
             >
               <span></span>
               <span></span>
@@ -113,25 +115,34 @@ export default function GlobalNav() {
 
             <nav
               className={`${classes.nav} ${
-                view ? classes.view : classes.noneView
+                store.view ? classes.view : classes.noneView
               }`}
             >
               <div className={classes.logoWrapper}>
                 <Logo link />
               </div>
+
               <div className={classes.contentsLink}>
                 {/* <Link href={"/about"}>사용법</Link> */}
-                <Link href={"/list"}>
+                <NavLink href={"/list"}>
                   템플릿 리스트
                   <span className={classes.new}>NEW</span>
-                </Link>
-                <Link href={"/made"}>템플릿 만들기</Link>
-                <Link href={"/community"}>커뮤니티</Link>
+                </NavLink>
+                <NavLink href={"/made"}>템플릿 만들기</NavLink>
+                <NavLink href={"/community"}>커뮤니티</NavLink>
+
+                {/* Mobile View */}
+                {/* <MobileNavWrapper>
+                  <div className={classes.mobileBtn}>
+                    <div>로그인</div>
+                    <div>회원가입</div>
+                  </div>
+                </MobileNavWrapper> */}
               </div>
 
-              {isMobile && user && (
+              {/* {isMobile && user && (
                 <div className={classes.mobileMypage}>마이페이지</div>
-              )}
+              )} */}
             </nav>
 
             <div className={classes.loginWrapper}>
@@ -150,10 +161,10 @@ export default function GlobalNav() {
         </Grid.center>
       </header>
       {mount &&
-        view &&
+        store.view &&
         isMobile && // 모바일 환경에서만 렌더링
         createPortal(
-          <BackDrop onClick={() => setView((prev) => !prev)} />,
+          <BackDrop onClick={() => store.setClose()} />,
           document.getElementById("backdrop-portal") as HTMLDivElement
         )}
     </>

@@ -22,6 +22,8 @@ import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
+import usePopup from "@/app/hook/usePopup";
+import LoadingStreming from "@/components/loading/LoadingStreming";
 
 export default function SurveyForm({
   id,
@@ -49,7 +51,8 @@ export default function SurveyForm({
     defaultValues,
   });
 
-  const { reset } = formMethod;
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+
   const { mutate, isSuccess, isPending } = useMutation<
     unknown,
     Error,
@@ -71,6 +74,7 @@ export default function SurveyForm({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
       });
 
+      // 이동
       router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });
@@ -78,6 +82,15 @@ export default function SurveyForm({
   const onSubmitHandler = (data: any) => {
     mutate(data);
   };
+
+  // pending 끝나고 성공이면 유지하기
+  if (isPending || isSuccess) {
+    return (
+      <>
+        <LoadingStreming />
+      </>
+    );
+  }
 
   return (
     <>

@@ -74,9 +74,15 @@
   flex-direction: column;
   gap: 15px;
   // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  @include respond("medium") {
+    padding: 2rem 0rem 2rem;
+  }
 
   .title {
     font-weight: 500;
+    @include respond("medium") {
+      font-size: 18px;
+    }
     @include textMaxLine(1);
   }
 
@@ -101,7 +107,7 @@
 .gnederChart {
   margin-bottom: 1rem;
 
-  background: #f8f8f8;
+  background: #f9f9f8;
   display: flex;
   flex-direction: column;
   gap: 2px;

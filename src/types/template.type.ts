@@ -27,6 +27,12 @@ export type DetailRespondents = {
     [key in GENDER_GROUP]: {
       [key in ageGroupProps]: number;
     };
+  } & {
+    maxGroup: {
+      maxCnt: number;
+      genderGroup?: GENDER_GROUP;
+      ageGroup?: number;
+    };
   };
 };
 

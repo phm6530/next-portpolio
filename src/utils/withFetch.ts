@@ -16,6 +16,7 @@ export default async function requestHandler<T>(
 
         throw new Error("UNAUTHORIZED");
       } else if (response.status === 404) {
+        console.log("내가 발현?");
         throw new Error("NOT_FOUND");
       } else {
         const errorMsg = await response.json();
