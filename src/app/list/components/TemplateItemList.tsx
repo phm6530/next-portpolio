@@ -12,6 +12,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import classes from "./TemplateItemlist.module.scss";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import NotFoundComponent from "@/components/NotFoundComponent";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -66,7 +67,7 @@ export default function TemplateList() {
   }
 
   if (!data) {
-    return <div>데이터 없음</div>;
+    return <NotFoundComponent.noneData />;
   }
 
   //마지막 잡기
