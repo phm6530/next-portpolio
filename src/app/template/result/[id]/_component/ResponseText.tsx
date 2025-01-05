@@ -1,8 +1,6 @@
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import classes from "./ResponseText.module.scss";
 import { ageGroupProps, Gender } from "@/types/template";
-import Female30 from "/public/asset/icon/female_30.svg";
-import Male30 from "/public/asset/icon/male_30.svg";
 
 import { useEffect, useState, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -94,10 +92,7 @@ export default function ResponseText({
           {filteredData.map((e, txtIdx) => (
             <div key={txtIdx} className={classes.responseContainer}>
               <div className={classes.anonymous}>
-                <div className={classes.iconWrap}>
-                  {e.gender === "female" && <Female30 />}
-                  {e.gender === "male" && <Male30 />}
-                </div>
+                <div className={classes.iconWrap}></div>
 
                 <div className={classes.age}>{e.age}대 </div>
                 <span

@@ -3,7 +3,6 @@ import classes from "./Msg.module.scss";
 import MsgForm from "@/components/Comment/MsgForm";
 import Button from "@/components/ui/button/Button";
 import { MessageProps } from "@/components/Comment/CommentSection";
-import ReplyIcon from "/public/asset/icon/reply.svg";
 
 export default function ReplyContainer({
   comment_id,
@@ -38,7 +37,6 @@ export default function ReplyContainer({
                   key={`reply-${idx}`}
                   style={{ display: "flex" }}
                 >
-                  <ReplyIcon className={classes.replyIcon} />
                   <MsgItem
                     reply_id={e.reply_id}
                     userId={e.user.userId}
