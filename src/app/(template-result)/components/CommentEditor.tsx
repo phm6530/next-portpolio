@@ -10,10 +10,7 @@ import { QUERY_KEY } from "@/types/constans";
 import { useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-} from "../result/survey/[id]/page";
+import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {

@@ -68,6 +68,7 @@ export async function generateMetadata({
 export default async function SurveyDetailTemplate({
   params: { id },
 }: SurveyDetailTemplateParams) {
+  // console.log(`${BASE_NEST_URL}/template/survey/${id}`);
   const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
   const data: FetchTemplateForm = await response.json();
 

@@ -1,3 +1,5 @@
+@import "mixin";
+
 .large {
   padding: 1rem 1.5rem;
   .ageGroup {
@@ -17,6 +19,7 @@
 
 .extraLarge {
   padding: 1.1rem 2rem;
+
   .ageGroup {
     color: #5c38de;
     font-size: 1.3rem;
@@ -48,6 +51,7 @@
     border-style: solid;
     border-color: transparent transparent transparent rgb(255 255 255);
   }
+
   .iconWrap {
     border-radius: 100%;
     position: relative;

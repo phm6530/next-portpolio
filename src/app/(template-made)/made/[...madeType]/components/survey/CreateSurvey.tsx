@@ -205,9 +205,6 @@ export default function CreateSurvey() {
     mutate(data);
   };
 
-  console.log(formState.watch());
-  console.log();
-
   return (
     <>
       <RenderPreview>프리뷰</RenderPreview>

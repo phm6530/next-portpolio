@@ -13,3 +13,13 @@ export type CommentReponse = {
     nickname: string;
   } & { email?: string };
 };
+
+export enum COMMENT_EDITOR_TYPE {
+  COMMENT = "comment",
+  REPLY = "reply",
+}
+
+export enum COMMENT_NEED_PATH {
+  TEMPLATE = "template",
+  BOARD = "board",
+}

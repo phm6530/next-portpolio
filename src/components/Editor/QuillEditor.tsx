@@ -8,13 +8,13 @@ import {
   PathValue,
   useFormContext,
 } from "react-hook-form";
-// import ReactQuill from "react-quill";
+import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
 import classes from "./QuillEditor.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import dynamic from "next/dynamic";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+// const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function QuillEditor<T extends FieldValues>({
   control,
@@ -64,7 +64,7 @@ export default function QuillEditor<T extends FieldValues>({
                 "blockquote",
                 "code-block",
                 "list",
-                "bullet",
+
                 "link",
                 "image",
               ]}

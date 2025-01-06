@@ -14,3 +14,16 @@
   font-weight: bold;
   line-height: 3rem;
 }
+
+.resultSummry {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+
+  .respondentsCnt {
+  }
+}
+.userCnt {
+  color: #7975e5;
+}

@@ -132,17 +132,17 @@ export default function GlobalNav() {
                 <NavLink href={"/community"}>커뮤니티</NavLink>
 
                 {/* Mobile View */}
-                <MobileNavWrapper>
+                {/* <MobileNavWrapper>
                   <div className={classes.mobileBtn}>
                     <div>로그인</div>
                     <div>회원가입</div>
                   </div>
-                </MobileNavWrapper>
+                </MobileNavWrapper> */}
               </div>
 
-              {isMobile && user && (
+              {/* {isMobile && user && (
                 <div className={classes.mobileMypage}>마이페이지</div>
-              )}
+              )} */}
             </nav>
 
             <div className={classes.loginWrapper}>

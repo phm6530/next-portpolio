@@ -7,9 +7,10 @@
 
   .filterController {
     padding: 5px;
-
     display: flex;
     gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }
 

@@ -22,6 +22,18 @@ export default function ListPageBanner() {
             <Link href={"/made"}>
               <Button.submit>+ 설문조사 만들기</Button.submit>
             </Link>
+            {/* 
+            <Link href={"/made"}>
+              <Button.BannerBtn>
+                <AnonymousIcon /> 설문조사 만들기
+              </Button.BannerBtn>
+            </Link>
+            <Link href={"/made"}>
+              <Button.BannerBtn>+ 랭킹 만들기</Button.BannerBtn>
+            </Link>
+            <Link href={"/made"}>
+              <Button.BannerBtn>+ 테스트 만들기</Button.BannerBtn>
+            </Link> */}
           </div>
         </div>
 

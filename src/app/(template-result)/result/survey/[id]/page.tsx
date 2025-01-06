@@ -6,7 +6,11 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(template-result)/result/survey/components/test";
-import { CommentReponse } from "@/types/comment.type";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+  CommentReponse,
+} from "@/types/comment.type";
 
 import { QUERY_KEY } from "@/types/constans";
 import { SurveyResult } from "@/types/surveyResult.type";
@@ -16,13 +20,13 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-type StringToNumber<T extends string> = T extends `${infer R extends number}`
-  ? R
-  : never;
+// type StringToNumber<T extends string> = T extends `${infer R extends number}`
+//   ? R
+//   : never;
 
-const test = "1d++";
+// const test = "1d++";
 
-type testProps = StringToNumber<typeof test>;
+// type testProps = StringToNumber<typeof test>;
 
 //이건 매번 생성될텐데 뭐지?
 
@@ -48,16 +52,8 @@ type testProps = StringToNumber<typeof test>;
 //   };
 // }
 
-export enum COMMENT_EDITOR_TYPE {
-  COMMENT = "comment",
-  REPLY = "reply",
-}
-
-export enum COMMENT_NEED_PATH {
-  TEMPLATE = "template",
-  BOARD = "board",
-}
 const queryClient = new QueryClient();
+
 export default async function SurveyResultPage({
   params: { id },
 }: {

@@ -23,11 +23,23 @@ function reply() {
   );
 }
 
+function noneData() {
+  return (
+    <div className={classes.errorDefault}>
+      <div className={classes.iconWrap}>
+        {/* <Image src={replyIcon} alt="replyIcon" width={70} /> */}
+      </div>
+      아직 등록된 댓글이 없습니다
+    </div>
+  );
+}
+
 function NotFoundComponent({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
 NotFoundComponent.search = search;
 NotFoundComponent.reply = reply;
+NotFoundComponent.noneData = noneData;
 
 export default NotFoundComponent;

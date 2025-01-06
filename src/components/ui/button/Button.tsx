@@ -112,7 +112,18 @@ function submit({
   );
 }
 
-interface ButtonProps extends React.FC<{ children: string }> {
+function BannerBtn({
+  children,
+  ...rest
+}: { children: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button {...rest} className={classes.BannerBtn}>
+      {children}
+    </button>
+  );
+}
+
+interface ButtonProps extends React.FC<{ children: ReactNode }> {
   moveLink: typeof moveLink;
   submit: typeof submit;
   closeBtn: typeof closeBtn;
@@ -120,6 +131,7 @@ interface ButtonProps extends React.FC<{ children: string }> {
   noneStyleButton: typeof noneStyleButton;
   solid: typeof solid;
   outlineButton: typeof outlineButton;
+  BannerBtn: typeof BannerBtn;
 }
 
 const Button: ButtonProps = ({ children }) => {
@@ -133,5 +145,6 @@ Button.normalButton = normalButton;
 Button.noneStyleButton = noneStyleButton;
 Button.solid = solid;
 Button.outlineButton = outlineButton;
+Button.BannerBtn = BannerBtn;
 
 export default Button;
