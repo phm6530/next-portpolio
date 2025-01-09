@@ -12,13 +12,10 @@ import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import { USER_ROLE } from "@/types/auth.type";
 import { DetailBoardItemType } from "../page";
 import LoadingStreming from "@/components/loading/LoadingStreming";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-} from "@/app/(template-result)/result/survey/[id]/page";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 
 import QuillViewer from "@/components/Editor/QuillViewer";
+import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 
 export default function PostContents({
   category,

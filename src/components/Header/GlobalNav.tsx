@@ -55,9 +55,14 @@ export default function GlobalNav() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const { resetUserQueries } = useQueryReset();
 
+  /**
+   * Template List 수정
+   */
   useEffect(() => {
-    store.setClose();
-  }, [pathname]);
+    if (store.view) {
+      store.setClose();
+    }
+  }, [pathname, store]);
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({

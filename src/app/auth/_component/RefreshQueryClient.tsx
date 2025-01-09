@@ -25,7 +25,7 @@ export default function RefreshQueryClient({ code }: { code: ERROR_CODE }) {
         router.refresh();
       }
     }
-  }, [code]);
+  }, [code, queryClient, resetUserQueries, router]);
 
   return null;
 }

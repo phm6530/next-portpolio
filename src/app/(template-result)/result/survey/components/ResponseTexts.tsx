@@ -115,7 +115,7 @@ export function ResponseTexts({
         pageParams: [1],
       }
     );
-  }, [questionId, textAnswers, queryClient]);
+  }, [questionId, textAnswers, isNextPage]);
 
   const getGenderClass = (gender: string) =>
     gender === "female" ? classes.female : classes.male;

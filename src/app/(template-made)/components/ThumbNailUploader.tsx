@@ -33,7 +33,7 @@ export default function ThumbNailUploader() {
     if (tempThumbNail) {
       trigger("thumbnail");
     }
-  }, [tempThumbNail]);
+  }, [tempThumbNail, trigger]);
 
   const {
     mutate,

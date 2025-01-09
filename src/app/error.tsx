@@ -7,7 +7,7 @@ import ErrorIcon from "/public/asset/utils/error.svg";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function error({
+export default function Error({
   error,
   reset,
 }: {
