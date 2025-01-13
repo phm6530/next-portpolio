@@ -16,8 +16,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import BackDrop from "../modal/BackDrop";
 import NavLink from "./NavLink";
-import MobilenavWrapper from "./MobileNavWrapper";
-import MobileNavWrapper from "./MobileNavWrapper";
 import useStore from "@/store/store";
 
 // type ExtendNumber<T extends number> = T;
@@ -58,11 +56,6 @@ export default function GlobalNav() {
   /**
    * Template List 수정
    */
-  useEffect(() => {
-    if (store.view) {
-      store.setClose();
-    }
-  }, [pathname, store]);
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({
@@ -118,6 +111,7 @@ export default function GlobalNav() {
               <span></span>
             </div>
 
+            {/* Store에 따라 모바일 뷰 */}
             <nav
               className={`${classes.nav} ${
                 store.view ? classes.view : classes.noneView

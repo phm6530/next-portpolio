@@ -5,7 +5,7 @@ import classes from "./PostController.module.scss";
 import { User, USER_ROLE } from "@/types/auth.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
+import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
 import usePopup from "@/app/hook/usePopup";
@@ -25,7 +25,8 @@ export default function PostController({
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } =
+    usePopup();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
@@ -49,9 +50,28 @@ export default function PostController({
             }),
       };
 
-      return await withFetch(async () => {
-        return await fetch(`${BASE_NEST_URL}/board/${category}/${id}`, options);
-      });
+      try {
+        // 삭제 이후
+        await withFetch(async () => {
+          return await fetch(
+            `${BASE_NEST_URL}/board/${category}/${id}`,
+            options
+          );
+        });
+
+        // RevaildateTags...
+        await withFetch(async () => {
+          return await fetch(`${BASE_NEXT_API}/revalidatetags`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ tag: `post-${category}-${id}` }),
+          });
+        });
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: () => {
       alert("삭제되었습니다.");

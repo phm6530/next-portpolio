@@ -8,7 +8,7 @@ import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
 import { boardCateogries, CategoriesKey } from "@/types/board";
 
-export default async function Board({
+export default async function BoardListPage({
   params,
   keyword,
   curPage,
@@ -47,7 +47,7 @@ export default async function Board({
 
       {/* Search Bar */}
       <div className={classes.actionArea}>
-        {/* 검색처리를 위해 CLinet 한번더 감쌓았음 */}
+        {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
         <Link href={`/community/${params.board}/write`}>
           <Button.submit>글쓰기</Button.submit>

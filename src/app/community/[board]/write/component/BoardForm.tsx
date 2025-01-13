@@ -56,6 +56,7 @@ export default function BoardForm({
 
   const { mutate } = useMutation<unknown, Error, WriteBoardProps>({
     mutationFn: async (data) => {
+      console.log(data);
       return await withFetch(async () => {
         let options: RequestInit = {
           method: "POST",
@@ -81,6 +82,7 @@ export default function BoardForm({
       router.push(`/community/${boardKey}`);
     },
     onError: (error) => {
+      console.log(error);
       alert("에러!");
     },
   });
