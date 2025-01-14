@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
 import usePopup from "@/app/hook/usePopup";
 import DeleteItemForm from "@/components/DeleteItemForm";
+import revaildateTags from "@/lib/revaildateTags";
 
 export default function PostController({
   id,
@@ -59,16 +60,8 @@ export default function PostController({
           );
         });
 
-        // RevaildateTags...
-        await withFetch(async () => {
-          return await fetch(`${BASE_NEXT_API}/revalidatetags`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ tag: `post-${category}-${id}` }),
-          });
-        });
+        // revaildate
+        await revaildateTags({ tags: [`post-${category}-${id}`] });
       } catch (error) {
         throw error;
       }
@@ -76,6 +69,7 @@ export default function PostController({
     onSuccess: () => {
       alert("삭제되었습니다.");
       router.replace(`/community/${category}`);
+      router.refresh();
     },
   });
 
@@ -112,7 +106,7 @@ export default function PostController({
             (creatorRole === USER_ROLE.ADMIN ||
               creatorRole === USER_ROLE.USER))) && (
           <>
-            <button onClick={() => router.push("/")}>수정</button>
+            {/* <button onClick={() => router.push("/")}>수정</button> */}
             <button onClick={postDeleteHandler}>삭제</button>
           </>
         )}

@@ -19,7 +19,9 @@ export default async function BoardListPage({
   curPage?: string;
   searchParams?: { search: string; page: string };
 }) {
-  function isBoardCategory(key: string): key is keyof typeof boardCateogries {
+  function isBoardCategory(
+    key: string
+  ): key is keyof typeof boardCateogries {
     return key in boardCateogries;
   }
 
@@ -43,7 +45,10 @@ export default async function BoardListPage({
       />
 
       {/* Category button */}
-      <BoardCategories categories={boardCateogries} curCategory={boardName} />
+      <BoardCategories
+        categories={boardCateogries}
+        curCategory={boardName}
+      />
 
       {/* Search Bar */}
       <div className={classes.actionArea}>

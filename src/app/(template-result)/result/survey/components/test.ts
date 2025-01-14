@@ -1,6 +1,7 @@
 import { BASE_NEST_URL } from "@/config/base";
+import { COMMENT_NEED_PATH } from "@/types/comment.type";
+import { withFetch } from "@/util/clientUtil";
 import requestHandler from "@/utils/withFetch";
-import { COMMENT_NEED_PATH } from "../[id]/page";
 
 //Survey Result Data
 export async function fetchSurveyData<T>(id: string): Promise<T> {
@@ -16,10 +17,10 @@ export async function fetchComments<T>(
   type: COMMENT_NEED_PATH
 ): Promise<T> {
   const url = `${BASE_NEST_URL}/comment/${type}/${id}`;
-  console.log(url);
-  return requestHandler(async () => {
+  return withFetch(async () => {
     return await fetch(url, {
-      cache: "no-store",
+      cache: "force-cache",
+      next: { tags: [`comment-${type}-${id}`] },
     });
   });
 }

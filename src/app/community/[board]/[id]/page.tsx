@@ -12,15 +12,19 @@ export async function generateStaticParams() {
 
   //각 카테고리 Detail Full Router cache 처리
   for (const category of categories) {
-    const response = await fetch(`${BASE_NEST_URL}/board/${category}`, {
-      cache: "force-cache",
-    });
+    const response = await fetch(
+      `${BASE_NEST_URL}/board/${category}`,
+      {
+        cache: "force-cache",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch data"); // 오류 처리
     }
 
-    const listResponse: [ListItemType[], number] = await response.json();
+    const listResponse: [ListItemType[], number] =
+      await response.json();
 
     const params = listResponse[0].map((item) => {
       return {

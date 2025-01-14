@@ -32,10 +32,13 @@ export default async function BoardList({
 }) {
   // number는 All Cnt
   const data = await withFetch<[ListItemType[], number]>(async () => {
-    const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
+    const searchParam = keyword
+      ? `${encodeURIComponent(keyword)}`
+      : "";
     const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}&page=${curPage}`;
     return await fetch(url, {
       cache: "no-store",
+      next: { tags: ["boardList"] },
     });
   });
 
@@ -62,7 +65,9 @@ export default async function BoardList({
               })}
             </>
           ) : (
-            <div className={classes.emptyState}>작성된 게시물이 없습니다.</div>
+            <div className={classes.emptyState}>
+              작성된 게시물이 없습니다.
+            </div>
           )}
         </div>
 

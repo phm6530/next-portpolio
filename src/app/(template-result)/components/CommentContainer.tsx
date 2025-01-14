@@ -4,11 +4,14 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "@/components/ui/button/Button";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 // import ReplyIcon from "/public/asset/icon/reply.svg";
-import { COMMENT_EDITOR_TYPE, CommentReponse } from "@/types/comment.type";
+import {
+  COMMENT_EDITOR_TYPE,
+  CommentReponse,
+} from "@/types/comment.type";
+import { useParams } from "next/navigation";
 
 export default function CommentContainer({
   touchIdx,
-  parentId,
   setTouch,
   ...props
 }: {
@@ -17,6 +20,7 @@ export default function CommentContainer({
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
   const { id: commentId, replies, creator } = props;
+  const params: { id: string } = useParams();
 
   const formViewHandler = () => {
     setTouch((prev) => {
@@ -29,13 +33,13 @@ export default function CommentContainer({
   };
 
   return (
-    <div>
+    <div className={classes.containerWrapper}>
       {/* Comment */}
       <Comment
         contentType="comment"
-        parentId={parentId}
         {...props}
         onClickEvent={formViewHandler}
+        boardId={params.id}
       />
       <div className={classes.commentBtnWrap}>
         <Button.noneStyleButton onClick={formViewHandler}>
@@ -58,10 +62,10 @@ export default function CommentContainer({
             >
               <Comment
                 contentType="reply"
-                parentId={parentId}
                 content={content}
                 onClickEvent={formViewHandler}
                 {...rest}
+                boardId={params.id}
               />
             </div>
           );
@@ -71,7 +75,8 @@ export default function CommentContainer({
             <CommentEditor
               editorType={COMMENT_EDITOR_TYPE.REPLY}
               commentId={commentId}
-              parentsId={parentId}
+              parentsId={params.id}
+              setTouch={setTouch}
             />
           </div>
         )}
