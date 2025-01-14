@@ -72,7 +72,7 @@ export default async function PostContents({
       <CommentEditor
         editorType={COMMENT_EDITOR_TYPE.COMMENT}
         parentsType={COMMENT_NEED_PATH.BOARD}
-        parentsId={parseInt(postId, 10)}
+        parentsId={postId}
       />
 
       {/* 댓글 리스트 */}

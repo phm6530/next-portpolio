@@ -3,7 +3,11 @@ import classes from "./GlobalNav.module.scss";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
@@ -148,12 +152,17 @@ export default function GlobalNav() {
               {user ? (
                 <>
                   <NavUserProfile />
-                  <button className={classes.logOut} onClick={() => logout()}>
+                  <button
+                    className={classes.logOut}
+                    onClick={() => logout()}
+                  >
                     로그아웃
                   </button>
                 </>
               ) : (
-                <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
+                <Link href={`/auth/login?redirect=${pathname}`}>
+                  로그인
+                </Link>
               )}
             </div>
           </div>

@@ -94,7 +94,7 @@ export default async function SurveyResultPage({
         <CommentEditor
           editorType={COMMENT_EDITOR_TYPE.COMMENT}
           parentsType={COMMENT_NEED_PATH.TEMPLATE}
-          parentsId={+id}
+          parentsId={id}
         />
       </HydrationBoundary>
     </>

@@ -40,6 +40,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 50px;
+
+  & > div:only-child {
+    grid-column: 1/ -1;
+  }
 }
 
 .loadingItem {
