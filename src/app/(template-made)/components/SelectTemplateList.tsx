@@ -1,11 +1,11 @@
 "use client";
 
 import classes from "./SelectTemplate.module.scss";
-import { useRouter } from "next/navigation";
 import SurveyIcon from "/public/asset/icon/survey.png";
 import rankIcon from "/public/asset/icon/rank.png";
 import Image from "next/image";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import useAOS from "@/_hook/usAOS";
 
 const templateList = [
   {
@@ -27,34 +27,36 @@ const templateList = [
 ];
 
 export default function SelectTemplateList() {
-  const router = useRouter();
+  useAOS({ preserveClass: true });
 
-  const onNotYetHandler = (
-    e: React.MouseEvent<HTMLDivElement>,
-    isActive: boolean,
-    path: string
-  ) => {
+  const handleTemplateClick = (type: string, isActive: boolean) => {
     if (!isActive) {
-      e.stopPropagation();
-      e.preventDefault();
-      alert("아직 개발중입니다..");
+      alert("아직 개발 중입니다.");
       return;
-    } else {
-      router.push(path);
+    }
+
+    switch (type) {
+      case "survey":
+        window.location.href = "/made/survey";
+        break;
+      case "form":
+        window.location.href = "/made/form";
+        break;
+      default:
+        alert("유효하지 않은 템플릿입니다.");
     }
   };
-
   return (
-    <div className={classes.templateSelector}>
+    <div className={`${classes.templateSelector} aos-hidden`}>
       {templateList.map((template, idx) => {
         return (
           <div
             key={`${template.type}-${idx}`}
-            className={`${classes.choiceItem} ${
+            className={`${classes.choiceItem}  ${
               !template.isActive ? classes.notYet : undefined
             }`}
-            onClick={(e) =>
-              onNotYetHandler(e, template.isActive, template.path)
+            onClick={() =>
+              handleTemplateClick(template.type, template.isActive)
             }
           >
             <div className={classes.iconWrap}>

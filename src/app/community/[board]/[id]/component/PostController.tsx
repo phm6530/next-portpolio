@@ -5,11 +5,12 @@ import classes from "./PostController.module.scss";
 import { User, USER_ROLE } from "@/types/auth.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
+import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
 import usePopup from "@/app/hook/usePopup";
 import DeleteItemForm from "@/components/DeleteItemForm";
+import revaildateTags from "@/lib/revaildateTags";
 
 export default function PostController({
   id,
@@ -25,7 +26,8 @@ export default function PostController({
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } =
+    usePopup();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
@@ -49,13 +51,25 @@ export default function PostController({
             }),
       };
 
-      return await withFetch(async () => {
-        return await fetch(`${BASE_NEST_URL}/board/${category}/${id}`, options);
-      });
+      try {
+        // 삭제 이후
+        await withFetch(async () => {
+          return await fetch(
+            `${BASE_NEST_URL}/board/${category}/${id}`,
+            options
+          );
+        });
+
+        // revaildate
+        await revaildateTags({ tags: [`post-${category}-${id}`] });
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: () => {
       alert("삭제되었습니다.");
       router.replace(`/community/${category}`);
+      router.refresh();
     },
   });
 
@@ -92,7 +106,7 @@ export default function PostController({
             (creatorRole === USER_ROLE.ADMIN ||
               creatorRole === USER_ROLE.USER))) && (
           <>
-            <button onClick={() => router.push("/")}>수정</button>
+            {/* <button onClick={() => router.push("/")}>수정</button> */}
             <button onClick={postDeleteHandler}>삭제</button>
           </>
         )}

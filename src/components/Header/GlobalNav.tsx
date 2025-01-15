@@ -3,7 +3,11 @@ import classes from "./GlobalNav.module.scss";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
@@ -16,8 +20,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import BackDrop from "../modal/BackDrop";
 import NavLink from "./NavLink";
-import MobilenavWrapper from "./MobileNavWrapper";
-import MobileNavWrapper from "./MobileNavWrapper";
 import useStore from "@/store/store";
 
 // type ExtendNumber<T extends number> = T;
@@ -55,9 +57,9 @@ export default function GlobalNav() {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const { resetUserQueries } = useQueryReset();
 
-  useEffect(() => {
-    store.setClose();
-  }, [pathname]);
+  /**
+   * Template List 수정
+   */
 
   /** 로그아웃 */
   const { mutate: logout } = useMutation({
@@ -113,6 +115,7 @@ export default function GlobalNav() {
               <span></span>
             </div>
 
+            {/* Store에 따라 모바일 뷰 */}
             <nav
               className={`${classes.nav} ${
                 store.view ? classes.view : classes.noneView
@@ -149,12 +152,17 @@ export default function GlobalNav() {
               {user ? (
                 <>
                   <NavUserProfile />
-                  <button className={classes.logOut} onClick={() => logout()}>
+                  <button
+                    className={classes.logOut}
+                    onClick={() => logout()}
+                  >
                     로그아웃
                   </button>
                 </>
               ) : (
-                <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
+                <Link href={`/auth/login?redirect=${pathname}`}>
+                  로그인
+                </Link>
               )}
             </div>
           </div>

@@ -3,11 +3,15 @@
 @import "mixin";
 @import "user.scss";
 @import "font.scss";
+@import "@/lib/aos/aos.scss";
 
 :root {
   --background-color: #{map-get($colors-white, "default")};
   --text-color: #{map-get($colors-black, "default")};
-  --background-color-vanner: #{map-get($background-gradients, "vanner")};
+  --background-color-vanner: #{map-get(
+      $background-gradients,
+      "vanner"
+    )};
   --background-color-questionhead: linear-gradient(
     84.35deg,
     #0a001a 13.62%,
@@ -45,8 +49,8 @@ body {
 }
 
 body {
-  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
-    system-ui, Roboto, sans-serif;
+  font-family: "Pretendard Variable", -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, sans-serif;
   color: $color-black;
 }
 

@@ -12,7 +12,7 @@ import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
+import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
 
@@ -56,6 +56,7 @@ export default function BoardForm({
 
   const { mutate } = useMutation<unknown, Error, WriteBoardProps>({
     mutationFn: async (data) => {
+      console.log(data);
       return await withFetch(async () => {
         let options: RequestInit = {
           method: "POST",
@@ -71,14 +72,16 @@ export default function BoardForm({
             credentials: "include",
           };
         }
-        return await fetch(`${BASE_NEST_URL}/board/${boardKey}`, options);
+        return await fetch(
+          `${BASE_NEST_URL}/board/${boardKey}`,
+          options
+        );
       });
     },
 
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      router.replace(`/community/${boardKey}`);
       router.refresh();
-      router.push(`/community/${boardKey}`);
     },
     onError: (error) => {
       alert("에러!");
@@ -114,6 +117,7 @@ export default function BoardForm({
                   placeholder="아이디를 입력해주세요"
                   {...register("password")}
                   autoComplete="off"
+                  data-lpignore="true"
                 />
               </InputWrapper>
             </>

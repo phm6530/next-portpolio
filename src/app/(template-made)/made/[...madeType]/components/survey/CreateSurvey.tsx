@@ -1,15 +1,23 @@
 "use client";
-
-import { FormProvider, useForm } from "react-hook-form";
-import { BASE_NEST_URL } from "@/config/base";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Control,
+  FieldValues,
+  FormProvider,
+  useForm,
+} from "react-hook-form";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import FormInput from "@/components/ui/FormElement/FormInput";
-import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
-import { TEMPLATE_TYPE, FetchTemplateForm } from "@/types/template.type";
+import {
+  TEMPLATE_TYPE,
+  FetchTemplateForm,
+} from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(template-made)/components/BooleanGroup";
@@ -31,7 +39,9 @@ import TemplateInputWrapper from "../common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
 import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
-import QuillEditor from "@/components/Editor/QuillEditor";
+import dynamic from "next/dynamic";
+import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
+import useAOS from "@/_hook/usAOS";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -68,9 +78,8 @@ const defaultValues = {
   creator: null,
 };
 
-type StringToNumber<T extends string> = T extends `${infer R extends number}`
-  ? R
-  : never;
+type StringToNumber<T extends string> =
+  T extends `${infer R extends number}` ? R : never;
 
 //Exclude
 type MyExclude<T, U> = T extends U ? never : T;
@@ -83,11 +92,21 @@ type MyPick<T, K extends keyof T> = {
 //Omit
 type MyOmit<T, K extends keyof T> = MyPick<T, MyExclude<keyof T, K>>;
 
+const EditorDynamicRender = dynamic<{
+  control: Control<RequestSurveyFormData & FieldValues>;
+  name: string;
+}>(() => import("@/components/Editor/QuillEditor"), {
+  ssr: false,
+  loading: () => <LoadingTextSkeleton cnt={1} />,
+});
+
 export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
-
+  useAOS({ preserveClass: true });
   const queryClient = useQueryClient();
-  const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
+  const userData = queryClient.getQueryData<User>([
+    QUERY_KEY.USER_DATA,
+  ]);
   const [editPage, setEditPage] = useState<boolean>(false);
   const qs = useSearchParams();
 
@@ -99,13 +118,7 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const {
-    register,
-    setValue,
-    reset,
-    control,
-    formState: { errors },
-  } = formState;
+  const { register, setValue, reset, control } = formState;
 
   const editId = qs.get("edit");
 
@@ -191,7 +204,9 @@ export default function CreateSurvey() {
     onSuccess: () => {
       router.replace("/list");
       alert(
-        !editId ? "설문조사 개설 완료되었습니다." : "수정 완료 되었습니다."
+        !editId
+          ? "설문조사 개설 완료되었습니다."
+          : "수정 완료 되었습니다."
       );
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.MY_CONTENTS],
@@ -216,7 +231,7 @@ export default function CreateSurvey() {
 
       <div className={classes.formContainer}>
         <FormProvider {...formState}>
-          <section className={classes.formSection}>
+          <section className={`${classes.formSection} aos-hidden`}>
             <div className={classes.header}>
               <h3>설문조사 정보</h3>
               <p className={classes.description}>
@@ -234,13 +249,19 @@ export default function CreateSurvey() {
             </TemplateInputWrapper>
 
             {/* 설문조사 설명 */}
-            <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
+            <TemplateInputWrapper
+              title={"간단한 설명을 기재해주세요"}
+            >
               {/* <FormTextarea
                 {...register("description")}
                 placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
                 autoComplete="off"
               /> */}
-              <QuillEditor control={control} name={"description"} />
+
+              <EditorDynamicRender
+                control={control}
+                name={"description"}
+              />
             </TemplateInputWrapper>
 
             {/* 썸네일 */}
@@ -248,6 +269,7 @@ export default function CreateSurvey() {
               <ThumbNailUploader />
             </TemplateInputWrapper>
           </section>
+
           <div
             className={`${classes.gapWrapper} ${
               editPage ? classes.disabled : undefined
@@ -260,7 +282,7 @@ export default function CreateSurvey() {
               </p>
             )}
 
-            <section className={classes.formSection}>
+            <section className={`${classes.formSection} aos-hidden`}>
               <div className={classes.header}>
                 <h3>2. 응답자 필터 설정</h3>
                 <p className={classes.description}>
@@ -282,17 +304,16 @@ export default function CreateSurvey() {
               />
             </section>
 
-            <section className={classes.formSection}>
+            <section className={`${classes.formSection} aos-hidden`}>
               <div className={classes.header}>
                 <h3>3. 설문 문항 구성</h3>
                 <p className={classes.description}>
-                  설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
+                  설문을 더욱 체계적으로 만들기 위한 문항을
+                  추가해보세요.
                 </p>
               </div>
-
               {/* List.. */}
               <SurveyList />
-
               {/* 항목 추가 */}
               <AddQuestionController />
             </section>

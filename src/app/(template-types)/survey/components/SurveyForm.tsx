@@ -24,6 +24,7 @@ import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersW
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
 import usePopup from "@/app/hook/usePopup";
 import LoadingStreming from "@/components/loading/LoadingStreming";
+import useAOS from "@/_hook/usAOS";
 
 export default function SurveyForm({
   id,
@@ -51,7 +52,8 @@ export default function SurveyForm({
     defaultValues,
   });
 
-  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } =
+    usePopup();
 
   const { mutate, isSuccess, isPending } = useMutation<
     unknown,
@@ -60,13 +62,16 @@ export default function SurveyForm({
   >({
     mutationFn: async (data) => {
       return withFetch(async () => {
-        return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+        return fetch(
+          `${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
       });
     },
     onSuccess: async () => {
@@ -105,7 +110,10 @@ export default function SurveyForm({
 
         {questions.map((qs, idx) => {
           return (
-            <QuestionsAnswersWrapper key={`${qs.label}-${idx}`}>
+            <QuestionsAnswersWrapper
+              className="aos-hidden"
+              key={`${qs.label}-${idx}`}
+            >
               <QuestionDetailWrapper>
                 <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
                 {(() => {
@@ -122,7 +130,10 @@ export default function SurveyForm({
                     "options" in qs
                   ) {
                     return (
-                      <QuestionOptions qsId={qs.id} options={qs.options} />
+                      <QuestionOptions
+                        qsId={qs.id}
+                        options={qs.options}
+                      />
                     );
                   } else {
                     return null as never;

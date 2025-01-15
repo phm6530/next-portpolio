@@ -7,10 +7,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
-import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+} from "@/types/comment.type";
+import { useParams, useRouter } from "next/navigation";
+import revaildateTags from "@/lib/revaildateTags";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -34,18 +39,23 @@ export default function CommentEditor({
   editorType,
   parentsType,
   parentsId,
-
   commentId,
+  setTouch,
 }: {
   editorType: COMMENT_EDITOR_TYPE;
 
   parentsType?: COMMENT_NEED_PATH;
-  parentsId?: number;
-
+  parentsId?: string;
+  setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
 }) {
   const queryclient = useQueryClient();
-  const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
+  const userData = queryclient.getQueryData([
+    QUERY_KEY.USER_DATA,
+  ]) as User;
+
+  const params = useParams();
+  const router = useRouter();
 
   const AnonymousValues: AnonymousDefaultValue = {
     anonymous: "",
@@ -69,7 +79,6 @@ export default function CommentEditor({
   });
 
   //전역 인스턴스
-  const queryClient = useQueryClient();
   const {
     reset,
     register,
@@ -107,13 +116,19 @@ export default function CommentEditor({
         body: JSON.stringify(data),
       };
 
-      return await withAuthFetch(url, options);
+      const req = await withAuthFetch(url, options);
+      //cache initals
+      await revaildateTags({
+        tags: [`comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`],
+      });
+      return req;
     },
     onSuccess: async () => {
       reset();
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.COMMENTS, parentsId],
-      });
+      router.refresh();
+      if (setTouch) {
+        setTouch(null);
+      }
     },
   });
 
@@ -164,11 +179,17 @@ export default function CommentEditor({
           {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
           <CommentTextArea name={"content"}>
             <div className={classes.errorDiv}>
-              {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
+              {typeof errorMessage === "string"
+                ? `! ${errorMessage}`
+                : null}
             </div>
           </CommentTextArea>
 
-          <button type="submit" disabled={isPending}>
+          <button
+            type="submit"
+            className={classes.submitBtn}
+            disabled={isPending}
+          >
             댓글 작성
           </button>
         </div>

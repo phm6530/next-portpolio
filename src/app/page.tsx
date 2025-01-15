@@ -1,9 +1,8 @@
-import { redirect } from "next/navigation";
+import MainList from "./list/page";
 
 /**
- * 추후 수정예정
+ * List를 Main으로 사용..
  */
-
 export default function Page() {
-  redirect("/list");
+  return <MainList />;
 }

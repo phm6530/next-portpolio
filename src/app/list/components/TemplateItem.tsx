@@ -10,6 +10,7 @@ import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import { useRouter } from "next/navigation";
 import { ForwardedRef, forwardRef } from "react";
 import TransformPlainText from "@/components/TransformPlainText";
+import useAOS from "@/_hook/usAOS";
 
 const TemplateItem = forwardRef(
   (
@@ -29,12 +30,13 @@ const TemplateItem = forwardRef(
   ) => {
     //참여자
     const { allCnt, maxGroup } = respondents;
+    useAOS();
 
     const router = useRouter();
 
     return (
       <div
-        className={`tdd ${classes.templateItemContainer}`}
+        className={`aos-hidden tdd ${classes.templateItemContainer}`}
         onClick={() => router.push(`/${templateType}/${id}`)}
         ref={ref}
       >

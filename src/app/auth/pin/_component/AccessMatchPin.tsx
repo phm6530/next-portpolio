@@ -15,19 +15,24 @@ const createSchema = (pin: string) =>
     pin: z
       .string()
       .length(4, "PIN 번호는 4자리여야 합니다.")
-      .refine((val) => val === pin, "입력한 PIN 번호가 일치하지 않습니다."),
+      .refine(
+        (val) => val === pin,
+        "입력한 PIN 번호가 일치하지 않습니다."
+      ),
   });
 
 type NavType = "next" | "prev";
 
 export default function AccessMatchPin({
   pin,
+  setAniTrigger,
   nextStep,
   setPin,
 }: {
   pin: string;
   nextStep: (arg: NavType) => void;
   setPin: Dispatch<SetStateAction<string | null>>;
+  setAniTrigger: Dispatch<SetStateAction<boolean>>;
 }) {
   const store = useStore();
 
@@ -58,7 +63,10 @@ export default function AccessMatchPin({
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(matchPin)} className={classes.form}>
+        <form
+          onSubmit={handleSubmit(matchPin)}
+          className={classes.form}
+        >
           <div>
             <InputWrapper
               title="PIN 번호"
@@ -78,7 +86,9 @@ export default function AccessMatchPin({
           {/* 인증완료 */}
           {isValid && <AuthComplete complateText="인증 완료" />}
 
-          <Button.outlineButton type="submit">인증</Button.outlineButton>
+          <Button.outlineButton type="submit">
+            인증
+          </Button.outlineButton>
         </form>
       </FormProvider>
     </>

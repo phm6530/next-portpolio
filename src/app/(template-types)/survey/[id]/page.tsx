@@ -15,6 +15,7 @@ import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
 import BackButton from "@/components/ui/button/BackButton";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import QuillViewer from "@/components/Editor/QuillViewer";
+import AosWrapper from "@/components/animation/AosWrapper";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -45,7 +46,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(
+    `${BASE_NEST_URL}/template/survey/${id}`
+  );
 
   //존재하지 않는  페이지면 Redirect 시켜버림
   if (!response.ok) {
@@ -69,7 +72,9 @@ export default async function SurveyDetailTemplate({
   params: { id },
 }: SurveyDetailTemplateParams) {
   // console.log(`${BASE_NEST_URL}/template/survey/${id}`);
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(
+    `${BASE_NEST_URL}/template/survey/${id}`
+  );
   const data: FetchTemplateForm = await response.json();
 
   if (!data) {
@@ -90,25 +95,29 @@ export default async function SurveyDetailTemplate({
     <>
       <Grid.smallCenter>
         <BackButton />
-        <TemplateQuestionWrapper>
-          <ThumbNail thumbnail={thumbnail} />
+        <AosWrapper>
+          <TemplateQuestionWrapper>
+            <ThumbNail thumbnail={thumbnail} />
 
-          <div className={classes.templateSumeryWrap}>
-            <TemplateStatus
-              startDate={startDate}
-              endDate={endDate}
-              createdAt={createdAt}
-            />
-            <TemplateTitle role={creator.role} nickname={creator.nickname}>
-              {title}
-            </TemplateTitle>
-            {/* <DateRange dateRange={dateRange} /> */}
+            <div className={classes.templateSumeryWrap}>
+              <TemplateStatus
+                startDate={startDate}
+                endDate={endDate}
+                createdAt={createdAt}
+              />
+              <TemplateTitle
+                role={creator.role}
+                nickname={creator.nickname}
+              >
+                {title}
+              </TemplateTitle>
+              {/* <DateRange dateRange={dateRange} /> */}
 
-            {/* Desciprtion */}
-            <QuillViewer contents={description} />
-          </div>
-        </TemplateQuestionWrapper>
-
+              {/* Desciprtion */}
+              <QuillViewer contents={description} />
+            </div>
+          </TemplateQuestionWrapper>
+        </AosWrapper>
         {/* survey Form */}
         <SurveyForm {...data} />
       </Grid.smallCenter>

@@ -28,7 +28,7 @@ export default function PinTimer({
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [timeout]);
 
   return (
     <div className={classes.timer}>

@@ -19,7 +19,6 @@ import OptionButton from "@/app/(template-made)/components/QuestionOption/Option
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import UploadedImagePreview from "@/app/(template-made)/components/ImageContainer/UploadedImagePreview";
-import { resolve } from "path";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -49,7 +48,10 @@ export default function SurveyTypeText({
       alert(error.message);
     },
     onSuccess: (data) => {
-      setValue(`questions.${surveyIdx}.img`, data!.supabase_storage_imgurl);
+      setValue(
+        `questions.${surveyIdx}.img`,
+        data!.supabase_storage_imgurl
+      );
     },
   });
 
@@ -87,6 +89,7 @@ export default function SurveyTypeText({
               type="text"
               {...register(`questions.${surveyIdx}.label`)}
               placeholder="질문 제목을 입력해주세요."
+              autoComplete="off"
             />
 
             <OptionButton
@@ -116,12 +119,17 @@ export default function SurveyTypeText({
           </div>
         ) : isSuccess && preView ? (
           <div className={classes.previewWrapper}>
-            <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
+            <UploadedImagePreview
+              src={preView}
+              deleteFunc={clearPreview}
+            />
           </div>
         ) : null}
 
         {/* 주관식에서 알려주기 */}
-        <div className={classes.textAnswer}>응답자 답변 (500자 내외)</div>
+        <div className={classes.textAnswer}>
+          응답자 답변 (500자 내외)
+        </div>
       </QuestionContainer>
     </>
   );

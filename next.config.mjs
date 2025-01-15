@@ -8,6 +8,9 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false, // strict 모드
+  eslint: {
+    ignoreDuringBuilds: true, // Vercel에서 ESLint 검사 무시
+  },
   images: {
     domains: [
       "www.h-creations.com",

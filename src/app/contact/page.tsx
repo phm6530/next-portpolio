@@ -22,7 +22,11 @@ export default function Page() {
 
   const { handleSubmit, reset, register } = formMethod;
 
-  const { mutate, isPending } = useMutation<void, Error, MailFormData>({
+  const { mutate, isPending } = useMutation<
+    void,
+    Error,
+    MailFormData
+  >({
     mutationFn: (data) =>
       withFetch(async () => {
         const url = `${ENV_NESTBASE_URL}/contact`;
@@ -75,7 +79,8 @@ export default function Page() {
               type="text"
               placeholder="회신 받으실 이메일이나 핸드폰번호를 기재해주세요"
               {...register("digit", {
-                required: "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
+                required:
+                  "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
               })}
               inputName="digit"
             />
@@ -84,7 +89,10 @@ export default function Page() {
               placeholder="textarea"
               {...register("textarea", {
                 required: "문의 내용은 필수입니다.",
-                minLength: { value: 10, message: "최소 10글자 적어주세요" },
+                minLength: {
+                  value: 10,
+                  message: "최소 10글자 적어주세요",
+                },
               })}
               textareaName="textarea"
               className={classes.textarea}

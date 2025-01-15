@@ -1,3 +1,12 @@
+@keyframes ani {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .commentBtnWrap {
   display: flex;
   gap: 20px;
@@ -28,4 +37,9 @@
     padding-left: 2rem;
     margin-bottom: 10px;
   }
+}
+
+.containerWrapper {
+  opacity: 0;
+  animation: ani 0.5s ease forwards;
 }

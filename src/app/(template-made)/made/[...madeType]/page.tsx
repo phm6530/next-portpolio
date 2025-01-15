@@ -1,6 +1,4 @@
 import CreateSurvey from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
-import WithProtectedComponent from "@/hoc/WithProtectedComponent";
-import { QUESTION_TYPE } from "@/types/survey.type";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
 type MadeTemplateParams = {

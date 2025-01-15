@@ -23,8 +23,8 @@ export default function MasonryLayout({
       <Masonry gutter="20px">
         {children}
         {(loading || pending) &&
-          tempArr.map((_) => {
-            return <LoadingItem />;
+          tempArr.map((_, idx) => {
+            return <LoadingItem key={`${idx}-item`} />;
           })}
       </Masonry>
     </ResponsiveMasonry>

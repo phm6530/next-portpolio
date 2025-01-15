@@ -1,26 +1,21 @@
-"use client";
 import DateCompareToday from "@/util/DateCompareToday";
 import classes from "./PostContents.module.scss";
 import { boardCateogries, CategoriesKey } from "@/types/board";
-import { useQuery } from "@tanstack/react-query";
-
-import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
 import PostController from "./PostController";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import { USER_ROLE } from "@/types/auth.type";
 import { DetailBoardItemType } from "../page";
-import LoadingStreming from "@/components/loading/LoadingStreming";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-} from "@/app/(template-result)/result/survey/[id]/page";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 
 import QuillViewer from "@/components/Editor/QuillViewer";
+import {
+  COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
+} from "@/types/comment.type";
+import { fetcbBoardItem } from "@/api/board.api";
 
-export default function PostContents({
+export default async function PostContents({
   category,
   postId,
 }: {
@@ -30,24 +25,10 @@ export default function PostContents({
   const dayCompare = DateCompareToday();
   const boardName = boardCateogries[category];
 
-  const { data, isLoading } = useQuery<DetailBoardItemType>({
-    queryKey: [`post-${category}-${postId}`],
-    queryFn: async () => {
-      return await withFetch(async () => {
-        return await fetch(`${BASE_NEST_URL}/board/${category}/${postId}`, {
-          credentials: "include",
-        });
-      });
-    },
-    staleTime: 5 * 60 * 1000,
+  const data: DetailBoardItemType = await fetcbBoardItem({
+    board: category,
+    id: postId,
   });
-
-  if (isLoading || !data) {
-    return <LoadingStreming />;
-  }
-
-  console.log(data.creator);
-  // console.log(data.updateAt);
 
   return (
     <>
@@ -68,7 +49,9 @@ export default function PostContents({
           <QuillViewer contents={data.contents} />
 
           {data.updateAt !== data.createAt && (
-            <div className={classes.lastUpdate}>조회수 {data.view}</div>
+            <div className={classes.lastUpdate}>
+              조회수 {data.view}
+            </div>
           )}
         </div>
       </div>
@@ -79,18 +62,24 @@ export default function PostContents({
         category={category}
         creatorRole={data.creator.role}
         creatorEmail={
-          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
+          data.creator.role !== USER_ROLE.ANONYMOUS
+            ? data.creator.email
+            : null
         }
       />
 
-      {/* 댓글 */}
+      {/* 댓글 에디터*/}
       <CommentEditor
         editorType={COMMENT_EDITOR_TYPE.COMMENT}
         parentsType={COMMENT_NEED_PATH.BOARD}
-        parentsId={parseInt(postId, 10)}
+        parentsId={postId}
       />
 
-      <ResultCommentSection id={+postId} type={COMMENT_NEED_PATH.BOARD} />
+      {/* 댓글 리스트 */}
+      <ResultCommentSection
+        id={+postId}
+        type={COMMENT_NEED_PATH.BOARD}
+      />
     </>
   );
 }

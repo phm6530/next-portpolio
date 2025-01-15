@@ -60,7 +60,8 @@ export default function SurveyTypeSelect({
 
   const hasDuplicates = new Set(values).size !== values.length;
 
-  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
+  const optionError =
+    errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (
     <QuestionContainer>

@@ -7,16 +7,17 @@ import "dayjs/locale/ko";
 
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import requestHandler from "@/utils/withFetch";
-import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
-import { CommentReponse } from "@/types/comment.type";
+import {
+  COMMENT_NEED_PATH,
+  CommentReponse,
+} from "@/types/comment.type";
 import { User } from "@/types/auth.type";
-import { SessionStorage } from "@/utils/sessionStorage-token";
 import withAuthFetch from "@/utils/withAuthFetch";
 import usePopup from "@/app/hook/usePopup";
-import FormInput from "@/components/ui/FormElement/FormInput";
 import DeleteItemForm from "@/components/DeleteItemForm";
+import revaildateTags from "@/lib/revaildateTags";
+import { useRouter } from "next/navigation";
 
 //import
 dayjs.extend(relativeTime);
@@ -31,16 +32,21 @@ export default function Comment({
   user,
   creator,
   onClickEvent,
+  boardId,
 }: {
   contentType: "reply" | "comment";
-  parentId: number;
+  parentId?: number;
   onClickEvent?: () => void;
+  boardId: string;
 } & Omit<CommentReponse, "replies">) {
   const queryClient = useQueryClient();
+  const router = useRouter();
+
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
-  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } =
+    usePopup();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data?: string) => {
@@ -61,12 +67,13 @@ export default function Comment({
       };
 
       await withAuthFetch(url, options);
+      await revaildateTags({
+        tags: [`comment-${COMMENT_NEED_PATH.BOARD}-${boardId}`],
+      });
     },
     onSuccess: () => {
       alert("댓글이 삭제되었습니다.");
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.COMMENTS, parentId],
-      });
+      router.refresh();
     },
     onError: (data) => {
       alert(data.message);
@@ -105,7 +112,10 @@ export default function Comment({
       <div className={classes.commentContainer}>
         <div className={classes.commentSurmmry}>
           {/* 유저 or 익명 */}
-          <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
+          <UserRoleDisplay
+            role={creator.role}
+            nickname={creator.nickname}
+          />
 
           <span style={{ marginRight: "10px" }}>
             {dayjs(createAt).fromNow()}

@@ -12,14 +12,16 @@ export default function NavLink({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = pathname.startsWith(href);
   const store = useStore();
 
   return (
     <Link
       href={href}
       onClick={() => store.setClose()}
-      className={`${classes.link} ${isActive ? classes.active : undefined}`}
+      className={`${classes.link} ${
+        isActive ? classes.active : undefined
+      }`}
     >
       {children}
     </Link>

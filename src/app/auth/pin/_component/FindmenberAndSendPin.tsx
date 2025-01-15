@@ -30,9 +30,11 @@ type NavType = "next" | "prev";
 export default function FindmenberAndSendPin({
   nextStep,
   setPin,
+  setAniTrigger,
 }: {
   nextStep: (arg: NavType) => void;
   setPin: Dispatch<SetStateAction<string | null>>;
+  setAniTrigger: Dispatch<SetStateAction<boolean>>;
 }) {
   const method = useForm<FormType>({ resolver: zodResolver(schema) });
   const store = useStore();
@@ -55,8 +57,9 @@ export default function FindmenberAndSendPin({
     },
     onSuccess: (data) => {
       // 4자리 Pin 번호
+
       setPin(data.authPin);
-      nextStep("next");
+      setAniTrigger(true);
       store.setPasswordUser(data.userEmail);
     },
   });
@@ -74,7 +77,10 @@ export default function FindmenberAndSendPin({
     <>
       {!isPinSuccess && (
         <FormProvider {...method}>
-          <form onSubmit={handleSubmit(sendPinNumber)} className={classes.form}>
+          <form
+            onSubmit={handleSubmit(sendPinNumber)}
+            className={classes.form}
+          >
             <InputWrapper
               title="이메일"
               description="* 해당 이메일로 PIN 번호 4자리 전송됩니다."

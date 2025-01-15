@@ -13,6 +13,7 @@ import classes from "./TemplateItemlist.module.scss";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
+import LoadingSummrySkeleton from "@/components/loading/LoadingSummrySkeleton";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -27,7 +28,6 @@ export default function TemplateList() {
     queryFn: async ({ pageParam = 1 }) => {
       let url = `${BASE_NEST_URL}/template?sort=${sort}`;
       url += `&page=${pageParam}`;
-
       const response = await fetch(url);
       return await response.json();
     },
@@ -44,12 +44,14 @@ export default function TemplateList() {
 
     const ob = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
-        if (entries[0].isIntersecting) {
-          // target!.style.backgroundColor = "red";
-          fetchNextPage();
-        }
+        entries.forEach((entiry) => {
+          if (entiry.intersectionRect) {
+            fetchNextPage();
+            // target!.style.backgroundColor = "red";
+          }
+        });
       },
-      { threshold: 0.4 }
+      { threshold: 0.1 }
     );
 
     if (target) {
@@ -63,7 +65,7 @@ export default function TemplateList() {
   }, [ref, fetchNextPage, qs]);
 
   if (isPending) {
-    return "loading....";
+    return <LoadingSummrySkeleton cnt={8} />;
   }
 
   if (!data) {

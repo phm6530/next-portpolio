@@ -20,7 +20,7 @@ export default function QuillEditor<T extends FieldValues>({
   control,
   name,
 }: {
-  control: Control<T, any>;
+  control: Control<T>;
   name: Path<T>;
 }) {
   const {

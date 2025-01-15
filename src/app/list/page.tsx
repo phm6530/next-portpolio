@@ -1,43 +1,46 @@
 import Grid from "@/components/ui/Grid";
 import classes from "./page.module.scss";
-import { BASE_NEST_URL } from "@/config/base";
-import { QUERY_KEY } from "@/types/constans";
-import { WithPrefetchRender } from "@/hoc/WithPrefetchRender";
+
 import ListFilterControls from "./components/ListFilterControls";
 import ListPageBanner from "@/app/list/components/ListPageBanner";
-import TemplateList from "@/app/list/components/TemplateItemList";
-import { TEMPLATERLIST_SORT } from "@/types/template.type";
+// import TemplateList from "@/app/list/components/TemplateItemList";
 
-export default async function page({
-  searchParams,
-}: {
-  searchParams: { sort: TEMPLATERLIST_SORT };
-}) {
-  const sort = searchParams.sort || TEMPLATERLIST_SORT.ALL;
+import { default as loadDynamic } from "next/dynamic";
+import LoadingSummrySkeleton from "@/components/loading/LoadingSummrySkeleton";
 
+// TemplateList를 동적 로드로 설정 (SSR 비활성화)
+const TemplateList = loadDynamic(
+  () => import("@/app/list/components/TemplateItemList"),
+  {
+    ssr: false,
+    loading: () => <LoadingSummrySkeleton cnt={8} />,
+  }
+);
+
+export default async function page() {
   // 고차 컴포넌트
-  const PrefetchTemplateList = await WithPrefetchRender(
-    TemplateList,
-    async (queryClient) => {
-      await queryClient.prefetchInfiniteQuery({
-        queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
-        queryFn: async ({ pageParam = 1 }) => {
-          let url = `${BASE_NEST_URL}/template?sort=${sort}`;
-          url += `&page=${pageParam}`;
+  // const PrefetchTemplateList = await WithPrefetchRender(
+  //   TemplateList,
+  //   async (queryClient) => {
+  //     await queryClient.prefetchInfiniteQuery({
+  //       queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
+  //       queryFn: async ({ pageParam = 1 }) => {
+  //         let url = `${BASE_NEST_URL}/template?sort=${sort}`;
+  //         url += `&page=${pageParam}`;
 
-          const response = await fetch(url, {
-            cache: "no-cache",
-          });
+  //         const response = await fetch(url, {
+  //           cache: "no-cache",
+  //         });
 
-          return await response.json();
-        },
-        getNextPageParam: (lastPage: { nextPage: number }) => {
-          return lastPage.nextPage || null;
-        },
-        initialPageParam: 1,
-      });
-    }
-  );
+  //         return await response.json();
+  //       },
+  //       getNextPageParam: (lastPage: { nextPage: number }) => {
+  //         return lastPage.nextPage || null;
+  //       },
+  //       initialPageParam: 1,
+  //     });
+  //   }
+  // );
 
   return (
     <div className={classes.wrap}>
@@ -51,7 +54,10 @@ export default async function page({
           {/* <SearchInput search={search} /> */}
         </div>
 
-        <PrefetchTemplateList />
+        {/**
+         * vercel 서버리스 Cold Start 때문에 prefetch에서 Client로 변경함
+         */}
+        <TemplateList />
       </Grid.center>
     </div>
   );

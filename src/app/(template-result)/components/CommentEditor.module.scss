@@ -6,6 +6,14 @@
   gap: 10px;
 }
 
+.submitBtn {
+  &:disabled {
+    background: #dbdbdd;
+  }
+  &:hover {
+    background: #dbdbdd;
+  }
+}
 .textareaWrap {
   display: grid;
   grid-column: 1 / -1;

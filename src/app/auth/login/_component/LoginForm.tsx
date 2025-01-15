@@ -18,12 +18,13 @@ type SignUpResponse = {
 };
 
 const schema = z.object({
-  password: z.string().min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
+  password: z
+    .string()
+    .min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
   email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
 });
 
 export default function LoginForm() {
-  const store = useStore();
   const router = useRouter();
 
   const {
@@ -68,7 +69,10 @@ export default function LoginForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmitHandler)} className={classes.form}>
+      <form
+        onSubmit={handleSubmit(onSubmitHandler)}
+        className={classes.form}
+      >
         <FormProvider {...method}>
           {/* Id */}
           <div className={classes.inputWrapper}>
@@ -93,15 +97,23 @@ export default function LoginForm() {
           <Button.submit disabled={isPending}>로그인</Button.submit>
 
           <div className={classes.passwordRecovery}>
-            <button type="button" onClick={() => router.push("/auth/pin")}>
+            <button
+              type="button"
+              onClick={() => router.push("/auth/pin")}
+            >
               비밀번호를 잊어버리셨나요?
             </button>
             |
-            <button type="button" onClick={() => router.push("/auth/signup")}>
+            <button
+              type="button"
+              onClick={() => router.push("/auth/signup")}
+            >
               회원가입
             </button>
           </div>
-          {error && <div className={classes.errorMsg}>{error.message}</div>}
+          {error && (
+            <div className={classes.errorMsg}>{error.message}</div>
+          )}
         </FormProvider>
       </form>
     </>

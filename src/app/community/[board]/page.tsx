@@ -7,8 +7,15 @@ import BoardCategories from "../component/BoardCategories";
 import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
 import { boardCateogries, CategoriesKey } from "@/types/board";
+import dynamic from "next/dynamic";
+import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 
-export default async function Board({
+const StremingBoardList = dynamic(
+  () => import("../component/BoardList"),
+  { ssr: true, loading: () => <LoadingTextSkeleton cnt={6} /> }
+);
+
+export default async function BoardListPage({
   params,
   keyword,
   curPage,
@@ -19,7 +26,9 @@ export default async function Board({
   curPage?: string;
   searchParams?: { search: string; page: string };
 }) {
-  function isBoardCategory(key: string): key is keyof typeof boardCateogries {
+  function isBoardCategory(
+    key: string
+  ): key is keyof typeof boardCateogries {
     return key in boardCateogries;
   }
 
@@ -43,11 +52,14 @@ export default async function Board({
       />
 
       {/* Category button */}
-      <BoardCategories categories={boardCateogries} curCategory={boardName} />
+      <BoardCategories
+        categories={boardCateogries}
+        curCategory={boardName}
+      />
 
       {/* Search Bar */}
       <div className={classes.actionArea}>
-        {/* 검색처리를 위해 CLinet 한번더 감쌓았음 */}
+        {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
         <Link href={`/community/${params.board}/write`}>
           <Button.submit>글쓰기</Button.submit>
@@ -55,11 +67,13 @@ export default async function Board({
       </div>
 
       {/* list */}
-      <BoardList
-        boardCategory={params.board}
-        keyword={keyword || searchParams?.search}
-        curPage={page}
-      />
+      <section className={classes.container}>
+        <StremingBoardList
+          boardCategory={params.board}
+          keyword={keyword || searchParams?.search}
+          curPage={page}
+        />
+      </section>
     </>
   );
 }

@@ -85,13 +85,16 @@ export default async function SurveyResultPage({
         <ResultSurveyCharts id={id} />
 
         {/* Comments */}
-        <ResultCommentSection id={+id} type={COMMENT_NEED_PATH.TEMPLATE} />
+        <ResultCommentSection
+          id={+id}
+          type={COMMENT_NEED_PATH.TEMPLATE}
+        />
 
         {/* 메인 Comment Editor */}
         <CommentEditor
           editorType={COMMENT_EDITOR_TYPE.COMMENT}
           parentsType={COMMENT_NEED_PATH.TEMPLATE}
-          parentsId={+id}
+          parentsId={id}
         />
       </HydrationBoundary>
     </>
