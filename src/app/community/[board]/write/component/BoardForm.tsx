@@ -15,6 +15,7 @@ import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
+import revaildateTags from "@/lib/revaildateTags";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
@@ -72,10 +73,14 @@ export default function BoardForm({
             credentials: "include",
           };
         }
-        return await fetch(
+        const datas = await fetch(
           `${BASE_NEST_URL}/board/${boardKey}`,
           options
         );
+        await revaildateTags({
+          tags: [`comunity-${boardKey}`],
+        });
+        return datas;
       });
     },
 

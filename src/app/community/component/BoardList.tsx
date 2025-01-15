@@ -42,7 +42,7 @@ export default async function BoardList({
 
     return await fetch(url, {
       cache: "force-cache",
-      next: { tags: ["boardList"] },
+      next: { tags: [`comunity-${boardCategory}`] },
     });
   });
 
