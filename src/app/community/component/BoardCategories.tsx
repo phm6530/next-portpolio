@@ -18,11 +18,12 @@ export default function BoardCategories({
   return (
     <div className={classes.categoriesWrapper}>
       {Object.entries(categories).map(([key, val]) => {
-        console.log(key);
         return (
           <button
             key={`category-${val}`}
-            className={`${val === curCategory ? classes.active : undefined}`}
+            className={`${
+              val === curCategory ? classes.active : undefined
+            }`}
             onClick={() => router.push(`/community/${key}`)}
           >
             {val}

@@ -33,7 +33,9 @@ export default function SurveyList() {
       <div className={classes.questionsStatus}>
         <div>
           총 항목{" "}
-          <span className={classes.QuestionsCnt}>{questionsWatch.length}</span>
+          <span className={classes.QuestionsCnt}>
+            {questionsWatch.length}
+          </span>
           개
         </div>
 
@@ -71,7 +73,9 @@ export default function SurveyList() {
 
         {errors["questions"]?.message && (
           <QuestionListWrapper>
-            <FormRegisterError errorMsg={errors["questions"]?.message} />
+            <FormRegisterError
+              errorMsg={errors["questions"]?.message}
+            />
           </QuestionListWrapper>
         )}
 

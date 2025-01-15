@@ -6,6 +6,7 @@ import {
   CommentReponse,
 } from "@/types/comment.type";
 import CommentContainerSection from "./CommentContainerSection";
+import AosWrapper from "@/components/animation/AosWrapper";
 
 //tempalte ID
 export default async function ResultCommentSection({
@@ -18,7 +19,7 @@ export default async function ResultCommentSection({
   const data = await fetchComments<CommentReponse[]>(id, type);
 
   return (
-    <div className={classes.commentSection}>
+    <AosWrapper className={classes.commentSection}>
       <div className={classes.commentCount}>
         댓글 <span>{data?.length}</span> 개
       </div>
@@ -32,6 +33,6 @@ export default async function ResultCommentSection({
           <NotFoundComponent.reply />
         )}
       </div>
-    </div>
+    </AosWrapper>
   );
 }

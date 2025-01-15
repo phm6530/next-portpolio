@@ -7,6 +7,13 @@ import BoardCategories from "../component/BoardCategories";
 import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
 import { boardCateogries, CategoriesKey } from "@/types/board";
+import dynamic from "next/dynamic";
+import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
+
+const StremingBoardList = dynamic(
+  () => import("../component/BoardList"),
+  { ssr: true, loading: () => <LoadingTextSkeleton cnt={6} /> }
+);
 
 export default async function BoardListPage({
   params,
@@ -60,11 +67,13 @@ export default async function BoardListPage({
       </div>
 
       {/* list */}
-      <BoardList
-        boardCategory={params.board}
-        keyword={keyword || searchParams?.search}
-        curPage={page}
-      />
+      <section className={classes.container}>
+        <StremingBoardList
+          boardCategory={params.board}
+          keyword={keyword || searchParams?.search}
+          curPage={page}
+        />
+      </section>
     </>
   );
 }

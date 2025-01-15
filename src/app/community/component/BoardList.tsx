@@ -5,6 +5,7 @@ import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
 import Paging from "@/components/ui/Paging";
+import AosWrapper from "@/components/animation/AosWrapper";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
@@ -30,14 +31,17 @@ export default async function BoardList({
   keyword?: string;
   curPage: number;
 }) {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+
   // number는 All Cnt
   const data = await withFetch<[ListItemType[], number]>(async () => {
     const searchParam = keyword
       ? `${encodeURIComponent(keyword)}`
       : "";
     const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}&page=${curPage}`;
+
     return await fetch(url, {
-      cache: "no-store",
+      cache: "force-cache",
       next: { tags: ["boardList"] },
     });
   });
@@ -52,7 +56,7 @@ export default async function BoardList({
             page {curPage} <span>/ 2</span>
           </div> */}
         </div>
-        <div>
+        <AosWrapper>
           {data[0].length > 0 ? (
             <>
               {data[0].map((item, idx) => {
@@ -69,7 +73,7 @@ export default async function BoardList({
               작성된 게시물이 없습니다.
             </div>
           )}
-        </div>
+        </AosWrapper>
 
         {/* 페이징 */}
         <Paging cnt={data[1]} />

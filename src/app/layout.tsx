@@ -4,22 +4,23 @@ import "@/styles/_styles.scss";
 import { Metadata } from "next";
 import GlobalNav from "@/components/Header/GlobalNav";
 
-import { serverSession } from "@/utils/serverSession";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { AUTH, QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY } from "@/types/constans";
 import ClientProvider from "@/provider/ClientProvider";
 import ModeToggle from "@/components/ModeToggle/ModeToggle";
 
 import withAuthFetch from "@/utils/withAuthFetch";
+import { cookies } from "next/headers";
 
 //메타 데이터
 export const metadata: Metadata = {
-  title: "나만의 설문조사를 만들어보세요",
-  description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
+  title: "[Dopoll] 나만의 설문조사를 만들어보세요",
+  description:
+    "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
 };
 
 export default async function RootLayout({
@@ -27,8 +28,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const token = serverSession();
   const queryClient = new QueryClient();
+
+  const cookieStore = cookies();
+  const token = cookieStore.get("token")?.value;
+  console.log(token);
 
   /**
    * 11/07

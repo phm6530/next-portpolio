@@ -12,12 +12,15 @@ const AUTH_REQUIRED_PATHS = ["/made", "/mypage"] as const;
 
 type Pathname = (typeof AUTH_REDIRECT_PATHS)[number];
 
-export async function middleware(req: NextRequest, res: NextResponse) {
+export async function middleware(
+  req: NextRequest,
+  res: NextResponse
+) {
   const pathname = req.nextUrl.pathname as Pathname;
   const qs = req.nextUrl.searchParams;
 
   // get Token
-  const token = serverSession();
+  const token = req.cookies.get("token")?.value;
 
   //로그인 페이지인데 로그인 되어있을때 ReDirect 시켜버리기
   if (AUTH_REDIRECT_PATHS.includes(pathname) && token) {
@@ -29,13 +32,14 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     pathname.startsWith(path)
   );
 
-  //권한이 필요 한페이지인데 TOken이 없을떄 ,
   if (authPath) {
     const encodedPath = encodeURIComponent(pathname);
     const redirectPath = `/auth/login?redirect=${encodedPath}&code=${ERROR_CODE.UNAUTHORIZED}`;
-
+    //권한이 필요 한페이지인데 TOken이 없을떄 ,
     if (!token)
-      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+      return NextResponse.redirect(
+        new URL(redirectPath, req.nextUrl.origin)
+      );
 
     try {
       const isAuthenticated = await withAuthFetch("auth/verify", {
@@ -45,10 +49,14 @@ export async function middleware(req: NextRequest, res: NextResponse) {
       });
 
       if (!isAuthenticated) {
-        return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+        return NextResponse.redirect(
+          new URL(redirectPath, req.nextUrl.origin)
+        );
       }
     } catch (error) {
-      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
+      return NextResponse.redirect(
+        new URL(redirectPath, req.nextUrl.origin)
+      );
     }
   }
 }

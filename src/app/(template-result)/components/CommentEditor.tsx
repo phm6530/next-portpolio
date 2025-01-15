@@ -185,7 +185,11 @@ export default function CommentEditor({
             </div>
           </CommentTextArea>
 
-          <button type="submit" disabled={isPending}>
+          <button
+            type="submit"
+            className={classes.submitBtn}
+            disabled={isPending}
+          >
             댓글 작성
           </button>
         </div>

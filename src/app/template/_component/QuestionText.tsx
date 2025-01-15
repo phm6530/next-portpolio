@@ -70,7 +70,13 @@ export default function QuestionText({
           <ImageZoom alt={"preview"} image={qsImg} />
         </div>
       )}
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+        }}
+      >
         <FormTextarea
           className={classes.textArea}
           placeholder={`${description}을 기재해주세요!`}
@@ -80,7 +86,9 @@ export default function QuestionText({
           autoComplete="off"
         />
 
-        {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
+        {errorMsg && (
+          <FormRegisterError errorMsg={errorMsg as string} />
+        )}
       </div>
     </>
   );

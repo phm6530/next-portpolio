@@ -12,7 +12,8 @@ export default function ListPageBanner() {
         <div>
           <PageTitle>
             다른사람들은<br></br> 어떤
-            <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
+            <div className="pointText">생각</div>을 가졌는지
+            궁금하신가요?
           </PageTitle>
 
           <p className={classes.description}>

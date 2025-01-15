@@ -1,13 +1,10 @@
 "use client";
-
 import {
   Control,
   FieldValues,
   FormProvider,
   useForm,
 } from "react-hook-form";
-import { BASE_NEST_URL } from "@/config/base";
-
 import {
   useMutation,
   useQuery,
@@ -15,7 +12,6 @@ import {
 } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import FormInput from "@/components/ui/FormElement/FormInput";
-import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
 import {
@@ -36,17 +32,16 @@ import { User } from "@/types/auth.type";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import surveySchema from "@/app/(template-made)/made/[...madeType]/components/survey/schema";
 import ThumbNailUploader from "@/app/(template-made)/components/ThumbNailUploader";
 import TemplateInputWrapper from "../common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
 import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
-import QuillEditor from "@/components/Editor/QuillEditor";
 import dynamic from "next/dynamic";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
+import useAOS from "@/_hook/usAOS";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -107,7 +102,7 @@ const EditorDynamicRender = dynamic<{
 
 export default function CreateSurvey() {
   const { RenderPreview } = usePreview();
-
+  useAOS({ preserveClass: true });
   const queryClient = useQueryClient();
   const userData = queryClient.getQueryData<User>([
     QUERY_KEY.USER_DATA,
@@ -236,7 +231,7 @@ export default function CreateSurvey() {
 
       <div className={classes.formContainer}>
         <FormProvider {...formState}>
-          <section className={classes.formSection}>
+          <section className={`${classes.formSection} aos-hidden`}>
             <div className={classes.header}>
               <h3>설문조사 정보</h3>
               <p className={classes.description}>
@@ -274,6 +269,7 @@ export default function CreateSurvey() {
               <ThumbNailUploader />
             </TemplateInputWrapper>
           </section>
+
           <div
             className={`${classes.gapWrapper} ${
               editPage ? classes.disabled : undefined
@@ -286,7 +282,7 @@ export default function CreateSurvey() {
               </p>
             )}
 
-            <section className={classes.formSection}>
+            <section className={`${classes.formSection} aos-hidden`}>
               <div className={classes.header}>
                 <h3>2. 응답자 필터 설정</h3>
                 <p className={classes.description}>
@@ -308,7 +304,7 @@ export default function CreateSurvey() {
               />
             </section>
 
-            <section className={classes.formSection}>
+            <section className={`${classes.formSection} aos-hidden`}>
               <div className={classes.header}>
                 <h3>3. 설문 문항 구성</h3>
                 <p className={classes.description}>
@@ -316,10 +312,8 @@ export default function CreateSurvey() {
                   추가해보세요.
                 </p>
               </div>
-
               {/* List.. */}
               <SurveyList />
-
               {/* 항목 추가 */}
               <AddQuestionController />
             </section>

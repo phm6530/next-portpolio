@@ -5,6 +5,7 @@ import SurveyIcon from "/public/asset/icon/survey.png";
 import rankIcon from "/public/asset/icon/rank.png";
 import Image from "next/image";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import useAOS from "@/_hook/usAOS";
 
 const templateList = [
   {
@@ -26,6 +27,8 @@ const templateList = [
 ];
 
 export default function SelectTemplateList() {
+  useAOS({ preserveClass: true });
+
   const handleTemplateClick = (type: string, isActive: boolean) => {
     if (!isActive) {
       alert("아직 개발 중입니다.");
@@ -44,12 +47,12 @@ export default function SelectTemplateList() {
     }
   };
   return (
-    <div className={classes.templateSelector}>
+    <div className={`${classes.templateSelector} aos-hidden`}>
       {templateList.map((template, idx) => {
         return (
           <div
             key={`${template.type}-${idx}`}
-            className={`${classes.choiceItem} ${
+            className={`${classes.choiceItem}  ${
               !template.isActive ? classes.notYet : undefined
             }`}
             onClick={() =>
