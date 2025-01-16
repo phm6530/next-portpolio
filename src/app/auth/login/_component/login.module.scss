@@ -1,7 +1,9 @@
 .errorMsg {
   color: $color-error-1;
 }
-
+.loading {
+  opacity: 0.3;
+}
 .form {
   gap: 20px;
   display: flex;
@@ -45,4 +47,12 @@
   button {
     opacity: 0.8;
   }
+}
+
+.loadingWrapper {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

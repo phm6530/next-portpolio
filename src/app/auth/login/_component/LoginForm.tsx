@@ -9,8 +9,10 @@ import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import LoadingSpiner from "@/components/loading/LoadingSpiner";
+import { resolve } from "path";
 
 type SignUpResponse = {
   accessToken: string;
@@ -30,10 +32,12 @@ export default function LoginForm() {
   const {
     mutate: signUpMutate,
     isPending,
+    isSuccess,
     error,
   } = useMutation({
     mutationFn: async (data: SignIn) => {
       return await requestHandler<SignUpResponse>(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -67,17 +71,27 @@ export default function LoginForm() {
   // const errorMessages = Object.values(errors);
   // const firstErrorMeg = errorMessages[0]?.message;
 
+  const loadingStatus = isPending || isSuccess;
   return (
-    <>
+    <div style={{ position: "relative" }}>
+      {loadingStatus && (
+        <div className={classes.loadingWrapper}>
+          <LoadingSpiner />
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
-        className={classes.form}
+        className={`${classes.form} ${
+          loadingStatus ? classes.loading : undefined
+        }`}
       >
         <FormProvider {...method}>
           {/* Id */}
           <div className={classes.inputWrapper}>
             <FormInput
               type="text"
+              disabled={isPending || isSuccess}
               placeholder="아이디를 입력해주세요"
               {...register("email")}
               autoComplete="off"
@@ -87,6 +101,7 @@ export default function LoginForm() {
             {/* Password */}
             <FormInput
               type="password"
+              disabled={isPending || isSuccess}
               placeholder="비밀번호를 입력해주세요"
               {...register("password")}
               autoComplete="new-password"
@@ -94,7 +109,9 @@ export default function LoginForm() {
             />
           </div>
 
-          <Button.submit disabled={isPending}>로그인</Button.submit>
+          <Button.submit disabled={isPending || isSuccess}>
+            로그인
+          </Button.submit>
 
           <div className={classes.passwordRecovery}>
             <button
@@ -116,6 +133,6 @@ export default function LoginForm() {
           )}
         </FormProvider>
       </form>
-    </>
+    </div>
   );
 }
