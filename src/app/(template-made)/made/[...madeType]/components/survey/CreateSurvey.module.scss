@@ -75,7 +75,12 @@
   /* margin-bottom: 3rem; */
   border: 1px solid #d5dfe6;
   margin: 1.5rem 0;
+
   padding: 3rem;
+  @include respond("medium") {
+    padding: 3rem 1.4rem;
+  }
+
   & .header {
     display: flex;
     flex-direction: column;

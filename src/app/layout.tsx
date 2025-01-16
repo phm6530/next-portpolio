@@ -32,8 +32,6 @@ export default async function RootLayout({
 
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
-  console.log(token);
-
   /**
    * 11/07
    * AccessToken이 SessionStorage로 관리되기 때문에 ,

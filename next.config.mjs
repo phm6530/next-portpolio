@@ -25,7 +25,10 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "src/styles")],
 
     // 전역적으로 반영된거임
-    prependData: `@import "@/styles/_colors.scss";`,
+    additionalData: `
+    @import "@/styles/_colors.scss";
+    @import "@/styles/_mixin.scss";
+  `,
   },
   logging: {
     fetches: {
