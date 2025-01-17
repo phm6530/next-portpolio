@@ -1,14 +1,15 @@
-.sunflowerSpinner {
-  position: relative;
-  width: 50px;
-  height: 50px;
-}
-
 .petals {
   position: absolute;
-  width: 25px;
-  height: 25px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
+
 @keyframes rotate {
   from {
     opacity: 0;
@@ -17,22 +18,20 @@
     opacity: 1;
   }
 }
+
 .petal {
   position: absolute;
-
-  background: #ffd700;
   border-radius: 50px;
-  left: 50%;
+  width: 3px;
+  height: 9px;
   transform-origin: bottom;
+  background: rgb(120, 117, 117);
+  animation: rotate 0.5s linear infinite alternate;
 }
 
 @for $i from 1 through 12 {
   .petal:nth-child(#{$i}) {
-    width: 3px;
-    animation: rotate 0.5s linear infinite alternate;
-    animation-delay: #{$i * 0.1}s; // 0.1초씩 딜레이 추가
-    height: 9px;
-    background: rgb(120, 117, 117);
+    animation-delay: #{$i * 0.1}s;
     transform: rotate(#{($i - 1) * 30}deg) translateY(-80%);
   }
 }

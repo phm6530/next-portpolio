@@ -6,5 +6,9 @@ export default function layout({
 }: {
   children: ReactNode;
 }) {
-  return <Grid.smallCenter>{children}</Grid.smallCenter>;
+  return (
+    <Grid.center>
+      <Grid.smallCenter>{children}</Grid.smallCenter>
+    </Grid.center>
+  );
 }

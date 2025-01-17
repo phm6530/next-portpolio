@@ -79,6 +79,7 @@
   padding: 3rem;
   @include respond("medium") {
     padding: 3rem 1.4rem;
+    gap: 30px;
   }
 
   & .header {
@@ -87,10 +88,16 @@
     gap: 15px;
     h3 {
       font-size: 20px;
+      @include respond("medium") {
+        font-size: 16px;
+      }
     }
     .description {
       color: #868e96;
       font-size: 14px;
+      @include respond("medium") {
+        font-size: 13px;
+      }
     }
   }
 }

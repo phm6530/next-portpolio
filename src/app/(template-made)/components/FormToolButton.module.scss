@@ -11,11 +11,19 @@
   box-shadow: 0px 2px 8px 0px #4950570f;
   color: #495057;
   border-radius: 8px;
-
+  @include respond("medium") {
+    font-size: 11px;
+    padding: 0.8rem;
+  }
   svg {
     width: 20px;
     height: 20px;
     fill: #495057;
+
+    @include respond("medium") {
+      width: 15px;
+      height: 15px;
+    }
   }
 
   &:hover {

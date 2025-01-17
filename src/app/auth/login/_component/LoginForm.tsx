@@ -10,9 +10,8 @@ import { BASE_NEST_URL } from "@/config/base";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import LoadingSpiner from "@/components/loading/LoadingSpiner";
-import { resolve } from "path";
+import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 
 type SignUpResponse = {
   accessToken: string;
@@ -62,24 +61,13 @@ export default function LoginForm() {
     signUpMutate(data);
   };
 
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = method;
-
-  // const errorMessages = Object.values(errors);
-  // const firstErrorMeg = errorMessages[0]?.message;
+  const { register, handleSubmit } = method;
 
   const loadingStatus = isPending || isSuccess;
-  return (
-    <div style={{ position: "relative" }}>
-      {loadingStatus && (
-        <div className={classes.loadingWrapper}>
-          <LoadingSpiner />
-        </div>
-      )}
 
+  // const loadingStatus = true;
+  return (
+    <LoadingSpinnerWrapper loading={loadingStatus}>
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
         className={`${classes.form} ${
@@ -133,6 +121,6 @@ export default function LoginForm() {
           )}
         </FormProvider>
       </form>
-    </div>
+    </LoadingSpinnerWrapper>
   );
 }

@@ -23,6 +23,9 @@
   & > div {
     font-size: 14px;
     display: flex;
+    @include respond("medium") {
+      font-size: 12px;
+    }
     justify-content: center;
     flex: 1;
     align-items: center;

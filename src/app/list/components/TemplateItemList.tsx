@@ -73,8 +73,6 @@ export default function TemplateList() {
     return <LoadingSummrySkeleton cnt={8} />;
   }
 
-  console.log(data?.pages[0].data.length === 0);
-
   if (data?.pages[0].data.length === 0) {
     return (
       <NotFoundComponent.noneData text="생성된 템플릿이 없습니다." />

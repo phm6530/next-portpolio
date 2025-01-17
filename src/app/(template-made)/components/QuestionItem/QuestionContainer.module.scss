@@ -43,6 +43,9 @@
     font-size: 20px;
     border: 0;
     flex: 1;
+    @include respond("medium") {
+      font-size: 14px;
+    }
   }
 }
 
