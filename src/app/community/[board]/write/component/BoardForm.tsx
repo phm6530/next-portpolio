@@ -16,6 +16,7 @@ import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
 import revaildateTags from "@/lib/revaildateTags";
+import { toast } from "react-toastify";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
@@ -87,9 +88,7 @@ export default function BoardForm({
     onSuccess: () => {
       router.replace(`/community/${boardKey}`);
       router.refresh();
-    },
-    onError: (error) => {
-      alert("에러!");
+      toast.success("게시물이 생성되었습니다.");
     },
   });
 
