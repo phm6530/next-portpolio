@@ -10,7 +10,6 @@ import { BASE_NEST_URL } from "@/config/base";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 
 type SignUpResponse = {
@@ -27,6 +26,8 @@ const schema = z.object({
 
 export default function LoginForm() {
   const router = useRouter();
+  //zodResolver
+  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
 
   const {
     mutate: signUpMutate,
@@ -36,7 +37,7 @@ export default function LoginForm() {
   } = useMutation({
     mutationFn: async (data: SignIn) => {
       return await requestHandler<SignUpResponse>(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -50,10 +51,11 @@ export default function LoginForm() {
       const { nickname, email, role, id } = data.user;
       router.refresh();
     },
+    onError: () => {
+      // 미 일치시 Password 지워 버림
+      method.reset({ password: "" });
+    },
   });
-
-  //zodResolver
-  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
 
   //제출
   const onSubmitHandler = (data: SignIn) => {
