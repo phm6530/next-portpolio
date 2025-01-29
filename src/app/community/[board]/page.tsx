@@ -69,7 +69,7 @@ export default async function BoardListPage({
       {/* list */}
       <section className={classes.container}>
         <StremingBoardList
-          boardCategory={params.board}
+          category={params.board}
           keyword={keyword || searchParams?.search}
           curPage={page}
         />

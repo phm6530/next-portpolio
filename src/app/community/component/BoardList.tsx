@@ -23,11 +23,11 @@ export type ListItemType = {
 };
 
 export default async function BoardList({
-  boardCategory,
+  category,
   keyword,
   curPage,
 }: {
-  boardCategory: CategoriesKey;
+  category: CategoriesKey;
   keyword?: string;
   curPage: number;
 }) {
@@ -38,11 +38,11 @@ export default async function BoardList({
     const searchParam = keyword
       ? `${encodeURIComponent(keyword)}`
       : "";
-    const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}&page=${curPage}`;
+    const url = `${BASE_NEST_URL}/board/${category}?search=${searchParam}&page=${curPage}`;
 
     return await fetch(url, {
       cache: "force-cache",
-      next: { tags: [`comunity-${boardCategory}`] },
+      next: { tags: [`board-${category}`] },
     });
   });
 

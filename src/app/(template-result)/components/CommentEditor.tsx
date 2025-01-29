@@ -45,7 +45,6 @@ export default function CommentEditor({
   category,
 }: {
   editorType: COMMENT_EDITOR_TYPE;
-
   parentsType?: COMMENT_NEED_PATH;
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
@@ -124,7 +123,7 @@ export default function CommentEditor({
       await revaildateTags({
         tags: [
           `comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`,
-          `comunity-${category}`, // list 초기화
+          `${COMMENT_NEED_PATH.BOARD}-${category}`, // list 초기화
         ],
       });
       return req;
@@ -132,9 +131,6 @@ export default function CommentEditor({
     onSuccess: async () => {
       reset();
       router.refresh();
-      if (setTouch) {
-        setTouch(null);
-      }
     },
   });
 
