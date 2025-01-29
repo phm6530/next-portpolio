@@ -23,13 +23,17 @@ function reply() {
   );
 }
 
-function noneData() {
+function noneData({
+  text = "아직 등록된 댓글이 없습니다",
+}: {
+  text?: string;
+}) {
   return (
     <div className={classes.errorDefault}>
       <div className={classes.iconWrap}>
         {/* <Image src={replyIcon} alt="replyIcon" width={70} /> */}
       </div>
-      아직 등록된 댓글이 없습니다
+      {text}
     </div>
   );
 }

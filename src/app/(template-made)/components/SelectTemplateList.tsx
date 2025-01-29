@@ -31,7 +31,7 @@ export default function SelectTemplateList() {
 
   const handleTemplateClick = (type: string, isActive: boolean) => {
     if (!isActive) {
-      alert("아직 개발 중입니다.");
+      alert(`[${type}]는 아직 개발 중입니다.`);
       return;
     }
 

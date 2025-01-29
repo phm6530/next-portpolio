@@ -9,8 +9,8 @@ import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useStore from "@/store/store";
 import { useRouter } from "next/navigation";
+import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 
 type SignUpResponse = {
   accessToken: string;
@@ -26,14 +26,18 @@ const schema = z.object({
 
 export default function LoginForm() {
   const router = useRouter();
+  //zodResolver
+  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
 
   const {
     mutate: signUpMutate,
     isPending,
+    isSuccess,
     error,
   } = useMutation({
     mutationFn: async (data: SignIn) => {
       return await requestHandler<SignUpResponse>(async () => {
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -47,10 +51,11 @@ export default function LoginForm() {
       const { nickname, email, role, id } = data.user;
       router.refresh();
     },
+    onError: () => {
+      // 미 일치시 Password 지워 버림
+      method.reset({ password: "" });
+    },
   });
-
-  //zodResolver
-  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
 
   //제출
   const onSubmitHandler = (data: SignIn) => {
@@ -58,26 +63,25 @@ export default function LoginForm() {
     signUpMutate(data);
   };
 
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = method;
+  const { register, handleSubmit } = method;
 
-  // const errorMessages = Object.values(errors);
-  // const firstErrorMeg = errorMessages[0]?.message;
+  const loadingStatus = isPending || isSuccess;
 
+  // const loadingStatus = true;
   return (
-    <>
+    <LoadingSpinnerWrapper loading={loadingStatus}>
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
-        className={classes.form}
+        className={`${classes.form} ${
+          loadingStatus ? classes.loading : undefined
+        }`}
       >
         <FormProvider {...method}>
           {/* Id */}
           <div className={classes.inputWrapper}>
             <FormInput
               type="text"
+              disabled={isPending || isSuccess}
               placeholder="아이디를 입력해주세요"
               {...register("email")}
               autoComplete="off"
@@ -87,6 +91,7 @@ export default function LoginForm() {
             {/* Password */}
             <FormInput
               type="password"
+              disabled={isPending || isSuccess}
               placeholder="비밀번호를 입력해주세요"
               {...register("password")}
               autoComplete="new-password"
@@ -94,7 +99,9 @@ export default function LoginForm() {
             />
           </div>
 
-          <Button.submit disabled={isPending}>로그인</Button.submit>
+          <Button.submit disabled={isPending || isSuccess}>
+            로그인
+          </Button.submit>
 
           <div className={classes.passwordRecovery}>
             <button
@@ -116,6 +123,6 @@ export default function LoginForm() {
           )}
         </FormProvider>
       </form>
-    </>
+    </LoadingSpinnerWrapper>
   );
 }

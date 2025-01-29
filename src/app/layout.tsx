@@ -15,6 +15,8 @@ import ModeToggle from "@/components/ModeToggle/ModeToggle";
 
 import withAuthFetch from "@/utils/withAuthFetch";
 import { cookies } from "next/headers";
+import { ToastContainer } from "react-toastify";
+import toastConfig from "@/config/toast";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -32,8 +34,6 @@ export default async function RootLayout({
 
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
-  console.log(token);
-
   /**
    * 11/07
    * AccessToken이 SessionStorage로 관리되기 때문에 ,
@@ -69,7 +69,7 @@ export default async function RootLayout({
             <HydrationBoundary state={dehydrate(queryClient)}>
               {/* Global */}
               <GlobalNav />
-
+              <ToastContainer {...toastConfig} />
               <main className="container">{children}</main>
 
               {/* Dark Mode handler */}

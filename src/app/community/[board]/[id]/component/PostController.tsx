@@ -61,7 +61,9 @@ export default function PostController({
         });
 
         // revaildate
-        await revaildateTags({ tags: [`post-${category}-${id}`] });
+        await revaildateTags({
+          tags: [`post-${category}-${id}`, `comunity-${category}`],
+        });
       } catch (error) {
         throw error;
       }

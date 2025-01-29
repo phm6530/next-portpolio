@@ -3,7 +3,7 @@
 @mixin grid-center {
   // width: 100%;
   margin: 0 auto;
-  width: calc(100% - 2rem);
+  width: calc(100% - 3rem);
   // @include respond("medium") {
   //   max-width: calc(100% - 20px);
   // }
@@ -15,7 +15,7 @@
 }
 
 .GridSmallCenter {
-  @include grid-center;
+  margin: 0 auto;
   max-width: 700px;
   padding-top: 30px;
 }

@@ -42,7 +42,7 @@ export default async function BoardList({
 
     return await fetch(url, {
       cache: "force-cache",
-      next: { tags: ["boardList"] },
+      next: { tags: [`comunity-${boardCategory}`] },
     });
   });
 
@@ -56,7 +56,7 @@ export default async function BoardList({
             page {curPage} <span>/ 2</span>
           </div> */}
         </div>
-        <AosWrapper>
+        <div>
           {data[0].length > 0 ? (
             <>
               {data[0].map((item, idx) => {
@@ -73,7 +73,7 @@ export default async function BoardList({
               작성된 게시물이 없습니다.
             </div>
           )}
-        </AosWrapper>
+        </div>
 
         {/* 페이징 */}
         <Paging cnt={data[1]} />

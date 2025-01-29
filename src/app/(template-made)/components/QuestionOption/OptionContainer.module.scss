@@ -18,5 +18,11 @@
     height: 40px;
     text-indent: 0.5rem;
     background: transparent;
+    @include respond("medium") {
+      font-size: 14px;
+      &::placeholder {
+        font-size: 13px;
+      }
+    }
   }
 }

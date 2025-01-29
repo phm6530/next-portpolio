@@ -73,6 +73,7 @@ export default async function PostContents({
         editorType={COMMENT_EDITOR_TYPE.COMMENT}
         parentsType={COMMENT_NEED_PATH.BOARD}
         parentsId={postId}
+        category={category}
       />
 
       {/* 댓글 리스트 */}

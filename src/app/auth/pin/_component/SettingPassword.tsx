@@ -14,7 +14,9 @@ import { useRouter } from "next/navigation";
 
 const schema = z
   .object({
-    resetPassword: z.string().min(4, "비밀번호는 최소 4자 이상이어야 합니다."),
+    resetPassword: z
+      .string()
+      .min(4, "비밀번호는 최소 4자 이상이어야 합니다."),
     resetPasswordChk: z.string(),
   })
   .refine((data) => data.resetPassword === data.resetPasswordChk, {
@@ -24,10 +26,15 @@ const schema = z
 
 type schemaType = z.infer<typeof schema>;
 
-type Test = { userEmail: string } & Omit<schemaType, "resetPasswordChk">;
+type Test = { userEmail: string } & Omit<
+  schemaType,
+  "resetPasswordChk"
+>;
 
 export default function SettingPassword() {
-  const methods = useForm<schemaType>({ resolver: zodResolver(schema) });
+  const methods = useForm<schemaType>({
+    resolver: zodResolver(schema),
+  });
   const store = useStore();
   const router = useRouter();
 
@@ -57,12 +64,18 @@ export default function SettingPassword() {
 
   const changePassword = (data: schemaType) => {
     if (store.userEmail)
-      mutate({ resetPassword: data.resetPassword, userEmail: store.userEmail });
+      mutate({
+        resetPassword: data.resetPassword,
+        userEmail: store.userEmail,
+      });
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(changePassword)} className={classes.form}>
+      <form
+        onSubmit={handleSubmit(changePassword)}
+        className={classes.form}
+      >
         <InputWrapper title="새 비밀번호">
           <FormInput
             type="password"
@@ -80,7 +93,9 @@ export default function SettingPassword() {
         </InputWrapper>
 
         {/* 인증완료 */}
-        {isValid && <AuthComplete complateText="비밀번호가 일치합니다." />}
+        {isValid && (
+          <AuthComplete complateText="비밀번호가 일치합니다." />
+        )}
         <Button.submit>비밀번호 변경</Button.submit>
       </form>
     </FormProvider>

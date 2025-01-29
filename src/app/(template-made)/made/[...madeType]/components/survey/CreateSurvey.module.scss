@@ -75,17 +75,29 @@
   /* margin-bottom: 3rem; */
   border: 1px solid #d5dfe6;
   margin: 1.5rem 0;
+
   padding: 3rem;
+  @include respond("medium") {
+    padding: 3rem 1.4rem;
+    gap: 30px;
+  }
+
   & .header {
     display: flex;
     flex-direction: column;
     gap: 15px;
     h3 {
       font-size: 20px;
+      @include respond("medium") {
+        font-size: 16px;
+      }
     }
     .description {
       color: #868e96;
       font-size: 14px;
+      @include respond("medium") {
+        font-size: 13px;
+      }
     }
   }
 }

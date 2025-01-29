@@ -15,11 +15,13 @@ import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
+import revaildateTags from "@/lib/revaildateTags";
+import { toast } from "react-toastify";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
   title: z.string().min(1, "제목은 필수 항목입니다."),
-  contents: z.string().min(4, "내용은 필수 항목입니다."),
+  contents: z.string().min(1, "내용은 필수 항목입니다."),
 });
 
 // 익명일 때
@@ -38,7 +40,6 @@ export type WriteBoardProps = z.infer<typeof guestSchema>;
 
 export default function BoardForm({
   boardKey,
-  boardName,
 }: {
   boardKey: CategoriesKey;
   searchParams?: string;
@@ -72,19 +73,21 @@ export default function BoardForm({
             credentials: "include",
           };
         }
-        return await fetch(
+        const datas = await fetch(
           `${BASE_NEST_URL}/board/${boardKey}`,
           options
         );
+        await revaildateTags({
+          tags: [`comunity-${boardKey}`],
+        });
+        return datas;
       });
     },
 
     onSuccess: () => {
       router.replace(`/community/${boardKey}`);
       router.refresh();
-    },
-    onError: (error) => {
-      alert("에러!");
+      toast.success("게시물이 생성되었습니다.");
     },
   });
 
@@ -131,7 +134,9 @@ export default function BoardForm({
               {...register("title")}
               autoComplete="off"
             />
-            <QuillEditor control={method.control} name={"contents"} />
+
+            {/* Quill Editor */}
+            <QuillEditor name={"contents"} />
           </InputWrapper>
         </div>
         <Button.submit>글쓰기</Button.submit>

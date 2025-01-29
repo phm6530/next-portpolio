@@ -4,10 +4,15 @@ import classes from "./Grid.module.scss";
 type Children<T> = { className?: string; children: T };
 
 //가운데 Grid
-const center: React.FC<Children<ReactNode>> = ({ className, children }) => {
+const center: React.FC<Children<ReactNode>> = ({
+  className,
+  children,
+}) => {
   return (
     <div
-      className={`${classes.GridCenter} ${className ? className : undefined}`}
+      className={`${classes.GridCenter} ${
+        className ? className : undefined
+      }`}
     >
       {children}
     </div>
@@ -18,10 +23,15 @@ const smallCenter: React.FC<Children<ReactNode>> = ({ children }) => {
   return <div className={classes.GridSmallCenter}>{children}</div>;
 };
 
-const extraSmall: React.FC<Children<ReactNode>> = ({ className, children }) => {
+const extraSmall: React.FC<Children<ReactNode>> = ({
+  className,
+  children,
+}) => {
   return (
     <div
-      className={`${classes.ExtraSmall} ${className ? className : undefined}`}
+      className={`${classes.ExtraSmall} ${
+        className ? className : undefined
+      }`}
     >
       {children}
     </div>

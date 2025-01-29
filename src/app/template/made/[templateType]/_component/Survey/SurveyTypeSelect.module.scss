@@ -6,6 +6,9 @@
   gap: 10px;
   border-radius: 5px;
   color: #576e8b;
+  @include respond("medium") {
+    font-size: 12px;
+  }
   span {
     background: #f3f0f1;
     color: #4f637b;
