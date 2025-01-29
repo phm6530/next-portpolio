@@ -16,6 +16,7 @@ import {
 } from "@/types/comment.type";
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
+import { CategoriesKey } from "@/types/board";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -41,6 +42,7 @@ export default function CommentEditor({
   parentsId,
   commentId,
   setTouch,
+  category,
 }: {
   editorType: COMMENT_EDITOR_TYPE;
 
@@ -48,6 +50,7 @@ export default function CommentEditor({
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
+  category: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([
@@ -119,7 +122,10 @@ export default function CommentEditor({
       const req = await withAuthFetch(url, options);
       //cache initals
       await revaildateTags({
-        tags: [`comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`],
+        tags: [
+          `comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`,
+          `comunity-${category}`, // list 초기화
+        ],
       });
       return req;
     },
