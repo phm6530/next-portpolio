@@ -121,7 +121,8 @@ export default async function Page({
             : null
         }
       />
-      <CommentEditorProvider>
+      {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
+      <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>
         {/* 댓글 에디터*/}
         <CommentEditor
           editorType={COMMENT_EDITOR_TYPE.COMMENT}
@@ -129,12 +130,12 @@ export default async function Page({
           parentsId={id}
           category={category}
         />
+        {/* 댓글 리스트 */}
+        <ResultCommentSection
+          id={parseInt(id, 10)}
+          type={COMMENT_NEED_PATH.BOARD}
+        />{" "}
       </CommentEditorProvider>
-      {/* 댓글 리스트 */}
-      <ResultCommentSection
-        id={parseInt(id, 10)}
-        type={COMMENT_NEED_PATH.BOARD}
-      />
     </>
   );
 }

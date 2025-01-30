@@ -17,6 +17,8 @@ import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import AosWrapper from "@/components/animation/AosWrapper";
 
+export const runtime = "edge";
+
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };

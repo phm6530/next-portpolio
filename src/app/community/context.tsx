@@ -1,29 +1,39 @@
 "use client";
 
 import { COMMENT_NEED_PATH } from "@/types/comment.type";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 
-// Context 생성시 타입 적용
-const CommentEditorContext = createContext<{
-  section: COMMENT_NEED_PATH | null; //초기는 없고
+export const CommentEditorContext = createContext<{
+  section: COMMENT_NEED_PATH | null;
+  setSections: (e: COMMENT_NEED_PATH) => void;
 }>({
   section: null,
+  setSections: () => {},
 });
 
 export function CommentEditorProvider({
   children,
+  initialSection = null, // 초기 섹션 값을 props로 받을 수 있게
 }: {
   children: ReactNode;
+  initialSection?: COMMENT_NEED_PATH | null;
 }) {
   const [section, setSection] = useState<COMMENT_NEED_PATH | null>(
-    null
+    initialSection
   );
+
+  useEffect(() => {
+    // 컴포넌트가 언마운트될 때 자동으로 초기화
+    return () => {
+      setSection(null);
+    };
+  }, []);
 
   return (
     <CommentEditorContext.Provider
       value={{
         section,
-        setSection,
+        setSections: setSection,
       }}
     >
       {children}
