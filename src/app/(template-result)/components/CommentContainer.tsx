@@ -6,6 +6,7 @@ import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 // import ReplyIcon from "/public/asset/icon/reply.svg";
 import {
   COMMENT_EDITOR_TYPE,
+  COMMENT_NEED_PATH,
   CommentReponse,
 } from "@/types/comment.type";
 import { useParams } from "next/navigation";

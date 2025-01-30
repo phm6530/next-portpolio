@@ -49,7 +49,7 @@ export default function CommentEditor({
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
-  category: CategoriesKey;
+  category?: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([
@@ -119,11 +119,12 @@ export default function CommentEditor({
       };
 
       const req = await withAuthFetch(url, options);
+
       //cache initals
       await revaildateTags({
         tags: [
-          `comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`,
-          `${COMMENT_NEED_PATH.BOARD}-${category}`, // list 초기화
+          `comment-${parentsType}-${params.id}`,
+          ...(category ? [`${parentsType}-${category}`] : []),
         ],
       });
       return req;
@@ -131,6 +132,11 @@ export default function CommentEditor({
     onSuccess: async () => {
       reset();
       router.refresh();
+
+      // idx View Close
+      if (setTouch) {
+        setTouch(null); //답글창 닫기
+      }
     },
   });
 

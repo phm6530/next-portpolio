@@ -15,6 +15,7 @@ import DateCompareToday from "@/util/DateCompareToday";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import classes from "./page.module.scss";
+import { CommentEditorProvider } from "../../context";
 
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
@@ -120,15 +121,15 @@ export default async function Page({
             : null
         }
       />
-
-      {/* 댓글 에디터*/}
-      <CommentEditor
-        editorType={COMMENT_EDITOR_TYPE.COMMENT}
-        parentsType={COMMENT_NEED_PATH.BOARD}
-        parentsId={id}
-        category={category}
-      />
-
+      <CommentEditorProvider>
+        {/* 댓글 에디터*/}
+        <CommentEditor
+          editorType={COMMENT_EDITOR_TYPE.COMMENT}
+          parentsType={COMMENT_NEED_PATH.BOARD}
+          parentsId={id}
+          category={category}
+        />
+      </CommentEditorProvider>
       {/* 댓글 리스트 */}
       <ResultCommentSection
         id={parseInt(id, 10)}

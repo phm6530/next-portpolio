@@ -23,8 +23,8 @@ export default async function ResultCommentSection({
       <div className={classes.commentCount}>
         댓글 <span>{data?.length}</span> 개
       </div>
-      {/* 댓글 리스트 */}
 
+      {/* 댓글 리스트 */}
       <div className={classes.commentsWrapper}>
         {data && data.length > 0 ? (
           <CommentContainerSection listData={data} />
