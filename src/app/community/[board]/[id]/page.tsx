@@ -15,7 +15,7 @@ import DateCompareToday from "@/util/DateCompareToday";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import classes from "./page.module.scss";
-import { CommentEditorProvider } from "../../context";
+import { CommentEditorProvider } from "@/context/context";
 
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트

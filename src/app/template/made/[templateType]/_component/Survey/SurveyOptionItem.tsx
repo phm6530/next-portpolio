@@ -65,7 +65,8 @@ export default function SurveyOptionItem({
     },
   });
 
-  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
+  const optionError =
+    errors.questions as FieldErrorsImpl<RequestSelect>[];
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
@@ -100,7 +101,10 @@ export default function SurveyOptionItem({
     // 수정모드
     if (editMode) {
       return preView ? (
-        <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
+        <UploadedImagePreview
+          src={preView}
+          deleteFunc={clearPreview}
+        />
       ) : null;
     }
 
@@ -110,7 +114,12 @@ export default function SurveyOptionItem({
     }
 
     if (isSuccess && preView) {
-      return <UploadedImagePreview src={preView} deleteFunc={clearPreview} />;
+      return (
+        <UploadedImagePreview
+          src={preView}
+          deleteFunc={clearPreview}
+        />
+      );
     }
 
     return null;
@@ -133,7 +142,9 @@ export default function SurveyOptionItem({
           {/* 질문  명 */}
           <input
             type="text"
-            {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
+            {...register(
+              `questions.${surveyIdx}.options.${optionIdx}.value`
+            )}
             autoComplete="off"
             placeholder={`항목 ${optionIdx + 1}을 입력해주세요`}
           />
@@ -161,7 +172,8 @@ export default function SurveyOptionItem({
         <div>
           <FormRegisterError
             errorMsg={
-              optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message
+              optionError?.[surveyIdx]?.options?.[optionIdx]?.value
+                ?.message
             }
           />
         </div>

@@ -118,9 +118,10 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { register, setValue, reset, control } = formState;
-
+  const { register, setValue, reset, control, watch } = formState;
   const editId = qs.get("edit");
+
+  console.log(watch());
 
   //수정시 get해오기
   const {
@@ -140,10 +141,6 @@ export default function CreateSurvey() {
   //에러 캐치
   useEffect(() => {
     if (editId && isError && error) {
-      const errorMessage = error.message || "알 수 없는 오류 발생";
-
-      alert(`Error: ${errorMessage}`);
-
       if (window.history.length > 1) {
         router.back();
       } else {
@@ -229,9 +226,9 @@ export default function CreateSurvey() {
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className={classes.formContainer}>
+      <div className={`${classes.formContainer} aos-hidden`}>
         <FormProvider {...formState}>
-          <section className={`${classes.formSection} aos-hidden`}>
+          <section className={`${classes.formSection} `}>
             <div className={classes.header}>
               <h3>설문조사 정보</h3>
               <p className={classes.description}>
@@ -282,7 +279,7 @@ export default function CreateSurvey() {
               </p>
             )}
 
-            <section className={`${classes.formSection} aos-hidden`}>
+            <section className={`${classes.formSection} `}>
               <div className={classes.header}>
                 <h3>2. 응답자 필터 설정</h3>
                 <p className={classes.description}>
@@ -304,7 +301,7 @@ export default function CreateSurvey() {
               />
             </section>
 
-            <section className={`${classes.formSection} aos-hidden`}>
+            <section className={`${classes.formSection} `}>
               <div className={classes.header}>
                 <h3>3. 설문 문항 구성</h3>
                 <p className={classes.description}>

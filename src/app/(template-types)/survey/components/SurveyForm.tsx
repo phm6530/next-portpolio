@@ -1,11 +1,7 @@
 "use client";
 
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
-import {
-  AnswerSurvey,
-  QUESTION_TYPE,
-  SurveyTemplateDetail,
-} from "@/types/survey.type";
+import { AnswerSurvey, QUESTION_TYPE, SurveyTemplateDetail } from "@/types/survey.type";
 import { FormProvider, useForm } from "react-hook-form";
 import classes from "./surveyform.module.scss";
 import Button from "@/components/ui/button/Button";
@@ -25,6 +21,14 @@ import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrap
 import usePopup from "@/app/hook/usePopup";
 import LoadingStreming from "@/components/loading/LoadingStreming";
 import useAOS from "@/_hook/usAOS";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function SurveyForm({
   id,
@@ -52,26 +56,16 @@ export default function SurveyForm({
     defaultValues,
   });
 
-  const { isOpen, openModal, closeModal, PopupComponent } =
-    usePopup();
-
-  const { mutate, isSuccess, isPending } = useMutation<
-    unknown,
-    Error,
-    AnswerSurvey
-  >({
+  const { mutate, isSuccess, isPending } = useMutation<unknown, Error, AnswerSurvey>({
     mutationFn: async (data) => {
       return withFetch(async () => {
-        return fetch(
-          `${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
+        return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
       });
     },
     onSuccess: async () => {
@@ -99,6 +93,18 @@ export default function SurveyForm({
 
   return (
     <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xs">test</CardTitle>
+          <CardDescription>Card Description</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Card Content</p>
+        </CardContent>
+        <CardFooter>
+          <p>Card Footer</p>
+        </CardFooter>
+      </Card>
       <FormProvider {...formMethod}>
         <div className={classes.requireds}>
           {/* Gender Chk  */}
@@ -110,31 +116,14 @@ export default function SurveyForm({
 
         {questions.map((qs, idx) => {
           return (
-            <QuestionsAnswersWrapper
-              className="aos-hidden"
-              key={`${qs.label}-${idx}`}
-            >
+            <QuestionsAnswersWrapper className="aos-hidden" key={`${qs.label}-${idx}`}>
               <QuestionDetailWrapper>
                 <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
                 {(() => {
                   if (qs.type === QUESTION_TYPE.TEXT) {
-                    return (
-                      <QuestionText
-                        description={qs.label}
-                        qsImg={qs.pictrue}
-                        qsId={qs.id}
-                      />
-                    );
-                  } else if (
-                    qs.type === QUESTION_TYPE.SELECT &&
-                    "options" in qs
-                  ) {
-                    return (
-                      <QuestionOptions
-                        qsId={qs.id}
-                        options={qs.options}
-                      />
-                    );
+                    return <QuestionText description={qs.label} qsImg={qs.pictrue} qsId={qs.id} />;
+                  } else if (qs.type === QUESTION_TYPE.SELECT && "options" in qs) {
+                    return <QuestionOptions qsId={qs.id} options={qs.options} />;
                   } else {
                     return null as never;
                   }
@@ -144,7 +133,6 @@ export default function SurveyForm({
           );
         })}
       </FormProvider>
-
       <div className={classes.buttonWrapper}>
         <Button.submit
           type="button"

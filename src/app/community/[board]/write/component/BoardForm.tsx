@@ -57,7 +57,6 @@ export default function BoardForm({
 
   const { mutate } = useMutation<unknown, Error, WriteBoardProps>({
     mutationFn: async (data) => {
-      console.log(data);
       return await withFetch(async () => {
         let options: RequestInit = {
           method: "POST",
@@ -78,13 +77,14 @@ export default function BoardForm({
           options
         );
         await revaildateTags({
-          tags: [`comunity-${boardKey}`],
+          tags: [`community-${boardKey}`],
         });
         return datas;
       });
     },
 
     onSuccess: () => {
+      console.log(boardKey);
       router.replace(`/community/${boardKey}`);
       router.refresh();
       toast.success("게시물이 생성되었습니다.");

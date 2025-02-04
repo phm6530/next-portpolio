@@ -59,7 +59,7 @@ export default function SurveyList() {
               />
             );
           } else if (field.type === QUESTION_TYPE.SELECT) {
-            //리스트 만들기 - Props으로 넘겨서 메모리 아끼기
+            //리스트 만들기 - Props으로..
             return (
               <SurveyTypeSelect
                 key={`typeSelect-${qsIdx}`}

@@ -22,7 +22,7 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
-import { CommentEditorContext } from "@/app/community/context";
+import { CommentEditorContext } from "@/context/context";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {

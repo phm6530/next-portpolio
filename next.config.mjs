@@ -26,8 +26,8 @@ const nextConfig = {
 
     // 전역적으로 반영된거임
     additionalData: `
-    @import "@/styles/_colors.scss";
-    @import "@/styles/_mixin.scss";
+      @import "@/styles/_colors.scss";
+      @import "@/styles/_mixin.scss";
   `,
   },
   logging: {

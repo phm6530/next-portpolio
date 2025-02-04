@@ -8,14 +8,22 @@ import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Surv
 import { QUESTION_TYPE } from "@/types/survey.type";
 
 import {
-  FieldErrorsImpl,
   useFieldArray,
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
 import classes from "./SurveyTypeSelect.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import { RequestSelect } from "./AddQuestionController";
+import SwitchButton from "@/components/ui/switch-button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Info } from "lucide-react";
 
 export default function SurveyTypeSelect({
   surveyDelete,
@@ -43,7 +51,11 @@ export default function SurveyTypeSelect({
   });
 
   const handleArrAppend = () => {
-    append({ label: "", value: "", type: QUESTION_TYPE.SELECT });
+    append({
+      label: "",
+      value: "",
+      type: QUESTION_TYPE.SELECT,
+    });
   };
 
   const confimDelete = () => {
@@ -60,8 +72,8 @@ export default function SurveyTypeSelect({
 
   const hasDuplicates = new Set(values).size !== values.length;
 
-  const optionError =
-    errors.questions as FieldErrorsImpl<RequestSelect>[];
+  // const optionError =
+  //   errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (
     <QuestionContainer>
@@ -94,7 +106,6 @@ export default function SurveyTypeSelect({
           </div>
         )}
       </div>
-
       {/* Option에 img가 있다면 grid 변경하기 */}
       <div
         className={`${classes.optionsWrapper} ${
@@ -113,13 +124,41 @@ export default function SurveyTypeSelect({
           );
         })}
       </div>
-
       {hasDuplicates && (
         <div>
           <FormRegisterError errorMsg={"중복된 옵션 값이 있습니다"} />
         </div>
       )}
-      {/* 항목추가 */}
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="items-top flex space-x-2">
+              <Checkbox id="terms1" />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="terms1"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
+                >
+                  복수 선택 여부
+                </label>
+              </div>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent
+            align="start"
+            sideOffset={20}
+            className="flex flex-row gap-2 items-center"
+          >
+            <Info className="h-4 w-4" />
+            <p className="text-xs">
+              체크 시, 다중 응답이 가능하도록 변경합니다.
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      {/* 복수 선택여부 */}
+
       <button
         className={classes.AddBtn}
         type="button"

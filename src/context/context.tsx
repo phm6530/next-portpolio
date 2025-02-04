@@ -18,12 +18,10 @@ export function CommentEditorProvider({
   children: ReactNode;
   initialSection?: COMMENT_NEED_PATH | null;
 }) {
-  const [section, setSection] = useState<COMMENT_NEED_PATH | null>(
-    initialSection
-  );
+  const [section, setSection] = useState<COMMENT_NEED_PATH | null>(initialSection);
 
   useEffect(() => {
-    // 컴포넌트가 언마운트될 때 자동으로 초기화
+    // Page 떠날떄 초기화 시켜부리기
     return () => {
       setSection(null);
     };

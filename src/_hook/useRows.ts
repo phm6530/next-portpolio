@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from "react";
 
 // 3줄 기본값임
 const minRows = 3;
-
 const useRows = (): [number, (e: ChangeEvent<HTMLTextAreaElement>) => void] => {
   const [rows, setRows] = useState<number>(minRows);
 

@@ -5,10 +5,7 @@ interface UseAOSOptions {
   preserveClass?: boolean;
 }
 
-export default function useAOS({
-  threshold = 0.2,
-  preserveClass = false,
-}: UseAOSOptions = {}) {
+export default function useAOS({ threshold = 0.2, preserveClass = false }: UseAOSOptions = {}) {
   useEffect(() => {
     const observeElements = () => {
       const aosLists = document.querySelectorAll(".aos-hidden");

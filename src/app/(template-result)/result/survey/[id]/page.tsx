@@ -6,7 +6,7 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(template-result)/result/survey/components/test";
-import { CommentEditorProvider } from "@/app/community/context";
+import { CommentEditorProvider } from "@/context/context";
 import {
   COMMENT_EDITOR_TYPE,
   COMMENT_NEED_PATH,
