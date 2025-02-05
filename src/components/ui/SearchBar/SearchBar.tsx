@@ -8,11 +8,7 @@ interface SearchBarProps {
   register?: UseFormRegisterReturn;
 }
 
-export default function SearchBar({
-  placeholder,
-  clickEvent,
-  register,
-}: SearchBarProps) {
+export default function SearchBar({ placeholder, clickEvent, register }: SearchBarProps) {
   return (
     <form
       className={classes.search}
