@@ -10,10 +10,10 @@ import { boardCateogries, CategoriesKey } from "@/types/board";
 import dynamic from "next/dynamic";
 import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 
-const StremingBoardList = dynamic(
-  () => import("../component/BoardList"),
-  { ssr: true, loading: () => <LoadingTextSkeleton cnt={6} /> }
-);
+const StremingBoardList = dynamic(() => import("../component/BoardList"), {
+  ssr: true,
+  loading: () => <LoadingTextSkeleton cnt={6} />,
+});
 
 export default async function BoardListPage({
   params,
@@ -26,9 +26,7 @@ export default async function BoardListPage({
   curPage?: string;
   searchParams?: { search: string; page: string };
 }) {
-  function isBoardCategory(
-    key: string
-  ): key is keyof typeof boardCateogries {
+  function isBoardCategory(key: string): key is keyof typeof boardCateogries {
     return key in boardCateogries;
   }
 
@@ -37,11 +35,7 @@ export default async function BoardListPage({
   }
 
   const page =
-    curPage !== undefined
-      ? +curPage
-      : searchParams?.page !== undefined
-      ? +searchParams.page
-      : 0;
+    curPage !== undefined ? +curPage : searchParams?.page !== undefined ? +searchParams.page : 0;
 
   const boardName = boardCateogries[params.board];
   return (
@@ -52,10 +46,7 @@ export default async function BoardListPage({
       />
 
       {/* Category button */}
-      <BoardCategories
-        categories={boardCateogries}
-        curCategory={boardName}
-      />
+      <BoardCategories categories={boardCateogries} curCategory={boardName} />
 
       {/* Search Bar */}
       <div className={classes.actionArea}>
