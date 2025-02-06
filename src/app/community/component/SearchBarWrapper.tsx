@@ -1,6 +1,5 @@
 "use client";
 import SearchBar from "@/components/ui/SearchBar/SearchBar";
-import { SearchIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
@@ -8,7 +7,7 @@ export default function SearchBarWrapper() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState<string>("");
 
   useEffect(() => {
     setKeyword(searchParams.get("search") ?? "");
@@ -25,26 +24,11 @@ export default function SearchBarWrapper() {
   };
 
   return (
-    <>
-      <form
-        className="border rounded-lg overflow-hidden  focus-within:border-muted-foreground focus-within:focus-within:bg-[hsl(var(--custom-color))] flex-1"
-        onSubmit={serSearchKeyword}
-      >
-        <div className="flex items-center h-full">
-          <input
-            type="text"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            autoComplete="off"
-            name="keyword"
-            className="bg-transparent flex-1 h-full pl-4"
-            placeholder="검색어를 입력해주세요"
-          />
-          <button type="submit" className="flex  p-2 pr-3">
-            <SearchIcon />
-          </button>
-        </div>
-      </form>
-    </>
+    <form className="flex-1" onSubmit={serSearchKeyword}>
+      <SearchBar
+        name="keyword"
+        onChange={(e) => setKeyword(e.currentTarget.value)}
+      />
+    </form>
   );
 }

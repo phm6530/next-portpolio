@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
-import BoardList from "../component/BoardList";
 import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
-import Button from "@/components/ui/button/Button";
+import { Button } from "@/components/ui/button";
 import classes from "./page.module.scss";
 import BoardCategories from "../component/BoardCategories";
 import SearchBarWrapper from "../component/SearchBarWrapper";
@@ -35,7 +34,11 @@ export default async function BoardListPage({
   }
 
   const page =
-    curPage !== undefined ? +curPage : searchParams?.page !== undefined ? +searchParams.page : 0;
+    curPage !== undefined
+      ? +curPage
+      : searchParams?.page !== undefined
+      ? +searchParams.page
+      : 0;
 
   const boardName = boardCateogries[params.board];
   return (
@@ -52,9 +55,9 @@ export default async function BoardListPage({
       <div className={classes.actionArea}>
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
-        <Link href={`/community/${params.board}/write`}>
-          <Button.submit>글쓰기</Button.submit>
-        </Link>
+        <Button asChild size={"custom"}>
+          <Link href={`/community/${params.board}/write`}>글쓰기</Link>
+        </Button>
       </div>
 
       {/* list */}

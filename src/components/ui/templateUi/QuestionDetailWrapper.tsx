@@ -6,5 +6,5 @@ export default function QuestionDetailWrapper({
 }: {
   children: ReactNode;
 }) {
-  return <div className={classes.chartsWrapper}>{children}</div>;
+  return <div className="border p-4">{children}</div>;
 }
