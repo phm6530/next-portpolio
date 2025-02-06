@@ -27,7 +27,7 @@ export default function SearchBarWrapper() {
   return (
     <>
       <form
-        className="border rounded-lg overflow-hidden  focus-within:border-muted-foreground  flex-1"
+        className="border rounded-lg overflow-hidden  focus-within:border-muted-foreground focus-within:focus-within:bg-[hsl(var(--custom-color))] flex-1"
         onSubmit={serSearchKeyword}
       >
         <div className="flex items-center h-full">
