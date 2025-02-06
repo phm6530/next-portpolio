@@ -44,7 +44,7 @@ export default function SearchBarWrapper() {
             <SearchIcon />
           </button>
         </div>
-      </form>{" "}
+      </form>
     </>
   );
 }
