@@ -1,8 +1,4 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { ComponentType } from "react";
 
 export const WithPrefetchRender = async <T extends object>(

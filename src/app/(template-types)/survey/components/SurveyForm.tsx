@@ -8,7 +8,6 @@ import {
 } from "@/types/survey.type";
 import { FormProvider, useForm } from "react-hook-form";
 import classes from "./surveyform.module.scss";
-import Button from "@/components/ui/button/Button";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
@@ -20,11 +19,8 @@ import OptionGenderGroup from "@/app/template/_component/OptionGendergroup";
 import OptionAgeGroup from "@/app/template/_component/OptionAgegroup";
 import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
-import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
-import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
-import usePopup from "@/app/hook/usePopup";
 import LoadingStreming from "@/components/loading/LoadingStreming";
-import useAOS from "@/_hook/usAOS";
+import { Button } from "@/components/ui/button";
 
 export default function SurveyForm({
   id,
@@ -52,9 +48,6 @@ export default function SurveyForm({
     defaultValues,
   });
 
-  const { isOpen, openModal, closeModal, PopupComponent } =
-    usePopup();
-
   const { mutate, isSuccess, isPending } = useMutation<
     unknown,
     Error,
@@ -62,16 +55,13 @@ export default function SurveyForm({
   >({
     mutationFn: async (data) => {
       return withFetch(async () => {
-        return fetch(
-          `${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
+        return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
       });
     },
     onSuccess: async () => {
@@ -110,49 +100,39 @@ export default function SurveyForm({
 
         {questions.map((qs, idx) => {
           return (
-            <QuestionsAnswersWrapper
-              className="aos-hidden"
-              key={`${qs.label}-${idx}`}
-            >
-              <QuestionDetailWrapper>
-                <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
-                {(() => {
-                  if (qs.type === QUESTION_TYPE.TEXT) {
-                    return (
-                      <QuestionText
-                        description={qs.label}
-                        qsImg={qs.pictrue}
-                        qsId={qs.id}
-                      />
-                    );
-                  } else if (
-                    qs.type === QUESTION_TYPE.SELECT &&
-                    "options" in qs
-                  ) {
-                    return (
-                      <QuestionOptions
-                        qsId={qs.id}
-                        options={qs.options}
-                      />
-                    );
-                  } else {
-                    return null as never;
-                  }
-                })()}
-              </QuestionDetailWrapper>
-            </QuestionsAnswersWrapper>
+            <div className="p-6 border rounded-md" key={qs.id}>
+              <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
+              {(() => {
+                if (qs.type === QUESTION_TYPE.TEXT) {
+                  return (
+                    <QuestionText
+                      description={qs.label}
+                      qsImg={qs.pictrue}
+                      qsId={qs.id}
+                    />
+                  );
+                } else if (
+                  qs.type === QUESTION_TYPE.SELECT &&
+                  "options" in qs
+                ) {
+                  return <QuestionOptions qsId={qs.id} options={qs.options} />;
+                } else {
+                  return null as never;
+                }
+              })()}
+            </div>
           );
         })}
       </FormProvider>
-
       <div className={classes.buttonWrapper}>
-        <Button.submit
+        <Button
           type="button"
+          size={"custom"}
           onClick={formMethod.handleSubmit(onSubmitHandler)}
           disabled={isPending || isSuccess}
         >
           제출하기
-        </Button.submit>
+        </Button>
       </div>
     </>
   );

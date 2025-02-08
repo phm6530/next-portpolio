@@ -6,18 +6,17 @@ import SurveyGroupFilter, {
   AgeOptions,
   GenderOptions,
 } from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
-import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
-import requestHandler from "@/utils/withFetch";
+import {
+  ResultSelectOption,
+  SurveyResult,
+} from "@/types/surveyResult.type";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import classes from "./SuveyStatusCharts.module.scss";
-import QuestionsAnswersWrapper from "@/components/ui/templateUi/QuestionAnswersWrapper";
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
-import { random } from "gsap";
 import { fetchSurveyData } from "./test";
 // type logger<T> = (arg: T) => void;
 
@@ -55,8 +54,13 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
     if (gender === "all") {
       return {
         female:
-          age === "all" ? option.female : { [age]: option.female![age] ?? 0 },
-        male: age === "all" ? option.male : { [age]: option.male![age] ?? 0 },
+          age === "all"
+            ? option.female
+            : { [age]: option.female![age] ?? 0 },
+        male:
+          age === "all"
+            ? option.male
+            : { [age]: option.male![age] ?? 0 },
       };
     } else {
       if (age === "all") {

@@ -20,21 +20,13 @@ type UserEmailSlice = {
   setResetUser: () => void;
 };
 
-type navSlice = {
-  view: boolean;
-  setToggle: () => void;
-  setClose: () => void;
-};
-
-type StoreType = {} & UserEmailSlice & AuthUserStore & navSlice;
+type StoreType = {} & UserEmailSlice & AuthUserStore;
 
 //기본 user
 const initalAuthUser = { id: null, nickname: null, email: null, role: null };
 
 //USER EMAIL
-const createUserEmailSlice = (
-  set: (partial: Partial<UserEmailSlice>) => void
-): UserEmailSlice => ({
+const createUserEmailSlice = (set: (partial: Partial<UserEmailSlice>) => void): UserEmailSlice => ({
   userEmail: null,
   setPasswordUser: (email: string) => {
     set({ userEmail: email });
@@ -45,9 +37,7 @@ const createUserEmailSlice = (
 });
 
 //AUTH USER
-const authUserStore = (
-  set: (partial: Partial<AuthUserStore>) => void
-): AuthUserStore => ({
+const authUserStore = (set: (partial: Partial<AuthUserStore>) => void): AuthUserStore => ({
   login: false,
   authUser: initalAuthUser,
   setAuthUser: ({ id, nickname, email, role }: User) =>
@@ -55,24 +45,9 @@ const authUserStore = (
   setRemoveUser: () => set({ authUser: initalAuthUser }),
 });
 
-const navStore = (
-  set: (updater: (state: navSlice) => Partial<navSlice>) => void
-) => ({
-  view: false,
-  setToggle: () =>
-    set((state) => ({
-      view: !state.view,
-    })),
-  setClose: () =>
-    set(() => ({
-      view: false,
-    })),
-});
-
 const useStore = create<StoreType>((set) => ({
   ...authUserStore(set),
   ...createUserEmailSlice(set),
-  ...navStore(set),
 }));
 
 export default useStore;

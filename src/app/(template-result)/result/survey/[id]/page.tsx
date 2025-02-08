@@ -6,6 +6,7 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(template-result)/result/survey/components/test";
+import { CommentEditorProvider } from "@/context/context";
 import {
   COMMENT_EDITOR_TYPE,
   COMMENT_NEED_PATH,
@@ -84,18 +85,22 @@ export default async function SurveyResultPage({
 
         <ResultSurveyCharts id={id} />
 
-        {/* Comments */}
-        <ResultCommentSection
-          id={+id}
-          type={COMMENT_NEED_PATH.TEMPLATE}
-        />
+        <CommentEditorProvider
+          initialSection={COMMENT_NEED_PATH.TEMPLATE}
+        >
+          {/* 메인 Comment Editor */}
+          <CommentEditor
+            editorType={COMMENT_EDITOR_TYPE.COMMENT}
+            parentsType={COMMENT_NEED_PATH.TEMPLATE}
+            parentsId={id}
+          />
 
-        {/* 메인 Comment Editor */}
-        <CommentEditor
-          editorType={COMMENT_EDITOR_TYPE.COMMENT}
-          parentsType={COMMENT_NEED_PATH.TEMPLATE}
-          parentsId={id}
-        />
+          {/* Comments */}
+          <ResultCommentSection
+            id={parseInt(id, 10)}
+            type={COMMENT_NEED_PATH.TEMPLATE}
+          />
+        </CommentEditorProvider>
       </HydrationBoundary>
     </>
   );

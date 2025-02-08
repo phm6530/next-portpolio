@@ -1,30 +1,35 @@
-import { UseFormRegisterReturn } from "react-hook-form";
-import classes from "./SearchBar.module.scss";
-import SearchIcon from "/public/asset/icon/searchIcon.svg";
-
-interface SearchBarProps {
-  placeholder: string;
-  clickEvent: (e: React.FormEvent<HTMLFormElement>) => void;
-  register?: UseFormRegisterReturn;
-}
+import { cn } from "@/lib/utils";
+import { SearchIcon } from "lucide-react";
+import { HTMLAttributes } from "react";
 
 export default function SearchBar({
-  placeholder,
-  clickEvent,
-  register,
-}: SearchBarProps) {
+  name,
+  className,
+  ...props
+}: {
+  name: string;
+  className?: string;
+} & HTMLAttributes<HTMLInputElement>) {
   return (
-    <form
-      className={classes.search}
-      onSubmit={(e) => {
-        e.preventDefault(); // 기본 새로고침 방지
-        clickEvent(e);
-      }}
+    <div
+      className={cn(
+        `border rounded-lg overflow-hidden focus-within:border-muted-foreground 
+       focus-within:focus-within:bg-[hsl(var(--custom-color))] flex flex-1`,
+        className
+      )}
     >
-      <input autoComplete="off" placeholder={placeholder} {...register} />
-      <button type="submit">
+      <input
+        type="text"
+        autoComplete="off"
+        name={name}
+        className="bg-transparent flex-1 h-full p-4 pl-4"
+        placeholder="검색어를 입력해주세요"
+        {...props}
+      />
+
+      <button type="submit" className="flex items-center p-3 pr-3">
         <SearchIcon />
       </button>
-    </form>
+    </div>
   );
 }

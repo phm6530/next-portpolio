@@ -11,6 +11,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/ui/password-input";
 
 type SignUpResponse = {
   accessToken: string;
@@ -18,9 +20,7 @@ type SignUpResponse = {
 };
 
 const schema = z.object({
-  password: z
-    .string()
-    .min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
+  password: z.string().min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
   email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
 });
 
@@ -79,6 +79,7 @@ export default function LoginForm() {
         <FormProvider {...method}>
           {/* Id */}
           <div className={classes.inputWrapper}>
+            <PasswordInput />
             <FormInput
               type="text"
               disabled={isPending || isSuccess}
@@ -104,23 +105,15 @@ export default function LoginForm() {
           </Button.submit>
 
           <div className={classes.passwordRecovery}>
-            <button
-              type="button"
-              onClick={() => router.push("/auth/pin")}
-            >
+            <button type="button" onClick={() => router.push("/auth/pin")}>
               비밀번호를 잊어버리셨나요?
             </button>
             |
-            <button
-              type="button"
-              onClick={() => router.push("/auth/signup")}
-            >
+            <button type="button" onClick={() => router.push("/auth/signup")}>
               회원가입
             </button>
           </div>
-          {error && (
-            <div className={classes.errorMsg}>{error.message}</div>
-          )}
+          {error && <div className={classes.errorMsg}>{error.message}</div>}
         </FormProvider>
       </form>
     </LoadingSpinnerWrapper>

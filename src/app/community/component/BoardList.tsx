@@ -5,7 +5,6 @@ import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
 import Paging from "@/components/ui/Paging";
-import AosWrapper from "@/components/animation/AosWrapper";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
@@ -23,11 +22,11 @@ export type ListItemType = {
 };
 
 export default async function BoardList({
-  boardCategory,
+  category,
   keyword,
   curPage,
 }: {
-  boardCategory: CategoriesKey;
+  category: CategoriesKey;
   keyword?: string;
   curPage: number;
 }) {
@@ -35,14 +34,12 @@ export default async function BoardList({
 
   // number는 All Cnt
   const data = await withFetch<[ListItemType[], number]>(async () => {
-    const searchParam = keyword
-      ? `${encodeURIComponent(keyword)}`
-      : "";
-    const url = `${BASE_NEST_URL}/board/${boardCategory}?search=${searchParam}&page=${curPage}`;
+    const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
+    const url = `${BASE_NEST_URL}/board/${category}?search=${searchParam}&page=${curPage}`;
 
     return await fetch(url, {
       cache: "force-cache",
-      next: { tags: [`comunity-${boardCategory}`] },
+      next: { tags: [`community-${category}`] },
     });
   });
 
@@ -52,26 +49,16 @@ export default async function BoardList({
       <section className={classes.container}>
         <div className={classes.listHeader}>
           <h3>최신 순 </h3>
-          {/* <div className={classes.pageNum}>
-            page {curPage} <span>/ 2</span>
-          </div> */}
         </div>
         <div>
           {data[0].length > 0 ? (
             <>
               {data[0].map((item, idx) => {
-                return (
-                  <BoardListItem
-                    itemData={item}
-                    key={`board-${item.id}-${idx}`}
-                  />
-                );
+                return <BoardListItem itemData={item} key={`board-${item.id}-${idx}`} />;
               })}
             </>
           ) : (
-            <div className={classes.emptyState}>
-              작성된 게시물이 없습니다.
-            </div>
+            <div className={classes.emptyState}>작성된 게시물이 없습니다.</div>
           )}
         </div>
 

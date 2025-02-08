@@ -1,15 +1,21 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, FormEvent, Suspense, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  Suspense,
+  useEffect,
+  useState,
+} from "react";
 import classes from "./searchArea.module.scss";
 import { QUERY_STRING } from "@/types/constans";
-import SearchIcon from "/public/asset/icon/search.png";
+// import SearchIcon from "/public/asset/icon/search.png";
 import Image from "next/image";
 import Button from "@/components/ui/button/Button";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_URL } from "@/config/base";
-import Test from "@/components/ui/Test";
+// import Test from "@/components/ui/Test";
 
 export default function SearchInput({ search }: { search?: string }) {
   const [curSearch, setCurSearch] = useState<string | null>(null);
@@ -41,9 +47,12 @@ export default function SearchInput({ search }: { search?: string }) {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(searchText ? `/template?search=${searchText}` : "/template ", {
-      scroll: false,
-    });
+    router.push(
+      searchText ? `/template?search=${searchText}` : "/template ",
+      {
+        scroll: false,
+      }
+    );
   };
   const clearSearch = () => {
     setCurSearch(null);
@@ -70,13 +79,16 @@ export default function SearchInput({ search }: { search?: string }) {
         />
         <button
           type="button"
-          style={{ position: "relative", backgroundColor: "transparent" }}
+          style={{
+            position: "relative",
+            backgroundColor: "transparent",
+          }}
         >
-          <Image
+          {/* <Image
             src={SearchIcon}
             style={{ objectFit: "contain" }}
             alt="searchIcon"
-          />
+          /> */}
         </button>
       </form>
     </>

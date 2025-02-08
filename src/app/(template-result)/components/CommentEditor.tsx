@@ -7,7 +7,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+} from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
 import {
@@ -17,6 +22,7 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
+import { CommentEditorContext } from "@/context/context";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -45,18 +51,19 @@ export default function CommentEditor({
   category,
 }: {
   editorType: COMMENT_EDITOR_TYPE;
-
   parentsType?: COMMENT_NEED_PATH;
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
-  category: CategoriesKey;
+  category?: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([
     QUERY_KEY.USER_DATA,
   ]) as User;
 
+  const { section } = useContext(CommentEditorContext);
+  console.log("section::", section);
   const params = useParams();
   const router = useRouter();
 
@@ -103,7 +110,7 @@ export default function CommentEditor({
       const url = (() => {
         switch (editorType) {
           case COMMENT_EDITOR_TYPE.COMMENT:
-            return `comment/${parentsType}/${parentsId}`;
+            return `comment/${section}/${parentsId}`;
           case COMMENT_EDITOR_TYPE.REPLY:
             return `reply/${commentId}`;
           default:
@@ -120,11 +127,12 @@ export default function CommentEditor({
       };
 
       const req = await withAuthFetch(url, options);
+
       //cache initals
       await revaildateTags({
         tags: [
-          `comment-${COMMENT_NEED_PATH.BOARD}-${params.id}`,
-          `comunity-${category}`, // list 초기화
+          `comment-${section}-${params.id}`,
+          ...(category ? [`${section}-${category}`] : []),
         ],
       });
       return req;
@@ -132,8 +140,10 @@ export default function CommentEditor({
     onSuccess: async () => {
       reset();
       router.refresh();
+
+      // idx View Close
       if (setTouch) {
-        setTouch(null);
+        setTouch(null); //답글창 닫기
       }
     },
   });

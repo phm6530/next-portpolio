@@ -7,6 +7,7 @@ import ListPageBanner from "@/app/list/components/ListPageBanner";
 
 import { default as loadDynamic } from "next/dynamic";
 import LoadingSummrySkeleton from "@/components/loading/LoadingSummrySkeleton";
+import SearchInput from "@/components/ui/SearchInput";
 
 // TemplateList를 동적 로드로 설정 (SSR 비활성화)
 const TemplateList = loadDynamic(
@@ -51,7 +52,7 @@ export default async function page() {
         {/* 검색 or 정렬 */}
         <div className={classes.searchFilterWrapper}>
           <ListFilterControls />
-          {/* <SearchInput search={search} /> */}
+          {/* <SearchInput search={Check boxCheck box""} /> */}
         </div>
 
         {/**

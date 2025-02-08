@@ -17,6 +17,7 @@ import withAuthFetch from "@/utils/withAuthFetch";
 import { cookies } from "next/headers";
 import { ToastContainer } from "react-toastify";
 import toastConfig from "@/config/toast";
+import "./globals.css";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -70,8 +71,8 @@ export default async function RootLayout({
               {/* Global */}
               <GlobalNav />
               <ToastContainer {...toastConfig} />
-              <main className="container">{children}</main>
 
+              <main className="pb-11 mt-[60px]">{children}</main>
               {/* Dark Mode handler */}
               <ModeToggle />
             </HydrationBoundary>

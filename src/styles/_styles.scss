@@ -1,5 +1,4 @@
 //그리드
-@import "./common/reset";
 @import "mixin";
 @import "user.scss";
 @import "font.scss";
@@ -8,15 +7,8 @@
 :root {
   --background-color: #{map-get($colors-white, "default")};
   --text-color: #{map-get($colors-black, "default")};
-  --background-color-vanner: #{map-get(
-      $background-gradients,
-      "vanner"
-    )};
-  --background-color-questionhead: linear-gradient(
-    84.35deg,
-    #0a001a 13.62%,
-    #373038 28.13%
-  );
+  --background-color-vanner: #{map-get($background-gradients, "vanner")};
+  --background-color-questionhead: linear-gradient(84.35deg, #0a001a 13.62%, #373038 28.13%);
 }
 
 :root[data-theme="dark"] {
@@ -49,8 +41,8 @@ body {
 }
 
 body {
-  font-family: "Pretendard Variable", -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    sans-serif;
   color: $color-black;
 }
 
@@ -71,8 +63,8 @@ button {
 button {
   cursor: pointer;
   box-sizing: border-box;
-  border: 0;
-  background: transparent;
+  // border: 0;
+  // background: transparent;
 }
 
 .box {
@@ -109,4 +101,32 @@ input[readonly] {
   /* Change the cursor to indicate non-interactive */
   outline: none;
   border: 1px solid $border-color;
+}
+
+body {
+  line-height: 1;
+  /* 전체 스크롤바 스타일 */
+  &::-webkit-scrollbar {
+    width: 12px; /* 스크롤바 너비 */
+    height: 12px; /* 가로 스크롤바 높이 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f0f0f0; /* 트랙 배경색 */
+    border-radius: 10px; /* 둥근 모서리 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888; /* thumb 색상 */
+    border-radius: 10px; /* 둥근 모서리 */
+    border: 3px solid #f0f0f0; /* thumb과 트랙 사이의 간격 */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555; /* hover 시 색상 변경 */
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background: #333; /* 클릭 시 색상 변경 */
+  }
 }

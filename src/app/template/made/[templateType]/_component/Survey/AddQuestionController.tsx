@@ -6,8 +6,6 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 import Lists from "/public/asset/icon/lists.svg";
 import pen from "/public/asset/icon/pen.svg";
 import FormToolButton from "@/app/(template-made)/components/FormToolButton";
-import Upload from "/public/asset/icon/upload.svg";
-import select from "/public/asset/icon/select.svg";
 import checkbox from "/public/asset/icon/checkbox.svg";
 
 export type RequestSelectOption = {
@@ -23,9 +21,11 @@ export type RequestText = {
   type: QUESTION_TYPE.TEXT;
 };
 
+// 복수여부 추가
 export type RequestSelect = {
   label: string;
   type: QUESTION_TYPE.SELECT;
+  multi_select: boolean; //복수선택 여부
   options: RequestSelectOption[];
 };
 
@@ -49,6 +49,7 @@ export default function AddQuestionController() {
       append({
         label: "",
         type: itemType,
+        multi_select: false, // Default False..
         options: [
           {
             value: "",

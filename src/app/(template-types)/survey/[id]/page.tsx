@@ -17,6 +17,8 @@ import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import AosWrapper from "@/components/animation/AosWrapper";
 
+export const runtime = "edge";
+
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
@@ -31,9 +33,7 @@ export async function generateStaticParams() {
    * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
    */
   const response = await fetch(url);
-  const {
-    data: listResponse,
-  }: { data: TemplateItemMetadata<RespondentsAndMaxGroup>[] } =
+  const { data: listResponse }: { data: TemplateItemMetadata<RespondentsAndMaxGroup>[] } =
     await response.json();
 
   return listResponse.map((template) => {
@@ -46,9 +46,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(
-    `${BASE_NEST_URL}/template/survey/${id}`
-  );
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
 
   //존재하지 않는  페이지면 Redirect 시켜버림
   if (!response.ok) {
@@ -68,28 +66,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function SurveyDetailTemplate({
-  params: { id },
-}: SurveyDetailTemplateParams) {
+export default async function SurveyDetailTemplate({ params: { id } }: SurveyDetailTemplateParams) {
   // console.log(`${BASE_NEST_URL}/template/survey/${id}`);
-  const response = await fetch(
-    `${BASE_NEST_URL}/template/survey/${id}`
-  );
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
   const data: FetchTemplateForm = await response.json();
 
   if (!data) {
     notFound();
   }
 
-  const {
-    title,
-    description,
-    thumbnail,
-    startDate,
-    endDate,
-    createdAt,
-    creator,
-  } = data;
+  const { title, description, thumbnail, startDate, endDate, createdAt, creator } = data;
 
   return (
     <>
@@ -100,15 +86,8 @@ export default async function SurveyDetailTemplate({
             <ThumbNail thumbnail={thumbnail} />
 
             <div className={classes.templateSumeryWrap}>
-              <TemplateStatus
-                startDate={startDate}
-                endDate={endDate}
-                createdAt={createdAt}
-              />
-              <TemplateTitle
-                role={creator.role}
-                nickname={creator.nickname}
-              >
+              <TemplateStatus startDate={startDate} endDate={endDate} createdAt={createdAt} />
+              <TemplateTitle role={creator.role} nickname={creator.nickname}>
                 {title}
               </TemplateTitle>
               {/* <DateRange dateRange={dateRange} /> */}

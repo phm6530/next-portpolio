@@ -1,41 +1,34 @@
 "use client";
 import SearchBar from "@/components/ui/SearchBar/SearchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
-
-interface SearchForm {
-  keyword: string;
-}
+import { FormEvent, useEffect, useState } from "react";
 
 export default function SearchBarWrapper() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const [keyword, setKeyword] = useState<string>("");
 
-  const keyword = searchParams.get("search");
+  useEffect(() => {
+    setKeyword(searchParams.get("search") ?? "");
+  }, [searchParams]);
 
-  const { register, handleSubmit } = useForm<SearchForm>({
-    defaultValues: {
-      keyword: keyword ? keyword : "",
-    },
-  });
+  const serSearchKeyword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const serSearchKeyword: SubmitHandler<SearchForm> = (data) => {
-    // const params = new URLSearchParams(
-    //   searchParams.size ? searchParams.toString() : ""
-    // );
-    if (data.keyword.trim() === "") {
+    if (keyword.trim() === "") {
       router.push(`${pathname}`);
     } else {
-      router.push(`${pathname}?search=${data.keyword}`);
+      router.push(`${pathname}?search=${keyword}`);
     }
   };
 
   return (
-    <SearchBar
-      register={register("keyword")}
-      clickEvent={handleSubmit(serSearchKeyword)}
-      placeholder="검색어를 입력해주세요"
-    />
+    <form className="flex-1" onSubmit={serSearchKeyword}>
+      <SearchBar
+        name="keyword"
+        onChange={(e) => setKeyword(e.currentTarget.value)}
+      />
+    </form>
   );
 }
