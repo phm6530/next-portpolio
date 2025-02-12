@@ -1,6 +1,6 @@
 import HeaderTitle from "../components/Header/HeaderTitle";
 import classes from "./page.module.scss";
-import SelectTemplateList from "@/app/(template-made)/components/SelectTemplateList";
+import SelectTemplateList from "../components/SelectTemplateList";
 
 export const dynamic = "force-dynamic";
 

@@ -7,18 +7,19 @@ import {
 } from "react-hook-form";
 import classes from "./SurveyTypeText.module.scss";
 
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
-import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
-import QuestionItemHeader, {
-  QuestionType,
-} from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
-import OptionButton from "@/app/(template-made)/components/QuestionOption/OptionButton";
+import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import UploadedImagePreview from "@/app/(template-made)/components/ImageContainer/UploadedImagePreview";
+import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
+import QuestionItemHeader, {
+  QuestionType,
+} from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
+import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -48,10 +49,7 @@ export default function SurveyTypeText({
       alert(error.message);
     },
     onSuccess: (data) => {
-      setValue(
-        `questions.${surveyIdx}.img`,
-        data!.supabase_storage_imgurl
-      );
+      setValue(`questions.${surveyIdx}.img`, data!.supabase_storage_imgurl);
     },
   });
 
@@ -70,7 +68,7 @@ export default function SurveyTypeText({
 
   return (
     <>
-      <QuestionContainer>
+      <QuestionListWrapper>
         {/* img Hidden */}
         <input
           type="file"
@@ -119,18 +117,13 @@ export default function SurveyTypeText({
           </div>
         ) : isSuccess && preView ? (
           <div className={classes.previewWrapper}>
-            <UploadedImagePreview
-              src={preView}
-              deleteFunc={clearPreview}
-            />
+            <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
           </div>
         ) : null}
 
         {/* 주관식에서 알려주기 */}
-        <div className={classes.textAnswer}>
-          응답자 답변 (500자 내외)
-        </div>
-      </QuestionContainer>
+        <div className={classes.textAnswer}>응답자 답변 (500자 내외)</div>
+      </QuestionListWrapper>
     </>
   );
 }

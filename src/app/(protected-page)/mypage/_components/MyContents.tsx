@@ -8,15 +8,14 @@ import {
 } from "@/types/template.type";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import withAuthFetch from "@/utils/withAuthFetch";
 import MyContentsItem from "./MyContentsItem";
 import { useState } from "react";
 import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleSlash, Laptop2Icon, LayoutTemplate } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { CircleSlash } from "lucide-react";
 
 type returnData = {
   data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
@@ -24,7 +23,6 @@ type returnData = {
 };
 
 export default function MyContents() {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [filter, setFilter] = useState<"new" | "users">("new");

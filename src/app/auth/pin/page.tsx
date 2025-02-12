@@ -1,5 +1,5 @@
 "use client";
-import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
 import { useEffect, useRef, useState } from "react";
 import FindmenberAndSendPin from "./_component/FindmenberAndSendPin";
 import AccessMatchPin from "./_component/AccessMatchPin";

@@ -1,5 +1,4 @@
 import { QUERY_KEY } from "@/types/constans";
-import classes from "./MycontentsController.module.scss";
 import {
   RespondentsAndMaxGroup,
   TEMPLATE_TYPE,
@@ -7,8 +6,9 @@ import {
 } from "@/types/template.type";
 import withAuthFetch from "@/utils/withAuthFetch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import Button from "@/components/ui/button/Button";
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function MyContentsController({
   templateType,
@@ -18,7 +18,6 @@ export default function MyContentsController({
   id: number;
 }) {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const { mutate } = useMutation<
     unknown,
@@ -56,20 +55,18 @@ export default function MyContentsController({
   };
 
   return (
-    <div className={classes.Controller}>
-      <Button.outlineButton
-        onClick={() => router.push(`/result/${templateType}/${id}`)}
-      >
-        결과페이지
-      </Button.outlineButton>
+    <div className="flex gap-1">
+      <Button asChild variant={"outline"} size={"sm"}>
+        <Link href={`/result/${templateType}/${id}`}> 결과페이지</Link>
+      </Button>
 
-      <Button.outlineButton
-        onClick={() => router.push(`/made/${templateType}?edit=${id}`)}
-      >
-        수정
-      </Button.outlineButton>
+      <Button asChild variant={"outline"} size={"sm"}>
+        <Link href={`/made/${templateType}?edit=${id}`}>수정</Link>
+      </Button>
 
-      <Button.outlineButton
+      <Button
+        variant={"outline"}
+        size={"sm"}
         onClick={() =>
           templateDeleteHanlder({
             templateType,
@@ -78,7 +75,7 @@ export default function MyContentsController({
         }
       >
         삭제
-      </Button.outlineButton>
+      </Button>
     </div>
   );
 }

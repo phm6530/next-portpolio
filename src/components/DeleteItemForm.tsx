@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import FormInput from "./ui/FormElement/FormInput";
-import FormToolButton from "@/app/(template-made)/components/FormToolButton";
+import FormToolButton from "@/app/(protected-page)/(template-made)/components/FormToolButton";
 import classes from "./DeleteItemForm.module.scss";
 import Password from "/public/asset/icon/password.svg";
 

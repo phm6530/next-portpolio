@@ -1,4 +1,4 @@
-import CreateSurvey from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import CreateSurvey from "./components/survey/CreateSurvey";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
 type MadeTemplateParams = {

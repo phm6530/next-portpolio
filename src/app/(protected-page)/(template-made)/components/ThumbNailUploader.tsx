@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
-import UnSplashThumbNail from "@/app/(template-made)/components/UnsplashThumbNail";
+import UnSplashThumbNail from "./UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";

@@ -1,8 +1,5 @@
-import QuestionItemHeader, {
-  QuestionType,
-} from "@/app/(template-made)/components/QuestionItem/QuestionItemHeader";
-import QuestionContainer from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Survey/SurveyOptionItem";
 
 import { QUESTION_TYPE } from "@/types/survey.type";
@@ -24,6 +21,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
+import QuestionItemHeader, {
+  QuestionType,
+} from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
+import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyTypeSelect({
   surveyDelete,
@@ -76,7 +77,7 @@ export default function SurveyTypeSelect({
   //   errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (
-    <QuestionContainer>
+    <QuestionListWrapper>
       <div>
         <QuestionItemHeader
           type={QuestionType.MULTIPLE_CHOICE}
@@ -167,6 +168,6 @@ export default function SurveyTypeSelect({
         <span>+</span> 항목추가
       </button>
       {/* Radio 전체삭제  */}
-    </QuestionContainer>
+    </QuestionListWrapper>
   );
 }

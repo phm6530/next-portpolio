@@ -1,4 +1,4 @@
-import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
 import SignUpForm from "./components/signup-form";
 
 export default function SignUp() {

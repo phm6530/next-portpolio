@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
 import { useForm, useFormContext } from "react-hook-form";
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import Search from "/public/asset/icon/search.svg";
 import FormToolButton from "./FormToolButton";
@@ -106,8 +106,8 @@ function UnSplashContents({
 
         <div className={classes.titleText}>
           <p>
-            UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한
-            결과를 검색합니다.
+            UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를
+            검색합니다.
           </p>
           <p>예{")"} 검색은 Search</p>
         </div>
@@ -123,9 +123,7 @@ function UnSplashContents({
       />
 
       {Object.values(errors)[0]?.message && (
-        <FormRegisterError
-          errorMsg={Object.values(errors)[0]?.message}
-        />
+        <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />
       )}
       <div>
         {/* 한번 touch 해야 div 생성하게 함 */}
@@ -167,8 +165,8 @@ function UnSplashContents({
                 </div>
               ) : (
                 <div className={classes.notfoundSearch}>
-                  &apos;{getValues("keyword")}&lsquo;과 일치하는
-                  이미지가 없습니다.
+                  &apos;{getValues("keyword")}&lsquo;과 일치하는 이미지가
+                  없습니다.
                 </div>
               )}
             </>
@@ -186,8 +184,7 @@ export default function UnSplashThumbNail({
   setImgPending: Dispatch<SetStateAction<boolean>>;
   setImgError: Dispatch<SetStateAction<boolean>>;
 }) {
-  const { isOpen, openModal, closeModal, PopupComponent } =
-    usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
 
   return (
     <>

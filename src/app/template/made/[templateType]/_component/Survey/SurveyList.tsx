@@ -2,11 +2,11 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeSelect";
 import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import classes from "./SurveyList.module.scss";
 import FormRegisterError from "@/components/Error/FormRegisterError";
-import QuestionListWrapper from "@/app/(template-made)/components/QuestionItem/QuestionContainer";
+import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyList() {
   const {
@@ -33,9 +33,7 @@ export default function SurveyList() {
       <div className={classes.questionsStatus}>
         <div>
           총 항목{" "}
-          <span className={classes.QuestionsCnt}>
-            {questionsWatch.length}
-          </span>
+          <span className={classes.QuestionsCnt}>{questionsWatch.length}</span>
           개
         </div>
 
@@ -71,11 +69,9 @@ export default function SurveyList() {
           }
         })}
 
-        {errors["questions"]?.message && (
+        {errors["questions"]?.root?.message && (
           <QuestionListWrapper>
-            <FormRegisterError
-              errorMsg={errors["questions"]?.message}
-            />
+            <FormRegisterError errorMsg={errors["questions"]?.root?.message} />
           </QuestionListWrapper>
         )}
 

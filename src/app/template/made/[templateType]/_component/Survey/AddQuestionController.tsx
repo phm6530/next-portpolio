@@ -1,11 +1,11 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import classes from "./AddQuestionController.module.scss";
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import Lists from "/public/asset/icon/lists.svg";
+
 import pen from "/public/asset/icon/pen.svg";
-import FormToolButton from "@/app/(template-made)/components/FormToolButton";
+import FormToolButton from "@/app/(protected-page)/(template-made)/components/FormToolButton";
 import checkbox from "/public/asset/icon/checkbox.svg";
 
 export type RequestSelectOption = {

@@ -8,7 +8,7 @@ import ko from "date-fns/locale/ko";
 import dayjs from "dayjs";
 import { Locale } from "react-datepicker/dist/date_utils";
 import RadioWrap from "@/components/ui/RadioWrap";
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 
 export default function AddDateRange() {
   const { control, watch } = useFormContext<RequestSurveyFormData>();

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
 import { Button } from "@/components/ui/button";
 import classes from "./page.module.scss";
 import BoardCategories from "../component/BoardCategories";

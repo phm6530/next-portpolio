@@ -5,18 +5,18 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { RequestSurveyFormData } from "@/app/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import classes from "./SurveyOptionItem.module.scss";
-import OptionContainer from "@/app/(template-made)/components/QuestionOption/OptionContainer";
-import OptionButton from "@/app/(template-made)/components/QuestionOption/OptionButton";
+import OptionContainer from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionContainer";
+import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
 import Delete from "/public/asset/icon/delete.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormRegisterError from "@/components/Error/FormRegisterError";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
-import UploadedImagePreview from "@/app/(template-made)/components/ImageContainer/UploadedImagePreview";
+import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import { useSearchParams } from "next/navigation";
 
 const MIN_OPTION_COUNT = 2;
@@ -65,8 +65,7 @@ export default function SurveyOptionItem({
     },
   });
 
-  const optionError =
-    errors.questions as FieldErrorsImpl<RequestSelect>[];
+  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거
@@ -101,10 +100,7 @@ export default function SurveyOptionItem({
     // 수정모드
     if (editMode) {
       return preView ? (
-        <UploadedImagePreview
-          src={preView}
-          deleteFunc={clearPreview}
-        />
+        <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
       ) : null;
     }
 
@@ -114,12 +110,7 @@ export default function SurveyOptionItem({
     }
 
     if (isSuccess && preView) {
-      return (
-        <UploadedImagePreview
-          src={preView}
-          deleteFunc={clearPreview}
-        />
-      );
+      return <UploadedImagePreview src={preView} deleteFunc={clearPreview} />;
     }
 
     return null;
@@ -142,9 +133,7 @@ export default function SurveyOptionItem({
           {/* 질문  명 */}
           <input
             type="text"
-            {...register(
-              `questions.${surveyIdx}.options.${optionIdx}.value`
-            )}
+            {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
             autoComplete="off"
             placeholder={`항목 ${optionIdx + 1}을 입력해주세요`}
           />
@@ -172,8 +161,7 @@ export default function SurveyOptionItem({
         <div>
           <FormRegisterError
             errorMsg={
-              optionError?.[surveyIdx]?.options?.[optionIdx]?.value
-                ?.message
+              optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message
             }
           />
         </div>
