@@ -68,6 +68,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .icon-hover {
+    @apply text-zinc-300 hover:text-zinc-500;
+  }
 }
 
 @font-face {

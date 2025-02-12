@@ -2,12 +2,9 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { SignIn, User } from "@/types/auth.type";
-import classes from "./login.module.scss";
-import FormInput from "@/components/ui/FormElement/FormInput";
 import Button from "@/components/ui/button/Button";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
@@ -23,6 +20,8 @@ import {
 } from "@/components/ui/form";
 import { loginSchema } from "./login-schema";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
+import useThrottlring from "@/_hook/useThrottlring";
 
 type SignUpResponse = {
   accessToken: string;
@@ -31,6 +30,7 @@ type SignUpResponse = {
 
 export default function LoginForm() {
   const router = useRouter();
+  const { throttle } = useThrottlring();
   //zodResolver
   const formMethod = useForm<SignIn>({
     resolver: zodResolver(loginSchema),
@@ -40,13 +40,10 @@ export default function LoginForm() {
     },
   });
 
-  console.log(formMethod.formState.errors);
-
   const {
     mutate: signUpMutate,
     isPending,
     isSuccess,
-    error,
   } = useMutation({
     mutationFn: async (data: SignIn) => {
       return await requestHandler<SignUpResponse>(async () => {
@@ -66,20 +63,18 @@ export default function LoginForm() {
     },
     onError: () => {
       // 미 일치시 Password 지워 버림
-      formMethod.reset({ password: "" });
+      toast.error("이메일 또는 비밀번호가 일치하지 않습니다.");
+      formMethod.setValue("password", "");
     },
   });
 
   //제출
   const onSubmitHandler = (data: SignIn) => {
-    console.log(data);
-    signUpMutate(data);
+    throttle(() => signUpMutate(data), 2000);
   };
 
-  const loadingStatus = isPending || isSuccess;
-
   return (
-    <LoadingSpinnerWrapper loading={loadingStatus}>
+    <LoadingSpinnerWrapper loading={isPending || isSuccess}>
       <Form {...formMethod}>
         <form
           className="flex flex-col"
@@ -109,20 +104,23 @@ export default function LoginForm() {
             <FormField
               control={formMethod.control}
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel />
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      autoComplete="off"
-                      placeholder="비밀번호를 입력해주세요"
-                    />
-                  </FormControl>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const { ref, ...rest } = field;
+                return (
+                  <FormItem>
+                    <FormLabel />
+                    <FormControl>
+                      <PasswordInput
+                        {...rest}
+                        autoComplete="off"
+                        placeholder="비밀번호를 입력해주세요"
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <Button.submit disabled={isPending || isSuccess}>

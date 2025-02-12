@@ -30,9 +30,9 @@ export default function PasswordInput(
         onMouseLeave={leaveToMouseHandler}
       >
         {!psView ? (
-          <Eye className="text-zinc-300" />
+          <Eye className="icon-hover" />
         ) : (
-          <EyeOff className="text-zinc-300" />
+          <EyeOff className="icon-hover" />
         )}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import LoadingSpiner from "./LoadingSpiner";
+import { cn } from "@/lib/utils";
 
 export default function LoadingSpinnerWrapper({
   loading,
@@ -11,7 +12,9 @@ export default function LoadingSpinnerWrapper({
   return (
     <div style={{ position: "relative" }}>
       {loading && <LoadingSpiner />}
-      {children}
+      <div className={cn(loading && "opacity-50 pointer-events-none")}>
+        {children}
+      </div>
     </div>
   );
 }

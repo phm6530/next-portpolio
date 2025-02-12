@@ -35,9 +35,7 @@ function solid({
   return (
     <button
       {...rest}
-      className={`${classes.solidButton} ${
-        className ? className : undefined
-      }`}
+      className={`${classes.solidButton} ${className ? className : undefined}`}
     >
       {children}
     </button>
@@ -98,10 +96,7 @@ function moveLink({
 }) {
   return (
     <Link href={moveUrl}>
-      <div
-        className={classes.importantButton}
-        style={{ borderRadius: "1rem" }}
-      >
+      <div className={classes.importantButton} style={{ borderRadius: "1rem" }}>
         <span>{children}</span>
       </div>
     </Link>
