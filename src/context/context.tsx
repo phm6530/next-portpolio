@@ -18,7 +18,9 @@ export function CommentEditorProvider({
   children: ReactNode;
   initialSection?: COMMENT_NEED_PATH | null;
 }) {
-  const [section, setSection] = useState<COMMENT_NEED_PATH | null>(initialSection);
+  const [section, setSection] = useState<COMMENT_NEED_PATH | null>(
+    initialSection
+  );
 
   useEffect(() => {
     // Page 떠날떄 초기화 시켜부리기

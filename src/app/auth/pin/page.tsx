@@ -6,7 +6,6 @@ import AccessMatchPin from "./_component/AccessMatchPin";
 import SettingPassword from "./_component/SettingPassword";
 import Indicator from "./_component/Indicator";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 const ForgotPasswordPage = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -32,9 +31,7 @@ const ForgotPasswordPage = () => {
         x: -100,
         opacity: 0,
         onComplete: () => {
-          setStep((prev) =>
-            prev < 3 ? ((prev + 1) as 1 | 2 | 3) : prev
-          ); // 여기서 상태 업데이트
+          setStep((prev) => (prev < 3 ? ((prev + 1) as 1 | 2 | 3) : prev)); // 여기서 상태 업데이트
         },
       }
     );
@@ -87,7 +84,6 @@ const ForgotPasswordPage = () => {
 
   return (
     <div>
-      <button onClick={() => setAniTrigger(true)}>test</button>
       <HeaderTitle
         title={stepData[step].title}
         description={stepData[step].description}

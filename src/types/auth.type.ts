@@ -13,11 +13,3 @@ export type User = {
   nickname: string;
   role: USER_ROLE;
 };
-
-//Sign In
-export type SignIn = { email: string; password: string };
-
-//register User
-export type SignupUser = {
-  nickname: string;
-} & SignIn;

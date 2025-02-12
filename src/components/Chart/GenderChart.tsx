@@ -2,11 +2,8 @@ import { useGSAP } from "@gsap/react";
 import classes from "./GenderChart.module.scss";
 import gsap from "gsap";
 import { useRef } from "react";
-// import Male from "/public/asset/icon/male1.svg";
 import Female from "/public/asset/icon/female2.svg";
 import Male from "/public/asset/icon/male2.svg";
-
-import Image from "next/image";
 
 export default function GenderChart({
   maleCnt,

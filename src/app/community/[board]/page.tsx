@@ -55,13 +55,13 @@ export default async function BoardListPage({
       <div className={classes.actionArea}>
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
-        <Button asChild size={"custom"}>
+        <Button asChild size={"xxl"}>
           <Link href={`/community/${params.board}/write`}>글쓰기</Link>
         </Button>
       </div>
 
       {/* list */}
-      <section className={classes.container}>
+      <section className={`${classes.container} `}>
         <StremingBoardList
           category={params.board}
           keyword={keyword || searchParams?.search}

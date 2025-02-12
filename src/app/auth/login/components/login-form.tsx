@@ -1,14 +1,12 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { SignIn, User } from "@/types/auth.type";
-import Button from "@/components/ui/button/Button";
+import { User } from "@/types/auth.type";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
-import PasswordInput from "@/components/ui/password-input";
 import {
   Form,
   FormControl,
@@ -22,6 +20,10 @@ import { loginSchema } from "./login-schema";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
 import useThrottlring from "@/_hook/useThrottlring";
+import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import Link from "next/link";
+import InputPassword from "@/components/ui/InputPassword";
 
 type SignUpResponse = {
   accessToken: string;
@@ -32,7 +34,7 @@ export default function LoginForm() {
   const router = useRouter();
   const { throttle } = useThrottlring();
   //zodResolver
-  const formMethod = useForm<SignIn>({
+  const formMethod = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -45,9 +47,8 @@ export default function LoginForm() {
     isPending,
     isSuccess,
   } = useMutation({
-    mutationFn: async (data: SignIn) => {
+    mutationFn: async (data: z.infer<typeof loginSchema>) => {
       return await requestHandler<SignUpResponse>(async () => {
-        // await new Promise((resolve) => setTimeout(resolve, 3000));
         return await fetch(`${BASE_NEST_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -56,9 +57,8 @@ export default function LoginForm() {
         });
       });
     },
-    onSuccess: (data) => {
-      //초기 로그인 시에 사용자 정보 + 토큰 반영
-      const { nickname, email, role, id } = data.user;
+    onSuccess: () => {
+      //초기 로그인 시에 받은 쿠키로 서버 정보 갱신하기위해 refresh 시킴
       router.refresh();
     },
     onError: () => {
@@ -69,7 +69,7 @@ export default function LoginForm() {
   });
 
   //제출
-  const onSubmitHandler = (data: SignIn) => {
+  const onSubmitHandler = (data: z.infer<typeof loginSchema>) => {
     throttle(() => signUpMutate(data), 2000);
   };
 
@@ -77,10 +77,10 @@ export default function LoginForm() {
     <LoadingSpinnerWrapper loading={isPending || isSuccess}>
       <Form {...formMethod}>
         <form
-          className="flex flex-col"
+          className="form-container"
           onSubmit={formMethod.handleSubmit(onSubmitHandler)}
         >
-          <div className="mb-4 flex flex-col">
+          <div className="form-input-wrapper">
             {/* Email */}
             <FormField
               control={formMethod.control}
@@ -110,7 +110,7 @@ export default function LoginForm() {
                   <FormItem>
                     <FormLabel />
                     <FormControl>
-                      <PasswordInput
+                      <InputPassword
                         {...rest}
                         autoComplete="off"
                         placeholder="비밀번호를 입력해주세요"
@@ -123,11 +123,23 @@ export default function LoginForm() {
               }}
             />
           </div>
-          <Button.submit disabled={isPending || isSuccess}>
+
+          <Button className="" size={"xl"} disabled={isPending || isSuccess}>
             로그인
-          </Button.submit>
+          </Button>
         </form>
       </Form>
+
+      {/* login Footer Nav */}
+      <div className="flex  text-center justify-center p-4 items-center">
+        <Button asChild variant={"link"}>
+          <Link href={"/auth/pin"}>비밀번호를 잊어버리셨나요?</Link>
+        </Button>
+        <span className="opacity-20">|</span>
+        <Button variant={"link"}>
+          <Link href={"/auth/signup"}>회원가입</Link>
+        </Button>
+      </div>
     </LoadingSpinnerWrapper>
   );
 }

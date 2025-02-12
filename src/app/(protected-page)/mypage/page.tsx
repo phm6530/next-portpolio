@@ -1,6 +1,5 @@
-import MyContents from "@/app/(mypage)/mypage/_components/MyContents";
-import Myprofile from "@/app/(mypage)/mypage/_components/Myprofile";
-import { Metadata } from "next";
+import MyContents from "@/app/(protected-page)/mypage/_components/MyContents";
+import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
 import classes from "./page.module.scss";
 
 export default async function page() {

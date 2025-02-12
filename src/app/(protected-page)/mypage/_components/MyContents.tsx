@@ -10,11 +10,13 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import withAuthFetch from "@/utils/withAuthFetch";
-import Button from "@/components/ui/button/Button";
 import MyContentsItem from "./MyContentsItem";
 import { useState } from "react";
-import { never } from "zod";
 import LoadingStreming from "@/components/loading/LoadingStreming";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CircleSlash, Laptop2Icon, LayoutTemplate } from "lucide-react";
 
 type returnData = {
   data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
@@ -24,9 +26,7 @@ type returnData = {
 export default function MyContents() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const userdata = queryClient.getQueryData<User>([
-    QUERY_KEY.USER_DATA,
-  ]);
+  const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [filter, setFilter] = useState<"new" | "users">("new");
 
   // get List..
@@ -58,8 +58,7 @@ export default function MyContents() {
             ...data,
             data: [...data.data].sort(
               (a, b) =>
-                (b.respondents.allCnt || 0) -
-                (a.respondents.allCnt || 0)
+                (b.respondents.allCnt || 0) - (a.respondents.allCnt || 0)
             ),
           };
 
@@ -76,25 +75,21 @@ export default function MyContents() {
       <div className={classes.categoriesWrapper}>
         <div className={classes.buttonWrapper}>
           <div
-            className={`${
-              filter === "new" ? classes.active : undefined
-            }`}
+            className={`${filter === "new" ? classes.active : undefined}`}
             onClick={() => setFilter("new")}
           >
             최신 순
           </div>
           <div
-            className={`${
-              filter === "users" ? classes.active : undefined
-            }`}
+            className={`${filter === "users" ? classes.active : undefined}`}
             onClick={() => setFilter("users")}
           >
             참여자 순
           </div>
         </div>
-        <Button.submit onClick={() => router.push("/made")}>
-          템플릿 만들기
-        </Button.submit>
+        <Button size={"xl"} asChild variant={"ghost"}>
+          <Link href={"/made"}>+ 템플릿 만들기</Link>
+        </Button>
       </div>
 
       {/* <h2>생성한 템플릿</h2> */}
@@ -104,15 +99,23 @@ export default function MyContents() {
           <LoadingStreming />
         </>
       ) : (
-        <div className={classes.container}>
+        <div className="grid flex-col">
           {data && data.data.length > 0 ? (
             data?.data.map((item) => {
               return <MyContentsItem key={item.id} item={item} />;
             })
           ) : (
-            <div className={classes.madeNotTemolate}>
-              생성하신 템플릿이 없습니다.
-            </div>
+            <Card className="h-[200px] flex flex-col items-center justify-center">
+              <CardContent className="text-center pt-6">
+                <div className="flex gap-3 items-center">
+                  <CircleSlash />
+                  <span>생성하신 템플릿이 없습니다</span>
+                </div>
+              </CardContent>{" "}
+              <Button size={"xl"} asChild className="shadow-lg ">
+                <Link href={"/made"}>템플릿 만들기</Link>
+              </Button>
+            </Card>
           )}
         </div>
       )}

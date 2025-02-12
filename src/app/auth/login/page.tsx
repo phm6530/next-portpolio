@@ -1,11 +1,8 @@
-import LoginForm from "@/app/auth/login/_component/LoginForm";
-import classes from "./page.module.scss";
-
+import LoginForm from "./components/login-form";
 import Logo from "@/components/logo/logo";
-import LoginMsg from "./LoginMsg";
 import { ERROR_CODE } from "@/codeMsg";
-import { Suspense } from "react";
 import RefreshQueryClient from "../_component/RefreshQueryClient";
+import MessageAlert from "@/components/shared/alerts/msg-alert";
 
 const Login = async ({
   searchParams,
@@ -15,23 +12,25 @@ const Login = async ({
   const { code } = searchParams;
 
   return (
-    <>
+    <div className="flex flex-col justify-center h-full">
       <RefreshQueryClient code={code} />
-      <div className={classes.loginContainer}>
-        <div className={classes.titleWrapper}>
-          <Suspense fallback={<div>test..</div>}>
-            <Logo />
-          </Suspense>
-          <div className={classes.loginText}>
-            Do poll, 설문으로 소통하는 공간
-          </div>
-        </div>
-        {code && <LoginMsg code={code} />}
 
-        {/* Login */}
-        <LoginForm />
+      <div className="flex flex-col gap-5 items-center pb-4 ">
+        <Logo />
+
+        <div className="text-center opacity-50 text-base pb-6">
+          Do poll, 설문으로 소통하는 공간
+        </div>
       </div>
-    </>
+      {code && (
+        <div className="pb-4">
+          <MessageAlert code={code} />
+        </div>
+      )}
+
+      {/* Login */}
+      <LoginForm />
+    </div>
   );
 };
 

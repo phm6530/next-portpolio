@@ -19,6 +19,7 @@ import useMediaQuery from "@/_hook/useMediaQuery";
 import { Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { Button } from "../ui/button";
 
 export default function GlobalNav() {
   const pathname = usePathname();
@@ -105,9 +106,13 @@ export default function GlobalNav() {
               {user ? (
                 <>
                   <NavUserProfile />
-                  <button className={classes.logOut} onClick={() => logout()}>
+                  <Button
+                    variant={"outline"}
+                    size={"sm"}
+                    onClick={() => logout()}
+                  >
                     로그아웃
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>

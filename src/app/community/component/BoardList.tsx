@@ -45,8 +45,7 @@ export default async function BoardList({
 
   return (
     <>
-      {/* <h3>자유게시판</h3> */}
-      <section className={classes.container}>
+      <section className={`${classes.container} animate-fadein`}>
         <div className={classes.listHeader}>
           <h3>최신 순 </h3>
         </div>
@@ -54,7 +53,12 @@ export default async function BoardList({
           {data[0].length > 0 ? (
             <>
               {data[0].map((item, idx) => {
-                return <BoardListItem itemData={item} key={`board-${item.id}-${idx}`} />;
+                return (
+                  <BoardListItem
+                    itemData={item}
+                    key={`board-${item.id}-${idx}`}
+                  />
+                );
               })}
             </>
           ) : (

@@ -22,7 +22,7 @@ export default function ModeToggle() {
   return (
     <div
       className={`${classes.darkmode} 
-      ${theme === "dark" && classes.dark}`} 
+      ${theme === "dark" && classes.dark}`}
       onClick={() => setTheme(curTheme)}
     >
       {curTheme === "light" ? <LightMode /> : <DarkMode />}

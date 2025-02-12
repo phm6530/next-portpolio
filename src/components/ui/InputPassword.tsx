@@ -1,10 +1,10 @@
 "use client";
 
 import { InputHTMLAttributes, useState } from "react";
-import { Input } from "./input";
+import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 
-export default function PasswordInput(
+export default function InputPassword(
   props: InputHTMLAttributes<HTMLInputElement>
 ) {
   const [psView, setPsView] = useState<boolean>(false);
@@ -16,10 +16,11 @@ export default function PasswordInput(
   return (
     <div className="relative">
       <Input
-        placeholder="비밀번호를 입력해주세요"
         autoComplete="off"
         type={psView ? "text" : "password"}
         className="w-full pr-10"
+        aria-autocomplete="none"
+        aria-hidden="true"
         {...props}
       />
 

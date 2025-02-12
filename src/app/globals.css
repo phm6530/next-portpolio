@@ -29,8 +29,10 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --throw: (340 75% 55%);
 
-    --custom-color: 240 100% 98%;
+    --shadow-primary-glow: "0 4px 6px -1px rgb(99 102 241 / 0.5)";
+    --shadow-primary-glow-hover: "0 4px 6px -1px rgb(99 102 241 / 0.8";
   }
 
   .dark {
@@ -58,6 +60,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --throw: (340 75% 55%);
   }
 }
 
@@ -71,6 +74,38 @@
 
   .icon-hover {
     @apply text-zinc-300 hover:text-zinc-500;
+  }
+
+  .form-container {
+    @apply flex flex-col;
+  }
+
+  .form-input-wrapper {
+    @apply mb-4 flex flex-col;
+  }
+
+  /* edge input 기본기능 - Off */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+
+  input::-webkit-text-security-button {
+    display: none;
+  }
+  .gird-default {
+    margin: 0 auto;
+    width: calc(100% - 3rem);
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
   }
 }
 

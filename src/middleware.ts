@@ -12,10 +12,7 @@ const AUTH_REQUIRED_PATHS = ["/made", "/mypage"] as const;
 
 type Pathname = (typeof AUTH_REDIRECT_PATHS)[number];
 
-export async function middleware(
-  req: NextRequest,
-  res: NextResponse
-) {
+export async function middleware(req: NextRequest, res: NextResponse) {
   const pathname = req.nextUrl.pathname as Pathname;
   const qs = req.nextUrl.searchParams;
 
@@ -37,9 +34,7 @@ export async function middleware(
     const redirectPath = `/auth/login?redirect=${encodedPath}&code=${ERROR_CODE.UNAUTHORIZED}`;
     //권한이 필요 한페이지인데 TOken이 없을떄 ,
     if (!token)
-      return NextResponse.redirect(
-        new URL(redirectPath, req.nextUrl.origin)
-      );
+      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
 
     try {
       const isAuthenticated = await withAuthFetch("auth/verify", {
@@ -49,14 +44,10 @@ export async function middleware(
       });
 
       if (!isAuthenticated) {
-        return NextResponse.redirect(
-          new URL(redirectPath, req.nextUrl.origin)
-        );
+        return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
       }
     } catch (error) {
-      return NextResponse.redirect(
-        new URL(redirectPath, req.nextUrl.origin)
-      );
+      return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
     }
   }
 }

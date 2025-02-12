@@ -7,18 +7,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-} from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-} from "@/types/comment.type";
+import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
@@ -58,9 +50,7 @@ export default function CommentEditor({
   category?: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
-  const userData = queryclient.getQueryData([
-    QUERY_KEY.USER_DATA,
-  ]) as User;
+  const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
 
   const { section } = useContext(CommentEditorContext);
   console.log("section::", section);
@@ -195,9 +185,7 @@ export default function CommentEditor({
           {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
           <CommentTextArea name={"content"}>
             <div className={classes.errorDiv}>
-              {typeof errorMessage === "string"
-                ? `! ${errorMessage}`
-                : null}
+              {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
             </div>
           </CommentTextArea>
 

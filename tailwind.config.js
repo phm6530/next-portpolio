@@ -11,6 +11,39 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        throw: "hsl(var(--throw))",
+      },
+      height: {
+        "calc-screen": "calc(100vh - 80px)", // 기본 설정
+        "calc-screen-sm": "calc(100% - 60px)", // sm 사이즈에서 높이 변경
+        "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경
+      },
+      keyframes: {
+        fadein: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        fadeout: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(-10px)",
+          },
+        },
+      },
+      animation: {
+        fadein: "fadein .4s ease",
+        fadeout: "fadeout 1s",
+      },
       fontFamily: {
         pretendard: ["pretendard", "sans-serif"],
         Paperlogy: ["Paperlogy-8ExtraBold", "sans-serif"],

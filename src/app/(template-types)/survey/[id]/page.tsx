@@ -12,10 +12,12 @@ import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
-import BackButton from "@/components/ui/button/BackButton";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import AosWrapper from "@/components/animation/AosWrapper";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 
 export const runtime = "edge";
 
@@ -33,7 +35,9 @@ export async function generateStaticParams() {
    * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
    */
   const response = await fetch(url);
-  const { data: listResponse }: { data: TemplateItemMetadata<RespondentsAndMaxGroup>[] } =
+  const {
+    data: listResponse,
+  }: { data: TemplateItemMetadata<RespondentsAndMaxGroup>[] } =
     await response.json();
 
   return listResponse.map((template) => {
@@ -66,8 +70,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function SurveyDetailTemplate({ params: { id } }: SurveyDetailTemplateParams) {
-  // console.log(`${BASE_NEST_URL}/template/survey/${id}`);
+export default async function SurveyDetailTemplate({
+  params: { id },
+}: SurveyDetailTemplateParams) {
   const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
   const data: FetchTemplateForm = await response.json();
 
@@ -75,18 +80,34 @@ export default async function SurveyDetailTemplate({ params: { id } }: SurveyDet
     notFound();
   }
 
-  const { title, description, thumbnail, startDate, endDate, createdAt, creator } = data;
+  const {
+    title,
+    description,
+    thumbnail,
+    startDate,
+    endDate,
+    createdAt,
+    creator,
+  } = data;
 
   return (
     <>
       <Grid.smallCenter>
-        <BackButton />
+        <Button asChild variant={"link"} className="pl-0">
+          <Link href={"/"}>
+            <ChevronLeft className="w-4 h-4" /> 목록으로
+          </Link>
+        </Button>
         <AosWrapper>
           <TemplateQuestionWrapper>
             <ThumbNail thumbnail={thumbnail} />
 
             <div className={classes.templateSumeryWrap}>
-              <TemplateStatus startDate={startDate} endDate={endDate} createdAt={createdAt} />
+              <TemplateStatus
+                startDate={startDate}
+                endDate={endDate}
+                createdAt={createdAt}
+              />
               <TemplateTitle role={creator.role} nickname={creator.nickname}>
                 {title}
               </TemplateTitle>

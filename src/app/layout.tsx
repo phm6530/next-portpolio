@@ -22,8 +22,7 @@ import "./globals.css";
 //메타 데이터
 export const metadata: Metadata = {
   title: "[Dopoll] 나만의 설문조사를 만들어보세요",
-  description:
-    "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
+  description: "익명의 장점을 살려 물어보기 어려웠던 정보를 공유해보세요!",
 };
 
 export default async function RootLayout({
@@ -72,7 +71,7 @@ export default async function RootLayout({
               <GlobalNav />
               <ToastContainer {...toastConfig} />
 
-              <main className="pb-11 mt-[60px]">{children}</main>
+              <main className=" mt-[60px]">{children}</main>
               {/* Dark Mode handler */}
               <ModeToggle />
             </HydrationBoundary>
