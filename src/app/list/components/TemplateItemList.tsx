@@ -20,24 +20,23 @@ export default function TemplateList() {
   const sort = qs.get("sort") || TEMPLATERLIST_SORT.ALL;
   const ref = useRef<HTMLDivElement>(null);
 
-  const { data, isPending, fetchNextPage, isError } =
-    useInfiniteQuery<{
-      data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
-      nextPage: number | null;
-    }>({
-      queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
-      queryFn: async ({ pageParam = 1 }) => {
-        let url = `${BASE_NEST_URL}/template?sort=${sort}`;
-        url += `&page=${pageParam}`;
-        const response = await fetch(url);
-        return await response.json();
-      },
-      getNextPageParam: (lastPage) => {
-        return lastPage.nextPage || null;
-      },
-      initialPageParam: 1,
-      staleTime: 10000,
-    });
+  const { data, isPending, fetchNextPage, isError } = useInfiniteQuery<{
+    data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
+    nextPage: number | null;
+  }>({
+    queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
+    queryFn: async ({ pageParam = 1 }) => {
+      let url = `${BASE_NEST_URL}/template?sort=${sort}`;
+      url += `&page=${pageParam}`;
+      const response = await fetch(url);
+      return await response.json();
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextPage || null;
+    },
+    initialPageParam: 1,
+    staleTime: 10000,
+  });
 
   useEffect(() => {
     const target = ref.current;
@@ -74,9 +73,7 @@ export default function TemplateList() {
   }
 
   if (data?.pages[0].data.length === 0) {
-    return (
-      <NotFoundComponent.noneData text="생성된 템플릿이 없습니다." />
-    );
+    return <NotFoundComponent.noneData text="생성된 템플릿이 없습니다." />;
   }
 
   //마지막 잡기

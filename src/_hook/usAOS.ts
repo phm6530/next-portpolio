@@ -5,7 +5,10 @@ interface UseAOSOptions {
   preserveClass?: boolean;
 }
 
-export default function useAOS({ threshold = 0.2, preserveClass = false }: UseAOSOptions = {}) {
+export default function useAOS({
+  threshold = 0.2,
+  preserveClass = false,
+}: UseAOSOptions = {}) {
   useEffect(() => {
     const observeElements = () => {
       const aosLists = document.querySelectorAll(".aos-hidden");
@@ -14,8 +17,6 @@ export default function useAOS({ threshold = 0.2, preserveClass = false }: UseAO
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("aos-visible");
-          } else if (!preserveClass) {
-            entry.target.classList.remove("aos-visible");
           }
         });
       };
