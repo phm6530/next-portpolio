@@ -74,12 +74,19 @@ export default function GlobalNav() {
         <Grid.center>
           <div className={classes.grid}>
             {/* Burger Menu */}
-            <div className={classes.burgerMenu} onClick={() => setNavView(true)}>
+            <div
+              className={classes.burgerMenu}
+              onClick={() => setNavView(true)}
+            >
               <Menu />
             </div>
 
             {/* Store에 따라 모바일 뷰 */}
-            <nav className={`${classes.nav} ${navView ? classes.view : classes.noneView}`}>
+            <nav
+              className={`${classes.nav} ${
+                navView ? classes.view : classes.noneView
+              }`}
+            >
               <div className={classes.logoWrapper}>
                 <Logo link />
               </div>
