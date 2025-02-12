@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { InputHTMLAttributes, useState } from "react";
 import { Input } from "./input";
 import { Eye, EyeOff } from "lucide-react";
 
-export default function PasswordInput() {
+export default function PasswordInput(
+  props: InputHTMLAttributes<HTMLInputElement>
+) {
   const [psView, setPsView] = useState<boolean>(false);
 
   const leaveToMouseHandler = () => {
@@ -14,10 +16,11 @@ export default function PasswordInput() {
   return (
     <div className="relative">
       <Input
-        placeholder="password를 입력해주세요"
+        placeholder="비밀번호를 입력해주세요"
         autoComplete="off"
         type={psView ? "text" : "password"}
         className="w-full pr-10"
+        {...props}
       />
 
       <div

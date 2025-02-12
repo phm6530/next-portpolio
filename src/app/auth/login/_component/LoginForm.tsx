@@ -1,5 +1,5 @@
 "use client";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { SignIn, User } from "@/types/auth.type";
 import classes from "./login.module.scss";
@@ -11,23 +11,36 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
-import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { loginSchema } from "./login-schema";
+import { Input } from "@/components/ui/input";
 
 type SignUpResponse = {
   accessToken: string;
   user: User;
 };
 
-const schema = z.object({
-  password: z.string().min(4, "비밀번호는 최소 4글자 이상이어야 합니다."),
-  email: z.string().email("올바른 이메일주소 형식이 아닙니다."),
-});
-
 export default function LoginForm() {
   const router = useRouter();
   //zodResolver
-  const method = useForm<SignIn>({ resolver: zodResolver(schema) });
+  const formMethod = useForm<SignIn>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  console.log(formMethod.formState.errors);
 
   const {
     mutate: signUpMutate,
@@ -53,7 +66,7 @@ export default function LoginForm() {
     },
     onError: () => {
       // 미 일치시 Password 지워 버림
-      method.reset({ password: "" });
+      formMethod.reset({ password: "" });
     },
   });
 
@@ -63,59 +76,60 @@ export default function LoginForm() {
     signUpMutate(data);
   };
 
-  const { register, handleSubmit } = method;
-
   const loadingStatus = isPending || isSuccess;
 
-  // const loadingStatus = true;
   return (
     <LoadingSpinnerWrapper loading={loadingStatus}>
-      <form
-        onSubmit={handleSubmit(onSubmitHandler)}
-        className={`${classes.form} ${
-          loadingStatus ? classes.loading : undefined
-        }`}
-      >
-        <FormProvider {...method}>
-          {/* Id */}
-          <div className={classes.inputWrapper}>
-            <PasswordInput />
-            <FormInput
-              type="text"
-              disabled={isPending || isSuccess}
-              placeholder="아이디를 입력해주세요"
-              {...register("email")}
-              autoComplete="off"
-              inputName="email"
+      <Form {...formMethod}>
+        <form
+          className="flex flex-col"
+          onSubmit={formMethod.handleSubmit(onSubmitHandler)}
+        >
+          <div className="mb-4 flex flex-col">
+            {/* Email */}
+            <FormField
+              control={formMethod.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel />
+                  <FormControl>
+                    <Input
+                      {...field}
+                      autoComplete="off"
+                      placeholder="이메일을 입력해주세요"
+                    />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
-            {/* Password */}
-            <FormInput
-              type="password"
-              disabled={isPending || isSuccess}
-              placeholder="비밀번호를 입력해주세요"
-              {...register("password")}
-              autoComplete="new-password"
-              inputName="password"
+            <FormField
+              control={formMethod.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel />
+                  <FormControl>
+                    <PasswordInput
+                      {...field}
+                      autoComplete="off"
+                      placeholder="비밀번호를 입력해주세요"
+                    />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-
           <Button.submit disabled={isPending || isSuccess}>
             로그인
           </Button.submit>
-
-          <div className={classes.passwordRecovery}>
-            <button type="button" onClick={() => router.push("/auth/pin")}>
-              비밀번호를 잊어버리셨나요?
-            </button>
-            |
-            <button type="button" onClick={() => router.push("/auth/signup")}>
-              회원가입
-            </button>
-          </div>
-          {error && <div className={classes.errorMsg}>{error.message}</div>}
-        </FormProvider>
-      </form>
+        </form>
+      </Form>
     </LoadingSpinnerWrapper>
   );
 }
