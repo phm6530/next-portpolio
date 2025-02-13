@@ -4,6 +4,7 @@ import { QUERY_KEY } from "@/types/constans";
 import classes from "./MyContents.module.scss";
 import {
   RespondentsAndMaxGroup,
+  RespondentsData,
   TemplateItemMetadata,
 } from "@/types/template.type";
 
@@ -16,19 +17,20 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { CircleSlash } from "lucide-react";
+import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import useAOS from "@/_hook/usAOS";
 
-type returnData = {
-  data: TemplateItemMetadata<RespondentsAndMaxGroup>[];
-  nextPage: null | number;
-};
+type MyContentsListData = TemplateItemMetadata<RespondentsData>;
 
 export default function MyContents() {
   const queryClient = useQueryClient();
   const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [filter, setFilter] = useState<"new" | "users">("new");
 
+  useAOS();
+
   // get List..
-  const { data, isLoading } = useQuery<returnData>({
+  const { data, isLoading } = useQuery<MyContentsListData[]>({
     queryKey: [QUERY_KEY.MY_CONTENTS],
     queryFn: async () => {
       const url = `user/me/contents`;
@@ -38,27 +40,16 @@ export default function MyContents() {
       return await withAuthFetch(url, options);
     },
     enabled: !!userdata,
-    staleTime: Infinity,
-    select: (data: returnData) => {
-      if (!data) {
-        return {
-          data: [],
-          nextPage: null,
-        };
-      }
-
+    staleTime: 10000,
+    select: (data: MyContentsListData[]) => {
       switch (filter) {
         case "new":
-          return data;
+          return data; //정렬 nest에서 DESC로 보내는 중
 
         case "users":
-          return {
-            ...data,
-            data: [...data.data].sort(
-              (a, b) =>
-                (b.respondents.allCnt || 0) - (a.respondents.allCnt || 0)
-            ),
-          };
+          return data.sort(
+            (a, b) => a.respondents.selectUserCnt - b.respondents.selectUserCnt
+          );
 
         default:
           throw new Error("Invalid filter value");
@@ -92,15 +83,13 @@ export default function MyContents() {
 
       {/* <h2>생성한 템플릿</h2> */}
 
-      {isLoading ? (
-        <>
-          <LoadingStreming />
-        </>
-      ) : (
-        <div className="grid flex-col">
-          {data && data.data.length > 0 ? (
-            data?.data.map((item) => {
-              return <MyContentsItem key={item.id} item={item} />;
+      <LoadingSpinnerWrapper loading={isLoading}>
+        <div className="grid flex-col gap-10">
+          {data && data.length > 0 ? (
+            data?.map((item) => {
+              return (
+                <MyContentsItem key={`${item.id}-${item.title}`} item={item} />
+              );
             })
           ) : (
             <Card className="h-[200px] flex flex-col items-center justify-center">
@@ -116,7 +105,7 @@ export default function MyContents() {
             </Card>
           )}
         </div>
-      )}
+      </LoadingSpinnerWrapper>
     </div>
   );
 }

@@ -8,10 +8,7 @@ import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
-import {
-  COMMENT_NEED_PATH,
-  CommentReponse,
-} from "@/types/comment.type";
+import { COMMENT_NEED_PATH, CommentReponse } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
 import usePopup from "@/app/hook/usePopup";
@@ -45,8 +42,7 @@ export default function Comment({
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
-  const { isOpen, openModal, closeModal, PopupComponent } =
-    usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data?: string) => {
@@ -112,10 +108,7 @@ export default function Comment({
       <div className={classes.commentContainer}>
         <div className={classes.commentSurmmry}>
           {/* 유저 or 익명 */}
-          <UserRoleDisplay
-            role={creator.role}
-            nickname={creator.nickname}
-          />
+          <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
           <span style={{ marginRight: "10px" }}>
             {dayjs(createAt).fromNow()}
