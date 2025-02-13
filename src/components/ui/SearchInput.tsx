@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  ChangeEvent,
-  FormEvent,
-  Suspense,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, Suspense, useEffect, useState } from "react";
 import classes from "./searchArea.module.scss";
 import { QUERY_STRING } from "@/types/constans";
 // import SearchIcon from "/public/asset/icon/search.png";
@@ -47,12 +41,9 @@ export default function SearchInput({ search }: { search?: string }) {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(
-      searchText ? `/template?search=${searchText}` : "/template ",
-      {
-        scroll: false,
-      }
-    );
+    router.push(searchText ? `/template?search=${searchText}` : "/template ", {
+      scroll: false,
+    });
   };
   const clearSearch = () => {
     setCurSearch(null);

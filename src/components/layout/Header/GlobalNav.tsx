@@ -14,12 +14,18 @@ import Logo from "../../logo/logo";
 import { useQueryReset } from "@/utils/queryClientReset";
 import { createPortal } from "react-dom";
 import BackDrop from "../../modal/BackDrop";
-import NavLink from "./components/NavLink";
+import NavLink from "@/components/ui/nav-link";
 import useMediaQuery from "@/_hook/useMediaQuery";
 import { Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../ui/button";
+
+const PATH = [
+  { label: "템플릿 리스트", path: "list", new: true },
+  { label: "템플릿 만들기", path: "made" },
+  { label: "커뮤니티", path: "community" },
+];
 
 export default function GlobalNav() {
   const pathname = usePathname();
@@ -71,9 +77,9 @@ export default function GlobalNav() {
 
   return (
     <>
-      <header className={classes.header}>
+      <header className="bg-white/70 dark:bg-zinc-900/80 fixed w-full flex items-center z-10 border-b h-[60px] backdrop-blur-sm">
         <Grid.center>
-          <div className={classes.grid}>
+          <div className="flex  justify-between items-center md:grid md:grid-cols-[2fr_1fr]">
             {/* Burger Menu */}
             <div
               className={classes.burgerMenu}
@@ -88,27 +94,42 @@ export default function GlobalNav() {
                 navView ? classes.view : classes.noneView
               }`}
             >
-              <div className={classes.logoWrapper}>
+              <div className="max-w-[80px] w-full">
                 <Logo link />
               </div>
 
-              <div className={classes.contentsLink}>
-                <NavLink href={"/list"}>
-                  템플릿 리스트
-                  <span className={classes.new}>NEW</span>
-                </NavLink>
-                <NavLink href={"/made"}>템플릿 만들기</NavLink>
-                <NavLink href={"/community"}>커뮤니티</NavLink>
+              <div className="flex gap-7 text-sm">
+                {PATH.map((obj) => {
+                  return (
+                    <div
+                      className="flex items-center justify-center"
+                      key={`link-${obj.path}`}
+                    >
+                      <NavLink
+                        href={`/${obj.path}`}
+                        active={pathname.startsWith(`/${obj.path}`)}
+                      >
+                        {obj.label}
+                      </NavLink>
+                      {obj.new && (
+                        <div className="text-[11px] px-2 ml-2 bg-[rgb(255,218,218)] rounded-full text-red-500">
+                          new
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </nav>
 
-            <div className={classes.loginWrapper}>
+            <div className="flex items-center justify-end">
               {user ? (
                 <>
                   <NavUserProfile />
                   <Button
                     variant={"outline"}
                     size={"sm"}
+                    className="text-[12px]"
                     onClick={() => logout()}
                   >
                     로그아웃

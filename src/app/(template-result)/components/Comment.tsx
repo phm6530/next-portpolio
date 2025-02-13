@@ -1,5 +1,5 @@
 "use client";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import classes from "./Comment.module.scss";
 import Button from "@/components/ui/button/Button";
 import dayjs from "dayjs";

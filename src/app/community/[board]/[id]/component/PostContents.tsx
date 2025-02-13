@@ -3,16 +3,13 @@ import classes from "./PostContents.module.scss";
 import { boardCateogries, CategoriesKey } from "@/types/board";
 import PostController from "./PostController";
 import CommentEditor from "@/app/(template-result)/components/CommentEditor";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import { USER_ROLE } from "@/types/auth.type";
 import { DetailBoardItemType } from "../page";
 import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
 
 import QuillViewer from "@/components/Editor/QuillViewer";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-} from "@/types/comment.type";
+import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 import { fetcbBoardItem } from "@/api/board.api";
 
 export default async function PostContents({
@@ -49,9 +46,7 @@ export default async function PostContents({
           <QuillViewer contents={data.contents} />
 
           {data.updateAt !== data.createAt && (
-            <div className={classes.lastUpdate}>
-              조회수 {data.view}
-            </div>
+            <div className={classes.lastUpdate}>조회수 {data.view}</div>
           )}
         </div>
       </div>
@@ -62,9 +57,7 @@ export default async function PostContents({
         category={category}
         creatorRole={data.creator.role}
         creatorEmail={
-          data.creator.role !== USER_ROLE.ANONYMOUS
-            ? data.creator.email
-            : null
+          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
         }
       />
 
@@ -77,10 +70,7 @@ export default async function PostContents({
       />
 
       {/* 댓글 리스트 */}
-      <ResultCommentSection
-        id={+postId}
-        type={COMMENT_NEED_PATH.BOARD}
-      />
+      <ResultCommentSection id={+postId} type={COMMENT_NEED_PATH.BOARD} />
     </>
   );
 }

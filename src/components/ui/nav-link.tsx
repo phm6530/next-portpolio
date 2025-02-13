@@ -1,22 +1,22 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
-import classes from "./NavLink.module.scss";
 
 export default function NavLink({
   href,
   children,
+  active,
 }: {
   href: string;
   children: ReactNode;
+  className?: string;
+  active: ((href: string) => boolean) | boolean;
 }) {
-  const pathname = usePathname();
-  const isActive = pathname.startsWith(href);
+  const isActive = active instanceof Function ? active(href) : active;
 
   return (
     <Link
       href={href}
-      className={`${classes.link} ${isActive ? classes.active : undefined}`}
+      className={`hover:text-primary ${isActive ? "text-primary" : undefined}`}
     >
       {children}
     </Link>

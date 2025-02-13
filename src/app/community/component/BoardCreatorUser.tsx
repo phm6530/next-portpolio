@@ -1,4 +1,4 @@
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import { USER_ROLE } from "@/types/auth.type";
 import classes from "./BoardCreatorUser.module.scss";
 

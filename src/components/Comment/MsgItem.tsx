@@ -10,7 +10,7 @@ import { withFetch } from "@/util/clientUtil";
 import "dayjs/locale/ko";
 import { queryClient } from "@/config/queryClient";
 import { useSession } from "next-auth/react";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import Button from "@/components/ui/button/Button";
 import { BASE_URL } from "@/config/base";
 import { USER_ROLE } from "@/types/auth.type";

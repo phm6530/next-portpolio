@@ -48,7 +48,7 @@ export function Chart({
   });
 
   return (
-    <Card>
+    <Card className="dark:bg-zinc-900 bg-zinc-50">
       <CardHeader>
         {/* <CardTitle>Bar Chart - Stacked + Legend</CardTitle> */}
         <CardDescription className="flex gap-2 items-center">

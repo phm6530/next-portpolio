@@ -35,67 +35,57 @@
   // @include respond("medium") {
   //   height: 100vh;
   // }
+}
 
-  nav {
-    height: 100%;
+.nav {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  @include respond("medium") {
+    width: calc(100% - 40px - 100px);
+    transition: left 0.5s ease;
+    padding: 20px;
+
+    &.view {
+      left: 0;
+    }
+
+    &.noneView {
+      left: -100%;
+    }
+
+    height: 100vh;
+    background: #fff;
+    position: fixed;
+    top: 61px;
+    left: 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  & > div {
+    gap: 30px;
+    display: flex;
+    align-items: center;
 
     @include respond("medium") {
-      width: calc(100% - 40px - 100px);
-      transition: left 0.5s ease;
-      padding: 20px;
-
-      &.view {
-        left: 0;
-      }
-
-      &.noneView {
-        left: -100%;
-      }
-
-      height: 100vh;
-      background: #fff;
-      position: fixed;
-      top: 61px;
-      left: 0;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    & > div {
-      gap: 30px;
-      display: flex;
-      align-items: center;
-
-      @include respond("medium") {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    .contentsLink {
-      display: flex;
-      gap: 30px;
-      font-size: 15px;
-      @include respond("medium") {
-        gap: 35px;
-      }
-      .new {
-        background: rgb(255, 218, 218);
-        font-size: 9px;
-        color: #ff6767;
-        padding: 4px 7px;
-        border-radius: 1rem;
-        margin-left: 5px;
-        margin-bottom: 1px;
-      }
+      align-items: flex-start;
     }
   }
 }
-
+.new {
+  background: rgb(255, 218, 218);
+  font-size: 11px;
+  color: #ff6767;
+  padding: 0px 7px;
+  border-radius: 1rem;
+  margin-left: 5px;
+  margin-bottom: 1px;
+}
 .mobileMypage {
   border: 1px solid;
 }
@@ -129,21 +119,6 @@
     display: flex;
     justify-content: center;
   }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  @include respond("medium") {
-    display: flex;
-    justify-content: space-between;
-  }
-}
-
-.loginWrapper {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 }
 
 .mobileBtn {

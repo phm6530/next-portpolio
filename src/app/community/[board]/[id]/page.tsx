@@ -9,7 +9,7 @@ import CommentEditor from "@/app/(template-result)/components/CommentEditor";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";
 import DateCompareToday from "@/util/DateCompareToday";
-import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import classes from "./page.module.scss";
 import { CommentEditorProvider } from "@/context/context";
@@ -62,7 +62,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: { params: { board: CategoriesKey; id: string } }) {
+export default async function Page({
+  params,
+}: {
+  params: { board: CategoriesKey; id: string };
+}) {
   const { board: category, id } = params;
   const dayCompare = DateCompareToday();
   const boardName = boardCateogries[category];
@@ -78,7 +82,10 @@ export default async function Page({ params }: { params: { board: CategoriesKey;
         <div className={classes.boardCategory}>{boardName}</div>
         <div className={classes.postTitle}>{data.title}</div>
         <div className={classes.postInfo}>
-          <UserRoleDisplay role={data.creator.role} nickname={data.creator.nickname} />
+          <UserRoleDisplay
+            role={data.creator.role}
+            nickname={data.creator.nickname}
+          />
           <span>{dayCompare.fromNow(data.createAt)}</span>
         </div>
       </div>
@@ -98,7 +105,9 @@ export default async function Page({ params }: { params: { board: CategoriesKey;
         id={id}
         category={category}
         creatorRole={data.creator.role}
-        creatorEmail={data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null}
+        creatorEmail={
+          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
+        }
       />
 
       {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
@@ -111,7 +120,10 @@ export default async function Page({ params }: { params: { board: CategoriesKey;
           category={category}
         />
         {/* 댓글 리스트 */}
-        <ResultCommentSection id={parseInt(id, 10)} type={COMMENT_NEED_PATH.BOARD} />{" "}
+        <ResultCommentSection
+          id={parseInt(id, 10)}
+          type={COMMENT_NEED_PATH.BOARD}
+        />{" "}
       </CommentEditorProvider>
     </>
   );

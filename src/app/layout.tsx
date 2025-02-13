@@ -1,4 +1,4 @@
-import Footer from "@/components/ui/Footer";
+import Footer from "@/components/layout/Footer";
 import ProviderContext from "@/app/_provider";
 import "@/styles/_styles.scss";
 import { Metadata } from "next";

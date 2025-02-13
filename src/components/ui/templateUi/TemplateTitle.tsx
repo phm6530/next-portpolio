@@ -1,5 +1,5 @@
 import { USER_ROLE } from "@/types/auth.type";
-import UserRoleDisplay from "../userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "../../layout/userRoleDisplay/UserRoleDisplay";
 import classes from "./TemplateTitle.module.scss";
 export default function TemplateTitle({
   allCnt,
