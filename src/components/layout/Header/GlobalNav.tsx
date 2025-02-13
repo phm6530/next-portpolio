@@ -7,19 +7,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
-import NavUserProfile from "@/components/Header/components/NavUserProfile";
+import NavUserProfile from "@/components/layout/Header/components/NavUserProfile";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
-import Logo from "../logo/logo";
+import Logo from "../../logo/logo";
 import { useQueryReset } from "@/utils/queryClientReset";
 import { createPortal } from "react-dom";
-import BackDrop from "../modal/BackDrop";
+import BackDrop from "../../modal/BackDrop";
 import NavLink from "./components/NavLink";
 import useMediaQuery from "@/_hook/useMediaQuery";
 import { Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export default function GlobalNav() {
   const pathname = usePathname();

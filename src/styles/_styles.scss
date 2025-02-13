@@ -8,7 +8,11 @@
   --background-color: #{map-get($colors-white, "default")};
   --text-color: #{map-get($colors-black, "default")};
   --background-color-vanner: #{map-get($background-gradients, "vanner")};
-  --background-color-questionhead: linear-gradient(84.35deg, #0a001a 13.62%, #373038 28.13%);
+  --background-color-questionhead: linear-gradient(
+    84.35deg,
+    #0a001a 13.62%,
+    #373038 28.13%
+  );
 }
 
 :root[data-theme="dark"] {
@@ -17,33 +21,36 @@
   --background-color-vanner: #{map-get($colors-black, "soft")};
   --background-color-questionhead: #fff;
 }
+//그리드
+@import "mixin";
+@import "user.scss";
+@import "font.scss";
+@import "@/lib/aos/aos.scss";
+
+// :root {
+//   --background-color: #{map-get($colors-white, "default")};
+//   --text-color: #{map-get($colors-black, "default")};
+//   --background-color-vanner: #{map-get($background-gradients, "vanner")};
+//   --background-color-questionhead: linear-gradient(84.35deg, #0a001a 13.62%, #373038 28.13%);
+// }
+
+// :root[data-theme="dark"] {
+//   --background-color: #1e1e20;
+//   --text-color: #{map-get($colors-white, "default")};
+//   --background-color-vanner: #{map-get($colors-black, "soft")};
+//   --background-color-questionhead: #fff;
+// }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: var(--background-color);
-  color: var(--text-color);
-
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  background-color: var(--background-color);
-  transition: background 0.5s ease;
-
-  @include respond("medium") {
-    font-size: 14px;
-  }
-}
-
-body {
-  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto,
-    sans-serif;
-  color: $color-black;
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, sans-serif;
 }
 
 textarea,

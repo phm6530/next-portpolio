@@ -2,7 +2,7 @@ import Footer from "@/components/ui/Footer";
 import ProviderContext from "@/app/_provider";
 import "@/styles/_styles.scss";
 import { Metadata } from "next";
-import GlobalNav from "@/components/Header/GlobalNav";
+import GlobalNav from "@/components/layout/Header/GlobalNav";
 
 import {
   dehydrate,

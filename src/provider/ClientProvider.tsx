@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 export default function ClientProvider({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider
-      attribute="data-theme"
+      attribute="class"
       enableSystem={false}
       defaultTheme="light"
       enableColorScheme={false}

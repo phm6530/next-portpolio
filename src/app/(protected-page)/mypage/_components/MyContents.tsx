@@ -16,7 +16,7 @@ import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { CircleSlash } from "lucide-react";
+import { CircleSlash, SquarePlus } from "lucide-react";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 import useAOS from "@/_hook/usAOS";
 
@@ -61,23 +61,30 @@ export default function MyContents() {
     <div>
       {/* <h3>내가 만든 템플릿</h3> */}
 
-      <div className={classes.categoriesWrapper}>
-        <div className={classes.buttonWrapper}>
+      <div className="py-5 flex items-center gap-2 justify-between">
+        <div className="flex gap-2">
           <div
-            className={`${filter === "new" ? classes.active : undefined}`}
+            className={`border py-2.5 px-4 text-sm rounded-full cursor-pointer ${
+              filter === "new" ? "border-zinc-500" : undefined
+            }`}
             onClick={() => setFilter("new")}
           >
             최신 순
           </div>
           <div
-            className={`${filter === "users" ? classes.active : undefined}`}
+            className={`border py-2.5 px-4 text-sm rounded-full cursor-pointer ${
+              filter === "users" ? "border-zinc-500" : undefined
+            }`}
             onClick={() => setFilter("users")}
           >
             참여자 순
           </div>
         </div>
-        <Button size={"xl"} asChild variant={"ghost"}>
-          <Link href={"/made"}>+ 템플릿 만들기</Link>
+        <Button size={"xl"} asChild variant={"outline"}>
+          <Link href={"/made"}>
+            <SquarePlus />
+            템플릿 만들기
+          </Link>
         </Button>
       </div>
 
