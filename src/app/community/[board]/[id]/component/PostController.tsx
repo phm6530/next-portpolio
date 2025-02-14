@@ -1,16 +1,17 @@
 "use client";
 
 import { CategoriesKey } from "@/types/board";
-import classes from "./PostController.module.scss";
 import { User, USER_ROLE } from "@/types/auth.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
+import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
 import usePopup from "@/app/hook/usePopup";
 import DeleteItemForm from "@/components/DeleteItemForm";
 import revaildateTags from "@/lib/revaildateTags";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function PostController({
   id,
@@ -26,8 +27,7 @@ export default function PostController({
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const { isOpen, openModal, closeModal, PopupComponent } =
-    usePopup();
+  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
@@ -97,19 +97,20 @@ export default function PostController({
       <PopupComponent isOpen={isOpen} closeModal={closeModal}>
         <DeleteItemForm action={deleteFunc} isPending={isPending} />
       </PopupComponent>
-      <div className={classes.controller}>
+      <div className="flex items-center gap-2 text-sm">
         {/* Edit  */}
-        <button onClick={() => router.push(`/community/${category}`)}>
-          목록
-        </button>
+        <Button variant={"outline"} asChild>
+          <Link href={`/community/${category}`}>목록</Link>
+        </Button>
 
         {(!authrozationPost ||
           (creatorEmail === userData?.email &&
             (creatorRole === USER_ROLE.ADMIN ||
               creatorRole === USER_ROLE.USER))) && (
           <>
-            {/* <button onClick={() => router.push("/")}>수정</button> */}
-            <button onClick={postDeleteHandler}>삭제</button>
+            <Button variant={"outline"} onClick={postDeleteHandler}>
+              삭제
+            </Button>
           </>
         )}
         {/* Edit  */}

@@ -30,8 +30,6 @@ export default async function BoardList({
   keyword?: string;
   curPage: number;
 }) {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
-
   // number는 All Cnt
   const data = await withFetch<[ListItemType[], number]>(async () => {
     const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
@@ -46,7 +44,7 @@ export default async function BoardList({
   return (
     <>
       <section className={`${classes.container} animate-fadein`}>
-        <div className={classes.listHeader}>
+        <div className="border-b pb-3 border-muted-foreground">
           <h3>최신 순 </h3>
         </div>
         <div>

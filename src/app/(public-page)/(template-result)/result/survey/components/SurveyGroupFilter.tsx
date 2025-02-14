@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import {
   FILTER_AGE,
   FILTER_GENDER,
-} from "@/app/(template-result)/result/survey/components/SurveyGroupFilter.tab";
+} from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter.tab";
 import { DetailRespondents } from "@/types/template.type";
 import { ageGroupProps } from "@/types/template";
 

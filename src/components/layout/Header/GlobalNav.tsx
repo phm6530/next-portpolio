@@ -77,7 +77,7 @@ export default function GlobalNav() {
 
   return (
     <>
-      <header className="bg-white/70 dark:bg-zinc-900/80 fixed w-full flex items-center z-10 border-b h-[60px] backdrop-blur-sm">
+      <header className="bg-white/70 dark:bg-background/90 fixed w-full flex items-center z-10 border-b h-[60px] backdrop-blur-sm">
         <Grid.center>
           <div className="flex  justify-between items-center md:grid md:grid-cols-[2fr_1fr]">
             {/* Burger Menu */}

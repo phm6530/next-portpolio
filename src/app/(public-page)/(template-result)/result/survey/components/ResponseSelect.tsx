@@ -1,4 +1,4 @@
-import SurveyResultBar from "@/app/(template-result)/result/survey/components/SurveyResultBar";
+import SurveyResultBar from "@/app/(public-page)/(template-result)/result/survey/components/SurveyResultBar";
 import classes from "./ReponseSelect.module.scss";
 import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";

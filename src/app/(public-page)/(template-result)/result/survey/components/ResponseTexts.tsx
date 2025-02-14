@@ -11,7 +11,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import {
   AgeOptions,
   GenderOptions,
-} from "@/app/(template-result)/result/survey/components/SurveyGroupFilter";
+} from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter";
 import dynamic from "next/dynamic";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 

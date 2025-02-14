@@ -15,7 +15,7 @@ import { AnswerSurvey } from "@/types/survey.type";
 import {
   AnswerError,
   getErrorMessage,
-} from "@/app/(template-types)/survey/util/getErrorMessge.util";
+} from "@/app/(public-page)/(template-types)/survey/util/getErrorMessge.util";
 
 // answers 배열의 타입 정의
 interface AnswerField {
@@ -86,9 +86,7 @@ export default function QuestionText({
           autoComplete="off"
         />
 
-        {errorMsg && (
-          <FormRegisterError errorMsg={errorMsg as string} />
-        )}
+        {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
       </div>
     </>
   );

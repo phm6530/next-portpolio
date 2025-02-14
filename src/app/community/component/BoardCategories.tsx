@@ -1,8 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
-
-import classes from "./BoardCategories.module.scss";
 import { boardCateogries, CategoriesValues } from "@/types/board";
+import NavLink from "@/components/ui/nav-link";
 
 type BoardCategoriesType = typeof boardCateogries;
 
@@ -13,21 +11,20 @@ export default function BoardCategories({
   categories: BoardCategoriesType;
   curCategory: CategoriesValues;
 }) {
-  const router = useRouter();
-
   return (
-    <div className={classes.categoriesWrapper}>
+    <div className="pt-8 pb-5 flex gap-1.5">
       {Object.entries(categories).map(([key, val]) => {
         return (
-          <button
-            key={`category-${val}`}
-            className={`${
-              val === curCategory ? classes.active : undefined
-            }`}
-            onClick={() => router.push(`/community/${key}`)}
-          >
-            {val}
-          </button>
+          <>
+            <NavLink
+              href={`/community/${key}`}
+              active={val === curCategory}
+              className="border min-w-5 py-2 px-4 rounded-full text-sm"
+              border
+            >
+              {val}
+            </NavLink>
+          </>
         );
       })}
     </div>

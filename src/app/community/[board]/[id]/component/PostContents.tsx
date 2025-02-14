@@ -2,15 +2,16 @@ import DateCompareToday from "@/util/DateCompareToday";
 import classes from "./PostContents.module.scss";
 import { boardCateogries, CategoriesKey } from "@/types/board";
 import PostController from "./PostController";
-import CommentEditor from "@/app/(template-result)/components/CommentEditor";
+import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import { USER_ROLE } from "@/types/auth.type";
 import { DetailBoardItemType } from "../page";
-import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
+import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
 
 import QuillViewer from "@/components/Editor/QuillViewer";
 import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 import { fetcbBoardItem } from "@/api/board.api";
+import { Badge } from "@/components/ui/badge";
 
 export default async function PostContents({
   category,
@@ -29,8 +30,8 @@ export default async function PostContents({
 
   return (
     <>
-      <div className={classes.postHeader}>
-        <div className={classes.boardCategory}>{boardName}</div>
+      <div className="flex flex-col gap-5 py-8">
+        <Badge>{boardName}</Badge>
         <div className={classes.postTitle}>{data.title}</div>
         <div className={classes.postInfo}>
           <UserRoleDisplay

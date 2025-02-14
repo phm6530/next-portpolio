@@ -13,7 +13,7 @@ export default function SearchBar({
   return (
     <div
       className={cn(
-        `border rounded-lg overflow-hidden focus-within:border-muted-foreground 
+        `border rounded-lg dark:bg-custom-input overflow-hidden focus-within:border-primary
        focus-within:focus-within:bg-[hsl(var(--custom-color))] flex flex-1`,
         className
       )}

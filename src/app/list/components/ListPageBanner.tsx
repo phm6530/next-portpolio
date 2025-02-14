@@ -7,13 +7,12 @@ import Link from "next/link";
 
 export default function ListPageBanner() {
   return (
-    <div className={classes.container}>
+    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#1c2046] dark:to-[#1f193b]">
       <Grid.center className={classes.bannerGrid}>
         <div>
           <PageTitle>
             다른사람들은<br></br> 어떤
-            <div className="pointText">생각</div>을 가졌는지
-            궁금하신가요?
+            <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
           </PageTitle>
 
           <p className={classes.description}>

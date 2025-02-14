@@ -6,6 +6,7 @@ import rankIcon from "/public/asset/icon/rank.png";
 import Image from "next/image";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import useAOS from "@/_hook/usAOS";
+import { Badge } from "@/components/ui/badge";
 
 const templateList = [
   {
@@ -47,12 +48,14 @@ export default function SelectTemplateList() {
     }
   };
   return (
-    <div className={`${classes.templateSelector} aos-hidden`}>
+    <div
+      className={`grid gap-5 mt-12 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] aos-hidden`}
+    >
       {templateList.map((template, idx) => {
         return (
           <div
             key={`${template.type}-${idx}`}
-            className={`${classes.choiceItem}  ${
+            className={` relative shadow-2xl cursor-pointer border dark:hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800 rounded-md p-5 ${
               !template.isActive ? classes.notYet : undefined
             }`}
             onClick={() =>
@@ -67,9 +70,11 @@ export default function SelectTemplateList() {
                 style={{ objectFit: "contain" }}
               />
             </div>
+            <Badge variant={"secondary"} className="mb-4">
+              {template.name}
+            </Badge>
 
-            <span className={classes.typeTitle}>{template.name}</span>
-            <div className={classes.desciprtionWrapper}>
+            <div className="text-sm text-secondary-foreground">
               {template.description.map((e, idx) => {
                 return <p key={`description-${idx}`}>{e}</p>;
               })}

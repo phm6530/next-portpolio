@@ -2,7 +2,6 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import classes from "./CommentEditor.module.scss";
-import FormInput from "@/components/ui/FormElement/FormInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CommentTextArea from "@/components/Comment/CommentTextArea";
@@ -15,6 +14,8 @@ import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
 import { CommentEditorContext } from "@/context/context";
+import InputField from "@/components/shared/inputs/input-field";
+import PasswordInputField from "@/components/shared/inputs/input-password-field";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -53,7 +54,7 @@ export default function CommentEditor({
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
 
   const { section } = useContext(CommentEditorContext);
-  console.log("section::", section);
+
   const params = useParams();
   const router = useRouter();
 
@@ -81,7 +82,6 @@ export default function CommentEditor({
   //전역 인스턴스
   const {
     reset,
-    register,
     formState: { errors },
     handleSubmit,
   } = formMethod;
@@ -143,44 +143,23 @@ export default function CommentEditor({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(submitHandler)}
-      className={classes.commentForm}
-    >
-      <FormProvider {...formMethod}>
+    <FormProvider {...formMethod}>
+      <form
+        onSubmit={handleSubmit(submitHandler)}
+        className={classes.commentForm}
+      >
         <>
           {!userData && (
             <>
-              <FormInput
-                type="text"
-                placeholder="이름"
+              <InputField
                 autoComplete="off"
-                notErrorText={true}
-                {...register("anonymous", {
-                  required: "이름은 필수입니다.",
-                  minLength: {
-                    value: 2,
-                    message: "이름은 최소 2글자로 설정해주세요",
-                  },
-                })}
+                name="anonymous"
+                placeholder="이름"
               />
-              <FormInput
-                type="password"
-                notErrorText={true}
-                {...register("password", {
-                  required: "비밀번호는 필수입니다.",
-                  minLength: {
-                    value: 4,
-                    message: "비밀번호는 최소 4글자로 설정해주세요",
-                  },
-                })}
-                placeholder="password"
-                autoComplete="new-password"
-              />
+              <PasswordInputField />
             </>
           )}
         </>
-
         <div className={classes.textareaWrap}>
           {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
           <CommentTextArea name={"content"}>
@@ -197,7 +176,7 @@ export default function CommentEditor({
             댓글 작성
           </button>
         </div>
-      </FormProvider>
-    </form>
+      </form>
+    </FormProvider>
   );
 }

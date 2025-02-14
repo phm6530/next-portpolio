@@ -1,22 +1,20 @@
 "use client";
-import FormInput from "@/components/ui/FormElement/FormInput";
-import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import { FormProvider, useForm } from "react-hook-form";
-import classes from "./BoardForm.module.scss";
-import Button from "@/components/ui/button/Button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CategoriesKey, CategoriesValues } from "@/types/board";
-import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL, BASE_NEXT_API } from "@/config/base";
+import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
 import revaildateTags from "@/lib/revaildateTags";
 import { toast } from "react-toastify";
+import InputField from "@/components/shared/inputs/input-field";
+import PasswordInputField from "@/components/shared/inputs/input-password-field";
+import { Button } from "@/components/ui/button";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 const baseScheme = z.object({
@@ -52,10 +50,19 @@ export default function BoardForm({
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
   const method = useForm<WriteBoardProps>({
-    resolver: zodResolver(userData ? baseScheme : guestSchema),
+    resolver: zodResolver(!!userData ? baseScheme : guestSchema),
+    defaultValues: {
+      title: "",
+      contents: "",
+      ...(!userData && { anonymous: "", password: "" }),
+    },
   });
 
-  const { mutate } = useMutation<unknown, Error, WriteBoardProps>({
+  const { mutate, isPending, isSuccess } = useMutation<
+    unknown,
+    Error,
+    WriteBoardProps
+  >({
     mutationFn: async (data) => {
       return await withFetch(async () => {
         let options: RequestInit = {
@@ -72,6 +79,7 @@ export default function BoardForm({
             credentials: "include",
           };
         }
+
         const datas = await fetch(
           `${BASE_NEST_URL}/board/${boardKey}`,
           options
@@ -84,14 +92,13 @@ export default function BoardForm({
     },
 
     onSuccess: () => {
-      console.log(boardKey);
       router.replace(`/community/${boardKey}`);
       router.refresh();
       toast.success("게시물이 생성되었습니다.");
     },
   });
 
-  const { register, handleSubmit } = method;
+  const { handleSubmit } = method;
 
   const onSubmitHandler = (data: WriteBoardProps) => {
     mutate(data);
@@ -100,46 +107,35 @@ export default function BoardForm({
   return (
     <FormProvider {...method}>
       <form
-        className={classes.formContainer}
+        className="flex flex-col gap-8 mt-7 "
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         {!userData && (
-          <div className={classes.guestIdenty}>
+          <div className="flex gap-5 [&>div]:flex-1">
             <>
-              <InputWrapper title="글쓴이">
-                <FormInput
-                  placeholder="아이디를 입력해주세요"
-                  {...register("anonymous")}
-                  autoComplete="off"
-                />
-              </InputWrapper>
+              <InputField
+                name="anonymous"
+                label="글쓴이"
+                placeholder="2글자 이상 입력해주세요."
+              />
 
-              <InputWrapper title="글 비밀번호">
-                <FormInput
-                  type="password"
-                  placeholder="아이디를 입력해주세요"
-                  {...register("password")}
-                  autoComplete="off"
-                  data-lpignore="true"
-                />
-              </InputWrapper>
+              <PasswordInputField label="비밀번호" />
             </>
           </div>
         )}
-
+        <InputField
+          name="title"
+          label="닉네임"
+          placeholder="닉네임을 2글자 이상 입력해주세요."
+        />
         <div>
-          <InputWrapper title="제목">
-            <FormInput
-              placeholder="글 제목을 입력해주세요"
-              {...register("title")}
-              autoComplete="off"
-            />
-
-            {/* Quill Editor */}
-            <QuillEditor name={"contents"} />
-          </InputWrapper>
+          {/* Quill Editor */}
+          <QuillEditor name={"contents"} />
         </div>
-        <Button.submit>글쓰기</Button.submit>
+
+        <Button className="p-8" disabled={isPending || isSuccess}>
+          글쓰기
+        </Button>
       </form>
     </FormProvider>
   );

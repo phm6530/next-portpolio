@@ -6,13 +6,12 @@ import BoardCategories from "../component/BoardCategories";
 import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
 import { boardCateogries, CategoriesKey } from "@/types/board";
-import dynamic from "next/dynamic";
-import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
-
-const StremingBoardList = dynamic(() => import("../component/BoardList"), {
-  ssr: true,
-  loading: () => <LoadingTextSkeleton cnt={6} />,
-});
+import BoardList from "../component/BoardList";
+import { Suspense } from "react";
+import SkeletonListItem from "@/components/shared/loading/skeleton-listitem";
+import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import LoadingSpiner from "@/components/ui/LoadingSpiner";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 export default async function BoardListPage({
   params,
@@ -59,14 +58,15 @@ export default async function BoardListPage({
           <Link href={`/community/${params.board}/write`}>글쓰기</Link>
         </Button>
       </div>
-
       {/* list */}
-      <section className={`${classes.container} `}>
-        <StremingBoardList
-          category={params.board}
-          keyword={keyword || searchParams?.search}
-          curPage={page}
-        />
+      <section className="mt-11 mb-7">
+        <Suspense fallback={<LoadingWrapper />}>
+          <BoardList
+            category={params.board}
+            keyword={keyword || searchParams?.search}
+            curPage={page}
+          />
+        </Suspense>
       </section>
     </>
   );

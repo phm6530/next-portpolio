@@ -60,9 +60,9 @@ export default function ListFilterControls() {
         return (
           <button
             key={`btn-${idx}`}
-            className={`${
-              active === btn.value ? classes.active : ""
-            } ${classes.btnControler}`}
+            className={`${active === btn.value ? classes.active : ""} ${
+              classes.btnControler
+            }`}
             value={btn.value}
             onClick={onClickHandler}
           >

@@ -12,7 +12,7 @@ import {
 import {
   AnswerError,
   getErrorMessage,
-} from "@/app/(template-types)/survey/util/getErrorMessge.util";
+} from "@/app/(public-page)/(template-types)/survey/util/getErrorMessge.util";
 
 export default function QuestionOptions({
   options,

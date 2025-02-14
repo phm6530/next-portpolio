@@ -11,7 +11,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import SurveyForm from "@/app/(template-types)/survey/components/SurveyForm";
+import SurveyForm from "@/app/(public-page)/(template-types)/survey/components/SurveyForm";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
 import QuillViewer from "@/components/Editor/QuillViewer";
 import AosWrapper from "@/components/animation/AosWrapper";

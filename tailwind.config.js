@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        custom: "5px 14px 29px rgb(100 63 255 / 25%)",
+      },
       colors: {
         throw: "hsl(var(--throw))",
       },
@@ -20,6 +23,14 @@ module.exports = {
         "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경
       },
       keyframes: {
+        opacity: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
         fadein: {
           "0%": {
             opacity: "0",
@@ -43,6 +54,7 @@ module.exports = {
       animation: {
         fadein: "fadein .4s ease",
         fadeout: "fadeout 1s",
+        opacity: "opacity 0.5s linear infinite alternate",
       },
       fontFamily: {
         pretendard: ["pretendard", "sans-serif"],
@@ -56,6 +68,7 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -84,6 +97,7 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -94,6 +108,8 @@ module.exports = {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+
+        "custom-input": "hsl(var(--custom-input))",
       },
     },
   },

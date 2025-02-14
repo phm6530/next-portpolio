@@ -4,5 +4,4 @@ export const boardCateogries = {
   notice: "피드백",
 } as const;
 export type CategoriesKey = keyof typeof boardCateogries;
-export type CategoriesValues =
-  (typeof boardCateogries)[CategoriesKey];
+export type CategoriesValues = (typeof boardCateogries)[CategoriesKey];

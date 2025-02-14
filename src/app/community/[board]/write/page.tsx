@@ -1,6 +1,6 @@
 import { boardCateogries, CategoriesKey } from "@/types/board";
-import BoardForm from "./component/BoardForm";
-import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import BoardForm from "./board-write-form";
+import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
 
 export default function BoardWrite({
   params,

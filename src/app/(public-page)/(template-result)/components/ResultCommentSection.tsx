@@ -1,10 +1,7 @@
 import classes from "./ResultCommentSection.module.scss";
-import { fetchComments } from "@/app/(template-result)/result/survey/components/test";
+import { fetchComments } from "@/app/(public-page)/(template-result)/result/survey/components/test";
 import NotFoundComponent from "@/components/NotFoundComponent";
-import {
-  COMMENT_NEED_PATH,
-  CommentReponse,
-} from "@/types/comment.type";
+import { COMMENT_NEED_PATH, CommentReponse } from "@/types/comment.type";
 import CommentContainerSection from "./CommentContainerSection";
 import AosWrapper from "@/components/animation/AosWrapper";
 

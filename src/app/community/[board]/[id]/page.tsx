@@ -3,9 +3,9 @@ import { ListItemType } from "../../component/BoardList";
 import { BASE_NEST_URL } from "@/config/base";
 
 import { boardCateogries, CategoriesKey } from "@/types/board";
-import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
+import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
 import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
-import CommentEditor from "@/app/(template-result)/components/CommentEditor";
+import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";
 import DateCompareToday from "@/util/DateCompareToday";
@@ -13,6 +13,13 @@ import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay
 import QuillViewer from "@/components/Editor/QuillViewer";
 import classes from "./page.module.scss";
 import { CommentEditorProvider } from "@/context/context";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];
@@ -78,37 +85,49 @@ export default async function Page({
 
   return (
     <>
-      <div className={classes.postHeader}>
-        <div className={classes.boardCategory}>{boardName}</div>
-        <div className={classes.postTitle}>{data.title}</div>
-        <div className={classes.postInfo}>
-          <UserRoleDisplay
-            role={data.creator.role}
-            nickname={data.creator.nickname}
-          />
-          <span>{dayCompare.fromNow(data.createAt)}</span>
-        </div>
+      <div className="flex flex-col gap-5 py-8">
+        <Card className="bg-transparent">
+          <CardHeader className="flex items-start flex-col gap-3">
+            <Badge variant={"secondary"}>{boardName}게시판</Badge>
+            <h2>{data.title}</h2>
+
+            <div className="flex">
+              <UserRoleDisplay
+                role={data.creator.role}
+                nickname={data.creator.nickname}
+              />
+
+              <span className="text-muted-foreground text-sm">
+                {dayCompare.fromNow(data.createAt)}
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent className="border-t pt-5 bg-slate-50 dark:bg-custom-input">
+            <QuillViewer contents={data.contents} />
+          </CardContent>
+          <CardFooter className="border-t pt-5">
+            {/* Controller */}
+            <PostController
+              id={id}
+              category={category}
+              creatorRole={data.creator.role}
+              creatorEmail={
+                data.creator.role !== USER_ROLE.ANONYMOUS
+                  ? data.creator.email
+                  : null
+              }
+            />
+          </CardFooter>
+        </Card>
       </div>
 
-      <div className={classes.contentsWrapper}>
+      {/* <div className="py-8 border-t border-b border-muted-foreground/30 my-3">
         <div className={classes.postContents}>
-          <QuillViewer contents={data.contents} />
-
           {data.updateAt !== data.createAt && (
             <div className={classes.lastUpdate}>조회수 {data.view}</div>
           )}
         </div>
-      </div>
-
-      {/* Controller */}
-      <PostController
-        id={id}
-        category={category}
-        creatorRole={data.creator.role}
-        creatorEmail={
-          data.creator.role !== USER_ROLE.ANONYMOUS ? data.creator.email : null
-        }
-      />
+      </div> */}
 
       {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
       <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>

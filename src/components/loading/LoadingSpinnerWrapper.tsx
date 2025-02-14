@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import LoadingSpiner from "./LoadingSpiner";
 import { cn } from "@/lib/utils";
+import LoadingSpiner from "../ui/LoadingSpiner";
 
 export default function LoadingSpinnerWrapper({
   loading,

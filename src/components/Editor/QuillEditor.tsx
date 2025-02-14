@@ -1,34 +1,22 @@
 "use client";
 
-import {
-  Controller,
-  FieldValues,
-  Path,
-  useFormContext,
-} from "react-hook-form";
+import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
 import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
 import classes from "./QuillEditor.module.scss";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 import { useEffect, useRef } from "react";
+import { FormControl, FormItem, FormMessage } from "../ui/form";
 
 export default function QuillEditor<T extends FieldValues>({
   name,
 }: {
   name: Path<T>;
 }) {
-  const {
-    formState: { errors },
-    control,
-    setValue,
-    trigger,
-  } = useFormContext();
+  const { control, setValue, trigger } = useFormContext();
 
   const quillRef = useRef<any>(null);
   const isComposing = useRef(false);
   const contentCache = useRef<string>("");
-
-  const err = name && errors ? errors[name] : null;
 
   useEffect(() => {
     const editor = quillRef.current?.getEditor();
@@ -65,14 +53,8 @@ export default function QuillEditor<T extends FieldValues>({
       }
     };
 
-    editorRoot.addEventListener(
-      "compositionstart",
-      handleCompositionStart
-    );
-    editorRoot.addEventListener(
-      "compositionend",
-      handleCompositionEnd
-    );
+    editorRoot.addEventListener("compositionstart", handleCompositionStart);
+    editorRoot.addEventListener("compositionend", handleCompositionEnd);
     editorRoot.addEventListener("input", handleInput);
 
     return () => {
@@ -80,65 +62,62 @@ export default function QuillEditor<T extends FieldValues>({
         "compositionstart",
         handleCompositionStart
       );
-      editorRoot.removeEventListener(
-        "compositionend",
-        handleCompositionEnd
-      );
+      editorRoot.removeEventListener("compositionend", handleCompositionEnd);
       editorRoot.removeEventListener("input", handleInput);
     };
   }, [name, setValue, trigger]);
 
+  console.log(name);
+
   return (
     <>
-      <div
-        className={`${classes.editorContainer} ${
-          err?.message ? classes.error : undefined
-        }`}
-      >
+      <div className={`${classes.editorContainer} `}>
         <Controller
           name={name}
           control={control}
           render={({ field }) => (
-            <ReactQuill
-              ref={quillRef}
-              theme="snow"
-              value={field.value || ""}
-              onChange={(content, delta, source, editor) => {
-                if (!isComposing.current) {
-                  const currentContent = editor.getHTML();
-                  if (contentCache.current !== currentContent) {
-                    contentCache.current = currentContent;
-                    field.onChange(currentContent);
-                  }
-                }
-              }}
-              placeholder="내용을 입력해주세요"
-              className={classes.custumQuillEditor}
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, false] }],
-                  ["bold", "italic", "underline"],
-                  ["blockquote", "code-block"],
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["link"],
-                ],
-              }}
-              formats={[
-                "header",
-                "bold",
-                "italic",
-                "underline",
-                "blockquote",
-                "code-block",
-                "list",
-                "link",
-                "image",
-              ]}
-            />
+            <FormItem>
+              <FormControl>
+                <ReactQuill
+                  {...field}
+                  onChange={(content, delta, source, editor) => {
+                    if (!isComposing.current) {
+                      const currentContent = editor.getHTML();
+                      if (contentCache.current !== currentContent) {
+                        contentCache.current = currentContent;
+                        field.onChange(currentContent);
+                        trigger(name);
+                      }
+                    }
+                  }}
+                  placeholder="내용을 입력해주세요"
+                  modules={{
+                    toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ["bold", "italic", "underline"],
+                      ["blockquote", "code-block"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link"],
+                    ],
+                  }}
+                  formats={[
+                    "header",
+                    "bold",
+                    "italic",
+                    "underline",
+                    "blockquote",
+                    "code-block",
+                    "list",
+                    "link",
+                    "image",
+                  ]}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
       </div>
-      {err && <FormRegisterError errorMsg={err.message as string} />}
     </>
   );
 }

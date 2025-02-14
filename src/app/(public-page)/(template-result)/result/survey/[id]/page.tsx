@@ -1,11 +1,11 @@
-import CommentEditor from "@/app/(template-result)/components/CommentEditor";
-import ResultCommentSection from "@/app/(template-result)/components/ResultCommentSection";
-import ResultSummry from "@/app/(template-result)/components/ResultSummry";
-import ResultSurveyCharts from "@/app/(template-result)/result/survey/components/SurveyStatsCharts";
+import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
+import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
+import ResultSummry from "@/app/(public-page)/(template-result)/components/ResultSummry";
+import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/components/SurveyStatsCharts";
 import {
   fetchComments,
   fetchSurveyData,
-} from "@/app/(template-result)/result/survey/components/test";
+} from "@/app/(public-page)/(template-result)/result/survey/components/test";
 import { CommentEditorProvider } from "@/context/context";
 import {
   COMMENT_EDITOR_TYPE,
@@ -85,9 +85,7 @@ export default async function SurveyResultPage({
 
         <ResultSurveyCharts id={id} />
 
-        <CommentEditorProvider
-          initialSection={COMMENT_NEED_PATH.TEMPLATE}
-        >
+        <CommentEditorProvider initialSection={COMMENT_NEED_PATH.TEMPLATE}>
           {/* 메인 Comment Editor */}
           <CommentEditor
             editorType={COMMENT_EDITOR_TYPE.COMMENT}

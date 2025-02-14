@@ -11,11 +11,7 @@ export function LoadingItem() {
   );
 }
 
-export default function LoadingTextSkeleton({
-  cnt = 6,
-}: {
-  cnt?: number;
-}) {
+export default function LoadingTexstSkeleton({ cnt = 6 }: { cnt?: number }) {
   const arr = Array.from({ length: cnt });
 
   return (

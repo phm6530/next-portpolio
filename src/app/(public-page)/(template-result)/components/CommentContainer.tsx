@@ -1,8 +1,8 @@
-import Comment from "@/app/(template-result)/components/Comment";
+import Comment from "@/app/(public-page)/(template-result)/components/Comment";
 import classes from "./CommentContainer.module.scss";
 import { Dispatch, SetStateAction } from "react";
 import Button from "@/components/ui/button/Button";
-import CommentEditor from "@/app/(template-result)/components/CommentEditor";
+import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 // import ReplyIcon from "/public/asset/icon/reply.svg";
 import {
   COMMENT_EDITOR_TYPE,

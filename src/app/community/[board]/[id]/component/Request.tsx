@@ -24,7 +24,5 @@ export default function Request({
     },
   });
 
-  console.log(data);
-
   return <>요청..</>;
 }

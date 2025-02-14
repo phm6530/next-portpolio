@@ -12,9 +12,9 @@ export default function BoardListItem({
     <div className="border-b py-4 flex flex-col gap-5">
       <Link href={`/community/${itemData.category}/${itemData.id}`}>
         <div className="cursor-pointer hover:text-primary text-sm flex items-center gap-3">
-          {itemData.title}
+          <p className="mt-[1px]">{itemData.title}</p>
           {itemData.commentCnt > 0 && (
-            <span className="text-[11px] opacity-60 text-indigo-500">
+            <span className="text-[12px]   text-indigo-400">
               [{itemData.commentCnt}]
             </span>
           )}
@@ -27,8 +27,8 @@ export default function BoardListItem({
           nickname={itemData.creator.nickname}
         />
 
-        <div className={classes.createAt}>{itemData.createAt}</div>
-        <div className={classes.viewCnt}>조회수 {itemData.view}</div>
+        <div className="opacity-30 text-xs">{itemData.createAt}</div>
+        <div className="opacity-30 text-xs ml-auto">조회수 {itemData.view}</div>
       </div>
     </div>
   );

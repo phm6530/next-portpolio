@@ -7,39 +7,13 @@
 :root {
   --background-color: #{map-get($colors-white, "default")};
   --text-color: #{map-get($colors-black, "default")};
-  --background-color-vanner: #{map-get($background-gradients, "vanner")};
-  --background-color-questionhead: linear-gradient(
-    84.35deg,
-    #0a001a 13.62%,
-    #373038 28.13%
-  );
 }
 
-:root[data-theme="dark"] {
-  --background-color: #1e1e20;
-  --text-color: #{map-get($colors-white, "default")};
-  --background-color-vanner: #{map-get($colors-black, "soft")};
-  --background-color-questionhead: #fff;
-}
 //그리드
 @import "mixin";
 @import "user.scss";
 @import "font.scss";
 @import "@/lib/aos/aos.scss";
-
-// :root {
-//   --background-color: #{map-get($colors-white, "default")};
-//   --text-color: #{map-get($colors-black, "default")};
-//   --background-color-vanner: #{map-get($background-gradients, "vanner")};
-//   --background-color-questionhead: linear-gradient(84.35deg, #0a001a 13.62%, #373038 28.13%);
-// }
-
-// :root[data-theme="dark"] {
-//   --background-color: #1e1e20;
-//   --text-color: #{map-get($colors-white, "default")};
-//   --background-color-vanner: #{map-get($colors-black, "soft")};
-//   --background-color-questionhead: #fff;
-// }
 
 html,
 body {
@@ -51,13 +25,6 @@ body {
 body {
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
     system-ui, Roboto, sans-serif;
-}
-
-textarea,
-input,
-button {
-  font-family: "Pretendard Variable";
-  font-size: 14px;
 }
 
 .container {
@@ -99,7 +66,6 @@ input:focus {
 }
 
 input[readonly] {
-  background-color: #f0f0f0;
   /* Disabled-like background */
   color: #999;
   /* Gray out the text */
