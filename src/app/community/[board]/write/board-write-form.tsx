@@ -10,31 +10,20 @@ import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
-import revaildateTags from "@/lib/revaildateTags";
+
 import { toast } from "react-toastify";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
 import { Button } from "@/components/ui/button";
+import {
+  baseSchema,
+  anonymousSchema,
+  boardWirteSchema,
+} from "./board-write-schema";
+import { revaildateTags } from "@/action/revaildate";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
-const baseScheme = z.object({
-  title: z.string().min(1, "제목은 필수 항목입니다."),
-  contents: z.string().min(1, "내용은 필수 항목입니다."),
-});
-
-// 익명일 때
-const guestSchema = baseScheme.extend({
-  anonymous: z
-    .string()
-    .min(2, "글쓴이는 최소 2글자 이상이여야 합니다")
-    .optional(),
-  password: z
-    .string()
-    .min(4, "비밀번호는 최소 4자리 이상이어야 합니다.")
-    .optional(),
-});
-
-export type WriteBoardProps = z.infer<typeof guestSchema>;
+export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
 
 export default function BoardForm({
   boardKey,
@@ -49,8 +38,8 @@ export default function BoardForm({
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
-  const method = useForm<WriteBoardProps>({
-    resolver: zodResolver(!!userData ? baseScheme : guestSchema),
+  const method = useForm<UnionBoardProps>({
+    resolver: zodResolver(!!userData ? baseSchema : anonymousSchema),
     defaultValues: {
       title: "",
       contents: "",
@@ -61,7 +50,7 @@ export default function BoardForm({
   const { mutate, isPending, isSuccess } = useMutation<
     unknown,
     Error,
-    WriteBoardProps
+    UnionBoardProps
   >({
     mutationFn: async (data) => {
       return await withFetch(async () => {
@@ -84,9 +73,7 @@ export default function BoardForm({
           `${BASE_NEST_URL}/board/${boardKey}`,
           options
         );
-        await revaildateTags({
-          tags: [`community-${boardKey}`],
-        });
+        await revaildateTags([`community-${boardKey}`]);
         return datas;
       });
     },
@@ -100,7 +87,8 @@ export default function BoardForm({
 
   const { handleSubmit } = method;
 
-  const onSubmitHandler = (data: WriteBoardProps) => {
+  const onSubmitHandler = (data: UnionBoardProps) => {
+    console.log("data:::", data);
     mutate(data);
   };
 
