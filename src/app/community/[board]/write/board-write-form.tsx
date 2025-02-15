@@ -6,8 +6,6 @@ import { z } from "zod";
 import { CategoriesKey, CategoriesValues } from "@/types/board";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
-import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
 import QuillEditor from "@/components/Editor/QuillEditor";
 
@@ -20,7 +18,7 @@ import {
   anonymousSchema,
   boardWirteSchema,
 } from "./board-write-schema";
-import { revaildateTags } from "@/action/revaildate";
+import { BoardWirteAction } from "./board-wirte-action";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
@@ -53,28 +51,10 @@ export default function BoardForm({
     UnionBoardProps
   >({
     mutationFn: async (data) => {
-      return await withFetch(async () => {
-        let options: RequestInit = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        };
-
-        if (!!userData) {
-          options = {
-            ...options,
-            credentials: "include",
-          };
-        }
-
-        const datas = await fetch(
-          `${BASE_NEST_URL}/board/${boardKey}`,
-          options
-        );
-        await revaildateTags(() => {}, [`community-${boardKey}`]);
-        return datas;
+      return await BoardWirteAction({
+        boardKey,
+        body: data,
+        isMember: !!userData,
       });
     },
 
@@ -88,7 +68,6 @@ export default function BoardForm({
   const { handleSubmit } = method;
 
   const onSubmitHandler = (data: UnionBoardProps) => {
-    console.log("data:::", data);
     mutate(data);
   };
 
@@ -113,8 +92,8 @@ export default function BoardForm({
         )}
         <InputField
           name="title"
-          label="닉네임"
-          placeholder="닉네임을 2글자 이상 입력해주세요."
+          label="글 제목"
+          placeholder="글 제목을 입력해주세요."
         />
         <div>
           {/* Quill Editor */}

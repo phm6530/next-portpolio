@@ -1,8 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
 import FormInput from "./ui/FormElement/FormInput";
 import FormToolButton from "@/app/(protected-page)/(template-made)/components/FormToolButton";
-import classes from "./DeleteItemForm.module.scss";
 import Password from "/public/asset/icon/password.svg";
+import { Button } from "./ui/button";
+import InputField from "./shared/inputs/input-field";
+import PasswordInputField from "./shared/inputs/input-password-field";
 
 export default function DeleteItemForm({
   action,
@@ -20,28 +22,9 @@ export default function DeleteItemForm({
 
   return (
     <FormProvider {...methods}>
-      <div className={classes.passwordHeader}>
-        <div>
-          <Password />
-        </div>
-
-        <h3 className={classes.title}>비밀번호를 입력해주세요</h3>
-      </div>
-
-      <div className={classes.inputWrapper}>
-        <FormInput
-          {...register("password", { required: "필수항목 입니다." })}
-          autoComplete="off"
-          placeholder="비밀번호를 입력해주세요."
-          type="password"
-        />
-        <FormToolButton
-          clickEvent={handleSubmit(clickEvent)}
-          disabled={isPending}
-          className={classes.buttonWidth}
-        >
-          삭제
-        </FormToolButton>
+      <div className="w-full mt-4 mb-4">
+        <PasswordInputField />
+        <button type="submit">test</button>
       </div>
     </FormProvider>
   );

@@ -1,15 +1,24 @@
-"use server";
-
 import { revalidateTag } from "next/cache";
 
 export const revaildateTags = async <T>(
   cb: () => Promise<T>,
   tags: string[]
 ): Promise<T> => {
-  // callback
-  const result = await cb();
+  try {
+    const result = (await cb()) as Response;
 
-  // Revaildate 초기화
-  tags.forEach((tag) => revalidateTag(tag));
-  return result;
+    if (!result.ok) {
+      const errorMsg = await result.json();
+      throw new Error(errorMsg.message || "error");
+    }
+
+    tags.forEach((tag) => revalidateTag(tag));
+    return result.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error("서버에 문제가 있습니다.");
+    }
+  }
 };

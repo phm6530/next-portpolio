@@ -1,4 +1,4 @@
-import { boardCateogries, CategoriesKey } from "@/types/board";
+import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import BoardForm from "./board-write-form";
 import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 
@@ -7,7 +7,7 @@ export default function BoardWrite({
 }: {
   params: { board: CategoriesKey };
 }) {
-  const boardName = boardCateogries[params.board];
+  const boardName = BOARD_CATEGORIES[params.board];
 
   return (
     <>

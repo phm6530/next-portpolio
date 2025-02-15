@@ -12,10 +12,10 @@ export default function BoardCategoriesWrapper({
 
   return (
     <div className="flex gap-2 mb-4 mt-8">
-      {Object.entries(BOARD_CATEGORIES).map(([key, value]) => {
-        console.log(key, value);
+      {Object.entries(BOARD_CATEGORIES).map(([key, value], idx) => {
         return (
           <TabRounded
+            key={`${idx}-${key}`}
             onClick={() => router.push(`/community/${key}`)}
             active={curBoard === key}
           >

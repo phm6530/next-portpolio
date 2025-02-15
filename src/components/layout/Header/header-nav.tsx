@@ -123,14 +123,14 @@ export default function HeaderNav() {
               })}
             </nav>
 
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end ">
               {user ? (
-                <>
+                <div className="ml-5 border-l  flex pl-5">
                   <Button
                     variant={"ghost"}
                     size={"sm"}
                     asChild
-                    className="text-[12px] mr-3"
+                    className="text-[12px] mr-3 "
                   >
                     <Link href={"/mypage"}>마이페이지</Link>
                   </Button>
@@ -143,7 +143,7 @@ export default function HeaderNav() {
                   >
                     로그아웃
                   </Button>
-                </>
+                </div>
               ) : (
                 <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
               )}

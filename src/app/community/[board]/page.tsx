@@ -52,7 +52,7 @@ export default async function BoardListPage({
       <div className="flex gap-5 [&>div:first-child]:flex-1">
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
-        <Button asChild size={"xxl"}>
+        <Button asChild size={"lg"} className="p-6">
           <Link href={`/community/${params.board}/write`}>글쓰기</Link>
         </Button>
       </div>
