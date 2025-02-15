@@ -26,7 +26,7 @@ import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components
 import TemplateInputWrapper from "../common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
-import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
+import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 import dynamic from "next/dynamic";
 import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 import useAOS from "@/_hook/usAOS";
@@ -213,7 +213,7 @@ export default function CreateSurvey() {
     <>
       <RenderPreview>프리뷰</RenderPreview>
 
-      <HeaderTitle
+      <SecondaryMessageBox
         title={`생성하실 템플릿 서식을\n기재해주세요`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />

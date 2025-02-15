@@ -7,7 +7,7 @@ import UnSplashThumbNail from "./UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import FormToolButton from "./FormToolButton";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import UploadedImagePreview from "./ImageContainer/UploadedImagePreview";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 
@@ -111,9 +111,6 @@ export default function ThumbNailUploader() {
           setImgError={setImgError}
         />
       </div>
-      {errors.thumbnail && (
-        <FormRegisterError errorMsg={errors.thumbnail?.message} />
-      )}
     </>
   );
 }

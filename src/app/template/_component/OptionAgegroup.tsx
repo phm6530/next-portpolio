@@ -1,6 +1,5 @@
 import { useFormContext } from "react-hook-form";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
@@ -38,7 +37,6 @@ export default function OptionAgeGroup() {
           );
         })}
       </div>{" "}
-      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
     </div>
   );
 }

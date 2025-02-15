@@ -44,7 +44,7 @@ export default async function BoardList({
   return (
     <>
       <section className={`${classes.container} animate-fadein`}>
-        <div className="border-b pb-3 border-muted-foreground">
+        <div className="border-b pb-3 border-muted-foreground/40">
           <h3>최신 순 </h3>
         </div>
         <div>

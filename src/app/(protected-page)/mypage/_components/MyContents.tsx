@@ -1,24 +1,19 @@
 "use client";
 import { User } from "@/types/auth.type";
 import { QUERY_KEY } from "@/types/constans";
-import classes from "./MyContents.module.scss";
-import {
-  RespondentsAndMaxGroup,
-  RespondentsData,
-  TemplateItemMetadata,
-} from "@/types/template.type";
+import { RespondentsData, TemplateItemMetadata } from "@/types/template.type";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import withAuthFetch from "@/utils/withAuthFetch";
 import MyContentsItem from "./MyContentsItem";
 import { useState } from "react";
-import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { CircleSlash, SquarePlus } from "lucide-react";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 import useAOS from "@/_hook/usAOS";
+import TabRounded from "@/components/ui/tab-rounded";
 
 type MyContentsListData = TemplateItemMetadata<RespondentsData>;
 
@@ -63,22 +58,18 @@ export default function MyContents() {
 
       <div className="py-5 flex items-center gap-2 justify-between">
         <div className="flex gap-2">
-          <div
-            className={`border py-2.5 px-4 text-sm rounded-full cursor-pointer ${
-              filter === "new" ? "border-zinc-500" : undefined
-            }`}
+          <TabRounded
+            active={"new" === filter}
             onClick={() => setFilter("new")}
           >
             최신 순
-          </div>
-          <div
-            className={`border py-2.5 px-4 text-sm rounded-full cursor-pointer ${
-              filter === "users" ? "border-zinc-500" : undefined
-            }`}
+          </TabRounded>
+          <TabRounded
+            active={"users" === filter}
             onClick={() => setFilter("users")}
           >
             참여자 순
-          </div>
+          </TabRounded>
         </div>
         <Button size={"xl"} asChild variant={"outline"}>
           <Link href={"/made"}>
@@ -105,7 +96,7 @@ export default function MyContents() {
                   <CircleSlash />
                   <span>생성하신 템플릿이 없습니다</span>
                 </div>
-              </CardContent>{" "}
+              </CardContent>
               <Button size={"xl"} asChild className="shadow-lg ">
                 <Link href={"/made"}>템플릿 만들기</Link>
               </Button>

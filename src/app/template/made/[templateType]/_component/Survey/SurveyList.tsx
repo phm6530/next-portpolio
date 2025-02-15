@@ -5,7 +5,7 @@ import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import classes from "./SurveyList.module.scss";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyList() {
@@ -68,12 +68,6 @@ export default function SurveyList() {
             );
           }
         })}
-
-        {errors["questions"]?.root?.message && (
-          <QuestionListWrapper>
-            <FormRegisterError errorMsg={errors["questions"]?.root?.message} />
-          </QuestionListWrapper>
-        )}
 
         {/* {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."} */}
       </div>

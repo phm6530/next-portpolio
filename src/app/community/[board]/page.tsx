@@ -1,17 +1,14 @@
-import { notFound } from "next/navigation";
-import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
+import { notFound, useRouter } from "next/navigation";
+import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 import { Button } from "@/components/ui/button";
-import classes from "./page.module.scss";
-import BoardCategories from "../component/BoardCategories";
 import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
-import { boardCateogries, CategoriesKey } from "@/types/board";
+import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import BoardList from "../component/BoardList";
 import { Suspense } from "react";
-import SkeletonListItem from "@/components/shared/loading/skeleton-listitem";
-import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
-import LoadingSpiner from "@/components/ui/LoadingSpiner";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import TabRounded from "@/components/ui/tab-rounded";
+import BoardCategoriesWrapper from "./board-categories";
 
 export default async function BoardListPage({
   params,
@@ -24,8 +21,8 @@ export default async function BoardListPage({
   curPage?: string;
   searchParams?: { search: string; page: string };
 }) {
-  function isBoardCategory(key: string): key is keyof typeof boardCateogries {
-    return key in boardCateogries;
+  function isBoardCategory(key: string) {
+    return key in BOARD_CATEGORIES;
   }
 
   if (!isBoardCategory(params.board)) {
@@ -39,19 +36,20 @@ export default async function BoardListPage({
       ? +searchParams.page
       : 0;
 
-  const boardName = boardCateogries[params.board];
+  const boardName = BOARD_CATEGORIES[params.board];
+
   return (
     <>
-      <HeaderTitle
+      <SecondaryMessageBox
         title={`${boardName} 게시판 \n`}
         description="한줄 남겨주시면 저에게 큰 힘이 됩니다 ..!"
       />
 
-      {/* Category button */}
-      <BoardCategories categories={boardCateogries} curCategory={boardName} />
+      {/* Categories */}
+      <BoardCategoriesWrapper curBoard={params.board} />
 
       {/* Search Bar */}
-      <div className={classes.actionArea}>
+      <div className="flex gap-5 [&>div:first-child]:flex-1">
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
         <Button asChild size={"xxl"}>

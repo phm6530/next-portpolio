@@ -1,5 +1,5 @@
 "use client";
-import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
+import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 import { useEffect, useRef, useState } from "react";
 import FindmenberAndSendPin from "./_component/FindmenberAndSendPin";
 import AccessMatchPin from "./_component/AccessMatchPin";
@@ -84,7 +84,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <div>
-      <HeaderTitle
+      <SecondaryMessageBox
         title={stepData[step].title}
         description={stepData[step].description}
       />{" "}

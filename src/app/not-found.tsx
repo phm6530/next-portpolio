@@ -1,3 +1,3 @@
 "use client";
-import ErrorComponent from "./error";
+import { default as ErrorComponent } from "./error";
 export default ErrorComponent;

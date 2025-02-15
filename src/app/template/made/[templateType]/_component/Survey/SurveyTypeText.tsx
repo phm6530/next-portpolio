@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import QuestionItemHeader, {
@@ -103,12 +103,6 @@ export default function SurveyTypeText({
               삭제
             </button>
           </QuestionItemHeader>
-
-          {errors?.questions?.[surveyIdx]?.label?.message && (
-            <FormRegisterError
-              errorMsg={errors?.questions[surveyIdx]?.label?.message}
-            />
-          )}
         </div>
 
         {isPending ? (

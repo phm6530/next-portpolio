@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        "auto-fill": "repeat(auto-fill, minmax(250px, 1fr))",
+      },
       boxShadow: {
         custom: "5px 14px 29px rgb(100 63 255 / 25%)",
       },

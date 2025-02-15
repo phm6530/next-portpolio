@@ -2,12 +2,12 @@ import classes from "./ListPageBanner.module.scss";
 import Grid from "@/components/ui/Grid";
 import PageTitle from "@/components/ui/PageTitle";
 import Button from "@/components/ui/button/Button";
-import TemplateCractor from "@/components/Cractor/TemplateCractor";
+import TemplateCractor from "./Cractor/TemplateCractor";
 import Link from "next/link";
 
 export default function ListPageBanner() {
   return (
-    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#1c2046] dark:to-[#1f193b]">
+    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#2c1c46] dark:to-[#262039]">
       <Grid.center className={classes.bannerGrid}>
         <div>
           <PageTitle>
@@ -22,18 +22,6 @@ export default function ListPageBanner() {
             <Link href={"/made"}>
               <Button.submit>+ 설문조사 만들기</Button.submit>
             </Link>
-            {/* 
-            <Link href={"/made"}>
-              <Button.BannerBtn>
-                <AnonymousIcon /> 설문조사 만들기
-              </Button.BannerBtn>
-            </Link>
-            <Link href={"/made"}>
-              <Button.BannerBtn>+ 랭킹 만들기</Button.BannerBtn>
-            </Link>
-            <Link href={"/made"}>
-              <Button.BannerBtn>+ 테스트 만들기</Button.BannerBtn>
-            </Link> */}
           </div>
         </div>
 

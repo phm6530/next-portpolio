@@ -12,7 +12,7 @@ export default function BoardListItem({
     <div className="border-b py-4 flex flex-col gap-5">
       <Link href={`/community/${itemData.category}/${itemData.id}`}>
         <div className="cursor-pointer hover:text-primary text-sm flex items-center gap-3">
-          <p className="mt-[1px]">{itemData.title}</p>
+          <p className="mt-[1px] text-base">{itemData.title}</p>
           {itemData.commentCnt > 0 && (
             <span className="text-[12px]   text-indigo-400">
               [{itemData.commentCnt}]

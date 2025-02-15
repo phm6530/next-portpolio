@@ -1,5 +1,5 @@
 "use client";
-import TemplateItem from "@/app/list/components/TemplateItem";
+import TemplateItem from "./TemplateItem";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 import {
@@ -9,11 +9,10 @@ import {
   TEMPLATERLIST_SORT,
 } from "@/types/template.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import classes from "./TemplateItemlist.module.scss";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import NotFoundComponent from "@/components/NotFoundComponent";
-import LoadingSummrySkeleton from "@/components/loading/LoadingSummrySkeleton";
+import LoadingSpiner from "@/components/ui/LoadingSpiner";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -69,7 +68,11 @@ export default function TemplateList() {
   }
 
   if (isPending) {
-    return <LoadingSummrySkeleton cnt={8} />;
+    return (
+      <div className="relative min-h-[300px]">
+        <LoadingSpiner />
+      </div>
+    );
   }
 
   if (data?.pages[0].data.length === 0) {
@@ -82,7 +85,7 @@ export default function TemplateList() {
 
   return (
     <>
-      <div className={` ${classes.surveyItemWrapper}`}>
+      <div className="grid grid-cols-auto-fill gap-[30px]">
         {data.pages.map((page) => {
           return page.data.map((item) => {
             if (item.respondents.tag === RESPONDENT_TAG.MAXGROUP) {

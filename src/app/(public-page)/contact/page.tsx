@@ -10,7 +10,7 @@ import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
-import HeaderTitle from "../(template-made)/components/Header/HeaderTitle";
+import SecondaryMessageBox from "../(template-made)/components/Header/SecondaryMessageBox";
 
 type MailFormData = {
   name: string;
@@ -22,11 +22,7 @@ export default function Page() {
 
   const { handleSubmit, reset, register } = formMethod;
 
-  const { mutate, isPending } = useMutation<
-    void,
-    Error,
-    MailFormData
-  >({
+  const { mutate, isPending } = useMutation<void, Error, MailFormData>({
     mutationFn: (data) =>
       withFetch(async () => {
         const url = `${ENV_NESTBASE_URL}/contact`;
@@ -60,7 +56,7 @@ export default function Page() {
         </>
       )}
       <Grid.smallCenter>
-        <HeaderTitle title={"궁금한 점이 있으신가요?"} />
+        <SecondaryMessageBox title={"궁금한 점이 있으신가요?"} />
 
         <form
           className={classes.mailForm}
@@ -79,8 +75,7 @@ export default function Page() {
               type="text"
               placeholder="회신 받으실 이메일이나 핸드폰번호를 기재해주세요"
               {...register("digit", {
-                required:
-                  "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
+                required: "회신 받으실 이메일이나 핸드폰번호를 기재해주세요.",
               })}
               inputName="digit"
             />

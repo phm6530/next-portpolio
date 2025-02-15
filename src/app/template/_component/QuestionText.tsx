@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
 import classes from "./QuestionText.module.scss";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import ImageZoom from "@/app/template/_component/ImageZoom";
 import { AnswerSurvey } from "@/types/survey.type";
@@ -85,8 +85,6 @@ export default function QuestionText({
           })}
           autoComplete="off"
         />
-
-        {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
       </div>
     </>
   );

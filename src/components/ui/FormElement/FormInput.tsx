@@ -2,7 +2,6 @@
 import { forwardRef } from "react";
 import classes from "./FormInput.module.scss";
 import { useFormContext } from "react-hook-form";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputName?: string;
@@ -26,9 +25,6 @@ const FormInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         ref={ref}
         {...rest}
       />
-      {err && !notErrorText && (
-        <FormRegisterError errorMsg={err.message as string} />
-      )}
     </div>
   );
 });

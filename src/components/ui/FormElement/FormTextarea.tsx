@@ -2,7 +2,6 @@ import useRows from "@/_hook/useRows";
 import classes from "./FormInput.module.scss";
 import { forwardRef, TextareaHTMLAttributes } from "react";
 import { useFormContext } from "react-hook-form";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 
 type TextAreaProps = {
   textareaName?: string;
@@ -32,7 +31,6 @@ const FormTextarea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           rows={rows}
           {...rest}
         />
-        {err && <FormRegisterError errorMsg={err.message as string} />}
       </>
     );
   }

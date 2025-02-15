@@ -2,8 +2,6 @@ import Footer from "@/components/layout/Footer";
 import ProviderContext from "@/app/_provider";
 import "@/styles/_styles.scss";
 import { Metadata } from "next";
-import GlobalNav from "@/components/layout/Header/GlobalNav";
-
 import {
   dehydrate,
   HydrationBoundary,
@@ -18,6 +16,7 @@ import { cookies } from "next/headers";
 import { ToastContainer } from "react-toastify";
 import toastConfig from "@/config/toast";
 import "./globals.css";
+import HeaderNav from "@/components/layout/Header/header-nav";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -68,7 +67,7 @@ export default async function RootLayout({
           <ClientProvider>
             <HydrationBoundary state={dehydrate(queryClient)}>
               {/* Global */}
-              <GlobalNav />
+              <HeaderNav />
               <ToastContainer {...toastConfig} />
 
               <main className=" mt-[60px]">{children}</main>

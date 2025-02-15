@@ -1,6 +1,6 @@
 import { boardCateogries, CategoriesKey } from "@/types/board";
 import BoardForm from "./board-write-form";
-import HeaderTitle from "@/app/(protected-page)/(template-made)/components/Header/HeaderTitle";
+import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 
 export default function BoardWrite({
   params,
@@ -11,7 +11,7 @@ export default function BoardWrite({
 
   return (
     <>
-      <HeaderTitle
+      <SecondaryMessageBox
         title={`${boardName} 게시판 \n`}
         description="한줄 남겨주시면 저에게 큰 힘이 됩니다 ..!"
       />

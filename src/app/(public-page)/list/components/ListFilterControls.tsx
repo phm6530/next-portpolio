@@ -9,6 +9,7 @@ import MaleIcon from "/public/asset/icon/male.svg";
 
 import classes from "./ListFilterControls.module.scss";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
+import TabRounded from "@/components/ui/tab-rounded";
 
 const btnArr = [
   {
@@ -18,24 +19,21 @@ const btnArr = [
   {
     label: "참여자 순",
     value: TEMPLATERLIST_SORT.RESPONDENTS,
-    icon: FemaleIcon,
   },
   {
     label: "남성 선호도",
     value: TEMPLATERLIST_SORT.MALE,
-    icon: MaleIcon,
   },
   {
     label: "여성 선호도",
     value: TEMPLATERLIST_SORT.FEMALE,
-    icon: FemaleIcon,
   },
 ];
 
 export default function ListFilterControls() {
   const qs = useSearchParams();
-
   const router = useRouter();
+
   const sortValue = qs.get("sort") || "all";
   const [active, setActive] = useState(sortValue || "all");
 
@@ -43,14 +41,11 @@ export default function ListFilterControls() {
     setActive(sortValue);
   }, [qs, sortValue]);
 
-  const onClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const newSortValue = e.currentTarget.value;
-
-    const newParams = new URLSearchParams(qs.toString()); // 쿼리 파라미터 복사
-    newParams.set("sort", newSortValue);
+  const onClickHandler = (e: TEMPLATERLIST_SORT) => {
+    const newParams = new URLSearchParams(qs.toString());
+    newParams.set("sort", e);
     newParams.delete("page");
-    setActive(newSortValue);
-
+    setActive(e);
     router.push(`/list?${newParams.toString()}`, { scroll: false });
   };
 
@@ -58,17 +53,13 @@ export default function ListFilterControls() {
     <div className={classes.btnWrapper}>
       {btnArr.map((btn, idx) => {
         return (
-          <button
+          <TabRounded
+            active={active === btn.value}
+            onClick={() => onClickHandler(btn.value)}
             key={`btn-${idx}`}
-            className={`${active === btn.value ? classes.active : ""} ${
-              classes.btnControler
-            }`}
-            value={btn.value}
-            onClick={onClickHandler}
           >
-            {/* {btn.icon && <btn.icon className={classes.btnImg} />} */}
-            <span>{btn.label}</span>
-          </button>
+            {btn.label}
+          </TabRounded>
         );
       })}
     </div>

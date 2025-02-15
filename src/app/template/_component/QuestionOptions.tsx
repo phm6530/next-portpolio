@@ -1,6 +1,6 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { useFormContext, useWatch } from "react-hook-form";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import styles from "./QuestionOptions.module.scss";
 import ImageViewer from "@/app/template/_component/ImageViewer";
@@ -77,7 +77,6 @@ export default function QuestionOptions({
           </InputTypeStyle.RadioAnswer>
         );
       })}
-      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
     </QuestionsContainer>
   );
 }

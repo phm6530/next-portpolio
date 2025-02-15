@@ -73,7 +73,7 @@ export default function BoardForm({
           `${BASE_NEST_URL}/board/${boardKey}`,
           options
         );
-        await revaildateTags([`community-${boardKey}`]);
+        await revaildateTags(() => {}, [`community-${boardKey}`]);
         return datas;
       });
     },

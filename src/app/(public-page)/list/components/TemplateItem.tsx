@@ -19,7 +19,7 @@ const TemplateItem = forwardRef(
       title,
       description,
       templateType,
-      createdAt,
+      createAt,
       startDate,
       endDate,
       thumbnail,
@@ -62,7 +62,7 @@ const TemplateItem = forwardRef(
           <TemplateStatus
             startDate={startDate}
             endDate={endDate}
-            createdAt={createdAt}
+            createdAt={createAt}
             maxGroup={maxGroup}
           />
 

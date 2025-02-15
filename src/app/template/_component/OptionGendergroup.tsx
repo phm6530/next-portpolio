@@ -1,4 +1,3 @@
-import FormRegisterError from "@/components/Error/FormRegisterError";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { useFormContext } from "react-hook-form";
@@ -35,7 +34,6 @@ export default function OptionGenderGroup() {
           );
         })}
       </div>{" "}
-      {errorMsg && <FormRegisterError errorMsg={errorMsg as string} />}
     </div>
   );
 }

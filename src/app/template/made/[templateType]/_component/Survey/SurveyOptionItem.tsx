@@ -14,7 +14,7 @@ import OptionContainer from "@/app/(protected-page)/(template-made)/components/Q
 import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
 import Delete from "/public/asset/icon/delete.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import { useSearchParams } from "next/navigation";
@@ -157,15 +157,6 @@ export default function SurveyOptionItem({
       </OptionContainer>
 
       {/* Error  */}
-      {optionError?.[surveyIdx]?.options?.[optionIdx] && (
-        <div>
-          <FormRegisterError
-            errorMsg={
-              optionError?.[surveyIdx]?.options?.[optionIdx]?.value?.message
-            }
-          />
-        </div>
-      )}
     </div>
   );
 }

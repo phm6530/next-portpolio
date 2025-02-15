@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { useRouter } from "next/navigation";
-import NavUserProfile from "@/components/layout/Header/components/NavUserProfile";
+import HeaderNavProfile from "./header-nav-profile";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import Logo from "../../logo/logo";
@@ -20,19 +20,26 @@ import { Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../ui/button";
+import { BREAKPOINT } from "@/types/ui.type";
+
+enum PATHNAME {
+  LIST = "list",
+  MADE = "made",
+  COMMUNITY = "community",
+}
 
 const PATH = [
-  { label: "템플릿 리스트", path: "list", new: true },
-  { label: "템플릿 만들기", path: "made" },
-  { label: "커뮤니티", path: "community" },
+  { label: "템플릿 리스트", path: PATHNAME.LIST, new: true },
+  { label: "템플릿 만들기", path: PATHNAME.MADE },
+  { label: "커뮤니티", path: PATHNAME.COMMUNITY },
 ];
 
-export default function GlobalNav() {
+export default function HeaderNav() {
   const pathname = usePathname();
   const router = useRouter();
 
   // 모바일 여부
-  const isMobile = useMediaQuery(`(min-width:${768}px)`);
+  const isMobile = useMediaQuery(`(min-width:${BREAKPOINT.MD}px)`);
   const [navView, setNavView] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
@@ -59,7 +66,7 @@ export default function GlobalNav() {
         return await fetch(`${BASE_NEST_URL}/auth/logout`, {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/json", // Content-Type 설정 필요
+            "Content-Type": "application/json",
           },
           credentials: "include", // HttpOnly 리프래시  토큰 삭제를 위해 설정했음
         });
@@ -68,64 +75,66 @@ export default function GlobalNav() {
     onSuccess: async () => {
       resetUserQueries();
       toast.success("로그아웃 되었습니다.");
-      router.refresh();
+      router.refresh(); // refresh 해버리기
     },
     onError: () => {
-      router.refresh();
+      router.refresh(); // refresh 해버리기
     },
   });
+
+  const pathActive = (path: PATHNAME) => {
+    if (pathname === "/" && path === "list") {
+      return true;
+    }
+    return pathname.startsWith(`/${path}`);
+  };
 
   return (
     <>
       <header className="bg-white/70 dark:bg-background/90 fixed w-full flex items-center z-10 border-b h-[60px] backdrop-blur-sm">
         <Grid.center>
-          <div className="flex  justify-between items-center md:grid md:grid-cols-[2fr_1fr]">
-            {/* Burger Menu */}
-            <div
-              className={classes.burgerMenu}
-              onClick={() => setNavView(true)}
-            >
-              <Menu />
+          <div className="flex justify-between items-center md:grid md:grid-cols-3">
+            {/* Store에 따라 모바일 뷰 */}
+
+            <div className="max-w-[80px] w-full">
+              <Logo link />
             </div>
 
-            {/* Store에 따라 모바일 뷰 */}
-            <nav
-              className={`${classes.nav} ${
-                navView ? classes.view : classes.noneView
-              }`}
-            >
-              <div className="max-w-[80px] w-full">
-                <Logo link />
-              </div>
-
-              <div className="flex gap-7 text-sm">
-                {PATH.map((obj) => {
-                  return (
-                    <div
-                      className="flex items-center justify-center"
-                      key={`link-${obj.path}`}
+            <nav className="flex gap-7 text-sm justify-center">
+              {PATH.map((obj) => {
+                return (
+                  <div
+                    className="flex items-center justify-center"
+                    key={`link-${obj.path}`}
+                  >
+                    <NavLink
+                      href={`/${obj.path}`}
+                      active={() => pathActive(obj.path)}
                     >
-                      <NavLink
-                        href={`/${obj.path}`}
-                        active={pathname.startsWith(`/${obj.path}`)}
-                      >
-                        {obj.label}
-                      </NavLink>
-                      {obj.new && (
-                        <div className="text-[11px] px-2 ml-2 bg-[rgb(255,218,218)] rounded-full text-red-500">
-                          new
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                      {obj.label}
+                    </NavLink>
+                    {obj.new && (
+                      <div className="text-[11px] px-2 ml-2 bg-[rgb(255,218,218)] rounded-full text-red-500">
+                        new
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </nav>
 
             <div className="flex items-center justify-end">
               {user ? (
                 <>
-                  <NavUserProfile />
+                  <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    asChild
+                    className="text-[12px] mr-3"
+                  >
+                    <Link href={"/mypage"}>마이페이지</Link>
+                  </Button>
+                  <HeaderNavProfile />
                   <Button
                     variant={"outline"}
                     size={"sm"}

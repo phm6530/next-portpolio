@@ -1,58 +1,28 @@
 import Grid from "@/components/ui/Grid";
-import classes from "./page.module.scss";
-
 import ListFilterControls from "./components/ListFilterControls";
-import ListPageBanner from "@/app/list/components/ListPageBanner";
-// import TemplateList from "@/app/list/components/TemplateItemList";
-
+import ListPageBanner from "./components/ListPageBanner";
 import { default as loadDynamic } from "next/dynamic";
-import LoadingSummrySkeleton from "@/components/loading/LoadingSummrySkeleton";
-import SearchInput from "@/components/ui/SearchInput";
 
-// TemplateList를 동적 로드로 설정 (SSR 비활성화)
+import SkeletonTemplateItemList from "@/components/shared/loading/skeleton-template-itemlist";
+
 const TemplateList = loadDynamic(
-  () => import("@/app/list/components/TemplateItemList"),
+  () => import("./components/TemplateItemList"),
   {
     ssr: false,
-    loading: () => <LoadingSummrySkeleton cnt={8} />,
+    loading: () => <SkeletonTemplateItemList />,
   }
 );
 
 export default async function page() {
-  // 고차 컴포넌트
-  // const PrefetchTemplateList = await WithPrefetchRender(
-  //   TemplateList,
-  //   async (queryClient) => {
-  //     await queryClient.prefetchInfiniteQuery({
-  //       queryKey: [QUERY_KEY.TEMPLATE_LIST, sort],
-  //       queryFn: async ({ pageParam = 1 }) => {
-  //         let url = `${BASE_NEST_URL}/template?sort=${sort}`;
-  //         url += `&page=${pageParam}`;
-
-  //         const response = await fetch(url, {
-  //           cache: "no-cache",
-  //         });
-
-  //         return await response.json();
-  //       },
-  //       getNextPageParam: (lastPage: { nextPage: number }) => {
-  //         return lastPage.nextPage || null;
-  //       },
-  //       initialPageParam: 1,
-  //     });
-  //   }
-  // );
-
   return (
-    <div className={classes.wrap}>
+    <div>
       {/* 페이지 Banner */}
       <ListPageBanner />
 
       <Grid.center>
         {/* 검색 or 정렬 */}
-        <div className={classes.searchFilterWrapper}>
+        <div className="flex items-center pt-[50px] justify-between mb-5">
           <ListFilterControls />
-          {/* <SearchInput search={Check boxCheck box""} /> */}
         </div>
 
         {/**

@@ -2,7 +2,7 @@ import { fetcbBoardItem } from "@/api/board.api";
 import { ListItemType } from "../../component/BoardList";
 import { BASE_NEST_URL } from "@/config/base";
 
-import { boardCateogries, CategoriesKey } from "@/types/board";
+import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
 import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
 import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
@@ -11,7 +11,6 @@ import PostController from "./component/PostController";
 import DateCompareToday from "@/util/DateCompareToday";
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import QuillViewer from "@/components/Editor/QuillViewer";
-import classes from "./page.module.scss";
 import { CommentEditorProvider } from "@/context/context";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -76,7 +75,7 @@ export default async function Page({
 }) {
   const { board: category, id } = params;
   const dayCompare = DateCompareToday();
-  const boardName = boardCateogries[category];
+  const boardName = BOARD_CATEGORIES[category];
 
   const data: DetailBoardItemType = await fetcbBoardItem({
     board: category,

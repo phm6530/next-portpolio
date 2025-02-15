@@ -3,7 +3,7 @@
 import girlCractor from "/public/asset/girl_template.png";
 import Image from "next/image";
 import classes from "./Creactor.module.scss";
-import AgeGroupIcon from "@/components/Cractor/genarationIcon/AgeGroupIcon";
+import AgeGroupIcon from "./genarationIcon/AgeGroupIcon";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import gsap from "gsap";

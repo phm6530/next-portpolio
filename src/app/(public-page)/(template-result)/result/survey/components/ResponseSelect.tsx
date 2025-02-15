@@ -8,7 +8,7 @@ import ImageViewer from "@/app/template/_component/ImageViewer";
 import AniNumbering from "@/components/animation/AniNumbering";
 import AniProgressbar from "@/components/animation/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
-import HeaderTitle from "@/app/(template-made)/components/Header/HeaderTitle";
+import SecondaryMessageBox from "@/app/(template-made)/components/Header/SecondaryMessageBox";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
 export default function ResponseSelect({
@@ -54,7 +54,7 @@ export default function ResponseSelect({
 
   return (
     <>
-      {/* <HeaderTitle title={"test 게시판"} description={label} /> */}
+      {/* <SecondaryMessageBox title={"test 게시판"} description={label} /> */}
       <QuestionTitle idx={idx}>{label}</QuestionTitle>
       <div
         className={`${classes.gridWrapper} ${

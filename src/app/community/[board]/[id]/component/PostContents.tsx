@@ -1,6 +1,6 @@
 import DateCompareToday from "@/util/DateCompareToday";
 import classes from "./PostContents.module.scss";
-import { boardCateogries, CategoriesKey } from "@/types/board";
+import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import PostController from "./PostController";
 import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
@@ -21,7 +21,7 @@ export default async function PostContents({
   postId: string;
 }) {
   const dayCompare = DateCompareToday();
-  const boardName = boardCateogries[category];
+  const boardName = BOARD_CATEGORIES[category];
 
   const data: DetailBoardItemType = await fetcbBoardItem({
     board: category,

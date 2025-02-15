@@ -6,7 +6,6 @@ import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
 import { useForm, useFormContext } from "react-hook-form";
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
-import FormRegisterError from "@/components/Error/FormRegisterError";
 import Search from "/public/asset/icon/search.svg";
 import FormToolButton from "./FormToolButton";
 import { resolve } from "path";
@@ -114,17 +113,14 @@ function UnSplashContents({
       </div>
 
       {/* Search Bar */}
-      <SearchBar
+      {/* <SearchBar
         placeholder="생성하실 섬네일을 검색해주세요"
         clickEvent={handleSubmit(onSearchHandler)}
         register={register("keyword", {
           required: "검색어를 기재해주세요!",
         })}
-      />
+      /> */}
 
-      {Object.values(errors)[0]?.message && (
-        <FormRegisterError errorMsg={Object.values(errors)[0]?.message} />
-      )}
       <div>
         {/* 한번 touch 해야 div 생성하게 함 */}
         {getValues("keyword") ? (

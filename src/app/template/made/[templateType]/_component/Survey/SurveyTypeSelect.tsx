@@ -10,7 +10,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 import classes from "./SurveyTypeSelect.module.scss";
-import FormRegisterError from "@/components/Error/FormRegisterError";
+
 import SwitchButton from "@/components/ui/switch-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -99,13 +99,6 @@ export default function SurveyTypeSelect({
         </QuestionItemHeader>
 
         {/* 제목에러 */}
-        {errors.questions?.[surveyIdx]?.label?.message && (
-          <div>
-            <FormRegisterError
-              errorMsg={errors.questions?.[surveyIdx]?.label?.message}
-            />
-          </div>
-        )}
       </div>
       {/* Option에 img가 있다면 grid 변경하기 */}
       <div
@@ -125,11 +118,6 @@ export default function SurveyTypeSelect({
           );
         })}
       </div>
-      {hasDuplicates && (
-        <div>
-          <FormRegisterError errorMsg={"중복된 옵션 값이 있습니다"} />
-        </div>
-      )}
 
       <TooltipProvider>
         <Tooltip>

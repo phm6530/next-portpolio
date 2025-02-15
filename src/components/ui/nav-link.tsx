@@ -21,9 +21,9 @@ export default function NavLink({
     <Link
       href={href}
       className={cn(
-        "hover:text-primary",
+        "hover:text-primary dark:hover:text-[hsl(247,100,82)]",
         {
-          "text-primary": isActive,
+          "text-primary dark:text-[hsl(247,100,82)]": isActive,
           "border-primary": isActive && border,
           "border-zinc-400": border && !isActive,
         },

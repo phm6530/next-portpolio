@@ -1,5 +1,4 @@
 "use client";
-import { useGSAP } from "@gsap/react";
 import classes from "./LoadingStreming.module.scss";
 import UiLoading from "../ui/loading/UiLoading";
 

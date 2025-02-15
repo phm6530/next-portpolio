@@ -1,5 +1,4 @@
 "use client";
-import classes from "./MyContentsItem.module.scss";
 import MyContentsController from "./MycontentsController";
 import {
   RespondentsAndMaxGroup,
@@ -11,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";

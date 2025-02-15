@@ -1,4 +1,4 @@
-import MainList from "./list/page";
+import MainList from "./(public-page)/list/page";
 
 /**
  * List를 Main으로 사용..
