@@ -12,7 +12,10 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        "auto-fill": "repeat(auto-fill, minmax(250px, 1fr))",
+        "auto-fill": "repeat(auto-fill, minmax(350px, 1fr))",
+      },
+      width: {
+        "calc-grid": "calc(100% - 40px)",
       },
       boxShadow: {
         custom: "5px 14px 29px rgb(100 63 255 / 25%)",

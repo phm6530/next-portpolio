@@ -19,6 +19,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];

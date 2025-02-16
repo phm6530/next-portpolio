@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import classes from "./Grid.module.scss";
 import { cn } from "@/lib/utils";
 
 type Children<T> = { className?: string; children: T };
@@ -8,7 +7,10 @@ type Children<T> = { className?: string; children: T };
 const center: React.FC<Children<ReactNode>> = ({ className, children }) => {
   return (
     <div
-      className={`${classes.GridCenter} ${className ? className : undefined}`}
+      className={cn(
+        "max-w-[1000px] items-center  mx-auto w-calc-grid",
+        className
+      )}
     >
       {children}
     </div>

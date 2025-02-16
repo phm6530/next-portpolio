@@ -21,7 +21,7 @@ export default async function page() {
 
       <Grid.center>
         {/* 검색 or 정렬 */}
-        <div className="flex items-center pt-[50px] justify-between mb-5">
+        <div className="flex items-center pt-[50px] justify-between mb-8">
           <ListFilterControls />
         </div>
 

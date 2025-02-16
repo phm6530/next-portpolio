@@ -36,13 +36,12 @@ const TemplateItem = forwardRef(
 
     return (
       <div
-        className={`aos-hidden tdd ${classes.templateItemContainer}`}
+        className={`aos-hidden tdd grid grid-cols-[2fr_5fr] gap-4 cursor-pointer group `}
         onClick={() => router.push(`/${templateType}/${id}`)}
         ref={ref}
       >
         {thumbnail && (
-          <div className={classes.templateItemThumbNail}>
-            <div className={classes.templateType}>{templateType}</div>
+          <div className="relative  flex-1 rounded-lg overflow-hidden">
             <Image
               alt="test"
               // sizes=" 100vw"
@@ -57,7 +56,7 @@ const TemplateItem = forwardRef(
         )}
 
         {/* <Image src={img} fill /> */}
-        <div className={classes.templateItemSummary}>
+        <div className="flex flex-col gap-3">
           {/* 상태 icons.. */}
           <TemplateStatus
             startDate={startDate}
@@ -66,34 +65,15 @@ const TemplateItem = forwardRef(
             maxGroup={maxGroup}
           />
 
-          {/* 템플릿 정보 보여주기 */}
-          <div className={classes.summary}>
-            <div className={classes.title}>{title}</div>
-            {/* <QuillViewer contents={description}/> */}
-
-            <div className={classes.description}>
-              <TransformPlainText html={description} />
-            </div>
-            {/* <div className={classes.bottomWrap}>
-              <span className={classes.Participation}>
-                참여자 {allCnt || 0}명
-              </span>
-            </div> */}
-            {/* 선호 */}
-            {/* {allCnt >= 1 && <GroupStatus {...rest} maxGroup={maxGroup} />} */}
+          <div className="text-base line-clamp-1 group-hover:underline">
+            {title}
           </div>
 
-          {/* 선호 그룹은 10명이상일때만 생성하기 */}
+          <div className="line-clamp-2 text-[13px] leading-5 text-muted-foreground">
+            <TransformPlainText html={description} />
+          </div>
 
-          {/* <div className={classes.gnederChart}>
-            <div className={classes.male}></div>
-            <div className={classes.female}></div>
-          </div> */}
-
-          {/* <div className={classes.btnWrapper}>
-            <button>참여하기</button>
-            <button>결과보기</button>
-          </div> */}
+          {/* 템플릿 정보 보여주기 */}
         </div>
       </div>
     );

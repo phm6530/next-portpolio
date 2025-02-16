@@ -16,6 +16,7 @@ import { CategoriesKey } from "@/types/board";
 import { CommentEditorContext } from "@/context/context";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
+import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
 
 //익명은 Password도 받음
 type AnonymousDefaultValue = {
@@ -149,7 +150,7 @@ export default function CommentEditor({
         className={classes.commentForm}
       >
         <>
-          {!userData && (
+          {!userData ? (
             <>
               <InputField
                 autoComplete="off"
@@ -158,6 +159,8 @@ export default function CommentEditor({
               />
               <PasswordInputField />
             </>
+          ) : (
+            <Myprofile />
           )}
         </>
         <div className={classes.textareaWrap}>
