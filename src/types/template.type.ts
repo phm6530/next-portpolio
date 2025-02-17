@@ -74,7 +74,7 @@ export type TemplateItemMetadata<
 > = {
   id: number;
   // updatedAt: string;
-  createAt: string;
+  createdAt: string;
   title: string;
   description: string;
   templateType: TEMPLATE_TYPE;

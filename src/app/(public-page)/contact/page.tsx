@@ -10,7 +10,7 @@ import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
-import SecondaryMessageBox from "../(template-made)/components/Header/SecondaryMessageBox";
+import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
 
 type MailFormData = {
   name: string;
@@ -80,7 +80,7 @@ export default function Page() {
               inputName="digit"
             />
 
-            <FormTextarea
+            {/* <FormTextarea
               placeholder="textarea"
               {...register("textarea", {
                 required: "문의 내용은 필수입니다.",
@@ -91,7 +91,7 @@ export default function Page() {
               })}
               textareaName="textarea"
               className={classes.textarea}
-            />
+            /> */}
           </FormProvider>
           <div style={{ textAlign: "center" }}>
             <Button.submit

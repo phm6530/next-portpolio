@@ -1,13 +1,25 @@
 import Image from "next/image";
 import classes from "./thumbnail.module.scss";
+import { cn } from "@/lib/utils";
 
-export default function ThumbNail({ thumbnail }: { thumbnail: string | null }) {
+export default function ThumbNail({
+  thumbnail,
+  className,
+}: {
+  thumbnail: string | null;
+  className?: string;
+}) {
   const isUrl = thumbnail?.includes("https:");
 
   if (!isUrl) return;
 
   return (
-    <div className={classes.thumbNailContainer}>
+    <div
+      className={cn(
+        "w-full rounded-xl overflow-hidden border relative pb-[50%]",
+        className
+      )}
+    >
       <>
         {!!thumbnail ? (
           <Image

@@ -99,14 +99,14 @@ export default async function Page({
               />
 
               <span className="text-muted-foreground text-sm">
-                {dayCompare.fromNow(data.createAt)}
+                {dayCompare.fromNow(data.createdAt)}
               </span>
             </div>
           </CardHeader>
           <CardContent className="border-t pt-5 bg-slate-50 dark:bg-custom-input">
             <QuillViewer contents={data.contents} />
           </CardContent>
-          <CardFooter className="border-t pt-5">
+          <CardFooter className="border-t pt-5 flex justify-between">
             <PostController
               id={id}
               category={category}
@@ -116,15 +116,11 @@ export default async function Page({
                   ? data.creator.email
                   : null
               }
-            />
+            />{" "}
+            <ViewCount className="text-sm" />
           </CardFooter>
         </Card>
       </div>
-
-      {/* 정적 페이지에 조회수만 Suspense 처리 */}
-      <Suspense fallback={<>div...</>}>
-        <ViewCount cookieName={`board_${category}_${id}`} />
-      </Suspense>
 
       {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
       <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>

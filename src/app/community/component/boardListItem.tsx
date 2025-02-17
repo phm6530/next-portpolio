@@ -29,7 +29,9 @@ export default function BoardListItem({
           nickname={itemData.creator.nickname}
         />
 
-        <div className="text-muted-foreground text-xs">{itemData.createAt}</div>
+        <div className="text-muted-foreground text-xs">
+          {itemData.createdAt}
+        </div>
         <div className="text-muted-foreground text-xs ml-auto">
           조회수 {itemData.view}
         </div>

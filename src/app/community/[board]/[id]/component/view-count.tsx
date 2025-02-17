@@ -1,35 +1,36 @@
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
 import { BASE_NEST_URL } from "@/config/base";
-import { cookies } from "next/headers";
+import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
-type TrackingCookieName = `${string}_${string}_${string}`;
+// type TrackingCookieName = `${string}_${string}_${string}`;
 
-export default async function ViewCount({
-  cookieName,
-}: {
-  cookieName: TrackingCookieName;
-}) {
-  const cookieStore = cookies();
+export default function ViewCount({ className }: { className?: string }) {
+  const { board: category, id } = useParams();
 
-  const [_, category, id] = cookieName.split("_");
-  const existingCookie = cookieStore.get(`board_${category}_${id}`);
-
-  // 쿠키를 헤더에 포함시켜 요청
-  const response = await fetch(
-    `${BASE_NEST_URL}/board/view/${category}/${id}`,
-    {
-      headers: {
-        Cookie: existingCookie
-          ? `${existingCookie.name}=${existingCookie.value}`
-          : "",
-      },
-    }
-  );
-
-  const result = await response.json();
+  const { data: result, isLoading } = useQuery({
+    queryKey: ["detail-page", id, category],
+    queryFn: async () => {
+      const response = await fetch(
+        `${BASE_NEST_URL}/board/view/${category}/${id}`,
+        { credentials: "include" }
+      );
+      return response.json();
+    },
+  });
 
   return (
-    <div className="py-8 border-t border-b border-muted-foreground/30 my-3">
-      조회수 {result.count}
-    </div>
+    <>
+      {isLoading ? (
+        <div className="flex gap-3">
+          <Skeleton className="w-10 h-4" />
+          <Skeleton className="w-5 h-4" />
+        </div>
+      ) : (
+        <span className={cn(className)}>조회수 {result?.count}</span>
+      )}
+    </>
   );
 }

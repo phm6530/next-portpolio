@@ -1,39 +1,63 @@
-import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { useFormContext } from "react-hook-form";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export default function OptionGenderGroup() {
-  const {
-    register,
-    formState: { errors },
-    watch,
-  } = useFormContext();
-  const gender = ["male", "female"];
+  const { control, watch } = useFormContext();
+  const genders = ["male", "female"];
   const selectGender = watch("gender");
 
-  const errorMsg = errors.gender?.message;
-
   return (
-    <div>
-      <QuestionTitle>성별이 어떻게 되시나요?</QuestionTitle>
-      <div style={{ display: "flex", gap: "10px" }}>
-        {gender.map((e) => {
-          return (
-            <InputTypeStyle.RadioAnswer
-              key={`gender-${e}`}
-              selectId={selectGender}
-              curid={e}
-            >
-              <input
-                type="radio"
-                value={e}
-                {...register("gender", { required: "필수 항목입니다." })}
-              />
-              {e === "male" ? "남" : "여"}
-            </InputTypeStyle.RadioAnswer>
-          );
-        })}
-      </div>{" "}
-    </div>
+    <FormField
+      name="gender"
+      control={control}
+      render={({ field }) => {
+        return (
+          <>
+            <Card>
+              <CardHeader>
+                <FormLabel className="text-xl">
+                  성별이 어떻게 되시나요?
+                </FormLabel>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-3">
+                  {genders.map((gender) => {
+                    return (
+                      <FormItem key={`key-${gender}`}>
+                        <FormControl>
+                          <InputTypeStyle.RadioAnswer
+                            key={`gender-${gender}`}
+                            selectId={selectGender}
+                            curid={gender}
+                          >
+                            <input
+                              type="radio"
+                              className="hidden"
+                              {...field}
+                              value={gender}
+                              checked={field.value === gender}
+                            />
+                            {gender === "male" ? "남" : "여"}
+                          </InputTypeStyle.RadioAnswer>
+                        </FormControl>{" "}
+                      </FormItem>
+                    );
+                  })}{" "}
+                </div>
+                <FormMessage />
+              </CardContent>
+            </Card>
+          </>
+        );
+      }}
+    />
   );
 }

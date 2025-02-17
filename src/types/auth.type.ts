@@ -7,7 +7,7 @@ export enum USER_ROLE {
 
 //UserData
 export type User = {
-  createAt: string;
+  createdAt: string;
   email: string;
   id: number;
   nickname: string;

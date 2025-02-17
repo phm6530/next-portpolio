@@ -93,7 +93,7 @@ export default function HeaderNav() {
     <>
       <header className="bg-white/70 dark:bg-background/90 fixed w-full flex items-center z-10 border-b h-[60px] backdrop-blur-sm">
         <Grid.center>
-          <div className="flex w-full justify-between items-center md:grid md:grid-cols-3 ">
+          <div className="flex w-full justify-between items-center md:grid md:grid-cols-[2fr_3fr_2fr] ">
             {/* Store에 따라 모바일 뷰 */}
 
             <div className="max-w-[80px] w-full">
@@ -125,7 +125,7 @@ export default function HeaderNav() {
 
             <div className="flex items-center justify-end ">
               {user ? (
-                <div className="ml-5 border-l  flex pl-5">
+                <div className="ml-5 border-l  flex ">
                   <Button
                     variant={"ghost"}
                     size={"sm"}

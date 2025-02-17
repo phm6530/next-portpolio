@@ -16,7 +16,7 @@ export default function UserRoleDisplay({
       {role === "admin" && <UserMarker.Master />}
 
       {/* 닉네임 */}
-      <div className="max-w-[100px] mr-3 text-[12px] line-clamp-1 ">
+      <div className="max-w-[100px] mr-3 text-[13px] line-clamp-1 text-muted-foreground ">
         {nickname}
       </div>
     </div>

@@ -44,7 +44,7 @@ export default function MyContentsItem({
 
         <div className="flex items-center gap-[10px] text-[12px] text-zinc-400">
           <Clock7 className="w-4 h-4" />
-          생성일 :<span>{item.createAt}</span>
+          생성일 :<span>{item.createdAt}</span>
         </div>
 
         <MyContentsController templateType={item.templateType} id={item.id} />

@@ -1,6 +1,3 @@
-import Grid from "@/components/ui/Grid";
-import TemplateQuestionWrapper from "@/components/ui/templateUi/TemplateQuestionWrap";
-import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import { BASE_NEST_URL } from "@/config/base";
 import {
   FetchTemplateForm,
@@ -9,15 +6,23 @@ import {
 } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import classes from "./page.module.scss";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import SurveyForm from "@/app/(public-page)/(template-types)/survey/components/SurveyForm";
+import SurveyForm from "./survey-form";
 import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
-import QuillViewer from "@/components/Editor/QuillViewer";
 import AosWrapper from "@/components/animation/AosWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
+import TransformPlainText from "@/components/TransformPlainText";
 
 export const runtime = "edge";
 
@@ -35,6 +40,7 @@ export async function generateStaticParams() {
    * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
    */
   const response = await fetch(url);
+
   const {
     data: listResponse,
   }: { data: TemplateItemMetadata<RespondentsAndMaxGroup>[] } =
@@ -92,35 +98,49 @@ export default async function SurveyDetailTemplate({
 
   return (
     <>
-      <Grid.smallCenter>
-        <Button asChild variant={"link"} className="pl-0">
-          <Link href={"/"}>
-            <ChevronLeft className="w-4 h-4" /> 목록으로
-          </Link>
-        </Button>
-        <AosWrapper>
-          <TemplateQuestionWrapper>
-            <ThumbNail thumbnail={thumbnail} />
+      <Button
+        asChild
+        variant={"link"}
+        className="pl-0 text-muted-foreground mb-5"
+      >
+        <Link href={"/"}>
+          <ChevronLeft className="w-4 h-4" /> 목록으로
+        </Link>
+      </Button>
 
-            <div className={classes.templateSumeryWrap}>
+      <AosWrapper>
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <CardTitle className="flex flex-col gap-5 mb-2">
               <TemplateStatus
                 startDate={startDate}
                 endDate={endDate}
                 createdAt={createdAt}
+                maxGroup={data.respondents.maxGroup}
               />
-              <TemplateTitle role={creator.role} nickname={creator.nickname}>
-                {title}
-              </TemplateTitle>
+              <div className="my-4   leading-9">{title}</div>
+            </CardTitle>
+            <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
+              <TransformPlainText html={description} />
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ThumbNail thumbnail={thumbnail} />
+
+            <div className="mt-5">
               {/* <DateRange dateRange={dateRange} /> */}
 
               {/* Desciprtion */}
-              <QuillViewer contents={description} />
             </div>
-          </TemplateQuestionWrapper>
-        </AosWrapper>
+          </CardContent>
+          <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
+            <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
+            <span className="text-[12px]">생성 일 {createdAt}</span>
+          </CardFooter>
+        </Card>
         {/* survey Form */}
-        <SurveyForm {...data} />
-      </Grid.smallCenter>
+        <SurveyForm {...data} />{" "}
+      </AosWrapper>
     </>
   );
 }

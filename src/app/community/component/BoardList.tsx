@@ -17,7 +17,7 @@ export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 export type ListItemType = {
   id: number;
   updateAt: string;
-  createAt: string;
+  createdAt: string;
   title: string;
   category: CategoriesKey;
   view: number;
@@ -41,7 +41,7 @@ export default function BoardList({
   const curPage = qs.get("page");
 
   // number는 All Cnt
-  const { data, isLoading, isError } = useQuery<[ListItemType[], number]>({
+  const { data, isLoading } = useQuery<[ListItemType[], number]>({
     queryKey: ["board", curPage, searchParam, category],
     queryFn: async () => {
       return await withFetch(async () => {

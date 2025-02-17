@@ -25,7 +25,10 @@ export default function Myprofile() {
                 <span className="opacity-50 text-sm">( {user?.email} )</span>
               </div>
               <div className="text-muted-foreground">{user?.role}</div>
-              <div className="text-sm opacity-60"> 가입일 {user?.createAt}</div>
+              <div className="text-sm opacity-60">
+                {" "}
+                가입일 {user?.createdAt}
+              </div>
             </div>
           </div>
         </CardContent>

@@ -21,6 +21,11 @@ import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { z } from "zod";
+import { createSurveyFormSchema } from "./survey-form-schema";
 
 export default function SurveyForm({
   id,
@@ -28,12 +33,13 @@ export default function SurveyForm({
   isAgeCollected,
   questions,
 }: SurveyTemplateDetail) {
-  const defaultValues: AnswerSurvey = {
+  const defaultValues: z.infer<typeof dynamicSchema> = {
     ...(isGenderCollected && { gender: null }),
     ...(isAgeCollected && { ageGroup: null }),
+
     answers: questions.map((e) => {
       if (e.type === QUESTION_TYPE.TEXT) {
-        return { questionId: e.id, type: e.type, answer: null };
+        return { questionId: e.id, type: e.type, answer: "" };
       } else if (e.type === QUESTION_TYPE.SELECT) {
         return { questionId: e.id, type: e.type, optionId: null };
       } else {
@@ -42,10 +48,15 @@ export default function SurveyForm({
     }),
   };
 
+  const dynamicSchema = createSurveyFormSchema(
+    isGenderCollected,
+    isAgeCollected
+  );
   const router = useRouter();
 
-  const formMethod = useForm<AnswerSurvey>({
+  const formMethod = useForm<z.infer<typeof dynamicSchema>>({
     defaultValues,
+    resolver: zodResolver(dynamicSchema),
   });
 
   const { mutate, isSuccess, isPending } = useMutation<
@@ -90,7 +101,7 @@ export default function SurveyForm({
   return (
     <>
       <FormProvider {...formMethod}>
-        <div className={classes.requireds}>
+        <div className="flex flex-col gap-10 mb-10 mt-10">
           {/* Gender Chk  */}
           {isGenderCollected && <OptionGenderGroup />}
 
@@ -98,10 +109,9 @@ export default function SurveyForm({
           {isAgeCollected && <OptionAgeGroup />}
         </div>
 
-        {questions.map((qs, idx) => {
+        {questions.map((qs) => {
           return (
-            <div className="p-6 border rounded-md" key={qs.id}>
-              <QuestionTitle idx={idx}>{qs.label}</QuestionTitle>
+            <Card key={qs.id}>
               {(() => {
                 if (qs.type === QUESTION_TYPE.TEXT) {
                   return (
@@ -120,14 +130,15 @@ export default function SurveyForm({
                   return null as never;
                 }
               })()}
-            </div>
+            </Card>
           );
         })}
       </FormProvider>
-      <div className={classes.buttonWrapper}>
+
+      <div className="mt-5 flex justify-center">
         <Button
-          type="button"
-          size={"custom"}
+          type="submit"
+          size={"lg"}
           onClick={formMethod.handleSubmit(onSubmitHandler)}
           disabled={isPending || isSuccess}
         >

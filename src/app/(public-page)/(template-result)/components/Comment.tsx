@@ -24,7 +24,7 @@ export default function Comment({
   contentType,
   parentId,
   id,
-  createAt,
+  createdAt,
   content,
   user,
   creator,
@@ -111,7 +111,7 @@ export default function Comment({
           <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
           <span style={{ marginRight: "10px" }}>
-            {dayjs(createAt).fromNow()}
+            {dayjs(createdAt).fromNow()}
           </span>
 
           {/* 내 댓글일 경우만 삭제버튼 노출 */}

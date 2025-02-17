@@ -3,7 +3,7 @@ import { User, USER_ROLE } from "@/types/auth.type";
 export type CommentReponse = {
   id: number;
   updateAt: string;
-  createAt: string;
+  createdAt: string;
   content: string;
   replies: CommentReponse[];
   user: User | null;

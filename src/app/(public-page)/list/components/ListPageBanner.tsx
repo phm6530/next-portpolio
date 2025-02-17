@@ -1,12 +1,12 @@
 import Grid from "@/components/ui/Grid";
 import PageTitle from "@/components/ui/PageTitle";
-import Button from "@/components/ui/button/Button";
 import TemplateCractor from "./Cractor/TemplateCractor";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function ListPageBanner() {
   return (
-    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#2c1c46] dark:to-[#262039]">
+    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#5e5586] dark:to-[#562857]">
       <Grid.center className="flex items-center flex-col md:flex-row justify-between">
         <div>
           <PageTitle>
@@ -18,9 +18,9 @@ export default function ListPageBanner() {
             평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
           </p>
           <div className="mt-8 flex gap-5">
-            <Link href={"/made"}>
-              <Button.submit>+ 설문조사 만들기</Button.submit>
-            </Link>
+            <Button asChild className="p-6">
+              <Link href={"/made"}>+ 설문조사 만들기</Link>
+            </Button>
           </div>
         </div>
 
