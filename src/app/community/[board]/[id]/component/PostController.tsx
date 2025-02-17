@@ -66,7 +66,7 @@ export default function PostController({
               creatorRole === USER_ROLE.USER))) && (
           <>
             <AlertDialog>
-              <AlertDialogTrigger>
+              <AlertDialogTrigger asChild>
                 <Button variant={"outline"}>삭제</Button>
               </AlertDialogTrigger>
               {authrozationPost ? (

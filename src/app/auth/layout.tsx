@@ -3,6 +3,6 @@ import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
-    <Grid.extraSmall className="h-calc-screen"> {children}</Grid.extraSmall>
+    <Grid.extraSmall className="min-h-calc-screen"> {children}</Grid.extraSmall>
   );
 }

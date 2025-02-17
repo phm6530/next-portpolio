@@ -71,7 +71,7 @@ export default function MyContents() {
             참여자 순
           </TabRounded>
         </div>
-        <Button size={"xl"} asChild variant={"outline"}>
+        <Button size={"lg"} asChild variant={"outline"}>
           <Link href={"/made"}>
             <SquarePlus />
             템플릿 만들기
@@ -97,7 +97,7 @@ export default function MyContents() {
                   <span>생성하신 템플릿이 없습니다</span>
                 </div>
               </CardContent>
-              <Button size={"xl"} asChild className="shadow-lg ">
+              <Button size={"lg"} asChild className="shadow-lg ">
                 <Link href={"/made"}>템플릿 만들기</Link>
               </Button>
             </Card>

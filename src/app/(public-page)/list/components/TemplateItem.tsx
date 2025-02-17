@@ -3,7 +3,6 @@ import {
   RespondentsAndMaxGroup,
   TemplateItemMetadata,
 } from "@/types/template.type";
-import classes from "./templateItem.module.scss";
 import Image from "next/image";
 import imgUrlMapper from "@/util/imgUrlMapper";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
@@ -36,15 +35,14 @@ const TemplateItem = forwardRef(
 
     return (
       <div
-        className={`aos-hidden tdd grid grid-cols-[2fr_5fr] gap-4 cursor-pointer group `}
+        className={`aos-hidden tdd flex flex-col cursor-pointer group border rounded-lg shadow-md`}
         onClick={() => router.push(`/${templateType}/${id}`)}
         ref={ref}
       >
         {thumbnail && (
-          <div className="relative  flex-1 rounded-lg overflow-hidden">
+          <div className="relative w-full pb-[60%]  flex-1 rounded-t-md overflow-hidden border-b">
             <Image
               alt="test"
-              // sizes=" 100vw"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
               fill
               src={imgUrlMapper({ thumbnail })}
@@ -56,7 +54,7 @@ const TemplateItem = forwardRef(
         )}
 
         {/* <Image src={img} fill /> */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 p-4 min-h-32">
           {/* 상태 icons.. */}
           <TemplateStatus
             startDate={startDate}

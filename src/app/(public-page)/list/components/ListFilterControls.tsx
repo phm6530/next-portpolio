@@ -2,11 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-
-import FemaleIcon from "/public/asset/icon/female.svg";
-import MaleIcon from "/public/asset/icon/male.svg";
-// import GraphIcon from "/public/asset/icon/graph.svg";
-
 import classes from "./ListFilterControls.module.scss";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
 import TabRounded from "@/components/ui/tab-rounded";
@@ -50,7 +45,7 @@ export default function ListFilterControls() {
   };
 
   return (
-    <div className={classes.btnWrapper}>
+    <div className="flex gap-2">
       {btnArr.map((btn, idx) => {
         return (
           <TabRounded

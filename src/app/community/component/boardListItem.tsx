@@ -1,6 +1,5 @@
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import { ListItemType } from "./BoardList";
-import classes from "./BoardListItem.module.scss";
 import Link from "next/link";
 
 export default function BoardListItem({
@@ -9,9 +8,12 @@ export default function BoardListItem({
   itemData: ListItemType;
 }) {
   return (
-    <div className="border-b py-4 flex flex-col gap-5">
-      <Link href={`/community/${itemData.category}/${itemData.id}`}>
-        <div className="cursor-pointer hover:text-primary text-sm flex items-center gap-3">
+    <div className="border-b py-4 flex flex-col gap-3">
+      <Link
+        href={`/community/${itemData.category}/${itemData.id}`}
+        className="mb-1"
+      >
+        <div className="cursor-pointer hover:text-primary text-sm flex gap-2 items-center">
           <p className="mt-[1px] text-base">{itemData.title}</p>
           {itemData.commentCnt > 0 && (
             <span className="text-[12px]   text-indigo-400">
@@ -27,8 +29,10 @@ export default function BoardListItem({
           nickname={itemData.creator.nickname}
         />
 
-        <div className="opacity-30 text-xs">{itemData.createAt}</div>
-        <div className="opacity-30 text-xs ml-auto">조회수 {itemData.view}</div>
+        <div className="text-muted-foreground text-xs">{itemData.createAt}</div>
+        <div className="text-muted-foreground text-xs ml-auto">
+          조회수 {itemData.view}
+        </div>
       </div>
     </div>
   );

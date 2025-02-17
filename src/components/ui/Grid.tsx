@@ -8,7 +8,7 @@ const center: React.FC<Children<ReactNode>> = ({ className, children }) => {
   return (
     <div
       className={cn(
-        "max-w-[1000px] items-center  mx-auto w-calc-grid",
+        "max-w-[900px] items-center  mx-auto w-calc-grid",
         className
       )}
     >

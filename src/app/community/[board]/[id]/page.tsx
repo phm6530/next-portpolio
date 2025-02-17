@@ -19,7 +19,8 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
+import ViewCount from "./component/view-count";
+import { Suspense } from "react";
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];
@@ -106,7 +107,6 @@ export default async function Page({
             <QuillViewer contents={data.contents} />
           </CardContent>
           <CardFooter className="border-t pt-5">
-            {/* Controller */}
             <PostController
               id={id}
               category={category}
@@ -121,13 +121,10 @@ export default async function Page({
         </Card>
       </div>
 
-      {/* <div className="py-8 border-t border-b border-muted-foreground/30 my-3">
-        <div className={classes.postContents}>
-          {data.updateAt !== data.createAt && (
-            <div className={classes.lastUpdate}>조회수 {data.view}</div>
-          )}
-        </div>
-      </div> */}
+      {/* 정적 페이지에 조회수만 Suspense 처리 */}
+      <Suspense fallback={<>div...</>}>
+        <ViewCount cookieName={`board_${category}_${id}`} />
+      </Suspense>
 
       {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
       <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>
@@ -142,7 +139,7 @@ export default async function Page({
         <ResultCommentSection
           id={parseInt(id, 10)}
           type={COMMENT_NEED_PATH.BOARD}
-        />{" "}
+        />
       </CommentEditorProvider>
     </>
   );

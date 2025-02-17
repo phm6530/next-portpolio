@@ -124,7 +124,7 @@ export default function LoginForm() {
             />
           </div>
 
-          <Button className="" size={"xl"} disabled={isPending || isSuccess}>
+          <Button className="" size={"lg"} disabled={isPending || isSuccess}>
             로그인
           </Button>
         </form>
@@ -132,11 +132,15 @@ export default function LoginForm() {
 
       {/* login Footer Nav */}
       <div className="flex  text-center justify-center p-4 items-center">
-        <Button asChild variant={"link"}>
+        <Button
+          asChild
+          variant={"link"}
+          className="text-[13px] text-muted-foreground"
+        >
           <Link href={"/auth/pin"}>비밀번호를 잊어버리셨나요?</Link>
         </Button>
         <span className="opacity-20">|</span>
-        <Button variant={"link"}>
+        <Button variant={"link"} className="text-[13px] text-muted-foreground">
           <Link href={"/auth/signup"}>회원가입</Link>
         </Button>
       </div>

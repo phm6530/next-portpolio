@@ -85,7 +85,7 @@ export default function TemplateList() {
 
   return (
     <>
-      <div className="grid grid-cols-auto-fill gap-[50px] ">
+      <div className="grid grid-cols-auto-fill gap-[20px] ">
         {data.pages.map((page) => {
           return page.data.map((item) => {
             if (item.respondents.tag === RESPONDENT_TAG.MAXGROUP) {

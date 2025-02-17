@@ -63,7 +63,7 @@ export default function SignUpForm() {
     <LoadingSpinnerWrapper loading={isPending}>
       <Form {...formMethod}>
         <form
-          className="form-container"
+          className="form-container mb-20"
           onSubmit={formMethod.handleSubmit(onSubmitHandler)}
         >
           <div className="form-input-wrapper gap-8 my-8">
@@ -88,7 +88,7 @@ export default function SignUpForm() {
               placeholder="비밀번호를 확인 해 주세요"
             />
           </div>
-          <Button size={"xxl"} disabled={isPending}>
+          <Button size={"lg"} disabled={isPending}>
             회원가입
           </Button>
         </form>

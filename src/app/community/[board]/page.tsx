@@ -7,7 +7,6 @@ import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import BoardList from "../component/BoardList";
 import { Suspense } from "react";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import TabRounded from "@/components/ui/tab-rounded";
 import BoardCategoriesWrapper from "./board-categories";
 
 export default async function BoardListPage({
@@ -29,13 +28,6 @@ export default async function BoardListPage({
     notFound();
   }
 
-  const page =
-    curPage !== undefined
-      ? +curPage
-      : searchParams?.page !== undefined
-      ? +searchParams.page
-      : 0;
-
   const boardName = BOARD_CATEGORIES[params.board];
 
   return (
@@ -52,7 +44,7 @@ export default async function BoardListPage({
       <div className="flex gap-5 [&>div:first-child]:flex-1">
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
-        <Button asChild size={"lg"} className="p-6">
+        <Button asChild size={"lg"} className="p-6 rounded-sm">
           <Link href={`/community/${params.board}/write`}>글쓰기</Link>
         </Button>
       </div>
@@ -62,7 +54,6 @@ export default async function BoardListPage({
           <BoardList
             category={params.board}
             keyword={keyword || searchParams?.search}
-            curPage={page}
           />
         </Suspense>
       </section>

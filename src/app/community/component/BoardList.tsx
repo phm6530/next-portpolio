@@ -1,3 +1,5 @@
+"use client";
+
 import { withFetch } from "@/util/clientUtil";
 import classes from "./BoardList.module.scss";
 import { BASE_NEST_URL } from "@/config/base";
@@ -5,6 +7,10 @@ import BoardListItem from "@/app/community/component/boardListItem";
 import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
 import Paging from "@/components/ui/Paging";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
@@ -21,52 +27,63 @@ export type ListItemType = {
     | { role: ExcludeUser; nickname: string; email: string };
 };
 
-export default async function BoardList({
+export default function BoardList({
   category,
   keyword,
-  curPage,
 }: {
   category: CategoriesKey;
   keyword?: string;
-  curPage: number;
 }) {
-  // number는 All Cnt
-  const data = await withFetch<[ListItemType[], number]>(async () => {
-    const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
-    const url = `${BASE_NEST_URL}/board/${category}?search=${searchParam}&page=${curPage}`;
+  // 조회수 때문에 Client로 변경
+  const searchParam = keyword ? `${encodeURIComponent(keyword)}` : "";
 
-    return await fetch(url, {
-      cache: "force-cache",
-      next: { tags: [`community-${category}`] },
-    });
+  const qs = useSearchParams();
+  const curPage = qs.get("page");
+
+  // number는 All Cnt
+  const { data, isLoading, isError } = useQuery<[ListItemType[], number]>({
+    queryKey: ["board", curPage, searchParam, category],
+    queryFn: async () => {
+      return await withFetch(async () => {
+        return fetch(
+          `${BASE_NEST_URL}/board/${category}?search=${searchParam}&page=${curPage}`
+        );
+      });
+    },
+    staleTime: 10000,
   });
 
-  return (
-    <>
-      <section className={`${classes.container} animate-fadein`}>
-        <div className="border-b pb-3 border-muted-foreground/40">
-          <h3>최신 순 </h3>
-        </div>
-        <div>
-          {data[0].length > 0 ? (
-            <>
-              {data[0].map((item, idx) => {
-                return (
-                  <BoardListItem
-                    itemData={item}
-                    key={`board-${item.id}-${idx}`}
-                  />
-                );
-              })}
-            </>
-          ) : (
-            <div className={classes.emptyState}>작성된 게시물이 없습니다.</div>
-          )}
-        </div>
+  if (isLoading) {
+    return <LoadingWrapper />;
+  }
 
-        {/* 페이징 */}
-        <Paging cnt={data[1]} />
-      </section>
-    </>
+  return (
+    <section
+      className={`${classes.container} animate-fadein`}
+      key={`${category}-${curPage}}`}
+    >
+      <div className="border-b pb-3 border-muted-foreground/40">
+        <h3>최신 순 </h3>
+      </div>
+      <div>
+        {data && data[0]?.length > 0 ? (
+          <>
+            {data[0].map((item, idx) => {
+              return (
+                <BoardListItem
+                  itemData={item}
+                  key={`board-${item.id}-${idx}`}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <div className={classes.emptyState}>작성된 게시물이 없습니다.</div>
+        )}
+      </div>
+
+      {/* 페이징 */}
+      <Paging cnt={(data && data[1]) ?? 1} />
+    </section>
   );
 }

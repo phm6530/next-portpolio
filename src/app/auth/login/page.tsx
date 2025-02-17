@@ -12,7 +12,7 @@ const Login = async ({
   const { code } = searchParams;
 
   return (
-    <div className="flex flex-col justify-center h-full">
+    <div className="flex flex-col justify-center h-calc-screen">
       <RefreshQueryClient code={code} />
 
       <div className="flex flex-col gap-5 items-center pb-4 ">
