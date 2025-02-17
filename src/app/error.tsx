@@ -36,11 +36,11 @@ export default function Error({
         <h3>요청이 잘못되었거나 서버에 문제가 있습니다.</h3>
 
         <div className={"flex mt-7 w-full max-w-[300px] gap-3 justify-center"}>
-          <Button variant={"outline"} size={"xxl"}>
+          <Button variant={"outline"} size={"lg"}>
             <Link href={"/"}>Home</Link>
           </Button>
           <Button
-            size={"xxl"}
+            size={"lg"}
             variant={"outline"}
             onClick={handleReset}
             disabled={isPending}

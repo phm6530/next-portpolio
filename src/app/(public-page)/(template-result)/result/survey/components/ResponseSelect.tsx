@@ -8,7 +8,6 @@ import ImageViewer from "@/app/template/_component/ImageViewer";
 import AniNumbering from "@/components/animation/AniNumbering";
 import AniProgressbar from "@/components/animation/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
-import SecondaryMessageBox from "@/app/(template-made)/components/Header/SecondaryMessageBox";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
 export default function ResponseSelect({

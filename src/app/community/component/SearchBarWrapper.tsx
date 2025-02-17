@@ -25,10 +25,10 @@ export default function SearchBarWrapper() {
 
   return (
     <form className="flex-1" onSubmit={serSearchKeyword}>
-      <SearchBar
+      {/* <SearchBar
         name="keyword"
         onChange={(e) => setKeyword(e.currentTarget.value)}
-      />
+      /> */}
     </form>
   );
 }
