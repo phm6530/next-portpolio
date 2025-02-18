@@ -5,7 +5,13 @@ export default async function ImageUploadHandler(endPoint: string, file: File) {
     const formData = new FormData();
     formData.append("image", file);
 
-    const allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif"]; // 허용된 이미지 MIME 타입들
+    const allowedTypes = [
+      "image/webp",
+      "image/jpg",
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+    ]; // 허용된 이미지 MIME 타입들
     if (!allowedTypes.includes(file.type)) {
       throw new Error("이미지 형식을 확인해주세요.");
     }

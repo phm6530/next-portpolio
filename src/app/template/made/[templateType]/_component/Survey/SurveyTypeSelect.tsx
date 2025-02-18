@@ -1,5 +1,5 @@
 import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Survey/SurveyOptionItem";
 
 import { QUESTION_TYPE } from "@/types/survey.type";
@@ -10,8 +10,6 @@ import {
   useFormContext,
 } from "react-hook-form";
 import classes from "./SurveyTypeSelect.module.scss";
-
-import SwitchButton from "@/components/ui/switch-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Tooltip,
@@ -19,12 +17,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import QuestionItemHeader, {
   QuestionType,
 } from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
+import { FormField, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import SvginButton from "@/components/ui/button-svg";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function SurveyTypeSelect({
   surveyDelete,
@@ -34,12 +36,7 @@ export default function SurveyTypeSelect({
   surveyIdx: number;
 }) {
   //FormContext
-  const {
-    control,
-    watch,
-    register,
-    formState: { errors },
-  } = useFormContext<RequestSurveyFormData>();
+  const { control, watch, register } = useFormContext<RequestSurveyFormData>();
 
   //항목 컨트롤러
   const {
@@ -79,32 +76,38 @@ export default function SurveyTypeSelect({
   return (
     <QuestionListWrapper>
       <div>
-        <QuestionItemHeader
-          type={QuestionType.MULTIPLE_CHOICE}
-          QuestionNum={surveyIdx + 1}
-        >
-          <input
-            type="text"
-            autoComplete="off"
-            {...register(`questions.${surveyIdx}.label`)}
-            placeholder="질문 제목을 입력해주세요."
-          />
-          <button
-            className={classes.delete}
-            type="button"
-            onClick={confimDelete}
-          >
-            삭제
-          </button>
-        </QuestionItemHeader>
+        <FormField
+          name={`questions.${surveyIdx}.label`}
+          control={control}
+          render={({ field }) => {
+            return (
+              <>
+                <div className="flex">
+                  <Input
+                    {...field}
+                    placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
+                    className="border-transparent !bg-transparent text-lg placeholder:text-lg focus:border-transparent hover:border-transparent"
+                    autoComplete="off"
+                  />
+
+                  <Button variant={"ghost"} onClick={() => confimDelete()}>
+                    삭제
+                  </Button>
+                </div>
+                <FormMessage />
+              </>
+            );
+          }}
+        />
 
         {/* 제목에러 */}
       </div>
       {/* Option에 img가 있다면 grid 변경하기 */}
       <div
-        className={`${classes.optionsWrapper} ${
-          isPicture ? classes.pictureGrid : undefined
-        }`}
+        className={cn(
+          "flex flex-col gap-5 my-2",
+          isPicture && "grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+        )}
       >
         {/* Radio - List */}
         {fields!.map((_, optionIdx) => {
@@ -149,7 +152,7 @@ export default function SurveyTypeSelect({
       {/* 복수 선택여부 */}
 
       <button
-        className={classes.AddBtn}
+        className={"mt-3 flex gap-2 rounded-md text-[#576e8b] text-sm"}
         type="button"
         onClick={handleArrAppend}
       >

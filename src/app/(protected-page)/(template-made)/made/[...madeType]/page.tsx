@@ -1,4 +1,4 @@
-import CreateSurvey from "./components/survey/CreateSurvey";
+import CreateSurveyForm from "./survey/CreateSurvey";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 
 type MadeTemplateParams = {
@@ -10,7 +10,7 @@ export default function MadeTemplate({ params }: MadeTemplateParams) {
 
   // //설문
   if (template === TEMPLATE_TYPE.SURVEY) {
-    return <CreateSurvey />;
+    return <CreateSurveyForm />;
   }
 
   //Rank

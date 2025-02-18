@@ -7,9 +7,11 @@ export default function QuestionListWrapper({
 }: {
   children: ReactNode;
 }) {
-  useAOS({ preserveClass: true });
+  useAOS();
   return (
-    <article className={`${classes.questionArticle} aos-hidden`}>
+    <article
+      className={`rounded-lg border border-muted p-4 shadow-md flex flex-col gap-6 aos-hidden`}
+    >
       {children}
     </article>
   );

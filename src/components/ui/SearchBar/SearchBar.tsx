@@ -1,16 +1,14 @@
 import { cn } from "@/lib/utils";
 import { SearchIcon } from "lucide-react";
-import { HTMLAttributes, InputHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 
 export default function SearchBar({
   name,
   className,
-  clickEvent,
   ...props
 }: {
   name: string;
   className?: string;
-  clickEvent: () => void;
 } & InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div

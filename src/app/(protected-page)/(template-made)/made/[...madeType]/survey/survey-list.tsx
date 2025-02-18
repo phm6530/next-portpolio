@@ -2,19 +2,11 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeSelect";
 import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
-import classes from "./SurveyList.module.scss";
-
-import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 
 export default function SurveyList() {
-  const {
-    control,
-    watch,
-    formState: { errors },
-  } = useFormContext<RequestSurveyFormData>();
-
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
   const { remove } = useFieldArray({
     control,
     name: "questions",
@@ -23,30 +15,10 @@ export default function SurveyList() {
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
 
-  //갯수
-  const cntType = (type: QUESTION_TYPE) => {
-    return questionsWatch.filter((item) => item.type === type).length;
-  };
-
   return (
-    <div>
-      <div className={classes.questionsStatus}>
-        <div>
-          총 항목{" "}
-          <span className={classes.QuestionsCnt}>{questionsWatch.length}</span>
-          개
-        </div>
-
-        <div>
-          주관식 항목 <span>{cntType(QUESTION_TYPE.TEXT)}</span>개
-        </div>
-
-        <div>
-          객관식 항목 <span>{cntType(QUESTION_TYPE.SELECT)}</span>개
-        </div>
-      </div>
-
-      <div className={classes.createQuestionsList}>
+    <>
+      {/* List */}
+      <div className="flex flex-col gap-6 rounded-sm">
         {questionsWatch.map((field, qsIdx) => {
           if (field.type === QUESTION_TYPE.TEXT) {
             return (
@@ -68,9 +40,7 @@ export default function SurveyList() {
             );
           }
         })}
-
-        {/* {questionsWatch.length === 0 && "하나이상의 질문을 생성해주세요."} */}
       </div>
-    </div>
+    </>
   );
 }

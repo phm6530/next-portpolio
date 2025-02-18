@@ -9,11 +9,9 @@ export default function AosWrapper({
   className?: string;
   children: ReactNode;
 }) {
-  useAOS({ preserveClass: true });
+  useAOS();
   return (
-    <div
-      className={`${className ? className : undefined} aos-hidden`}
-    >
+    <div className={`${className ? className : undefined} aos-hidden`}>
       {children}
     </div>
   );

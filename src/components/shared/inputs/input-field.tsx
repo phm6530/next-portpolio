@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { InputHTMLAttributes } from "react";
-import { Control, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 export default function InputField({
   name,

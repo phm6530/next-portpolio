@@ -2,13 +2,9 @@ import { useEffect } from "react";
 
 interface UseAOSOptions {
   threshold?: number;
-  preserveClass?: boolean;
 }
 
-export default function useAOS({
-  threshold = 0.2,
-  preserveClass = false,
-}: UseAOSOptions = {}) {
+export default function useAOS({ threshold = 0.2 }: UseAOSOptions = {}) {
   useEffect(() => {
     const observeElements = () => {
       const aosLists = document.querySelectorAll(".aos-hidden");
@@ -42,5 +38,5 @@ export default function useAOS({
     });
 
     return () => mutationObserver.disconnect();
-  }, [threshold, preserveClass]);
+  }, [threshold]);
 }

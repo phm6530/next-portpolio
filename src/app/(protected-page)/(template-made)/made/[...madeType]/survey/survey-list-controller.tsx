@@ -1,12 +1,10 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import classes from "./AddQuestionController.module.scss";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
-
-import pen from "/public/asset/icon/pen.svg";
-import FormToolButton from "@/app/(protected-page)/(template-made)/components/FormToolButton";
-import checkbox from "/public/asset/icon/checkbox.svg";
+import Pen from "/public/asset/icon/pen.svg";
+import Checkbox from "/public/asset/icon/checkbox.svg";
+import CustomButton from "@/components/ui/button-custom";
 
 export type RequestSelectOption = {
   label: string;
@@ -29,7 +27,7 @@ export type RequestSelect = {
   options: RequestSelectOption[];
 };
 
-export default function AddQuestionController() {
+export default function SurveyListController() {
   const { control } = useFormContext<RequestSurveyFormData>();
 
   //questions
@@ -65,20 +63,14 @@ export default function AddQuestionController() {
   };
 
   return (
-    <div className={classes.controllerWrapper}>
-      <FormToolButton
-        clickEvent={() => addSurveyItem(QUESTION_TYPE.TEXT)}
-        Svg={pen}
-      >
-        주관식 추가
-      </FormToolButton>
+    <div className="grid grid-cols-[repeat(2,1fr)] gap-3">
+      <CustomButton onClick={() => addSurveyItem(QUESTION_TYPE.TEXT)}>
+        <Pen /> 주관식 추가
+      </CustomButton>
 
-      <FormToolButton
-        clickEvent={() => addSurveyItem(QUESTION_TYPE.SELECT)}
-        Svg={checkbox}
-      >
-        객관식 추가
-      </FormToolButton>
+      <CustomButton onClick={() => addSurveyItem(QUESTION_TYPE.SELECT)}>
+        <Checkbox /> 객관식 추가
+      </CustomButton>
     </div>
   );
 }

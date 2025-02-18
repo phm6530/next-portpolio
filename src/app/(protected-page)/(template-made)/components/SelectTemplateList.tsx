@@ -28,7 +28,7 @@ const templateList = [
 ];
 
 export default function SelectTemplateList() {
-  useAOS({ preserveClass: true });
+  useAOS();
 
   const handleTemplateClick = (type: string, isActive: boolean) => {
     if (!isActive) {

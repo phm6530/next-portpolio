@@ -28,6 +28,7 @@ export default async function page() {
         {/**
          * vercel 서버리스 Cold Start 때문에 prefetch에서 Client로 변경함
          */}
+
         <TemplateList />
       </Grid.center>
     </div>

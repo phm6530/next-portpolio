@@ -35,10 +35,6 @@ const RequestSelectSchema = z.object({
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: `중복된 옵션 값이 있습니다 `,
-
-          // "${[...new Set(duplicates)].join(
-          //   ", "
-          // )}"`,
         });
       }
     }),
@@ -50,9 +46,7 @@ const surveySchema = z.object({
     .min(1, "제목은 필수 입니다.")
     .min(4, "제목은 최소 4글자 이상으로 적어주세요"),
   description: z.string().min(1, "해당 조사의 설명을 적어주세요"),
-  thumbnail: z
-    .string()
-    .min(1, "썸네일을 업로드하거나 검색등록 해주세요!"),
+  thumbnail: z.string().min(1, "썸네일을 업로드하거나 검색등록 해주세요!"),
   startDate: z.string().nullable().optional(),
   endDate: z.string().nullable().optional(),
   isGenderCollected: z.boolean().optional(),

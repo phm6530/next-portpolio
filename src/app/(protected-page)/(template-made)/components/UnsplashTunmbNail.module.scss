@@ -6,15 +6,7 @@
 }
 
 .wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
   .titleWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-
     .title {
       line-height: 2.3rem;
     }

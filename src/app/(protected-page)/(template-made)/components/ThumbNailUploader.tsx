@@ -1,15 +1,27 @@
 import classes from "./ThumbNailUploader.module.scss";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
 import UnSplashThumbNail from "./UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
-import imgUpload from "/public/asset/icon/imgUpload.svg";
-import FormToolButton from "./FormToolButton";
-
+import ImgUpload from "/public/asset/icon/imgUpload.svg";
 import UploadedImagePreview from "./ImageContainer/UploadedImagePreview";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import { Button } from "@/components/ui/button";
+import { ImgUploadContext } from "@/context/imgUpload-context";
+import SkeletonImage from "@/components/shared/loading/skeleton-image";
+import CustomButton from "@/components/ui/button-custom";
+import {
+  DoorOpen,
+  DropletIcon,
+  LucideUploadCloud,
+  Upload,
+  UploadCloud,
+  UploadIcon,
+} from "lucide-react";
+import { toast } from "react-toastify";
+import { cn } from "@/lib/utils";
+import { CardDescription } from "@/components/ui/card";
 
 /**
  * template_type : 템플릿 종류
@@ -17,16 +29,11 @@ import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
  */
 export default function ThumbNailUploader() {
   const fileRef = useRef<HTMLInputElement>(null);
-  const {
-    setValue,
-    watch,
-    formState: { errors },
-    trigger,
-  } = useFormContext<FetchTemplateForm>();
-  const [imgPending, setImgPending] = useState<boolean>(false);
-  const [imgError, setImgError] = useState<boolean>(false);
+  const { setValue, watch, trigger } = useFormContext<FetchTemplateForm>();
+
   const key = watch("templateKey");
   const tempThumbNail = watch("thumbnail");
+  const [isDragging, setIsDragging] = useState(false);
 
   /**배치 때문인지 썸네일 에러 검사 안함 triiger 처리 */
   useEffect(() => {
@@ -38,7 +45,6 @@ export default function ThumbNailUploader() {
   const {
     mutate,
     isPending: thumnbNailPending,
-    isError,
     reset,
   } = useMutation({
     mutationFn: async (file: File) => {
@@ -50,67 +56,96 @@ export default function ThumbNailUploader() {
     },
   });
 
-  useEffect(() => {
-    if (thumnbNailPending) {
-      setImgPending(true);
-    }
-  }, [thumnbNailPending]);
-
-  useEffect(() => {
-    if (isError) {
-      setImgError(true);
-    }
-  }, [isError]);
-
   //upLoader
   const thumbNailhandler = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
     if (files) mutate(files[0]);
   };
 
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith("image/")) {
+        mutate(file);
+      } else {
+        // 에러 처리
+        toast.error("이미지 파일만 업로드 가능합니다");
+      }
+    }
+  };
+
   const clearPreview = () => {
     setValue("thumbnail", "");
     reset();
   };
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <input
         type="file"
         className="hidden"
         ref={fileRef}
         onChange={thumbNailhandler}
       />
-      {/* 썸네일 preView */}
-      <>
-        {thumnbNailPending ? (
-          <div className={classes.thumbnailWrapper}>
-            <LoadingSkeleton loadingText="UP LOADING..." />
-          </div>
-        ) : (
-          tempThumbNail && (
-            <div className={classes.thumbnailWrapper}>
-              <UploadedImagePreview
-                src={tempThumbNail}
-                deleteFunc={clearPreview}
-              />
-            </div>
-          )
-        )}
-      </>{" "}
-      <div className={classes.buttonWrapper}>
-        <FormToolButton
-          clickEvent={() => fileRef.current?.click()}
-          Svg={imgUpload}
-        >
-          썸네일 업로드하기
-        </FormToolButton>
 
-        <UnSplashThumbNail
-          setImgPending={setImgPending}
-          setImgError={setImgError}
-        />
+      <div
+        className={cn(
+          `
+          w-full  hover:bg-muted/50
+          cursor-pointer
+          flex-col 
+          transition-all p-20 rounded-md text-center flex gap-2 
+          justify-center border border-muted-foreground/50 border-dashed
+        `,
+          (isDragging || tempThumbNail) &&
+            "border-primary bg-primary/10 border-dashed"
+        )}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        onDragLeave={() => setIsDragging(false)}
+        onClick={() => fileRef.current?.click()}
+      >
+        <>
+          {thumnbNailPending ? (
+            <div className={classes.thumbnailWrapper}>
+              <SkeletonImage />
+            </div>
+          ) : (
+            tempThumbNail && (
+              <div className={classes.thumbnailWrapper}>
+                <UploadedImagePreview
+                  src={tempThumbNail}
+                  deleteFunc={clearPreview}
+                />
+              </div>
+            )
+          )}
+        </>
+        <div className="flex gap-2 items-center justify-center">
+          <LucideUploadCloud className="w-5 h-5" /> Image Upload & Drag Drop
+        </div>
       </div>
-    </>
+      {/* 썸네일 preView */}
+
+      <div className="grid gap-3 grid-cols-[1fr_1fr]">
+        <CustomButton onClick={() => fileRef.current?.click()}>
+          <ImgUpload />
+          썸네일 업로드하기
+        </CustomButton>
+
+        {/* 검색기 */}
+        <UnSplashThumbNail />
+      </div>
+    </div>
   );
 }

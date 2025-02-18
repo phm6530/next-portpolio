@@ -1,17 +1,26 @@
-import usePopup from "@/app/hook/usePopup";
 import requestHandler from "@/utils/withFetch";
 import { useMutation } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useState } from "react";
 import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
 import { useForm, useFormContext } from "react-hook-form";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import Search from "/public/asset/icon/search.svg";
-import FormToolButton from "./FormToolButton";
-import { resolve } from "path";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import SearchBar from "@/components/ui/SearchBar/SearchBar";
+import CustomModal from "@/components/shared/modals/custom-modal";
+import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 
+import SkeletonImage from "@/components/shared/loading/skeleton-image";
+import CustomButton from "@/components/ui/button-custom";
+
+// unplashe Api Type임
 type UnsplashApi = {
   total: number;
   total_pages: number;
@@ -27,46 +36,24 @@ type UnsplashApi = {
   }[];
 };
 
-// type PixabayApi = {
-//   total: number;
-//   totalHits: number;
-//   hits: {
-//     webformatURL: string;
-//     largeImageURL: string;
-//     tags: string;
-//   }[];
-// };
-
 type SearchForm = { keyword: string };
 
-function UnSplashContents({
-  setImgPending,
-  setImgError,
-  closeModal,
-}: {
-  setImgPending: Dispatch<SetStateAction<boolean>>;
-  setImgError: Dispatch<SetStateAction<boolean>>;
-  closeModal: () => void;
-}) {
+function UnSplashContents({ closeModal }: { closeModal: () => void }) {
   const { setValue } = useFormContext<RequestSurveyFormData>();
+  const formMethod = useForm<SearchForm>({
+    defaultValues: { keyword: "" },
+  });
+
+  const { control, handleSubmit, getValues } = formMethod;
 
   const {
-    handleSubmit,
-    register,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm<SearchForm>({ defaultValues: { keyword: "" } });
-
-  const { mutate, data, isPending, isError } = useMutation<
-    UnsplashApi,
-    Error,
-    string
-  >({
+    mutate: searchMutate,
+    data,
+    isPending,
+  } = useMutation<UnsplashApi, Error, string>({
     mutationFn: async (searchText: string) => {
       return requestHandler(async () => {
         const encodingText = encodeURI(searchText);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         return fetch(
           `https://api.unsplash.com/search/photos?query=${encodingText}&client_id=PIkUJ8qatZ2000yVp0DzplIL15unNYVPJ3GsjXtWDSE&per_page=30&page=1`
         );
@@ -74,52 +61,58 @@ function UnSplashContents({
     },
   });
 
-  useEffect(() => {
-    if (isPending) {
-      setImgPending(true);
-    }
-  }, [isPending, setImgPending]);
-
-  useEffect(() => {
-    if (isError) {
-      setImgError(true);
-    }
-  }, [isError, setImgError]);
-
   const onSearchHandler = (data: SearchForm) => {
-    mutate(data.keyword);
+    console.log(data);
+    searchMutate(data.keyword);
   };
 
-  const selectSlug = (imgUrl: string) => {
+  const selectSlug = async (imgUrl: string) => {
     setValue("thumbnail", imgUrl);
     closeModal();
   };
 
   return (
-    <div className={classes.wrap}>
-      <div className={classes.titleWrapper}>
-        <h2 className={classes.title}>
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
+        <DialogTitle className="font-normal text-xl leading-8">
           사용하실 섬네일 키워드를 <br></br>
           아래 검색창에 적어주세요
-        </h2>
-
-        <div className={classes.titleText}>
-          <p>
-            UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를
-            검색합니다.
-          </p>
-          <p>예{")"} 검색은 Search</p>
-        </div>
+        </DialogTitle>
+        <DialogDescription>
+          <div className={classes.titleText}>
+            <p>
+              UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를
+              검색합니다.
+            </p>
+            <p>예{")"} 검색은 Search</p>
+          </div>
+        </DialogDescription>
       </div>
-
-      {/* Search Bar */}
-      {/* <SearchBar
-        placeholder="생성하실 섬네일을 검색해주세요"
-        clickEvent={handleSubmit(onSearchHandler)}
-        register={register("keyword", {
-          required: "검색어를 기재해주세요!",
-        })}
-      /> */}
+      <Form {...formMethod}>
+        <form onSubmit={handleSubmit(onSearchHandler)}>
+          <FormField
+            name="keyword"
+            control={control}
+            rules={{
+              required: "검색어를 입력해주세요",
+            }}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormControl>
+                    {/* Search Bar */}
+                    <SearchBar
+                      {...field}
+                      placeholder="이미지 키워드를 입력해주세요"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </form>
+      </Form>
 
       <div>
         {/* 한번 touch 해야 div 생성하게 함 */}
@@ -127,15 +120,12 @@ function UnSplashContents({
           // 로딩 시 스켈레톤 띄움
           isPending ? (
             <div className={classes.slugItemsWrap}>
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
-              <LoadingSkeleton />
+              <SkeletonImage />
+              <SkeletonImage />
+              <SkeletonImage />
+              <SkeletonImage />
+              <SkeletonImage />
+              <SkeletonImage />
             </div>
           ) : (
             <>
@@ -173,32 +163,24 @@ function UnSplashContents({
   );
 }
 
-export default function UnSplashThumbNail({
-  setImgPending,
-  setImgError,
-}: {
-  setImgPending: Dispatch<SetStateAction<boolean>>;
-  setImgError: Dispatch<SetStateAction<boolean>>;
-}) {
-  const { isOpen, openModal, closeModal, PopupComponent } = usePopup();
-
+export default function UnSplashThumbNail() {
+  const [modal, setModal] = useState<boolean>(false);
+  const closeModal = () => setModal(false);
+  const openModal = () => setModal(true);
   return (
     <>
-      <PopupComponent
-        isOpen={isOpen}
-        closeModal={closeModal}
-        className={classes.popupWidth}
+      <CustomModal
+        className="max-w-2xl w-[90%]"
+        open={modal}
+        onClose={closeModal}
       >
-        <UnSplashContents
-          setImgPending={setImgPending}
-          setImgError={setImgError}
-          closeModal={closeModal}
-        />
-      </PopupComponent>
+        <UnSplashContents closeModal={closeModal} />
+      </CustomModal>
 
-      <FormToolButton clickEvent={() => openModal()} Svg={Search}>
-        썸네일 검색기
-      </FormToolButton>
+      <CustomButton onClick={openModal}>
+        <Search />
+        이미지 검색기
+      </CustomButton>
     </>
   );
 }

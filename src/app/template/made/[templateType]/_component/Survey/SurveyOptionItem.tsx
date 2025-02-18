@@ -5,19 +5,20 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
-import { RequestSelect } from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
-import classes from "./SurveyOptionItem.module.scss";
 import OptionContainer from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionContainer";
-import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
 import Delete from "/public/asset/icon/delete.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import { useSearchParams } from "next/navigation";
+import SvginButton from "@/components/ui/button-svg";
+import { RequestSelect } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/survey-list-controller";
+import { FormField, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const MIN_OPTION_COUNT = 2;
 const MIN_OPTION_ERROR_MESSAGE =
@@ -41,6 +42,7 @@ export default function SurveyOptionItem({
     formState: { errors },
     setValue,
     watch,
+    control,
   } = useFormContext<RequestSurveyFormData>();
 
   const [curRadio, preView, key] = watch([
@@ -117,44 +119,54 @@ export default function SurveyOptionItem({
   };
 
   return (
-    <div className={classes.wrapper}>
-      <OptionContainer>
-        {/* Hidden Input */}
-        <input
-          type="file"
-          ref={ref}
-          onChange={imgPreview}
-          className="hidden"
-          autoComplete="off"
+    <div className="flex flex-col gap-3">
+      {/* Hidden Input */}
+      <input
+        type="file"
+        ref={ref}
+        onChange={imgPreview}
+        className="hidden"
+        autoComplete="off"
+      />
+
+      {/* 입력구간 */}
+      <div className="flex flex-1 items-center gap-2">
+        {/* 질문  명 */}
+
+        <FormField
+          name={`questions.${surveyIdx}.options.${optionIdx}.value`}
+          render={({ field }) => {
+            return (
+              <div className="w-full">
+                <div className="w-full flex focus-within:border-primary border rounded-md bg-custom-input">
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    placeholder={`항목 ${optionIdx + 1}을 입력해주세요`}
+                    className="border-transparent flex-1 focus:border-transparent bg-transparent dark:bg-transparent"
+                  />
+                  <div className={"flex gap-2 mr-2"}>
+                    {/* upload */}
+                    <SvginButton
+                      Svg={imgUpload}
+                      alt="업로드 버튼"
+                      onClick={imgHandler}
+                    />
+                    <SvginButton
+                      Svg={Delete}
+                      alt="삭제 버튼"
+                      onClick={() => removeOptions(optionIdx)}
+                    />
+                  </div>{" "}
+                </div>
+                <FormMessage />
+              </div>
+            );
+          }}
         />
+      </div>
 
-        {/* 입력구간 */}
-        <div className={classes.inputWrapper}>
-          {/* 질문  명 */}
-          <input
-            type="text"
-            {...register(`questions.${surveyIdx}.options.${optionIdx}.value`)}
-            autoComplete="off"
-            placeholder={`항목 ${optionIdx + 1}을 입력해주세요`}
-          />
-
-          <div className={classes.buttonsWrapper}>
-            {/* upload */}
-            <OptionButton
-              Svg={imgUpload}
-              alt="업로드 버튼"
-              onClick={imgHandler}
-            />
-            <OptionButton
-              Svg={Delete}
-              alt="삭제 버튼"
-              onClick={() => removeOptions(optionIdx)}
-            />
-          </div>
-        </div>
-
-        <>{renderPreview()}</>
-      </OptionContainer>
+      <>{renderPreview()}</>
 
       {/* Error  */}
     </div>

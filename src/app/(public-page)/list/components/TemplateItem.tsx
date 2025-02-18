@@ -67,12 +67,12 @@ const TemplateItem = forwardRef(
             <TooltipTrigger>
               {" "}
               <div
-                className={`hover:bg-card/50 text-start aos-hidden bg-card tdd flex flex-col cursor-pointer group border rounded-[15px] overflow-hidden shadow-lg`}
+                className={`hover:bg-card/50 text-start aos-hidden bg-card tdd flex flex-col cursor-pointer group border rounded-[15px] overflow-hidden`}
                 onClick={() => router.push(`/${templateType}/${id}`)}
                 ref={ref}
               >
                 {thumbnail && (
-                  <div className="relative w-full pb-[60%]  flex-1 rounded-t-md overflow-hidden border-b">
+                  <div className="relative w-full pb-[45%]  flex-1 rounded-md overflow-hidden border-b">
                     <Image
                       alt="test"
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"

@@ -137,7 +137,7 @@ export default function LoginForm() {
           variant={"link"}
           className="text-[13px] text-muted-foreground"
         >
-          <Link href={"/auth/pin"}>비밀번호를 잊어버리셨나요?</Link>
+          <Link href={"/auth/pin"}>밀번호를 잊어버리셨나요?</Link>
         </Button>
         <span className="opacity-20">|</span>
         <Button variant={"link"} className="text-[13px] text-muted-foreground">

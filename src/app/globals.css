@@ -91,6 +91,10 @@
     min-height: calc(100vh - 80px);
   }
 
+  .svg-button {
+    @apply dark:fill-white/70 fill-[#495057] !p-6;
+  }
+
   textarea,
   input,
   button {

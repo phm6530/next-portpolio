@@ -53,7 +53,7 @@ export default function ResponseSelect({
 
   return (
     <>
-      {/* <SecondaryMessageBox title={"test 게시판"} description={label} /> */}
+      {/* <SubheaderDescrition title={"test 게시판"} description={label} /> */}
       <QuestionTitle idx={idx}>{label}</QuestionTitle>
       <div
         className={`${classes.gridWrapper} ${

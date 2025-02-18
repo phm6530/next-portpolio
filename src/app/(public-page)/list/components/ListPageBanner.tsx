@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ListPageBanner() {
   return (
-    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#5e5586] dark:to-[#562857]">
+    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#593186]  dark:to-[#5c68b9]">
       <Grid.center className="flex items-center flex-col md:flex-row justify-between">
         <div>
           <PageTitle>

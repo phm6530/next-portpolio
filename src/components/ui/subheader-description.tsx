@@ -1,7 +1,5 @@
 import { MessageSquareMore } from "lucide-react";
-import InfoSvg from "/public/asset/icon/info_8.svg";
-
-export default function SecondaryMessageBox({
+export default function SubheaderDescrition({
   title,
   description,
 }: {

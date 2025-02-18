@@ -1,5 +1,5 @@
 "use client";
-import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
+import SubheaderDescrition from "@/components/ui/subheader-description";
 import { useEffect, useRef, useState } from "react";
 import FindmenberAndSendPin from "./_component/FindmenberAndSendPin";
 import AccessMatchPin from "./_component/AccessMatchPin";
@@ -84,7 +84,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <div>
-      <SecondaryMessageBox
+      <SubheaderDescrition
         title={stepData[step].title}
         description={stepData[step].description}
       />{" "}

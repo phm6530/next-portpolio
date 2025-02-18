@@ -1,25 +1,23 @@
-import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
-import {
-  FieldError,
-  UseFieldArrayRemove,
-  useFormContext,
-} from "react-hook-form";
+import { ChangeEvent, useRef } from "react";
+import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
 import classes from "./SurveyTypeText.module.scss";
 
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/components/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
-import OptionButton from "@/app/(protected-page)/(template-made)/components/QuestionOption/OptionButton";
+import SvginButton from "@/components/ui/button-svg";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
-import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import QuestionItemHeader, {
   QuestionType,
 } from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
+import { Button } from "@/components/ui/button";
+import InputField from "@/components/shared/inputs/input-field";
+import { FormField, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 export default function SurveyTypeText({
   surveyIdx,
@@ -29,12 +27,7 @@ export default function SurveyTypeText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const {
-    register,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useFormContext<RequestSurveyFormData>();
+  const { watch, setValue, control } = useFormContext<RequestSurveyFormData>();
 
   const preView = watch(`questions.${surveyIdx}.img`);
   const key = watch("templateKey");
@@ -79,44 +72,57 @@ export default function SurveyTypeText({
         />
 
         <div>
-          <QuestionItemHeader
-            type={QuestionType.SHORT_ANSWER}
-            QuestionNum={surveyIdx + 1}
-          >
-            <input
-              type="text"
-              {...register(`questions.${surveyIdx}.label`)}
-              placeholder="질문 제목을 입력해주세요."
-              autoComplete="off"
-            />
+          {/* <nputField
+            name={`questions.${surveyIdx}.label`}
+            placeholder="질문 제목을 입력해주세요."
+            autoComplete="off"
+            className="bg-transparent"
+          />I */}
 
-            <OptionButton
-              Svg={imgUpload}
-              alt="업로드 버튼"
-              onClick={imgHandler}
-            />
-            <button
-              className={classes.delete}
-              type="button"
-              onClick={() => remove(surveyIdx)}
-            >
-              삭제
-            </button>
-          </QuestionItemHeader>
+          <FormField
+            name={`questions.${surveyIdx}.label`}
+            control={control}
+            render={({ field }) => {
+              return (
+                <>
+                  <div className="flex">
+                    <Input
+                      {...field}
+                      placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
+                      className="border-transparent !bg-transparent placeholder:text-lg focus:border-transparent hover:border-transparent"
+                      autoComplete="off"
+                    />
+
+                    <SvginButton
+                      Svg={imgUpload}
+                      alt="업로드 버튼"
+                      onClick={imgHandler}
+                    />
+                    <Button variant={"ghost"} onClick={() => remove(surveyIdx)}>
+                      삭제
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </>
+              );
+            }}
+          />
         </div>
 
         {isPending ? (
-          <div className={classes.previewWrapper}>
+          <div>
             <LoadingSkeleton loadingText="UP LOADING..." />
           </div>
         ) : isSuccess && preView ? (
-          <div className={classes.previewWrapper}>
+          <div>
             <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
           </div>
         ) : null}
 
         {/* 주관식에서 알려주기 */}
-        <div className={classes.textAnswer}>응답자 답변 (500자 내외)</div>
+        <div className="bg-muted/50 text-sm p-3 rounded-sm border border-border">
+          응답자 답변 (500자 내외)
+        </div>
       </QuestionListWrapper>
     </>
   );

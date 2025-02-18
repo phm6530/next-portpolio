@@ -10,7 +10,7 @@ import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { ENV_NESTBASE_URL } from "@/config/base";
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
-import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
+import SubheaderDescrition from "@/components/ui/subheader-description";
 
 type MailFormData = {
   name: string;
@@ -56,7 +56,7 @@ export default function Page() {
         </>
       )}
       <Grid.smallCenter>
-        <SecondaryMessageBox title={"궁금한 점이 있으신가요?"} />
+        <SubheaderDescrition title={"궁금한 점이 있으신가요?"} />
 
         <form
           className={classes.mailForm}

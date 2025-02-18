@@ -8,9 +8,8 @@ import { USER_ROLE } from "@/types/auth.type";
 import { CategoriesKey } from "@/types/board";
 import Paging from "@/components/ui/Paging";
 import { useQuery } from "@tanstack/react-query";
-import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export type ExcludeUser = Exclude<USER_ROLE, USER_ROLE.ANONYMOUS>;
 
@@ -39,6 +38,8 @@ export default function BoardList({
 
   const qs = useSearchParams();
   const curPage = qs.get("page");
+
+  console.log("board", curPage, searchParam, category);
 
   // number는 All Cnt
   const { data, isLoading } = useQuery<[ListItemType[], number]>({

@@ -1,5 +1,5 @@
 import { notFound, useRouter } from "next/navigation";
-import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
+import SubheaderDescrition from "@/components/ui/subheader-description";
 import { Button } from "@/components/ui/button";
 import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
@@ -32,7 +32,7 @@ export default async function BoardListPage({
 
   return (
     <>
-      <SecondaryMessageBox
+      <SubheaderDescrition
         title={`${boardName} 게시판 \n`}
         description="한줄 남겨주시면 저에게 큰 힘이 됩니다 ..!"
       />

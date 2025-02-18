@@ -1,13 +1,12 @@
-import SecondaryMessageBox from "../components/Header/SecondaryMessageBox";
-import classes from "./page.module.scss";
+import SubheaderDescrition from "@/components/ui/subheader-description";
 import SelectTemplateList from "../components/SelectTemplateList";
 
 export const dynamic = "force-dynamic";
 
 export default function page() {
   return (
-    <div className={classes.wrap}>
-      <SecondaryMessageBox
+    <div>
+      <SubheaderDescrition
         title={`만드실 템플릿을 선택해주세요`}
         description="현재 Survey 만 제공하고 있으며 개발 중 입니다."
       />

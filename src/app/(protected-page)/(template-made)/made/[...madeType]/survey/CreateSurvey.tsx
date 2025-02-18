@@ -2,19 +2,14 @@
 import { Control, FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import FormInput from "@/components/ui/FormElement/FormInput";
-import Button from "@/components/ui/button/Button";
 import classes from "./CreateSurvey.module.scss";
 import { TEMPLATE_TYPE, FetchTemplateForm } from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(protected-page)/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
-import SurveyList from "@/app/template/made/[templateType]/_component/Survey/SurveyList";
-import AddQuestionController, {
-  RequestSelect,
-  RequestText,
-} from "@/app/template/made/[templateType]/_component/Survey/AddQuestionController";
+import SurveyList from "./survey-list";
+
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
 
@@ -23,13 +18,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import surveySchema from "./schema";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
-import TemplateInputWrapper from "../common/TemplateInputWrapper";
+import TemplateInputWrapper from "../components/common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
-import SecondaryMessageBox from "@/app/(protected-page)/(template-made)/components/Header/SecondaryMessageBox";
+import SubheaderDescrition from "@/components/ui/subheader-description";
 import dynamic from "next/dynamic";
 import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 import useAOS from "@/_hook/usAOS";
+import InputField from "@/components/shared/inputs/input-field";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ImgUploadProvider } from "@/context/imgUpload-context";
+import { Button } from "@/components/ui/button";
+import SurveyStatus from "./survey-status";
+import SurveyListController, {
+  RequestSelect,
+  RequestText,
+} from "./survey-list-controller";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -89,9 +99,10 @@ const EditorDynamicRender = dynamic<{
   loading: () => <LoadingTextSkeleton cnt={1} />,
 });
 
-export default function CreateSurvey() {
+export default function CreateSurveyForm() {
   const { RenderPreview } = usePreview();
-  useAOS({ preserveClass: true });
+  useAOS();
+
   const queryClient = useQueryClient();
   const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [editPage, setEditPage] = useState<boolean>(false);
@@ -105,17 +116,8 @@ export default function CreateSurvey() {
     resolver: zodResolver(surveySchema),
   });
 
-  const {
-    register,
-    setValue,
-    reset,
-    control,
-    watch,
-    formState: { errors },
-  } = formState;
+  const { setValue, reset, control } = formState;
   const editId = qs.get("edit");
-
-  console.log(errors);
 
   //수정시 get해오기
   const {
@@ -179,7 +181,6 @@ export default function CreateSurvey() {
     RequestSurveyFormData
   >({
     mutationFn: async (data) => {
-      //수정은 Patch로
       let options: RequestInit = {
         method: editId ? "PUT" : "POST",
         headers: {
@@ -205,7 +206,6 @@ export default function CreateSurvey() {
 
   //submit
   const onSubmitHandler = async (data: RequestSurveyFormData) => {
-    console.log(data);
     mutate(data);
   };
 
@@ -213,66 +213,51 @@ export default function CreateSurvey() {
     <>
       <RenderPreview>프리뷰</RenderPreview>
 
-      <SecondaryMessageBox
+      <SubheaderDescrition
         title={`생성하실 템플릿 서식을\n기재해주세요`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className={`${classes.formContainer} aos-hidden`}>
+      <div className=" aos-hidden pt-16">
         <FormProvider {...formState}>
-          <section className={`${classes.formSection} `}>
-            <div className={classes.header}>
-              <h3>설문조사 정보</h3>
-              <p className={classes.description}>
-                가장 먼저 노출되는 항목이에요
-              </p>
-            </div>
-            {/* 설문조사 제목 */}
-            <TemplateInputWrapper title={"템플릿 제목"}>
-              <FormInput
-                {...register("title")}
-                inputName={"title"}
+          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal">
+                1. 설문조사 정보
+              </CardTitle>
+              <CardDescription> 가장 먼저 노출되는 항목이에요</CardDescription>
+            </CardHeader>
+            <CardContent className="gap-10 flex flex-col">
+              {/* 설문조사 제목 */}
+              <InputField
+                name="title"
+                label="템플릿 제목"
+                placeholder="템플릿 제목을 입력해주세요"
                 autoComplete="off"
-                placeholder="제목"
               />
-            </TemplateInputWrapper>
 
-            {/* 설문조사 설명 */}
-            <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
-              {/* <FormTextarea
-                {...register("description")}
-                placeholder="생성하시는 템플릿에 대한 설명을 적어주세요!"
-                autoComplete="off"
-              /> */}
+              {/* 설문조사 설명 */}
+              <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
+                <EditorDynamicRender control={control} name={"description"} />
+              </TemplateInputWrapper>
 
-              <EditorDynamicRender control={control} name={"description"} />
-            </TemplateInputWrapper>
+              {/* 썸네일 */}
+              <TemplateInputWrapper title={"섬네일 - 선택"}>
+                <ThumbNailUploader />
+              </TemplateInputWrapper>
+            </CardContent>
+          </Card>
 
-            {/* 썸네일 */}
-            <TemplateInputWrapper title={"섬네일"}>
-              <ThumbNailUploader />
-            </TemplateInputWrapper>
-          </section>
-
-          <div
-            className={`${classes.gapWrapper} ${
-              editPage ? classes.disabled : undefined
-            }`}
-          >
-            {/* 진행 중인 설문은 수정 불가 안내문구 */}
-            {editPage && (
-              <p className={classes.info}>
-                진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
-              </p>
-            )}
-
-            <section className={`${classes.formSection} `}>
-              <div className={classes.header}>
-                <h3>2. 응답자 필터 설정</h3>
-                <p className={classes.description}>
-                  설문 결과를 더 자세히 분석하기 위한 설정입니다.
-                </p>
-              </div>
+          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal">
+                2. 응답자 필터 설정
+              </CardTitle>
+              <CardDescription>
+                설문 결과를 더 자세히 분석하기 위한 설정입니다.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="gap-10 flex flex-col">
               {/* 나이 별 수집 */}
               <BooleanGroup<RequestSurveyFormData>
                 label="연령대별 분석을 진행할까요?"
@@ -286,36 +271,53 @@ export default function CreateSurvey() {
                 groupName={"isGenderCollected"}
                 // description="성별 필터링이 가능합니다."
               />
-            </section>
+            </CardContent>
+          </Card>
 
-            <section className={`${classes.formSection} `}>
-              <div className={classes.header}>
-                <h3>3. 설문 문항 구성</h3>
-                <p className={classes.description}>
-                  설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
-                </p>
-              </div>
+          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal">
+                3. 설문 문항 구성
+              </CardTitle>
+              <CardDescription>
+                설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="gap-5 flex flex-col">
+              <SurveyStatus />
               {/* List.. */}
               <SurveyList />
               {/* 항목 추가 */}
-              <AddQuestionController />
-            </section>
+              <SurveyListController />
+            </CardContent>
+          </Card>
+
+          <div
+            className={`${classes.gapWrapper} ${
+              editPage ? classes.disabled : undefined
+            }`}
+          >
+            {/* 진행 중인 설문은 수정 불가 안내문구 */}
+            {editPage && (
+              <p className={classes.info}>
+                진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
+              </p>
+            )}
 
             {/* Survey Controller */}
           </div>
-          {/* 익명 사용자 - Email 정보동의  */}
-          {/* <TemplateAccess /> */}
         </FormProvider>
 
-        <div className={classes.buttonsWrapper}>
-          {/* <button type="button">미리보기</button> */}
-          <Button.submit
+        <div className="mt-5 flex [&>button]:flex-1">
+          <Button
             type="submit"
             disabled={isPending}
             onClick={formState.handleSubmit(onSubmitHandler)}
+            className="py-8"
           >
             설문조사 생성하기
-          </Button.submit>
+          </Button>
         </div>
       </div>
     </>
