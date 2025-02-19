@@ -18,7 +18,7 @@ import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
@@ -38,7 +38,7 @@ export default function SurveyForm({
       if (e.type === QUESTION_TYPE.TEXT) {
         return { questionId: e.id, type: e.type, answer: "" };
       } else if (e.type === QUESTION_TYPE.SELECT) {
-        return { questionId: e.id, type: e.type, optionId: null };
+        return { questionId: e.id, type: e.type, optionId: [] };
       } else {
         throw new Error("지원되지 않는 질문 타입입니다.") as never;
       }
@@ -47,7 +47,8 @@ export default function SurveyForm({
 
   const dynamicSchema = createSurveyFormSchema(
     isGenderCollected,
-    isAgeCollected
+    isAgeCollected,
+    questions
   );
 
   const router = useRouter();
@@ -123,9 +124,9 @@ export default function SurveyForm({
                     return (
                       <QuestionOptions
                         label={qs.label}
-                        qsId={qs.id}
                         options={qs.options}
                         idx={idx}
+                        isMulti={qs.multi_select}
                       />
                     );
                   } else {

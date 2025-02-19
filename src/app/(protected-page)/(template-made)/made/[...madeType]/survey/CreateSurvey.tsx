@@ -110,8 +110,6 @@ export default function CreateSurveyForm() {
   const { setValue, reset } = formState;
   const editId = qs.get("edit");
 
-  console.log("watch ::: ", formState.watch());
-
   //수정시 get해오기
   const {
     data: editData,

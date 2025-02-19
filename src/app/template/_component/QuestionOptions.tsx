@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import ImageViewer from "@/app/template/_component/ImageViewer";
 import { QUESTION_TYPE, SurveyQuestionOption } from "@/types/survey.type";
 import {
@@ -13,23 +13,22 @@ import { z } from "zod";
 import { createSurveyFormSchema } from "@/app/(public-page)/(template-types)/survey/[id]/survey-form-schema";
 import { cn } from "@/lib/utils";
 import CustomRadio from "@/components/ui/input-radio-custom";
+import CustomCheckbox from "@/components/ui/input-checkbox-custom";
 
 type FormSchema = z.infer<ReturnType<typeof createSurveyFormSchema>>;
 
 export default function QuestionOptions({
   label,
   options,
-  qsId,
   idx,
+  isMulti,
 }: {
   label: string;
   options: SurveyQuestionOption[];
-  qsId: number;
   idx: number;
+  isMulti: boolean;
 }) {
-  const { control, watch } = useFormContext<FormSchema>();
-
-  console.log(watch());
+  const { control } = useFormContext<FormSchema>();
 
   //하나라도 이미지 있으면 UI 변경하기
   const isPictureOption = options?.some((e) => e.img !== null) || false;
@@ -55,22 +54,56 @@ export default function QuestionOptions({
                   )}
                 >
                   {options?.map((op, idx) => {
+                    const selectOptionId = field.value.find(
+                      (option) => option[op.id]
+                    );
+
                     return (
                       <FormItem key={`option-${op.id}-${idx}`}>
                         <FormControl>
-                          <CustomRadio
-                            onChange={() => {
-                              field.onChange(op.id);
-                            }}
-                            label={op.value}
-                            active={op.id === field.value}
-                          >
-                            {op.img && (
-                              <>
-                                <ImageViewer image={op.img} alt={op.value} />
-                              </>
-                            )}
-                          </CustomRadio>
+                          {isMulti ? (
+                            <CustomCheckbox
+                              label={op.value}
+                              active={!!selectOptionId}
+                              onChange={() => {
+                                if (selectOptionId) {
+                                  field.onChange([
+                                    ...field.value.filter((obj) => {
+                                      return obj[op.id] !== op.id;
+                                    }),
+                                  ]);
+
+                                  return;
+                                }
+
+                                field.onChange([
+                                  ...field.value,
+                                  { [op.id]: op.id },
+                                ]);
+                              }}
+                            >
+                              {op.img && (
+                                <>
+                                  <ImageViewer image={op.img} alt={op.value} />
+                                </>
+                              )}
+                            </CustomCheckbox>
+                          ) : (
+                            <CustomRadio
+                              onChange={() => {
+                                // 그냥 덮어버려
+                                field.onChange([{ [op.id]: op.id }]);
+                              }}
+                              label={op.value}
+                              active={(field.value[0] ?? {})[op.id] === op.id}
+                            >
+                              {op.img && (
+                                <>
+                                  <ImageViewer image={op.img} alt={op.value} />
+                                </>
+                              )}
+                            </CustomRadio>
+                          )}
                         </FormControl>
                       </FormItem>
                     );
