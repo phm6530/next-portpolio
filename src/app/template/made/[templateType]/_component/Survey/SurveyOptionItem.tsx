@@ -16,7 +16,6 @@ import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import { useSearchParams } from "next/navigation";
 import SvginButton from "@/components/ui/button-svg";
-import { RequestSelect } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/survey-list-controller";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -38,11 +37,9 @@ export default function SurveyOptionItem({
   const editMode = qs.size > 0;
 
   const {
-    register,
     formState: { errors },
     setValue,
     watch,
-    control,
   } = useFormContext<RequestSurveyFormData>();
 
   const [curRadio, preView, key] = watch([
@@ -67,7 +64,6 @@ export default function SurveyOptionItem({
     },
   });
 
-  const optionError = errors.questions as FieldErrorsImpl<RequestSelect>[];
   const ref = useRef<HTMLInputElement>(null);
 
   //options 제거

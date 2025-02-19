@@ -5,19 +5,21 @@ import { TEMPLATE_TYPE } from "@/types/template.type";
 const RequestTextSchema = z.object({
   label: z.string().min(1, "질문 제목은 필수입니다"),
   type: z.literal(QUESTION_TYPE.TEXT),
+  required: z.boolean().default(true),
   img: z.string().nullable().optional(),
 });
 
 const RequestSelectSchema = z.object({
   label: z.string().min(1, "질문 제목은 필수입니다"),
   type: z.literal(QUESTION_TYPE.SELECT),
+  multi_select: z.boolean().default(false), // 다중 선택,
+  required: z.boolean().default(true),
   options: z
     .array(
       z.object({
         value: z.string().min(1, "옵션 값은 필수입니다."),
         type: z.literal(QUESTION_TYPE.SELECT),
         img: z.string().nullable().optional(),
-        multi_select: z.boolean(),
       })
     )
     .min(2, "선택 옵션은 최소 2개가 필요합니다.")
@@ -35,6 +37,7 @@ const RequestSelectSchema = z.object({
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: `중복된 옵션 값이 있습니다 `,
+          path: ["root"],
         });
       }
     }),
@@ -52,7 +55,7 @@ const surveySchema = z.object({
   isGenderCollected: z.boolean().optional(),
   isAgeCollected: z.boolean().optional(),
   templateType: z.nativeEnum(TEMPLATE_TYPE),
-  templateKey: z.string(),
+  templateKey: z.string().min(1, "templateKey가 생성되지 않았습니다."),
   questions: z
     .array(z.union([RequestTextSchema, RequestSelectSchema]))
     .refine((questions) => questions.length > 0, {

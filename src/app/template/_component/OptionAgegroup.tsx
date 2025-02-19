@@ -2,12 +2,13 @@ import { useFormContext } from "react-hook-form";
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormLabel, FormMessage } from "@/components/ui/form";
+import CustomRadio from "@/components/ui/input-radio-custom";
 
 export default function OptionAgeGroup() {
   const { control, watch, formState } = useFormContext();
   const AgeGroups = [10, 20, 30, 40, 50, 60];
   const selectAgeGroup = watch("ageGroup");
-  console.log(formState.errors);
+
   return (
     <FormField
       name="ageGroup"
@@ -19,24 +20,18 @@ export default function OptionAgeGroup() {
               <FormLabel className="text-xl">연령대를 선택해주세요</FormLabel>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-2 flex-wrap [&>label]:flex-1">
                 {AgeGroups.map((range) => {
                   return (
-                    <InputTypeStyle.RadioAnswer
+                    <CustomRadio
                       key={`ageGroup-${range}`}
-                      selectId={selectAgeGroup}
-                      curid={range + ""}
-                    >
-                      {/* hidden 처리 */}
-                      <input
-                        type="radio"
-                        className="hidden"
-                        {...field}
-                        value={range}
-                        checked={field.value === AgeGroups}
-                      />
-                      {range} 대
-                    </InputTypeStyle.RadioAnswer>
+                      active={parseInt(selectAgeGroup) === range}
+                      label={range + " 대"}
+                      onChange={() => {
+                        field.onChange(range);
+                      }}
+                      value={range}
+                    />
                   );
                 })}
               </div>{" "}

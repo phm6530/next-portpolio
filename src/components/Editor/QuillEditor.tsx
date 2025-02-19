@@ -67,8 +67,6 @@ export default function QuillEditor<T extends FieldValues>({
     };
   }, [name, setValue, trigger]);
 
-  console.log(name);
-
   return (
     <>
       <div className={`${classes.editorContainer} `}>

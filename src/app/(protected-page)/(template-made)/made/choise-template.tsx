@@ -1,12 +1,11 @@
 "use client";
-
-import classes from "./SelectTemplate.module.scss";
 import SurveyIcon from "/public/asset/icon/survey.png";
 import rankIcon from "/public/asset/icon/rank.png";
 import Image from "next/image";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import useAOS from "@/_hook/usAOS";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const templateList = [
   {
@@ -27,7 +26,7 @@ const templateList = [
   },
 ];
 
-export default function SelectTemplateList() {
+export default function ChoiseTemplate() {
   useAOS();
 
   const handleTemplateClick = (type: string, isActive: boolean) => {
@@ -55,21 +54,27 @@ export default function SelectTemplateList() {
         return (
           <div
             key={`${template.type}-${idx}`}
-            className={` relative shadow-2xl cursor-pointer border dark:hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800 rounded-md p-5 ${
-              !template.isActive ? classes.notYet : undefined
-            }`}
+            className={cn(
+              "relative shadow-2xl cursor-pointer border border-primary/40 dark:hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800 rounded-md p-5",
+              !template.isActive && "opacity-50 cursor-not-allowed"
+            )}
             onClick={() =>
               handleTemplateClick(template.type, template.isActive)
             }
           >
-            <div className={classes.iconWrap}>
+            <div className="w-full pb-[50%] mb-3 relative">
               <Image
                 src={template.icon}
                 alt={template.name}
                 fill
                 style={{ objectFit: "contain" }}
+                className={cn(
+                  "grayscale drop-shadow-[12px_4px_16px_rgba(69,154,211,0.432)]",
+                  template.isActive && "grayscale-0"
+                )}
               />
             </div>
+
             <Badge variant={"secondary"} className="mb-4">
               {template.name}
             </Badge>

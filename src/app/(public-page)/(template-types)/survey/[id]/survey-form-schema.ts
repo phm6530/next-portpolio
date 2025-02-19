@@ -1,38 +1,37 @@
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { z } from "zod";
 
+//주관관
+export const textAnswerSchema = z.object({
+  questionId: z.number(),
+  type: z.literal(QUESTION_TYPE.TEXT),
+  answer: z.string().nullable(),
+});
+
+//객관
+export const selectAnswerSchema = z.object({
+  questionId: z.number(),
+  type: z.literal(QUESTION_TYPE.SELECT),
+  optionId: z.number().nullable(),
+});
+
 export const createSurveyFormSchema = (
   isGenderCollected: boolean,
   isAgeCollected: boolean
 ) => {
   const baseSchema = z.object({
     ...(isGenderCollected && {
-      gender: z.enum(["male", "female"], {
-        required_error: "성별을 선택해주세요",
+      gender: z.enum(["male", "female"] as const, {
         invalid_type_error: "필수 항목입니다.",
       }),
     }),
     ...(isAgeCollected && {
       ageGroup: z
-        .string({
+        .number({
           invalid_type_error: "필수 항목입니다.",
         })
         .min(1, { message: "연령대를 선택해주세요" }),
     }),
-  });
-
-  //주관관
-  const textAnswerSchema = z.object({
-    questionId: z.number(),
-    type: z.literal(QUESTION_TYPE.TEXT),
-    answer: z.string().nullable(),
-  });
-
-  //객관
-  const selectAnswerSchema = z.object({
-    questionId: z.number(),
-    type: z.literal(QUESTION_TYPE.SELECT),
-    optionId: z.number().nullable(),
   });
 
   return baseSchema.extend({

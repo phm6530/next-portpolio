@@ -1,6 +1,5 @@
 import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
 import classes from "./BooleanGroup.module.scss";
-import { useState } from "react";
 
 export default function BooleanGroup<T extends FieldValues>({
   groupName,

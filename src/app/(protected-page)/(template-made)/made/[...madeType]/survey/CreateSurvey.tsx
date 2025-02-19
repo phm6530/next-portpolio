@@ -1,5 +1,5 @@
 "use client";
-import { Control, FieldValues, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import classes from "./CreateSurvey.module.scss";
@@ -8,7 +8,6 @@ import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(protected-page)/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
-import SurveyList from "./survey-list";
 
 import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
@@ -18,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import surveySchema from "./schema";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
-import TemplateInputWrapper from "../components/common/TemplateInputWrapper";
 
 import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
@@ -33,13 +31,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ImgUploadProvider } from "@/context/imgUpload-context";
 import { Button } from "@/components/ui/button";
 import SurveyStatus from "./survey-status";
-import SurveyListController, {
+
+import { z } from "zod";
+import { FormItem, FormLabel } from "@/components/ui/form";
+import CreateSurveyFormController, {
   RequestSelect,
   RequestText,
-} from "./survey-list-controller";
+} from "./survey-form-controller";
+import CreateSurveyList from "./survey-form-list";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -72,27 +73,17 @@ const defaultValues = {
   isAgeCollected: true,
   templateType: TEMPLATE_TYPE.SURVEY,
   questions: [],
-  templateKey: null,
-  creator: null,
+  templateKey: "",
+  creator: {
+    id: 0, // 임시
+    email: "",
+    nickname: "",
+    role: "",
+  },
 };
 
-type StringToNumber<T extends string> = T extends `${infer R extends number}`
-  ? R
-  : never;
-
-//Exclude
-type MyExclude<T, U> = T extends U ? never : T;
-
-//Pick
-type MyPick<T, K extends keyof T> = {
-  [P in K]: T[P];
-};
-
-//Omit
-type MyOmit<T, K extends keyof T> = MyPick<T, MyExclude<keyof T, K>>;
-
+// Editor..
 const EditorDynamicRender = dynamic<{
-  control: Control<RequestSurveyFormData & FieldValues>;
   name: string;
 }>(() => import("@/components/Editor/QuillEditor"), {
   ssr: false,
@@ -110,14 +101,16 @@ export default function CreateSurveyForm() {
 
   //초기 세션상태
   const router = useRouter();
-  const formState = useForm<RequestSurveyFormData>({
+  const formState = useForm<z.infer<typeof surveySchema>>({
     defaultValues,
     // userData가 없으면 defaultValues 설정하지 않음
     resolver: zodResolver(surveySchema),
   });
 
-  const { setValue, reset, control } = formState;
+  const { setValue, reset } = formState;
   const editId = qs.get("edit");
+
+  console.log("watch ::: ", formState.watch());
 
   //수정시 get해오기
   const {
@@ -178,7 +171,7 @@ export default function CreateSurveyForm() {
   const { mutate, isPending } = useMutation<
     unknown,
     Error,
-    RequestSurveyFormData
+    z.infer<typeof surveySchema>
   >({
     mutationFn: async (data) => {
       let options: RequestInit = {
@@ -205,7 +198,7 @@ export default function CreateSurveyForm() {
   });
 
   //submit
-  const onSubmitHandler = async (data: RequestSurveyFormData) => {
+  const onSubmitHandler = async (data: z.infer<typeof surveySchema>) => {
     mutate(data);
   };
 
@@ -218,7 +211,7 @@ export default function CreateSurveyForm() {
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className=" aos-hidden pt-16">
+      <div className=" aos-hidden pt-16 flex flex-col gap-8">
         <FormProvider {...formState}>
           <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
             <CardHeader>
@@ -237,14 +230,17 @@ export default function CreateSurveyForm() {
               />
 
               {/* 설문조사 설명 */}
-              <TemplateInputWrapper title={"간단한 설명을 기재해주세요"}>
-                <EditorDynamicRender control={control} name={"description"} />
-              </TemplateInputWrapper>
+
+              <FormItem>
+                <FormLabel>간단한 설명을 기재해주세요</FormLabel>
+                <EditorDynamicRender name={"description"} />
+              </FormItem>
 
               {/* 썸네일 */}
-              <TemplateInputWrapper title={"섬네일 - 선택"}>
+              <FormItem>
+                <FormLabel>섬네일</FormLabel>
                 <ThumbNailUploader />
-              </TemplateInputWrapper>
+              </FormItem>
             </CardContent>
           </Card>
 
@@ -284,12 +280,12 @@ export default function CreateSurveyForm() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="gap-5 flex flex-col">
+            <CardContent className="gap-10 flex flex-col">
               <SurveyStatus />
               {/* List.. */}
-              <SurveyList />
+              <CreateSurveyList />
               {/* 항목 추가 */}
-              <SurveyListController />
+              <CreateSurveyFormController />
             </CardContent>
           </Card>
 

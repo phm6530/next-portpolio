@@ -1,82 +1,87 @@
-import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import { useFormContext, useWatch } from "react-hook-form";
-
-import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
-import styles from "./QuestionOptions.module.scss";
+import { useFormContext } from "react-hook-form";
 import ImageViewer from "@/app/template/_component/ImageViewer";
+import { QUESTION_TYPE, SurveyQuestionOption } from "@/types/survey.type";
 import {
-  AnswerSelect,
-  AnswerSurvey,
-  SurveyQuestionOption,
-} from "@/types/survey.type";
-import {
-  AnswerError,
-  getErrorMessage,
-} from "@/app/(public-page)/(template-types)/survey/util/getErrorMessge.util";
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { z } from "zod";
+import { createSurveyFormSchema } from "@/app/(public-page)/(template-types)/survey/[id]/survey-form-schema";
+import { cn } from "@/lib/utils";
+import CustomRadio from "@/components/ui/input-radio-custom";
+
+type FormSchema = z.infer<ReturnType<typeof createSurveyFormSchema>>;
 
 export default function QuestionOptions({
+  label,
   options,
   qsId,
+  idx,
 }: {
+  label: string;
   options: SurveyQuestionOption[];
   qsId: number;
+  idx: number;
 }) {
-  const {
-    register,
-    formState: { errors },
+  const { control, watch } = useFormContext<FormSchema>();
 
-    control,
-  } = useFormContext<AnswerSurvey>();
-
-  const answers = useWatch({
-    control,
-    name: "answers",
-  });
-
-  const curIdx = answers.findIndex((e) => e.questionId === qsId);
-
-  if (curIdx === -1) {
-    return <p>해당 질문을 찾을 수 없습니다.</p>;
-  }
-
-  const option = answers[curIdx] as AnswerSelect;
-  const selectOption = option.optionId;
-
-  const error = errors.answers?.[curIdx] as AnswerError | undefined;
-  const errorMsg = error && getErrorMessage(error);
+  console.log(watch());
 
   //하나라도 이미지 있으면 UI 변경하기
   const isPictureOption = options?.some((e) => e.img !== null) || false;
 
   return (
-    <QuestionsContainer isPicture={isPictureOption}>
-      {options?.map((e, idx) => {
-        return (
-          <InputTypeStyle.RadioAnswer
-            key={`${e.id}-option-${idx}`}
-            selectId={selectOption}
-            curid={e.id + ""}
-          >
-            <input
-              type="radio"
-              key={idx}
-              value={e.id}
-              {...register(`answers.${curIdx}.optionId`, {
-                required: "필수 항목입니다.",
-              })}
-            />
+    <Card>
+      <CardHeader>
+        <FormLabel className="text-xl">{label}</FormLabel>
+      </CardHeader>
 
-            <div className={styles.chkItemWrap}>{e.value}</div>
-
-            {/* 이미지 있으면 */}
-            {e.img && (
-              <>
-                <ImageViewer image={e.img} alt={e.value} />
-              </>
-            )}
-          </InputTypeStyle.RadioAnswer>
-        );
-      })}
-    </QuestionsContainer>
+      <FormField
+        name={`answers.${idx}.optionId`}
+        control={control}
+        render={({ field }) => {
+          return (
+            <>
+              <CardContent>
+                <div
+                  className={cn(
+                    "grid gap-4 ",
+                    isPictureOption &&
+                      "grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+                  )}
+                >
+                  {options?.map((op, idx) => {
+                    return (
+                      <FormItem key={`option-${op.id}-${idx}`}>
+                        <FormControl>
+                          <CustomRadio
+                            onChange={() => {
+                              field.onChange(op.id);
+                            }}
+                            label={op.value}
+                            active={op.id === field.value}
+                          >
+                            {op.img && (
+                              <>
+                                <ImageViewer image={op.img} alt={op.value} />
+                              </>
+                            )}
+                          </CustomRadio>
+                        </FormControl>
+                      </FormItem>
+                    );
+                  })}
+                </div>
+                <FormMessage />
+              </CardContent>
+            </>
+          );
+        }}
+      />
+    </Card>
   );
 }

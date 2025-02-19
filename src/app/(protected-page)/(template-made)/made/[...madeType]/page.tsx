@@ -1,5 +1,5 @@
-import CreateSurveyForm from "./survey/CreateSurvey";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import CreateSurveyForm from "./survey/CreateSurvey";
 
 type MadeTemplateParams = {
   params: { madeType: [TEMPLATE_TYPE] };
@@ -8,7 +8,7 @@ type MadeTemplateParams = {
 export default function MadeTemplate({ params }: MadeTemplateParams) {
   const [template] = params.madeType;
 
-  // //설문
+  // Survey..
   if (template === TEMPLATE_TYPE.SURVEY) {
     return <CreateSurveyForm />;
   }
@@ -16,6 +16,5 @@ export default function MadeTemplate({ params }: MadeTemplateParams) {
   //Rank
   if (template === TEMPLATE_TYPE.RANK) {
     return <></>;
-  } else {
   }
 }

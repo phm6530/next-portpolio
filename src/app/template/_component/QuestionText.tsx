@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import commonStyle from "@/styles/pages/template.module.scss";
 
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
-import ImageZoom from "@/app/template/_component/ImageZoom";
+// import ImageZoom from "@/app/template/_component/ImageZoom";
 import { AnswerSurvey } from "@/types/survey.type";
 
 export default function QuestionText({
@@ -42,7 +42,7 @@ export default function QuestionText({
             alt="preview"
             priority
           />
-          <ImageZoom alt={"preview"} image={qsImg} />
+          {/* <ImageZoom alt={"preview"} image={qsImg} /> */}
         </div>
       )}
       <div

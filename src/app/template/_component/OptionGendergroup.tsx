@@ -1,13 +1,7 @@
-import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 import { useFormContext } from "react-hook-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormField, FormLabel, FormMessage } from "@/components/ui/form";
+import CustomRadio from "@/components/ui/input-radio-custom";
 
 export default function OptionGenderGroup() {
   const { control, watch } = useFormContext();
@@ -31,24 +25,15 @@ export default function OptionGenderGroup() {
                 <div className="flex gap-3">
                   {genders.map((gender) => {
                     return (
-                      <FormItem key={`key-${gender}`}>
-                        <FormControl>
-                          <InputTypeStyle.RadioAnswer
-                            key={`gender-${gender}`}
-                            selectId={selectGender}
-                            curid={gender}
-                          >
-                            <input
-                              type="radio"
-                              className="hidden"
-                              {...field}
-                              value={gender}
-                              checked={field.value === gender}
-                            />
-                            {gender === "male" ? "남" : "여"}
-                          </InputTypeStyle.RadioAnswer>
-                        </FormControl>{" "}
-                      </FormItem>
+                      <CustomRadio
+                        key={`GenderGroup-${gender}`}
+                        active={selectGender === gender}
+                        label={gender === "male" ? "남성" : "여성"}
+                        onChange={() => {
+                          field.onChange(gender);
+                        }}
+                        value={gender}
+                      />
                     );
                   })}{" "}
                 </div>

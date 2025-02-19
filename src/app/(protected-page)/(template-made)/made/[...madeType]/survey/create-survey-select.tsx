@@ -1,4 +1,3 @@
-import QuestionsContainer from "@/app/template/_component/survey/QuestionsContainer";
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Survey/SurveyOptionItem";
 
@@ -9,26 +8,14 @@ import {
   UseFieldArrayRemove,
   useFormContext,
 } from "react-hook-form";
-import classes from "./SurveyTypeSelect.module.scss";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
-import QuestionItemHeader, {
-  QuestionType,
-} from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import SvginButton from "@/components/ui/button-svg";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import OptionsController from "./option-controller";
 
-export default function SurveyTypeSelect({
+export default function CreateSurveySelect({
   surveyDelete,
   surveyIdx,
 }: {
@@ -36,7 +23,7 @@ export default function SurveyTypeSelect({
   surveyIdx: number;
 }) {
   //FormContext
-  const { control, watch, register } = useFormContext<RequestSurveyFormData>();
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
 
   //항목 컨트롤러
   const {
@@ -50,7 +37,6 @@ export default function SurveyTypeSelect({
 
   const handleArrAppend = () => {
     append({
-      label: "",
       value: "",
       type: QUESTION_TYPE.SELECT,
     });
@@ -64,14 +50,6 @@ export default function SurveyTypeSelect({
 
   const optionWatch = watch(`questions.${surveyIdx}.options`);
   const isPicture = optionWatch.some((e) => e.img);
-  const values = optionWatch
-    .map((e) => e.value.trim())
-    .filter((value) => value !== ""); // 빈 문자열 필터링
-
-  const hasDuplicates = new Set(values).size !== values.length;
-
-  // const optionError =
-  //   errors.questions as FieldErrorsImpl<RequestSelect>[];
 
   return (
     <QuestionListWrapper>
@@ -86,7 +64,7 @@ export default function SurveyTypeSelect({
                   <Input
                     {...field}
                     placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
-                    className="border-transparent !bg-transparent text-lg placeholder:text-lg focus:border-transparent hover:border-transparent"
+                    className="border-transparent !bg-transparent text-lg placeholder:text-lg focus:border-transparent hover:border-transparent border-b "
                     autoComplete="off"
                   />
 
@@ -122,42 +100,23 @@ export default function SurveyTypeSelect({
         })}
       </div>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="items-top flex space-x-2">
-              <Checkbox id="terms1" />
-              <div className="grid gap-1.5 leading-none">
-                <label
-                  htmlFor="terms1"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
-                >
-                  복수 선택 여부
-                </label>
-              </div>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent
-            align="start"
-            sideOffset={20}
-            className="flex flex-row gap-2 items-center"
-          >
-            <Info className="h-4 w-4" />
-            <p className="text-xs">
-              체크 시, 다중 응답이 가능하도록 변경합니다.
-            </p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      {/* 복수 선택여부 */}
+      {/* 옵션 컨트롤러*/}
 
-      <button
+      <Button
+        variant={"secondary"}
+        onClick={handleArrAppend}
+        className="!text-sm"
+      >
+        <span>+</span> 항목추가{" "}
+      </Button>
+      <OptionsController name={`questions.${surveyIdx}`} multiSelect={true} />
+      {/* <button
         className={"mt-3 flex gap-2 rounded-md text-[#576e8b] text-sm"}
         type="button"
         onClick={handleArrAppend}
       >
         <span>+</span> 항목추가
-      </button>
+      </button> */}
       {/* Radio 전체삭제  */}
     </QuestionListWrapper>
   );

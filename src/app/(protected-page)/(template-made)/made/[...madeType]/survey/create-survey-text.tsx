@@ -1,6 +1,5 @@
 import { ChangeEvent, useRef } from "react";
 import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
-import classes from "./SurveyTypeText.module.scss";
 
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
@@ -10,16 +9,13 @@ import SvginButton from "@/components/ui/button-svg";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
-import QuestionItemHeader, {
-  QuestionType,
-} from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionItemHeader";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
 import { Button } from "@/components/ui/button";
-import InputField from "@/components/shared/inputs/input-field";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import OptionsController from "./option-controller";
 
-export default function SurveyTypeText({
+export default function CreateSurveyText({
   surveyIdx,
   remove,
 }: {
@@ -32,7 +28,7 @@ export default function SurveyTypeText({
   const preView = watch(`questions.${surveyIdx}.img`);
   const key = watch("templateKey");
 
-  const { mutate, isPending, isSuccess, isPaused } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (file: File) => {
       const endPoint = `common/image/${key}`;
       // await new Promise((resolve) => setTimeout(resolve, 300000));
@@ -70,15 +66,7 @@ export default function SurveyTypeText({
           autoComplete="off"
           ref={imgRef}
         />
-
         <div>
-          {/* <nputField
-            name={`questions.${surveyIdx}.label`}
-            placeholder="질문 제목을 입력해주세요."
-            autoComplete="off"
-            className="bg-transparent"
-          />I */}
-
           <FormField
             name={`questions.${surveyIdx}.label`}
             control={control}
@@ -108,7 +96,6 @@ export default function SurveyTypeText({
             }}
           />
         </div>
-
         {isPending ? (
           <div>
             <LoadingSkeleton loadingText="UP LOADING..." />
@@ -118,11 +105,11 @@ export default function SurveyTypeText({
             <UploadedImagePreview src={preView} deleteFunc={clearPreview} />
           </div>
         ) : null}
-
         {/* 주관식에서 알려주기 */}
         <div className="bg-muted/50 text-sm p-3 rounded-sm border border-border">
           응답자 답변 (500자 내외)
-        </div>
+        </div>{" "}
+        <OptionsController name={`questions.${surveyIdx}`} />
       </QuestionListWrapper>
     </>
   );

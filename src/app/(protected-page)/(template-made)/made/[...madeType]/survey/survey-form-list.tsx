@@ -1,12 +1,17 @@
 "use client";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import SurveyTypeSelect from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeSelect";
-import SurveyTypeText from "@/app/template/made/[templateType]/_component/Survey/SurveyTypeText";
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
+import { FormMessage } from "@/components/ui/form";
+import CreateSurveySelect from "./create-survey-select";
+import CreateSurveyText from "./create-survey-text";
 
-export default function SurveyList() {
-  const { control, watch } = useFormContext<RequestSurveyFormData>();
+export default function CreateSurveyList() {
+  const {
+    control,
+    watch,
+    formState: { errors },
+  } = useFormContext<RequestSurveyFormData>();
   const { remove } = useFieldArray({
     control,
     name: "questions",
@@ -18,11 +23,11 @@ export default function SurveyList() {
   return (
     <>
       {/* List */}
-      <div className="flex flex-col gap-6 rounded-sm">
+      <div className="flex flex-col gap-10 rounded-sm">
         {questionsWatch.map((field, qsIdx) => {
           if (field.type === QUESTION_TYPE.TEXT) {
             return (
-              <SurveyTypeText
+              <CreateSurveyText
                 key={`typeText-${qsIdx}`}
                 surveyIdx={qsIdx}
                 remove={remove}
@@ -31,15 +36,15 @@ export default function SurveyList() {
           } else if (field.type === QUESTION_TYPE.SELECT) {
             //리스트 만들기 - Props으로..
             return (
-              <SurveyTypeSelect
+              <CreateSurveySelect
                 key={`typeSelect-${qsIdx}`}
                 surveyDelete={remove}
                 surveyIdx={qsIdx}
-                // imgId={imgId}
               />
             );
           }
         })}
+        {<FormMessage>{errors.questions?.root?.message} </FormMessage>}
       </div>
     </>
   );

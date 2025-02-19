@@ -1,13 +1,10 @@
 "use client";
-
-import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 import {
   AnswerSurvey,
   QUESTION_TYPE,
   SurveyTemplateDetail,
 } from "@/types/survey.type";
 import { FormProvider, useForm } from "react-hook-form";
-import classes from "./surveyform.module.scss";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";
@@ -52,6 +49,7 @@ export default function SurveyForm({
     isGenderCollected,
     isAgeCollected
   );
+
   const router = useRouter();
 
   const formMethod = useForm<z.infer<typeof dynamicSchema>>({
@@ -104,35 +102,40 @@ export default function SurveyForm({
         <div className="flex flex-col gap-10 mb-10 mt-10">
           {/* Gender Chk  */}
           {isGenderCollected && <OptionGenderGroup />}
-
           {/* age Chk  */}
           {isAgeCollected && <OptionAgeGroup />}
+          {questions.map((qs, idx) => {
+            return (
+              <Card key={qs.id}>
+                {(() => {
+                  if (qs.type === QUESTION_TYPE.TEXT) {
+                    return (
+                      <QuestionText
+                        description={qs.label}
+                        qsImg={qs.pictrue}
+                        qsId={qs.id}
+                      />
+                    );
+                  } else if (
+                    qs.type === QUESTION_TYPE.SELECT &&
+                    "options" in qs
+                  ) {
+                    return (
+                      <QuestionOptions
+                        label={qs.label}
+                        qsId={qs.id}
+                        options={qs.options}
+                        idx={idx}
+                      />
+                    );
+                  } else {
+                    return null as never;
+                  }
+                })()}
+              </Card>
+            );
+          })}
         </div>
-
-        {questions.map((qs) => {
-          return (
-            <Card key={qs.id}>
-              {(() => {
-                if (qs.type === QUESTION_TYPE.TEXT) {
-                  return (
-                    <QuestionText
-                      description={qs.label}
-                      qsImg={qs.pictrue}
-                      qsId={qs.id}
-                    />
-                  );
-                } else if (
-                  qs.type === QUESTION_TYPE.SELECT &&
-                  "options" in qs
-                ) {
-                  return <QuestionOptions qsId={qs.id} options={qs.options} />;
-                } else {
-                  return null as never;
-                }
-              })()}
-            </Card>
-          );
-        })}
       </FormProvider>
 
       <div className="mt-5 flex justify-center">

@@ -1,14 +1,7 @@
 import { HTMLAttributes, ReactNode } from "react";
 import classes from "./InputTypeStyle.module.scss";
-import Chk from "/public/asset/icon/check.svg";
 import { cn } from "@/lib/utils";
-import {
-  Check,
-  CheckCircle,
-  CheckCircle2,
-  CheckSquare,
-  CheckSquare2,
-} from "lucide-react";
+import { CheckSquare } from "lucide-react";
 
 // Tab
 interface RadioTabProps extends HTMLAttributes<HTMLDivElement> {
@@ -26,32 +19,6 @@ const RadioTab: React.FC<RadioTabProps> = ({ children, select, ...rest }) => {
     </div>
   );
 };
-
-//동적 Radio Style
-function RadioAnswer({
-  selectId,
-  curid,
-  children,
-}: {
-  selectId: string | undefined; // selectLabel이 null일 수도 있다고 가정
-  curid: string;
-  children: ReactNode;
-}) {
-  return (
-    <label
-      className={cn(
-        "flex opacity-80 p-3.5 border transition-all   items-center rounded-lg cursor-pointer",
-        selectId === curid &&
-          "opacity-100 scale-105 border-primary bg-primary/20 "
-      )}
-    >
-      <div className={cn("w-4 h-5")}>
-        <CheckSquare />
-      </div>
-      <div className="pl-4">{children}</div>
-    </label>
-  );
-}
 
 //필수 Radio Style
 function Radio<T extends HTMLLabelElement>({
@@ -81,7 +48,6 @@ function Radio<T extends HTMLLabelElement>({
 }
 
 interface InputTypeStyleProps extends React.FC<{ children: ReactNode }> {
-  RadioAnswer: typeof RadioAnswer;
   Radio: typeof Radio;
   RadioTab: typeof RadioTab;
 }
@@ -90,7 +56,6 @@ const InputTypeStyle: InputTypeStyleProps = ({ children }) => {
   return <>{children}</>;
 };
 
-InputTypeStyle.RadioAnswer = RadioAnswer;
 InputTypeStyle.Radio = Radio;
 InputTypeStyle.RadioTab = RadioTab;
 

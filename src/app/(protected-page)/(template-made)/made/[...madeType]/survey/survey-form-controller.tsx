@@ -7,7 +7,6 @@ import Checkbox from "/public/asset/icon/checkbox.svg";
 import CustomButton from "@/components/ui/button-custom";
 
 export type RequestSelectOption = {
-  label: string;
   value: string;
   img?: string;
   type: QUESTION_TYPE.SELECT;
@@ -17,6 +16,7 @@ export type RequestText = {
   label: string;
   img?: string;
   type: QUESTION_TYPE.TEXT;
+  required: boolean; // 필수 여부
 };
 
 // 복수여부 추가
@@ -24,10 +24,11 @@ export type RequestSelect = {
   label: string;
   type: QUESTION_TYPE.SELECT;
   multi_select: boolean; //복수선택 여부
+  required: boolean; // 필수 여부
   options: RequestSelectOption[];
 };
 
-export default function SurveyListController() {
+export default function CreateSurveyFormController() {
   const { control } = useFormContext<RequestSurveyFormData>();
 
   //questions
@@ -40,25 +41,20 @@ export default function SurveyListController() {
     if (itemType === QUESTION_TYPE.TEXT) {
       append({
         label: "",
-        type: itemType,
+        type: QUESTION_TYPE.TEXT,
+        required: true,
       });
     } else if (itemType === QUESTION_TYPE.SELECT) {
-      //라디오니까 무조건 Default 2개
       append({
         label: "",
-        type: itemType,
-        multi_select: false, // Default False..
+        type: QUESTION_TYPE.SELECT,
+        multi_select: false,
+        required: true,
         options: [
-          {
-            value: "",
-            type: QUESTION_TYPE.SELECT,
-          },
-          {
-            value: "",
-            type: QUESTION_TYPE.SELECT,
-          },
+          { value: "", type: QUESTION_TYPE.SELECT },
+          { value: "", type: QUESTION_TYPE.SELECT },
         ],
-      } as RequestSelect);
+      });
     }
   };
 

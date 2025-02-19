@@ -118,7 +118,7 @@ export default async function SurveyDetailTemplate({
                 createdAt={createdAt}
                 maxGroup={data.respondents.maxGroup}
               />
-              <div className="my-4   leading-9">{title}</div>
+              <div className="my-4 leading-9">{title}</div>
             </CardTitle>
             <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
               <TransformPlainText html={description} />
@@ -127,11 +127,7 @@ export default async function SurveyDetailTemplate({
           <CardContent>
             <ThumbNail thumbnail={thumbnail} />
 
-            <div className="mt-5">
-              {/* <DateRange dateRange={dateRange} /> */}
-
-              {/* Desciprtion */}
-            </div>
+            <div className="mt-5">{/* Desciprtion */}</div>
           </CardContent>
           <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
             <UserRoleDisplay role={creator.role} nickname={creator.nickname} />

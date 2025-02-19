@@ -1,5 +1,5 @@
 import SubheaderDescrition from "@/components/ui/subheader-description";
-import SelectTemplateList from "../components/SelectTemplateList";
+import ChoiseTemplate from "./choise-template";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,7 @@ export default function page() {
         description="현재 Survey 만 제공하고 있으며 개발 중 입니다."
       />
 
-      <SelectTemplateList />
+      <ChoiseTemplate />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import {
   RespondentsAndMaxGroup,
-  TEMPLATE_TYPE,
   TemplateItemMetadata,
 } from "@/types/template.type";
 
@@ -26,12 +25,6 @@ export type SurveyQuestionsText = {
   pictrue: null;
 } & BaseQuestionsType;
 
-// 객관식- 옵션
-export type SurveyQuestionOption = {
-  value: string;
-  img: string | null;
-} & Omit<BaseQuestionsType, "label">;
-
 // 객관식
 export type SurveyQuestionSelect = {
   id: number;
@@ -41,11 +34,17 @@ export type SurveyQuestionSelect = {
   options: SurveyQuestionOption[];
 };
 
+// 객관식- 옵션
+export type SurveyQuestionOption = {
+  value: string;
+  img: string | null;
+} & Omit<BaseQuestionsType, "label">;
+
 /*제출시 */
 export type AnswerSelect = {
   questionId: number;
   type: QUESTION_TYPE.TEXT;
-  optionId?: string; // useForm에서 직접 넣을거임
+  optionId: string; // useForm에서 직접 넣을거임
 };
 
 export type AnswerText = {
