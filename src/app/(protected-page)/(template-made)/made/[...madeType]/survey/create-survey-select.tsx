@@ -1,4 +1,7 @@
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
+import {
+  defaultValues,
+  RequestSurveyFormData,
+} from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import SurveyOptionItem from "@/app/template/made/[templateType]/_component/Survey/SurveyOptionItem";
 
 import { QUESTION_TYPE } from "@/types/survey.type";
@@ -14,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import OptionsController from "./option-controller";
+import ConfirmButton from "@/components/ui/confirm-button";
 
 export default function CreateSurveySelect({
   surveyDelete,
@@ -23,7 +27,9 @@ export default function CreateSurveySelect({
   surveyIdx: number;
 }) {
   //FormContext
-  const { control, watch } = useFormContext<RequestSurveyFormData>();
+  const { control, watch, getValues } = useFormContext<RequestSurveyFormData>();
+
+  console.log(defaultValues);
 
   //항목 컨트롤러
   const {
@@ -40,12 +46,6 @@ export default function CreateSurveySelect({
       value: "",
       type: QUESTION_TYPE.SELECT,
     });
-  };
-
-  const confimDelete = () => {
-    if (confirm(`${surveyIdx + 1}번 문항을 삭제하시겠습니까?`)) {
-      surveyDelete(surveyIdx);
-    }
   };
 
   const optionWatch = watch(`questions.${surveyIdx}.options`);
@@ -67,10 +67,15 @@ export default function CreateSurveySelect({
                     className="border-transparent !bg-transparent text-lg placeholder:text-lg focus:border-transparent hover:border-transparent border-b "
                     autoComplete="off"
                   />
-
-                  <Button variant={"ghost"} onClick={() => confimDelete()}>
-                    삭제
-                  </Button>
+                  {/* <ConfirmDialog></ConfirmDialog> */}
+                  <ConfirmButton
+                    title="질문을 삭제하시겠습니까?"
+                    cb={() => {
+                      surveyDelete(surveyIdx);
+                    }}
+                  >
+                    <Button variant={"ghost"}>삭제</Button>
+                  </ConfirmButton>
                 </div>
                 <FormMessage />
               </>

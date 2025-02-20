@@ -7,11 +7,9 @@ import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import { AnswerSurvey } from "@/types/survey.type";
 
 export default function QuestionText({
-  description,
   qsImg,
   qsId,
 }: {
-  description: string;
   qsImg: string | null;
   qsId: number;
 }) {
@@ -53,8 +51,7 @@ export default function QuestionText({
         }}
       >
         <FormTextarea
-          label={description}
-          placeholder={`"${description}"에 대한 답변을 기재해주세요!`}
+          placeholder={` 답변을 기재해주세요!`}
           name={`answers.${curIdx}.answer`}
           autoComplete="off"
         />

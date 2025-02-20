@@ -5,12 +5,14 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 import { FormMessage } from "@/components/ui/form";
 import CreateSurveySelect from "./create-survey-select";
 import CreateSurveyText from "./create-survey-text";
+import { useEffect } from "react";
 
 export default function CreateSurveyList() {
   const {
     control,
     watch,
     formState: { errors },
+    setError,
   } = useFormContext<RequestSurveyFormData>();
   const { remove } = useFieldArray({
     control,
@@ -19,6 +21,12 @@ export default function CreateSurveyList() {
 
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
+
+  useEffect(() => {
+    if (questionsWatch.length > 0) {
+      setError("questions", { message: "" });
+    }
+  }, [questionsWatch, setError]); //
 
   return (
     <>
@@ -44,7 +52,7 @@ export default function CreateSurveyList() {
             );
           }
         })}
-        {<FormMessage>{errors.questions?.root?.message} </FormMessage>}
+        {<FormMessage>{errors.questions?.root?.message}</FormMessage>}
       </div>
     </>
   );

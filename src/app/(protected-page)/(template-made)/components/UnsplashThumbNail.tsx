@@ -73,21 +73,6 @@ function UnSplashContents({ closeModal }: { closeModal: () => void }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-6">
-        <DialogTitle className="font-normal text-xl leading-8">
-          사용하실 섬네일 키워드를 <br></br>
-          아래 검색창에 적어주세요
-        </DialogTitle>
-        <DialogDescription>
-          <div className={classes.titleText}>
-            <p>
-              UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를
-              검색합니다.
-            </p>
-            <p>예{")"} 검색은 Search</p>
-          </div>
-        </DialogDescription>
-      </div>
       <Form {...formMethod}>
         <form onSubmit={handleSubmit(onSearchHandler)}>
           <FormField
@@ -167,10 +152,13 @@ export default function UnSplashThumbNail() {
   const [modal, setModal] = useState<boolean>(false);
   const closeModal = () => setModal(false);
   const openModal = () => setModal(true);
+
   return (
     <>
       <CustomModal
         className="max-w-2xl w-[90%]"
+        title={`사용하실 섬네일 키워드를\n 검색해보세요`}
+        description={`UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를 검색합니다. \n 예) 동물 > animal`}
         open={modal}
         onClose={closeModal}
       >

@@ -17,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import surveySchema from "./schema";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
-
 import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 import dynamic from "next/dynamic";
@@ -63,7 +62,7 @@ export type RequestSurveyFormData = {
 };
 
 // UserData는 useEffect로 처리
-const defaultValues = {
+export const defaultValues = {
   title: "",
   description: "",
   thumbnail: "",
@@ -107,8 +106,14 @@ export default function CreateSurveyForm() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { setValue, reset } = formState;
+  const {
+    setValue,
+    reset,
+    formState: { errors },
+  } = formState;
   const editId = qs.get("edit");
+
+  console.log("errors:::", errors);
 
   //수정시 get해오기
   const {
@@ -223,6 +228,7 @@ export default function CreateSurveyForm() {
               <InputField
                 name="title"
                 label="템플릿 제목"
+                required
                 placeholder="템플릿 제목을 입력해주세요"
                 autoComplete="off"
               />
@@ -230,13 +236,16 @@ export default function CreateSurveyForm() {
               {/* 설문조사 설명 */}
 
               <FormItem>
-                <FormLabel>간단한 설명을 기재해주세요</FormLabel>
+                <FormLabel>
+                  간단한 설명을 기재해주세요{" "}
+                  <span className="text-primary">*</span>
+                </FormLabel>
                 <EditorDynamicRender name={"description"} />
               </FormItem>
 
               {/* 썸네일 */}
               <FormItem>
-                <FormLabel>섬네일</FormLabel>
+                <FormLabel>섬네일 (선택)</FormLabel>
                 <ThumbNailUploader />
               </FormItem>
             </CardContent>

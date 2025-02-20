@@ -10,14 +10,7 @@ import { useRouter } from "next/navigation";
 import { ForwardedRef, forwardRef, useEffect, useRef } from "react";
 import TransformPlainText from "@/components/TransformPlainText";
 import useAOS from "@/_hook/usAOS";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { PersonStanding, PersonStandingIcon, UserRound } from "lucide-react";
+import { UserRound } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,

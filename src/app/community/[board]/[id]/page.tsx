@@ -20,7 +20,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import ViewCount from "./component/view-count";
-import { Suspense } from "react";
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];

@@ -50,7 +50,7 @@ export default function OptionsController({
                         onCheckedChange={(chk) => {
                           // 첫번쨰 인자로 체크 행위가 들어옴
                           if (!chk && requiredCount <= 1) {
-                            toast.error("하나이상의 질문은 필수어야 합니다.");
+                            toast.warn("하나이상의 질문은 필수어야 합니다.");
                             return;
                           }
                           return field.onChange(chk);

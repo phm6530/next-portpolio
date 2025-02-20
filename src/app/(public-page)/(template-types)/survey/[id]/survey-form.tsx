@@ -18,11 +18,11 @@ import QuestionText from "@/app/template/_component/QuestionText";
 import QuestionOptions from "@/app/template/_component/QuestionOptions";
 import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { z } from "zod";
 import { createSurveyFormSchema } from "./survey-form-schema";
+import { FormLabel } from "@/components/ui/form";
 
 export default function SurveyForm({
   id,
@@ -85,6 +85,7 @@ export default function SurveyForm({
   });
 
   const onSubmitHandler = (data: any) => {
+    console.log(data);
     mutate(data);
   };
 
@@ -105,32 +106,37 @@ export default function SurveyForm({
           {isGenderCollected && <OptionGenderGroup />}
           {/* age Chk  */}
           {isAgeCollected && <OptionAgeGroup />}
+
           {questions.map((qs, idx) => {
             return (
               <Card key={qs.id}>
+                {/* Header 같이쓰기 */}
+                <CardHeader>
+                  <FormLabel className="text-xl">
+                    {qs.label} {!qs.required && "선택"}{" "}
+                    {"options" in qs && // type guard 추가
+                      qs.multi_select &&
+                      "복수 선택"}
+                  </FormLabel>
+                </CardHeader>
+
                 {(() => {
-                  if (qs.type === QUESTION_TYPE.TEXT) {
-                    return (
-                      <QuestionText
-                        description={qs.label}
-                        qsImg={qs.pictrue}
-                        qsId={qs.id}
-                      />
-                    );
-                  } else if (
-                    qs.type === QUESTION_TYPE.SELECT &&
-                    "options" in qs
-                  ) {
-                    return (
-                      <QuestionOptions
-                        label={qs.label}
-                        options={qs.options}
-                        idx={idx}
-                        isMulti={qs.multi_select}
-                      />
-                    );
-                  } else {
-                    return null as never;
+                  switch (qs.type) {
+                    case QUESTION_TYPE.TEXT:
+                      return <QuestionText qsImg={qs.pictrue} qsId={qs.id} />;
+                    //주관식
+                    case QUESTION_TYPE.SELECT:
+                      if ("options" in qs)
+                        return (
+                          <QuestionOptions
+                            label={qs.label}
+                            options={qs.options}
+                            idx={idx}
+                            isMulti={qs.multi_select}
+                          />
+                        );
+                    default:
+                      return null as never;
                   }
                 })()}
               </Card>

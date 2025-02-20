@@ -69,8 +69,6 @@ export const createSurveyFormSchema = (
             }
 
             if (qs.type === QUESTION_TYPE.SELECT) {
-              const select = question as SurveyQuestionSelect;
-
               // 필수 chk
               if (qs.optionId.length === 0) {
                 ctx.addIssue({

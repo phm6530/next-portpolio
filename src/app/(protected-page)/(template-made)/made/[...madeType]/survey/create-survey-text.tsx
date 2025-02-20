@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OptionsController from "./option-controller";
+import ConfirmDialog from "@/components/ui/confirm-button";
+import { toast } from "react-toastify";
 
 export default function CreateSurveyText({
   surveyIdx,
@@ -23,7 +25,8 @@ export default function CreateSurveyText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const { watch, setValue, control } = useFormContext<RequestSurveyFormData>();
+  const { watch, setValue, control, getValues } =
+    useFormContext<RequestSurveyFormData>();
 
   const preView = watch(`questions.${surveyIdx}.img`);
   const key = watch("templateKey");
@@ -34,9 +37,7 @@ export default function CreateSurveyText({
       // await new Promise((resolve) => setTimeout(resolve, 300000));
       return await ImageUploadHandler(endPoint, file);
     },
-    onError: (error) => {
-      alert(error.message);
-    },
+
     onSuccess: (data) => {
       setValue(`questions.${surveyIdx}.img`, data!.supabase_storage_imgurl);
     },
@@ -86,9 +87,14 @@ export default function CreateSurveyText({
                       alt="업로드 버튼"
                       onClick={imgHandler}
                     />
-                    <Button variant={"ghost"} onClick={() => remove(surveyIdx)}>
-                      삭제
-                    </Button>
+                    <ConfirmDialog
+                      title={`${surveyIdx + 1}번 질문을 삭제하시겠습니까?`}
+                      cb={() => {
+                        remove(surveyIdx);
+                      }}
+                    >
+                      <Button variant={"ghost"}>삭제</Button>
+                    </ConfirmDialog>
                   </div>
                   <FormMessage />
                 </>

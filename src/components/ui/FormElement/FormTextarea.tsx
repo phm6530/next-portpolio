@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../form";
-import { CardContent, CardFooter, CardHeader } from "../card";
+import { CardContent, CardHeader } from "../card";
 
 type TextAreaProps = {
   textareaName?: string;
@@ -17,7 +17,7 @@ type TextAreaProps = {
 
 const FormTextarea = forwardRef<
   HTMLTextAreaElement,
-  TextAreaProps & { label: string }
+  TextAreaProps & { label?: string }
 >(({ className, placeholder, name, label, ...rest }, ref) => {
   const [rows, rowsHandler] = useRows();
   const { control } = useFormContext();
@@ -30,9 +30,12 @@ const FormTextarea = forwardRef<
         render={({ field }) => {
           return (
             <FormItem>
-              <CardHeader>
-                <FormLabel className="text-xl">{label}</FormLabel>
-              </CardHeader>
+              {label && (
+                <CardHeader>
+                  <FormLabel className="text-xl">{label}</FormLabel>
+                </CardHeader>
+              )}
+
               <CardContent>
                 <FormControl>
                   <Textarea

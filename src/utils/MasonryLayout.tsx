@@ -1,6 +1,4 @@
-import LoadingTextSkeleton, {
-  LoadingItem,
-} from "@/components/loading/LoadingTextSkeleton";
+import { LoadingItem } from "@/components/loading/LoadingTextSkeleton";
 import React, { ReactNode } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
@@ -19,7 +17,7 @@ export default function MasonryLayout({
   const tempArr = Array.from({ length: cnt });
 
   return (
-    <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 2 }}>
+    <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
       <Masonry gutter="20px">
         {children}
         {(loading || pending) &&

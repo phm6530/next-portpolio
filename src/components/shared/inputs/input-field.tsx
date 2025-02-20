@@ -14,6 +14,7 @@ export default function InputField({
   name,
   label,
   description,
+  required,
   ...rest
 }: {
   name: string;
@@ -28,7 +29,11 @@ export default function InputField({
       render={({ field }) => {
         return (
           <FormItem>
-            {label && <FormLabel>{label}</FormLabel>}
+            {label && (
+              <FormLabel>
+                {label} {required && <span className="text-primary">*</span>}
+              </FormLabel>
+            )}
 
             <FormControl>
               <Input {...field} {...rest} />

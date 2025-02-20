@@ -2,7 +2,11 @@
 
 import { CategoriesKey } from "@/types/board";
 import { User, USER_ROLE } from "@/types/auth.type";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { QUERY_KEY } from "@/types/constans";
 import { Button } from "@/components/ui/button";
@@ -10,8 +14,9 @@ import Link from "next/link";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "react-toastify";
 import { BoardDeleteAction } from "../board-delete-action";
-import ConfirmDialog from "@/components/ui/confirm-dialog";
-import PasswordConfirmModal from "@/components/shared/modals/password-cofirm-modal";
+import ConfirmDialog from "@/components/ui/confirm-button";
+import { PsConfirmModal } from "@/components/shared/modals/password-input-modal";
+import { useState } from "react";
 
 export default function PostController({
   id,
@@ -26,6 +31,7 @@ export default function PostController({
 }) {
   const queryClient = useQueryClient();
   const router = useRouter();
+
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
@@ -33,24 +39,31 @@ export default function PostController({
   const authrozationPost =
     creatorRole === USER_ROLE.ADMIN || creatorRole === USER_ROLE.USER;
 
-  const { mutate, isPending } = useMutation<void, Error, { password?: string }>(
-    {
-      mutationFn: async (data) => {
-        await BoardDeleteAction({
-          category,
-          id: parseInt(id),
-          body: authrozationPost ? {} : { password: data.password },
-          isMember: !!userData,
-        });
-      },
+  const { mutateAsync, isPending } = useMutation<
+    void,
+    Error,
+    { password?: string }
+  >({
+    mutationFn: async (data) => {
+      await BoardDeleteAction({
+        category,
+        id: parseInt(id),
+        body: authrozationPost ? {} : { password: data.password },
+        isMember: !!userData,
+      });
+    },
 
-      onSuccess: () => {
-        toast.success("삭제되었습니다.");
-        router.replace(`/community/${category}`);
-        router.refresh();
-      },
-    }
-  );
+    onSuccess: () => {
+      toast.success("삭제되었습니다.");
+      queryClient.refetchQueries({
+        queryKey: ["board"],
+      });
+
+      router.replace(`/community/${category}`);
+
+      router.refresh();
+    },
+  });
 
   return (
     <>
@@ -65,25 +78,24 @@ export default function PostController({
             (creatorRole === USER_ROLE.ADMIN ||
               creatorRole === USER_ROLE.USER))) && (
           <>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+            {authrozationPost ? (
+              <ConfirmDialog
+                title="해당 글을 삭제하시겠습니까?"
+                description={"삭제 한 게시물은 복구가 불가합니다."}
+                cb={async () => mutateAsync({})}
+              >
                 <Button variant={"outline"}>삭제</Button>
-              </AlertDialogTrigger>
-              {authrozationPost ? (
-                <ConfirmDialog
-                  title="해당 글을 삭제하시겠습니까?"
-                  onClick={() => mutate({})}
-                >
-                  댓글 삭제 시 복구 불가합니다.
-                </ConfirmDialog>
-              ) : (
-                <PasswordConfirmModal
-                  cb={(data: { password: "내가_원하는_값" }) =>
-                    Promise.resolve()
-                  }
-                />
-              )}
-            </AlertDialog>
+              </ConfirmDialog>
+            ) : (
+              <PsConfirmModal
+                disalbed={isPending}
+                cb={(formData) => mutateAsync(formData)}
+              >
+                <Button variant="outline" disabled={isPending}>
+                  삭제
+                </Button>
+              </PsConfirmModal>
+            )}
           </>
         )}
 

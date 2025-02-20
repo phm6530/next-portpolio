@@ -60,6 +60,9 @@ export default function BoardForm({
 
     onSuccess: () => {
       router.replace(`/community/${boardKey}`);
+      queryClient.refetchQueries({
+        queryKey: ["board"],
+      });
       router.refresh();
       toast.success("게시물이 생성되었습니다.");
     },
