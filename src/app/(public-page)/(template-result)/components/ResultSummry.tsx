@@ -3,6 +3,17 @@ import TemplateTitle from "@/components/ui/templateUi/TemplateTitle";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
 import { SurveyResult } from "@/types/surveyResult.type";
 import QuillViewer from "@/components/Editor/QuillViewer";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import TransformPlainText from "@/components/TransformPlainText";
+import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import { UserRound } from "lucide-react";
 
 export default async function ResultSummry(data: SurveyResult) {
   const {
@@ -13,39 +24,40 @@ export default async function ResultSummry(data: SurveyResult) {
     startDate,
     endDate,
     createdAt,
+    thumbnail,
     respondents,
     creator,
   } = data;
   const { allCnt, detail } = respondents;
 
   return (
-    <div className={classes.summeryDetail}>
-      {/* <div className={classes.relative}>
-        <div className={classes.Badge}>결과페이지</div>
-      </div> */}
+    <Card className="rounded-xl">
+      <CardHeader>
+        <CardTitle className="flex flex-col gap-5 mb-2">
+          {" "}
+          <TemplateStatus
+            startDate={startDate}
+            endDate={endDate}
+            createdAt={createdAt}
+            maxGroup={detail.maxGroup}
+          />{" "}
+          <div className="my-4 leading-9">{title}</div>
+        </CardTitle>
+        <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
+          <TransformPlainText html={description} />
+        </CardDescription>
+      </CardHeader>
 
-      <div className={classes.summeryInfoWrapper}>
-        <TemplateStatus
-          startDate={startDate}
-          endDate={endDate}
-          createdAt={createdAt}
-          maxGroup={detail.maxGroup}
-        />
+      <CardContent>
+        {/* <ThumbNail thumbnail={thumbnail} /> */}
 
-        <TemplateTitle
-          allCnt={allCnt}
-          role={creator.role}
-          nickname={creator.nickname}
-        >
-          {title}
-        </TemplateTitle>
-
-        <QuillViewer contents={description} />
-
-        {/* <Button.moveLink moveUrl={`/${templateType}/${id}`}>
-          참여하기
-        </Button.moveLink> */}
-      </div>
-    </div>
+        <div className="mt-5">{/* Desciprtion */}</div>
+      </CardContent>
+      <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
+        <div className="border-t text-[12px] text-muted-foreground pt-3 flex items-center">
+          <UserRound className="w-4 mr-2" /> {allCnt ?? 0}
+        </div>
+      </CardFooter>
+    </Card>
   );
 }

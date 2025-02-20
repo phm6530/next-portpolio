@@ -14,6 +14,10 @@ import { CircleSlash, SquarePlus } from "lucide-react";
 import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 import useAOS from "@/_hook/usAOS";
 import TabRounded from "@/components/ui/tab-rounded";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import SearchBar from "@/components/ui/SearchBar/SearchBar";
+import SearchBarWrapper from "@/app/community/component/SearchBarWrapper";
+import { useSearchParams } from "next/navigation";
 
 type MyContentsListData = TemplateItemMetadata<RespondentsData>;
 
@@ -22,11 +26,14 @@ export default function MyContents() {
   const userdata = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [filter, setFilter] = useState<"new" | "users">("new");
 
+  const qs = useSearchParams();
+  const keyword = qs.get("search");
+
   useAOS();
 
   // get List..
   const { data, isLoading } = useQuery<MyContentsListData[]>({
-    queryKey: [QUERY_KEY.MY_CONTENTS],
+    queryKey: [QUERY_KEY.MY_CONTENTS, filter],
     queryFn: async () => {
       const url = `user/me/contents`;
       const options: RequestInit = {
@@ -37,13 +44,22 @@ export default function MyContents() {
     enabled: !!userdata,
     staleTime: 10000,
     select: (data: MyContentsListData[]) => {
+      let temp = data;
+
+      if (keyword?.trim()) {
+        const searchLower = keyword.toLowerCase();
+        temp = temp.filter((e) => {
+          const titleLower = e.title.toLowerCase();
+          return titleLower.includes(searchLower);
+        });
+      }
+
       switch (filter) {
         case "new":
-          return data; //정렬 nest에서 DESC로 보내는 중
-
+          return temp; //정렬 nest에서 DESC로 보내는 중
         case "users":
-          return data.sort(
-            (a, b) => a.respondents.selectUserCnt - b.respondents.selectUserCnt
+          return temp.sort(
+            (a, b) => b.respondents.selectUserCnt - a.respondents.selectUserCnt
           );
 
         default:
@@ -51,6 +67,10 @@ export default function MyContents() {
       }
     },
   });
+
+  if (isLoading) {
+    return <LoadingWrapper />;
+  }
 
   return (
     <div>
@@ -78,32 +98,33 @@ export default function MyContents() {
           </Link>
         </Button>
       </div>
+      <div className="mb-5">
+        <SearchBarWrapper />
+      </div>
 
       {/* <h2>생성한 템플릿</h2> */}
 
-      <LoadingSpinnerWrapper loading={isLoading}>
-        <div className="grid flex-col gap-10">
-          {data && data.length > 0 ? (
-            data?.map((item) => {
-              return (
-                <MyContentsItem key={`${item.id}-${item.title}`} item={item} />
-              );
-            })
-          ) : (
-            <Card className="h-[200px] flex flex-col items-center justify-center">
-              <CardContent className="text-center pt-6">
-                <div className="flex gap-3 items-center">
-                  <CircleSlash />
-                  <span>생성하신 템플릿이 없습니다</span>
-                </div>
-              </CardContent>
-              <Button size={"lg"} asChild className="shadow-lg ">
-                <Link href={"/made"}>템플릿 만들기</Link>
-              </Button>
-            </Card>
-          )}
-        </div>
-      </LoadingSpinnerWrapper>
+      <div className="grid flex-col gap-10">
+        {data && data.length > 0 ? (
+          data?.map((item) => {
+            return (
+              <MyContentsItem key={`${item.id}-${item.title}`} item={item} />
+            );
+          })
+        ) : (
+          <Card className="h-[200px] flex flex-col items-center justify-center">
+            <CardContent className="text-center pt-6">
+              <div className="flex gap-3 items-center">
+                <CircleSlash />
+                <span>생성하신 템플릿이 없습니다</span>
+              </div>
+            </CardContent>
+            <Button size={"lg"} asChild className="shadow-lg ">
+              <Link href={"/made"}>템플릿 만들기</Link>
+            </Button>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

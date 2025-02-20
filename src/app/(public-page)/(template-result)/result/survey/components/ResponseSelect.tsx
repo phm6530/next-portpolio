@@ -10,7 +10,7 @@ import AniProgressbar from "@/components/animation/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
 import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
-export default function ResponseSelect({
+export default function sResponseSelect({
   idx,
   allCnt,
   label,
@@ -53,8 +53,6 @@ export default function ResponseSelect({
 
   return (
     <>
-      {/* <SubheaderDescrition title={"test 게시판"} description={label} /> */}
-      <QuestionTitle idx={idx}>{label}</QuestionTitle>
       <div
         className={`${classes.gridWrapper} ${
           isPictrue ? classes.pictrueGrid : undefined

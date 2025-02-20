@@ -128,7 +128,6 @@ export function ResponseTexts({
   return (
     <>
       <div className={classes.container}>
-        <QuestionTitle idx={idx}>{label}</QuestionTitle>
         {resultList?.length === 0 && (
           <div className={classes.answerWrapper}>
             <div className={classes.emptyRespondents}>

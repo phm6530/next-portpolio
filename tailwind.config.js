@@ -17,6 +17,9 @@ module.exports = {
       width: {
         "calc-grid": "calc(100% - 40px)",
       },
+      fontFamily: {
+        paperlogy: ["Paperlogy-8ExtraBold", "sans-serif"],
+      },
       boxShadow: {
         custom: "5px 14px 29px rgb(100 63 255 / 25%)",
       },

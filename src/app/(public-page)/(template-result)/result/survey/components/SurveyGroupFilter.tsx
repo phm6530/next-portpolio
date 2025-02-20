@@ -1,5 +1,5 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import classes from "./SurveyGroupFilter.module.scss";
+
 import { Dispatch, SetStateAction, useState } from "react";
 
 import {
@@ -8,6 +8,18 @@ import {
 } from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter.tab";
 import { DetailRespondents } from "@/types/template.type";
 import { ageGroupProps } from "@/types/template";
+import { Card } from "@/components/ui/card";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
 
 export type GenderOptions = (typeof FILTER_GENDER)[number]["val"];
 export type AgeOptions = (typeof FILTER_AGE)[number]["val"];
@@ -82,35 +94,51 @@ export default function SurveyGroupFilter({
   };
 
   return (
-    <div className={classes.radioWrap}>
-      {/* Gender Filter */}
-      <div className={classes.filterController}>
-        {FILTER_GENDER.map((e, idx) => (
-          <InputTypeStyle.RadioTab
-            key={`genderFilter-${idx}`}
-            select={curFilter.genderGroup === e.val} // genderGroup과 정확히 비교
-            onClick={() => filterGenderHandler(e.val)}
-          >
-            {e.label}
-          </InputTypeStyle.RadioTab>
-        ))}
-      </div>
+    <Drawer>
+      <DrawerTrigger>Open</DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          <div className="flex flex-col">
+            {/* Gender Filter */}
+            <div className="flex">
+              {FILTER_GENDER.map((e, idx) => (
+                <InputTypeStyle.RadioTab
+                  key={`genderFilter-${idx}`}
+                  select={curFilter.genderGroup === e.val} // genderGroup과 정확히 비교
+                  onClick={() => filterGenderHandler(e.val)}
+                >
+                  {e.label}
+                </InputTypeStyle.RadioTab>
+              ))}
+            </div>
 
-      {/* Age Filter */}
-      <div className={classes.filterController}>
-        {FILTER_AGE.map((e, idx) => {
-          return (
-            <InputTypeStyle.RadioTab
-              key={`ageFilter-${idx}`}
-              select={curFilter.ageGroup === e.val} // ageGroup과 정확히 비교
-              onClick={() => filterAgeHandler(e.val)}
-            >
-              {e.label}{" "}
-              <span className={classes.filterCnt}>({cntFilter(e.val)})</span>
-            </InputTypeStyle.RadioTab>
-          );
-        })}
-      </div>
-    </div>
+            {/* Age Filter */}
+            <div className="flex flex-col">
+              <div className="flex">
+                {FILTER_AGE.map((e, idx) => {
+                  return (
+                    <InputTypeStyle.RadioTab
+                      key={`ageFilter-${idx}`}
+                      select={curFilter.ageGroup === e.val} // ageGroup과 정확히 비교
+                      onClick={() => filterAgeHandler(e.val)}
+                    >
+                      {e.label} <span>({cntFilter(e.val)})</span>
+                    </InputTypeStyle.RadioTab>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button>Submit</Button>
+          <DrawerClose>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

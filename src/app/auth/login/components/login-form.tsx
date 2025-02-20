@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import Link from "next/link";
 import InputPassword from "@/components/ui/InputPassword";
+import PasswordInputField from "@/components/shared/inputs/input-password-field";
 
 type SignUpResponse = {
   accessToken: string;
@@ -101,26 +102,9 @@ export default function LoginForm() {
               )}
             />
 
-            <FormField
-              control={formMethod.control}
-              name="password"
-              render={({ field }) => {
-                const { ref, ...rest } = field;
-                return (
-                  <FormItem>
-                    <FormLabel />
-                    <FormControl>
-                      <InputPassword
-                        {...rest}
-                        autoComplete="off"
-                        placeholder="비밀번호를 입력해주세요"
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+            <PasswordInputField
+              placeholder="password
+            "
             />
           </div>
 
@@ -137,7 +121,7 @@ export default function LoginForm() {
           variant={"link"}
           className="text-[13px] text-muted-foreground"
         >
-          <Link href={"/auth/pin"}>밀번호를 잊어버리셨나요?</Link>
+          <Link href={"/auth/pin"}>비밀번호를 잊어버리셨나요?</Link>
         </Button>
         <span className="opacity-20">|</span>
         <Button variant={"link"} className="text-[13px] text-muted-foreground">

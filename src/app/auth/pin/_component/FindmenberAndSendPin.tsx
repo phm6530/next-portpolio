@@ -1,6 +1,5 @@
 "use client";
-import Button from "@/components/ui/button/Button";
-import FormInput from "@/components/ui/FormElement/FormInput";
+
 import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
@@ -11,6 +10,8 @@ import { useMutation } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
 import { withFetch } from "@/util/clientUtil";
 import useStore from "@/store/store";
+import InputField from "@/components/shared/inputs/input-field";
+import { Button } from "@/components/ui/button";
 
 const schema = z.object({
   email: z.string().email("유효한 이메일주소가 아닙니다."),
@@ -64,11 +65,7 @@ export default function FindmenberAndSendPin({
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isValid, errors },
-  } = method;
+  const { handleSubmit } = method;
 
   const sendPinNumber = (e: FormType) => {
     mutate(e);
@@ -77,25 +74,21 @@ export default function FindmenberAndSendPin({
     <>
       {!isPinSuccess && (
         <FormProvider {...method}>
-          <form
-            onSubmit={handleSubmit(sendPinNumber)}
-            className={classes.form}
-          >
+          <form onSubmit={handleSubmit(sendPinNumber)} className={classes.form}>
             <InputWrapper
               title="이메일"
               description="* 해당 이메일로 PIN 번호 4자리 전송됩니다."
             >
-              <FormInput
-                type="text"
-                placeholder="가입 하셨던 이메일을 기재해주세요"
-                {...register("email")}
+              <InputField
+                name="email"
                 disabled={isPending}
+                placeholder="가입 하셨던 이메일을 기재해주세요"
               />
             </InputWrapper>
 
-            <Button.outlineButton type="submit" disabled={isPending}>
+            <Button disabled={isPending}>
               {isPending ? "발송 중..." : "Pin 발송"}
-            </Button.outlineButton>
+            </Button>
           </form>
         </FormProvider>
       )}

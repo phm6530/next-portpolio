@@ -9,6 +9,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import AuthComplete from "./AuthComplete";
 import useStore from "@/store/store";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const createSchema = (pin: string) =>
   z.object({
@@ -42,6 +55,7 @@ export default function AccessMatchPin({
   const {
     register,
     handleSubmit,
+    control,
     formState: { isValid },
   } = methods;
 
@@ -61,21 +75,32 @@ export default function AccessMatchPin({
     <>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(matchPin)} className={classes.form}>
-          <div>
-            <InputWrapper
-              title="PIN 번호"
-              // description="* 핀번호 4자리를 입력해주세요"
-            >
-              <FormInput
-                type="text"
-                placeholder="핀번호 4자리를 입력해주세요"
-                {...register("pin")}
-                maxLength={4}
-                disabled={isValid}
-              />
-            </InputWrapper>
-            <PinTimer timeout={Timeout} />
-          </div>
+          <FormField
+            control={control}
+            name="pin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>PIN</FormLabel>{" "}
+                <FormDescription>
+                  메일로 발송된 4자리 숫자를 입력해주세요
+                </FormDescription>
+                <FormControl>
+                  <InputOTP maxLength={6} {...field}>
+                    <InputOTPGroup className="w-full justify-between grid grid-cols-[1fr_1fr_1fr_1fr] h-[60px]">
+                      <InputOTPSlot index={0} className="w-full h-full" />
+                      <InputOTPSlot index={1} className="w-full h-full" />
+                      <InputOTPSlot index={2} className="w-full h-full" />
+                      <InputOTPSlot index={3} className="w-full h-full" />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </FormControl>
+                <FormDescription className="text-foreground">
+                  <PinTimer timeout={Timeout} />
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* 인증완료 */}
           {isValid && <AuthComplete complateText="인증 완료" />}

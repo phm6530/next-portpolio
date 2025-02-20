@@ -8,7 +8,7 @@ import Indicator from "./_component/Indicator";
 import gsap from "gsap";
 
 const ForgotPasswordPage = () => {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(2);
   const [pin, setPin] = useState<string | null>(null);
   const [aniTrigger, setAniTrigger] = useState(false);
 

@@ -6,7 +6,9 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(public-page)/(template-result)/result/survey/components/test";
+import Grid from "@/components/ui/Grid";
 import { CommentEditorProvider } from "@/context/context";
+import { cn } from "@/lib/utils";
 import {
   COMMENT_EDITOR_TYPE,
   COMMENT_NEED_PATH,
@@ -20,38 +22,6 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-
-// type StringToNumber<T extends string> = T extends `${infer R extends number}`
-//   ? R
-//   : never;
-
-// const test = "1d++";
-
-// type testProps = StringToNumber<typeof test>;
-
-//이건 매번 생성될텐데 뭐지?
-
-// export async function generateMetadata({
-//   params: { id },
-// }: {
-//   params: { id: string };
-// }): Promise<Metadata> {
-//   // 인스턴스 생성
-
-//   const data = await queryClient.fetchQuery({
-//     queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-//     queryFn: async () => await fetchSurveyData<SurveyResult>(id),
-//   });
-
-//   return {
-//     title: data.title,
-//     description: data.description,
-//     openGraph: {
-//       title: data.title,
-//       description: data.description,
-//     },
-//   };
-// }
 
 const queryClient = new QueryClient();
 
@@ -79,27 +49,40 @@ export default async function SurveyResultPage({
 
   return (
     <>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        {/* template Summry */}
-        <ResultSummry {...data} />
+      <div className="absolute w-full z-[-1]  h-[50vh] opacity-40">
+        <div
+          className="w-full h-full absolute z-[-1] bg-center bg-cover bg-no-repeat"
+          style={{
+            backgroundImage: `url(${data?.thumbnail})`,
+          }}
+        />
+        <div className="absolute inset-0 z-[-1] bg-gradient-to-t from-background background/70  to-transparent" />
+      </div>
+      <Grid.smallCenter className="h-full">
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <div className="pt-14">
+            {/* template Summry */}
+            <ResultSummry {...data} />
 
-        <ResultSurveyCharts id={id} />
+            <ResultSurveyCharts id={id} />
 
-        <CommentEditorProvider initialSection={COMMENT_NEED_PATH.TEMPLATE}>
-          {/* 메인 Comment Editor */}
-          <CommentEditor
-            editorType={COMMENT_EDITOR_TYPE.COMMENT}
-            parentsType={COMMENT_NEED_PATH.TEMPLATE}
-            parentsId={id}
-          />
+            <CommentEditorProvider initialSection={COMMENT_NEED_PATH.TEMPLATE}>
+              {/* 메인 Comment Editor */}
+              <CommentEditor
+                editorType={COMMENT_EDITOR_TYPE.COMMENT}
+                parentsType={COMMENT_NEED_PATH.TEMPLATE}
+                parentsId={id}
+              />
 
-          {/* Comments */}
-          <ResultCommentSection
-            id={parseInt(id, 10)}
-            type={COMMENT_NEED_PATH.TEMPLATE}
-          />
-        </CommentEditorProvider>
-      </HydrationBoundary>
+              {/* Comments */}
+              <ResultCommentSection
+                id={parseInt(id, 10)}
+                type={COMMENT_NEED_PATH.TEMPLATE}
+              />
+            </CommentEditorProvider>
+          </div>
+        </HydrationBoundary>
+      </Grid.smallCenter>{" "}
     </>
   );
 }

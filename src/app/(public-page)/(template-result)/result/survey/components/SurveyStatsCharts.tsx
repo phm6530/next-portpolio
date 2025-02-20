@@ -15,6 +15,7 @@ import { useState } from "react";
 import classes from "./SuveyStatusCharts.module.scss";
 import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
 import { fetchSurveyData } from "./test";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 // type logger<T> = (arg: T) => void;
 
 // let logNumber: logger<number> = (a) => {
@@ -118,10 +119,16 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
         setFilter={setFilter}
         respondents={data?.respondents}
       />
-      <div className={classes.wrapper}>
+
+      <div className="flex flex-col gap-10 mt-6">
         {questions.map((qs, idx) => {
           return (
-            <QuestionDetailWrapper key={`${idx}`}>
+            <Card key={`${idx}-card`}>
+              <CardHeader>
+                <CardTitle>
+                  <span className="font-Paperlogy">Q{idx + 1}.</span> {qs.label}
+                </CardTitle>
+              </CardHeader>
               {(() => {
                 console.log(qs);
                 if (qs.type === QUESTION_TYPE.SELECT) {
@@ -149,7 +156,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                   return null as never;
                 }
               })()}
-            </QuestionDetailWrapper>
+            </Card>
           );
         })}
       </div>
