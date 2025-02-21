@@ -16,7 +16,7 @@ import useAOS from "@/_hook/usAOS";
 import TabRounded from "@/components/ui/tab-rounded";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import SearchBar from "@/components/ui/SearchBar/SearchBar";
-import SearchBarWrapper from "@/app/community/component/SearchBarWrapper";
+import SearchBarWrapper from "@/app/(public-page)/community/component/SearchBarWrapper";
 import { useSearchParams } from "next/navigation";
 
 type MyContentsListData = TemplateItemMetadata<RespondentsData>;

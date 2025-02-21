@@ -1,5 +1,4 @@
 "use client";
-import classes from "./GlobalNav.module.scss";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Grid from "@/components/ui/Grid";

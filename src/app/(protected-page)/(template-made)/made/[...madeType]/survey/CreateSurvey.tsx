@@ -37,6 +37,7 @@ import CreateSurveyFormController, {
   RequestText,
 } from "./survey-form-controller";
 import CreateSurveyList from "./survey-form-list";
+import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -77,14 +78,6 @@ export const defaultValues = {
     role: "",
   },
 };
-
-// Editor..
-const EditorDynamicRender = dynamic<{
-  name: string;
-}>(() => import("@/components/Editor/QuillEditor"), {
-  ssr: false,
-  loading: () => <LoadingTextSkeleton cnt={1} />,
-});
 
 export default function CreateSurveyForm() {
   useAOS();
@@ -222,14 +215,10 @@ export default function CreateSurveyForm() {
               />
 
               {/* 설문조사 설명 */}
-
-              <FormItem>
-                <FormLabel>
-                  간단한 설명을 기재해주세요{" "}
-                  <span className="text-primary">*</span>
-                </FormLabel>
-                <EditorDynamicRender name={"description"} />
-              </FormItem>
+              <TipTapEditorField
+                name="description"
+                placeholder="간략한 설명을 입력해주세요.!!"
+              />
 
               {/* 썸네일 */}
               <FormItem>

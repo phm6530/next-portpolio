@@ -18,7 +18,7 @@ import { Clock7 } from "lucide-react";
 import { Chart } from "@/components/shared/charts/chart";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import ImageThumbNail from "@/components/ui/image-thumbnail";
 
 export default function MyContentsItem({
   item,

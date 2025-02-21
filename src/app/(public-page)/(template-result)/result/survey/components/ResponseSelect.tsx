@@ -4,13 +4,11 @@ import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
 import Person from "/public/asset/icon/person.svg";
 import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
-import ImageViewer from "@/app/template/_component/ImageViewer";
-import AniNumbering from "@/components/animation/AniNumbering";
+import ZoomableImage from "@/components/ui/image-zoomable";
 import AniProgressbar from "@/components/animation/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
-import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
 
-export default function sResponseSelect({
+export default function ResponseSelect({
   idx,
   allCnt,
   label,
@@ -82,7 +80,7 @@ export default function sResponseSelect({
               </div>
 
               {option.img && (
-                <ImageViewer image={option.img} alt={option.value} />
+                <ZoomableImage image={option.img} alt={option.value} />
               )}
             </div>
           );

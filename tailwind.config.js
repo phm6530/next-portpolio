@@ -22,6 +22,8 @@ module.exports = {
       },
       boxShadow: {
         custom: "5px 14px 29px rgb(100 63 255 / 25%)",
+        center: "0px 0px 3px #757575a2",
+        "center-dark": "0px 0px 3px #ffffffa2",
       },
       colors: {
         throw: "hsl(var(--throw))",

@@ -9,7 +9,6 @@ import { withFetch } from "@/util/clientUtil";
 import BackDrop from "@/components/modal/BackDrop";
 import LoadingCircle from "@/components/animation/LoadingCircle";
 import { ENV_NESTBASE_URL } from "@/config/base";
-import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 
 type MailFormData = {

@@ -1,4 +1,4 @@
-import { DetailBoardItemType } from "@/app/community/[board]/[id]/page";
+import { DetailBoardItemType } from "@/app/(public-page)/community/[board]/[id]/page";
 import { BASE_NEST_URL } from "@/config/base";
 import { CategoriesKey } from "@/types/board";
 import { withFetch } from "@/util/clientUtil";

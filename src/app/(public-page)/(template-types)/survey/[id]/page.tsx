@@ -7,8 +7,7 @@ import {
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import TemplateStatus from "@/components/templateUtill/TemplateStatus";
-import SurveyForm from "./survey-form";
-import ThumbNail from "@/app/template/_component/thumbNail/ThumbNail";
+import SurveyResponseForm from "./survey-response-form";
 import AosWrapper from "@/components/animation/AosWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -23,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import TransformPlainText from "@/components/TransformPlainText";
+import ImageThumbNail from "@/components/ui/image-thumbnail";
 
 export const runtime = "edge";
 
@@ -120,12 +120,17 @@ export default async function SurveyDetailTemplate({
               />
               <div className="my-4 leading-9">{title}</div>
             </CardTitle>
-            <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
-              <TransformPlainText html={description} />
-            </CardDescription>
+            {/* <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
+              <div dangerouslySetInnerHTML={{ __html: description }} />
+            </CardDescription> */}
+
+            <div
+              className="ProseMirror"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
           </CardHeader>
           <CardContent>
-            <ThumbNail thumbnail={thumbnail} />
+            <ImageThumbNail thumbnail={thumbnail} />
 
             <div className="mt-5">{/* Desciprtion */}</div>
           </CardContent>
@@ -134,8 +139,8 @@ export default async function SurveyDetailTemplate({
             <span className="text-[12px]">생성 일 {createdAt}</span>
           </CardFooter>
         </Card>
-        {/* survey Form */}
-        <SurveyForm {...data} />{" "}
+        {/* survey Form 응답 */}
+        <SurveyResponseForm {...data} />{" "}
       </AosWrapper>
     </>
   );
