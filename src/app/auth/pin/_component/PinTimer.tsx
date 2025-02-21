@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import classes from "./PinTimer.module.scss";
 import { TimerIcon } from "lucide-react";
 
 export default function PinTimer({
@@ -18,7 +17,6 @@ export default function PinTimer({
         0,
         Math.floor((endTime.current - Date.now()) / 1000)
       );
-
       setCountdown(remainingTime);
 
       if (remainingTime === 0) {
@@ -32,10 +30,9 @@ export default function PinTimer({
   }, [timeout]);
 
   return (
-    <div className="flex gap-3 items-center mt-5">
-      인증 유효 시간
-      <span className="flex">
-        <TimerIcon />
+    <div className="flex gap-3 items-center mt-5 text-sm">
+      <TimerIcon /> 인증 유효 시간{" "}
+      <span>
         {Math.floor(countdown / 60)}분 {countdown % 60}초
       </span>
     </div>

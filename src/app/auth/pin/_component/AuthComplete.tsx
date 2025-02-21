@@ -1,5 +1,4 @@
-import classes from "./AuthComplete.module.scss";
-import Verified from "/public/asset/icon/Verified.svg";
+import { VerifiedIcon } from "lucide-react";
 
 export default function AuthComplete({
   complateText,
@@ -7,8 +6,11 @@ export default function AuthComplete({
   complateText: string;
 }) {
   return (
-    <div className={classes.success}>
-      <Verified />
+    <div
+      className="text-indigo-400  flex gap-3 items-center text-base
+    "
+    >
+      <VerifiedIcon />
       {complateText}
     </div>
   );

@@ -87,7 +87,6 @@ export default function AccessEmailController({
 
       return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
     } else if (countdown === 0) {
-      // 타이머가 0이 되면 인증 취소
       setIsAgreed(false);
     }
   }, [isAgreed, countdown, setIsAgreed]);

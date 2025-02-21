@@ -8,10 +8,7 @@ import { v4 as uuid4 } from "uuid";
 
 import BooleanGroup from "@/app/(protected-page)/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
-
-import usePreview from "@/app/template/made/[templateType]/_component/Preview/usePreview";
 import { User } from "@/types/auth.type";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEffect, useState } from "react";
@@ -90,7 +87,6 @@ const EditorDynamicRender = dynamic<{
 });
 
 export default function CreateSurveyForm() {
-  const { RenderPreview } = usePreview();
   useAOS();
 
   const queryClient = useQueryClient();
@@ -106,14 +102,8 @@ export default function CreateSurveyForm() {
     resolver: zodResolver(surveySchema),
   });
 
-  const {
-    setValue,
-    reset,
-    formState: { errors },
-  } = formState;
+  const { setValue, reset } = formState;
   const editId = qs.get("edit");
-
-  console.log("errors:::", errors);
 
   //수정시 get해오기
   const {
@@ -207,8 +197,6 @@ export default function CreateSurveyForm() {
 
   return (
     <>
-      <RenderPreview>프리뷰</RenderPreview>
-
       <SubheaderDescrition
         title={`생성하실 템플릿 서식을\n기재해주세요`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"

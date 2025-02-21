@@ -1,11 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FormField, FormLabel, FormMessage } from "@/components/ui/form";
 import CustomRadio from "@/components/ui/input-radio-custom";
 
 export default function OptionAgeGroup() {
-  const { control, watch, formState } = useFormContext();
+  const { control, watch } = useFormContext();
   const AgeGroups = [10, 20, 30, 40, 50, 60];
   const selectAgeGroup = watch("ageGroup");
 

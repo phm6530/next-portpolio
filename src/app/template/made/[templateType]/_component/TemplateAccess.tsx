@@ -1,6 +1,5 @@
 "use client";
 import EmailAgreement from "@/components/Agreed/EmailAgreed";
-import AccessEmailController from "@/app/template/made/[templateType]/_component/AccessEmailController";
 import { AddSurveyFormProps } from "@/types/templateSurvey";
 
 import { ChangeEvent, useState } from "react";
@@ -54,12 +53,7 @@ export default function TemplateAccess() {
           placeholder="인증번호 4자리"
           readOnly={!agreed || isAgreed === "ing" || isAgreed}
         />
-        {/* 이메일 인증 */}
-        <AccessEmailController
-          agreed={agreed}
-          isAgreed={isAgreed}
-          setIsAgreed={setIsAgreed}
-        />
+
         <div>{errors.access_email?.message as string | null}</div>
         <p>
           *인증 완료 후 설문조사 개설하시면 삭제 및 관리를 위한 URL을 전달

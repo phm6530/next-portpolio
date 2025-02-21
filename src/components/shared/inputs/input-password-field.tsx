@@ -30,7 +30,15 @@ export default function PasswordInputField({
           <FormItem className={cn(className)}>
             {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
-              <InputPassword {...field} placeholder={placeholder} {...rest} />
+              <InputPassword
+                {...field}
+                placeholder={placeholder}
+                {...rest}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\s/g, "");
+                  field.onChange(value);
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

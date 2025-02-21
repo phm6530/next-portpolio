@@ -22,6 +22,7 @@ export default function CreateSurveyList() {
   //Get보단 watch가 성능이 좋다 ,.
   const questionsWatch = watch("questions");
 
+  //에러 수동 처리..
   useEffect(() => {
     if (questionsWatch.length > 0) {
       setError("questions", { message: "" });

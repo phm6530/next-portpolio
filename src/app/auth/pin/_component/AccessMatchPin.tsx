@@ -1,111 +1,81 @@
+"use client";
 import PinTimer from "./PinTimer";
 import { FormProvider, useForm } from "react-hook-form";
-import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
-import FormInput from "@/components/ui/FormElement/FormInput";
-import Button from "@/components/ui/button/Button";
-import classes from "./AccessMatchPin.module.scss";
+import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import AuthComplete from "./AuthComplete";
-import useStore from "@/store/store";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { Dispatch, SetStateAction } from "react";
 
-const createSchema = (pin: string) =>
+import InputField from "@/components/shared/inputs/input-field";
+import AuthComplete from "./AuthComplete";
+import { useRouter } from "next/navigation";
+
+const createSchema = (authPin: string) =>
   z.object({
     pin: z
       .string()
       .length(4, "PIN 번호는 4자리여야 합니다.")
-      .refine((val) => val === pin, "입력한 PIN 번호가 일치하지 않습니다."),
+      .refine(
+        (inputPin) => inputPin === authPin,
+        "입력한 PIN 번호가 일치하지 않습니다."
+      ),
   });
 
-type NavType = "next" | "prev";
-
 export default function AccessMatchPin({
-  pin,
-  setAniTrigger,
+  authPin,
   nextStep,
   setPin,
 }: {
-  pin: string;
-  nextStep: (arg: NavType) => void;
+  authPin: string;
+  nextStep: () => void;
   setPin: Dispatch<SetStateAction<string | null>>;
-  setAniTrigger: Dispatch<SetStateAction<boolean>>;
 }) {
-  const store = useStore();
-
-  const schema = createSchema(pin || ""); // PIN을 동적으로 전달
-
-  const methods = useForm<{ pin: string }>({
+  const schema = createSchema(authPin); // PIN을 동적으로 전달
+  const router = useRouter();
+  const methods = useForm<z.infer<typeof schema>>({
+    defaultValues: {
+      pin: "",
+    },
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
 
   const {
-    register,
     handleSubmit,
-    control,
     formState: { isValid },
   } = methods;
 
-  const matchPin = (e: { pin: string }) => {
-    if (parseInt(e.pin, 10) === parseInt(pin)) {
-      nextStep("next");
+  const matchPin = (e: z.infer<typeof schema>) => {
+    if (e.pin === authPin) {
+      nextStep();
     }
   };
 
   const Timeout = () => {
     setPin(null); // 핀번호 리셋
-    nextStep("prev");
-    store.setResetUser();
+    router.refresh();
   };
 
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(matchPin)} className={classes.form}>
-          <FormField
-            control={control}
-            name="pin"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>PIN</FormLabel>{" "}
-                <FormDescription>
-                  메일로 발송된 4자리 숫자를 입력해주세요
-                </FormDescription>
-                <FormControl>
-                  <InputOTP maxLength={6} {...field}>
-                    <InputOTPGroup className="w-full justify-between grid grid-cols-[1fr_1fr_1fr_1fr] h-[60px]">
-                      <InputOTPSlot index={0} className="w-full h-full" />
-                      <InputOTPSlot index={1} className="w-full h-full" />
-                      <InputOTPSlot index={2} className="w-full h-full" />
-                      <InputOTPSlot index={3} className="w-full h-full" />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </FormControl>
-                <FormDescription className="text-foreground">
-                  <PinTimer timeout={Timeout} />
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form
+          onSubmit={handleSubmit(matchPin)}
+          className="mt-5 flex flex-col gap-5"
+        >
+          <div>
+            <InputField
+              name="pin"
+              maxLength={4}
+              placeholder="PIN 번호 4자리를 입력해주세요"
+            />
+            <PinTimer timeout={Timeout} />
+          </div>
 
           {/* 인증완료 */}
           {isValid && <AuthComplete complateText="인증 완료" />}
-
-          <Button.outlineButton type="submit">인증</Button.outlineButton>
+          <Button disabled={!isValid}>인증</Button>
+          {/* <Button.outlineButton type="submit">인증</Button.outlineButton> */}
         </form>
       </FormProvider>
     </>

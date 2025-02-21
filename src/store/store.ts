@@ -26,7 +26,9 @@ type StoreType = {} & UserEmailSlice & AuthUserStore;
 const initalAuthUser = { id: null, nickname: null, email: null, role: null };
 
 //USER EMAIL
-const createUserEmailSlice = (set: (partial: Partial<UserEmailSlice>) => void): UserEmailSlice => ({
+const createUserEmailSlice = (
+  set: (partial: Partial<UserEmailSlice>) => void
+): UserEmailSlice => ({
   userEmail: null,
   setPasswordUser: (email: string) => {
     set({ userEmail: email });
@@ -37,7 +39,9 @@ const createUserEmailSlice = (set: (partial: Partial<UserEmailSlice>) => void): 
 });
 
 //AUTH USER
-const authUserStore = (set: (partial: Partial<AuthUserStore>) => void): AuthUserStore => ({
+const authUserStore = (
+  set: (partial: Partial<AuthUserStore>) => void
+): AuthUserStore => ({
   login: false,
   authUser: initalAuthUser,
   setAuthUser: ({ id, nickname, email, role }: User) =>

@@ -23,7 +23,6 @@ import useThrottlring from "@/_hook/useThrottlring";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import Link from "next/link";
-import InputPassword from "@/components/ui/InputPassword";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
 
 type SignUpResponse = {

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import classes from "./thumbnail.module.scss";
 import { cn } from "@/lib/utils";
 
 export default function ThumbNail({
