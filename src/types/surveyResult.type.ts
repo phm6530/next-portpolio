@@ -6,7 +6,7 @@ import { GENDER_GROUP } from "./user";
 import {
   AgeOptions,
   GenderOptions,
-} from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter";
+} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
 
 type BaseResultItem = {
   id: number;

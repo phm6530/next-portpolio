@@ -53,17 +53,6 @@
   animation: ani 0.5s ease forwards;
 }
 
-.answerWrapper {
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  padding: 1rem;
-  animation: ani 0.5s ease forwards;
-  border-radius: 10px;
-}
-.emptyRespondents {
-  font-size: 14px;
-  padding: 2rem;
-  text-align: center;
-}
 .textQuestionList {
   display: flex;
   flex-direction: row;

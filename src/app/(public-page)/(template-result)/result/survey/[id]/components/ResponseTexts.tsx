@@ -1,34 +1,19 @@
 "use client";
 import { ResultText } from "@/types/surveyResult.type";
 import classes from "./ResponseTexts.module.scss";
-// import Female30 from "/public/asset/icon/female_30.svg";
-// import Male30 from "/public/asset/icon/male_30.svg";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   AgeOptions,
   GenderOptions,
-} from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter";
-import dynamic from "next/dynamic";
-import QuestionTitle from "@/components/ui/templateUi/QuestionTitle";
-
-import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
-import Male from "/public/asset/icon/man.png";
-import Female from "/public/asset/icon/woman.png";
-import Image from "next/image";
+} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
 import { queryClient } from "@/config/queryClient";
-
-const DynamicMasonryLayout = dynamic(() => import("@/utils/MasonryLayout"), {
-  ssr: false,
-  loading: () => (
-    <div>
-      <LoadingTextSkeleton />
-    </div>
-  ),
-});
+import { CardContent } from "@/components/ui/card";
+import NotthingUser from "./notthing-user";
+import MasonryLayout from "@/utils/MasonryLayout";
 
 export function ResponseTexts({
   idx,
@@ -102,7 +87,6 @@ export function ResponseTexts({
   });
 
   useEffect(() => {
-    console.log("한번만 실행하지?");
     queryClient.setQueryData(
       [
         QUERY_KEY.QUESTION_TEXT,
@@ -126,45 +110,47 @@ export function ResponseTexts({
   const resultList = textQuestions?.pages.flatMap((page) => page.answers);
 
   return (
-    <>
-      <div className={classes.container}>
+    <CardContent>
+      <div>
         {resultList?.length === 0 && (
-          <div className={classes.answerWrapper}>
-            <div className={classes.emptyRespondents}>
-              {filter.ageGroup}대 {getGenderText(filter.genderGroup)} 참여자가
-              없어요!
-            </div>
-          </div>
+          <NotthingUser
+            ageGroup={filter.ageGroup}
+            genderGroup={filter.genderGroup}
+          />
         )}
-        <DynamicMasonryLayout pending={isPending} loading={isLoading}>
+        <MasonryLayout pending={isPending} loading={isLoading}>
           {resultList?.map((as, idx) => {
             const { id, respondent, answer } = as;
             const { gender, age } = respondent;
 
             return (
-              <div key={`${id}-${idx}`} className={classes.answerWrapper}>
-                <div className={classes.respondent}>
-                  <div className={classes.iconWrap}>
-                    {gender === "female" && (
+              <div
+                key={`${id}-${idx}`}
+                className="border p-2 bg-third rounded-xl"
+              >
+                <div className="flex">
+                  <div className=" w-10 h-10 flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
+                    {/* {gender === "female" && (
                       <Image
                         src={Female}
                         alt="logo"
                         fill
                         priority
                         style={{ objectFit: "contain" }}
-                        sizes="(max-width: 768px) 100vw"
+                        sizes="(max-width: 768px) 50vw"
                       />
                     )}
+
                     {gender === "male" && (
                       <Image
-                        src={gender === "male" ? Male : Female}
+                        src={Female}
                         alt="logo"
                         fill
                         priority
                         style={{ objectFit: "contain" }}
-                        sizes="(max-width: 768px) 100vw"
+                        sizes="(max-width: 768px) 50vw"
                       />
-                    )}
+                    )} */}
                   </div>
 
                   <div className={classes.age}>{age}대 </div>
@@ -173,11 +159,11 @@ export function ResponseTexts({
                   </span>
                 </div>
 
-                <div className={classes.respondentText}>{answer}</div>
+                <div className="rounded-md text-foreground b">{answer}</div>
               </div>
             );
           })}
-        </DynamicMasonryLayout>
+        </MasonryLayout>
       </div>
 
       {hasNextPage && (
@@ -194,6 +180,6 @@ export function ResponseTexts({
           </div>
         </>
       )}
-    </>
+    </CardContent>
   );
 }

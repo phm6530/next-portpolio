@@ -16,7 +16,6 @@ export default function TipTapEditorField({
   placeholder: string;
 }) {
   const formMethod = useFormContext();
-  console.log(formMethod.watch());
 
   return (
     <>
@@ -26,7 +25,9 @@ export default function TipTapEditorField({
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel>설명</FormLabel>
+              <FormLabel>
+                설명 <span className="text-primary">*</span>
+              </FormLabel>
               <FormControl>
                 <TipTapEditor {...field} placeholder={placeholder} />
               </FormControl>

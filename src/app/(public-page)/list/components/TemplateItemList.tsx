@@ -134,7 +134,6 @@ export default function TemplateList() {
             style={{
               height: "10px",
               marginTop: "10px",
-              backgroundColor: "red",
             }}
           />
         </>

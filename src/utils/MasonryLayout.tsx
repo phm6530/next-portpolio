@@ -1,4 +1,4 @@
-import { LoadingItem } from "@/components/loading/LoadingTextSkeleton";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import React, { ReactNode } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
@@ -9,8 +9,8 @@ export default function MasonryLayout({
   children,
   cnt = 6,
 }: {
-  loading: boolean;
-  pending: boolean;
+  loading?: boolean;
+  pending?: boolean;
   children: ReactNode;
   cnt?: number;
 }) {
@@ -20,10 +20,8 @@ export default function MasonryLayout({
     <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
       <Masonry gutter="20px">
         {children}
-        {(loading || pending) &&
-          tempArr.map((_, idx) => {
-            return <LoadingItem key={`${idx}-item`} />;
-          })}
+
+        {(loading || pending) && <LoadingWrapper />}
       </Masonry>
     </ResponsiveMasonry>
   );

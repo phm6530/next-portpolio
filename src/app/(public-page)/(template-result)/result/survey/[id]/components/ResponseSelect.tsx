@@ -1,4 +1,4 @@
-import SurveyResultBar from "@/app/(public-page)/(template-result)/result/survey/components/SurveyResultBar";
+import SurveyResultBar from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyResultBar";
 import classes from "./ReponseSelect.module.scss";
 import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
@@ -7,6 +7,8 @@ import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
 import ZoomableImage from "@/components/ui/image-zoomable";
 import AniProgressbar from "@/components/animation/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
+import { CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export default function ResponseSelect({
   idx,
@@ -20,8 +22,6 @@ export default function ResponseSelect({
     selectAgeGroup: AgeOptions;
     selectGenderGroup: GenderOptions;
   }) {
-  const isPictrue = options.some((e) => e.img);
-
   const sumFilterUsers = (arr: ResultSelectOption["response"]) => {
     //남자 합
     const sumFemale = Object.values(arr.female ?? {}).reduce((arr, cur) => {
@@ -49,12 +49,14 @@ export default function ResponseSelect({
     return sumB - sumA;
   });
 
+  const isPictureOption = options.some((e) => e.img);
   return (
-    <>
+    <CardContent>
       <div
-        className={`${classes.gridWrapper} ${
-          isPictrue ? classes.pictrueGrid : undefined
-        }`}
+        className={cn(
+          "grid gap-4 ",
+          isPictureOption && "grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+        )}
       >
         {sortedOptions.map((option, idx) => {
           const ixMax = maxOption === option;
@@ -62,16 +64,18 @@ export default function ResponseSelect({
           const percent = Math.round((sumUser / allCnt) * 100);
 
           return (
-            <div className={classes.item} key={`${option.label}-${idx}`}>
-              <div className={classes.questionLabel}>
+            <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
+              <div className="text-zinc-500">
                 {ixMax ? (
-                  <IconLabel Icon={Crown}>{option.value}</IconLabel>
+                  <IconLabel className="text-indigo-300" Icon={Crown}>
+                    {option.value}
+                  </IconLabel>
                 ) : (
                   option.value
                 )}
-                <span className={classes.cnt}>
+                {/* <span className={classes.cnt}>
                   <Person /> {sumUser}
-                </span>
+                </span> */}
               </div>
 
               <div className={classes.animationWrapper}>
@@ -86,6 +90,6 @@ export default function ResponseSelect({
           );
         })}
       </div>
-    </>
+    </CardContent>
   );
 }

@@ -121,6 +121,7 @@ module.exports = {
         },
 
         "custom-input": "hsl(var(--custom-input))",
+        third: "hsl(var(--third))",
       },
     },
   },

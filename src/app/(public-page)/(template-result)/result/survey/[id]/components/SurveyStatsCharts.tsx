@@ -1,37 +1,19 @@
 "use client";
 
-import ResponseSelect from "@/app/(public-page)/(template-result)/result/survey/components/ResponseSelect";
-import { ResponseTexts } from "@/app/(public-page)/(template-result)/result/survey/components/ResponseTexts";
+import ResponseSelect from "@/app/(public-page)/(template-result)/result/survey/[id]/components/ResponseSelect";
+import { ResponseTexts } from "./ResponseTexts";
 import SurveyGroupFilter, {
   AgeOptions,
   GenderOptions,
-} from "@/app/(public-page)/(template-result)/result/survey/components/SurveyGroupFilter";
+} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import classes from "./SuveyStatusCharts.module.scss";
-import QuestionDetailWrapper from "@/components/ui/templateUi/QuestionDetailWrapper";
 import { fetchSurveyData } from "./test";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-// type logger<T> = (arg: T) => void;
-
-// let logNumber: logger<number> = (a) => {
-//   console.log(a);
-// };
-
-// let logUnion: logger<number | string> = (a) => {
-//   console.log(a);
-// };
-
-// logNumber = logUnion;
-// logUnion = logNumber;
-
-type MyPick<T, K extends keyof T> = {
-  [P in K]: T[];
-};
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
   //초깃값
@@ -123,14 +105,16 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
       <div className="flex flex-col gap-10 mt-6">
         {questions.map((qs, idx) => {
           return (
-            <Card key={`${idx}-card`}>
+            <Card key={`${idx}-card`} className="py-5">
               <CardHeader>
                 <CardTitle>
-                  <span className="font-Paperlogy">Q{idx + 1}.</span> {qs.label}
+                  <span className="font-Paperlogy text-indigo-400">
+                    Q. {idx + 1}
+                  </span>
+                  <div className="my-10">{qs.label}</div>
                 </CardTitle>
               </CardHeader>
               {(() => {
-                console.log(qs);
                 if (qs.type === QUESTION_TYPE.SELECT) {
                   // 객관식 차트
                   return (

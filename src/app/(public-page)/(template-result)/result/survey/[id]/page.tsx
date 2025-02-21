@@ -1,14 +1,13 @@
 import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(public-page)/(template-result)/components/ResultSummry";
-import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/components/SurveyStatsCharts";
+import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyStatsCharts";
 import {
   fetchComments,
   fetchSurveyData,
-} from "@/app/(public-page)/(template-result)/result/survey/components/test";
+} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
 import Grid from "@/components/ui/Grid";
 import { CommentEditorProvider } from "@/context/context";
-import { cn } from "@/lib/utils";
 import {
   COMMENT_EDITOR_TYPE,
   COMMENT_NEED_PATH,

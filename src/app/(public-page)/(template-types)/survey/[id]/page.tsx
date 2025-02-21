@@ -23,6 +23,7 @@ import {
 import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
 import TransformPlainText from "@/components/TransformPlainText";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
+import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
 export const runtime = "edge";
 
@@ -120,14 +121,7 @@ export default async function SurveyDetailTemplate({
               />
               <div className="my-4 leading-9">{title}</div>
             </CardTitle>
-            {/* <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
-              <div dangerouslySetInnerHTML={{ __html: description }} />
-            </CardDescription> */}
-
-            <div
-              className="ProseMirror"
-              dangerouslySetInnerHTML={{ __html: description }}
-            />
+            <TipTapEditor mode="view" value={description} />
           </CardHeader>
           <CardContent>
             <ImageThumbNail thumbnail={thumbnail} />

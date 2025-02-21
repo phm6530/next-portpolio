@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   text-shadow: 0px 0px 1px;
-  color: rgb(100, 64, 192);
 }
 
 .iconWrap {
@@ -15,8 +14,5 @@
     width: 15px;
     height: 15px;
     filter: drop-shadow(0px 0px 4px rgb(100, 77, 128));
-    g {
-      fill: rgb(255, 255, 255);
-    }
   }
 }

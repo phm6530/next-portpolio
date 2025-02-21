@@ -1,5 +1,5 @@
 import classes from "./ResultCommentSection.module.scss";
-import { fetchComments } from "@/app/(public-page)/(template-result)/result/survey/components/test";
+import { fetchComments } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
 import NotFoundComponent from "@/components/NotFoundComponent";
 import { COMMENT_NEED_PATH, CommentReponse } from "@/types/comment.type";
 import CommentContainerSection from "./CommentContainerSection";

@@ -37,11 +37,13 @@ export default function AniProgressbar({
   );
 
   return (
-    <div className={classes.ResultBarWrap}>
+    <div className="relative h-6 rounded-full">
       <div
         ref={ref}
         key={percent}
-        className={`${classes.progressbar} ${maxCnt && classes.maxCnt}`}
+        className={`w-0 h-full left-0 rounded-full absolute bg-background ${
+          maxCnt && classes.maxCnt
+        }`}
       >
         <AniNumbering percent={percent} maxCnt={maxCnt} />
       </div>
