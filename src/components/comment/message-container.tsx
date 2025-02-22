@@ -1,22 +1,21 @@
 "use client";
 import { CommentReponse } from "@/types/comment.type";
-import CommentContainer from "./CommentContainer";
-import { useState } from "react";
 
-export default function CommentContainerSection({
+import { useState } from "react";
+import MessageThread from "./message-thread";
+
+export default function MessageContainer({
   listData,
 }: {
   listData: CommentReponse[];
 }) {
-  const [touchFormIdx, setTouchFormIdx] = useState<null | number>(
-    null
-  );
+  const [touchFormIdx, setTouchFormIdx] = useState<null | number>(null);
 
   return (
     <>
       {listData.map((e, idx) => {
         return (
-          <CommentContainer
+          <MessageThread
             {...e}
             parentId={e.id}
             touchIdx={touchFormIdx}

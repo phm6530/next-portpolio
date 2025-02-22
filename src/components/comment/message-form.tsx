@@ -1,51 +1,37 @@
 "use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import classes from "./CommentEditor.module.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import CommentTextArea from "@/components/Comment/CommentTextArea";
 import { QUERY_KEY } from "@/types/constans";
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
-import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
+import { COMMENT_EDITOR_MODE } from "@/types/comment.type";
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
-import { CommentEditorContext } from "@/context/context";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
 import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
-
-//익명은 Password도 받음
-type AnonymousDefaultValue = {
-  anonymous: string; //닉네임
-  password: string;
-  content: string;
-};
-
-//로그인 유저는 ID만 받음
-type AuthUserDefaultValue = {
-  userId: number | null;
-  content: string;
-};
+import TextareaFormField from "@/components/ui/FormElement/textarea-form-field";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import useCommentContext from "./hook/comment-context-hook";
+import { UserMsgSchema, geustMsgSchema } from "./schema/message-schema";
+import { toast } from "react-toastify";
 
 /**
  * Editor Type = Comment / Reply 유니온
  * Comment Id = Reply가 의존
  * parentType , parentId = Comment Id가 의존
  */
-export default function CommentEditor({
-  editorType,
-  parentsType,
+export default function MessageForm({
   parentsId,
   commentId,
   setTouch,
   category,
 }: {
-  editorType: COMMENT_EDITOR_TYPE;
-  parentsType?: COMMENT_NEED_PATH;
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
@@ -53,56 +39,46 @@ export default function CommentEditor({
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
-
-  const { section } = useContext(CommentEditorContext);
+  const { EDITOR_MODE, EDITOR_PATH } = useCommentContext();
 
   const params = useParams();
   const router = useRouter();
 
-  const AnonymousValues: AnonymousDefaultValue = {
-    anonymous: "",
-    password: "",
-    content: "",
-  };
+  const dynamicSchema = !!userData ? UserMsgSchema : geustMsgSchema;
 
-  const AuthUserValues: AuthUserDefaultValue = {
-    userId: userData?.id ?? null,
-    content: "",
-  };
-
-  const defaultValues = userData ? AuthUserValues : AnonymousValues;
-
-  type DefaultValues<T> = T extends number
-    ? AuthUserDefaultValue
-    : AnonymousDefaultValue;
-
-  const formMethod = useForm<DefaultValues<typeof userData>>({
-    defaultValues,
+  const formMethod = useForm<z.infer<typeof dynamicSchema>>({
+    defaultValues: {
+      content: "",
+      ...(!!userData
+        ? {
+            userId: userData.id,
+          }
+        : {
+            password: "",
+            anonymous: "",
+          }),
+    },
+    resolver: zodResolver(dynamicSchema),
   });
 
+  console.log(formMethod.formState.errors);
+
   //전역 인스턴스
-  const {
-    reset,
-    formState: { errors },
-    handleSubmit,
-  } = formMethod;
+  const { reset, handleSubmit } = formMethod;
 
   useEffect(() => {
-    reset(defaultValues);
+    reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const errorArr = Object.values(errors);
-  const errorMessage = errorArr[0]?.message;
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data) => {
       // 분기 Url 생성..
       const url = (() => {
-        switch (editorType) {
-          case COMMENT_EDITOR_TYPE.COMMENT:
-            return `comment/${section}/${parentsId}`;
-          case COMMENT_EDITOR_TYPE.REPLY:
+        switch (EDITOR_MODE) {
+          case COMMENT_EDITOR_MODE.COMMENT:
+            return `comment/${EDITOR_PATH}/${parentsId}`;
+          case COMMENT_EDITOR_MODE.REPLY:
             return `reply/${commentId}`;
           default:
             return null as never;
@@ -122,13 +98,14 @@ export default function CommentEditor({
       //cache initals
       await revaildateTags({
         tags: [
-          `comment-${section}-${params.id}`,
-          ...(category ? [`${section}-${category}`] : []),
+          `comment-${EDITOR_PATH}-${params.id}`,
+          ...(category ? [`${EDITOR_PATH}-${category}`] : []),
         ],
       });
       return req;
     },
     onSuccess: async () => {
+      toast.success("댓글을 작성하였습니다.");
       reset();
       router.refresh();
 
@@ -147,38 +124,33 @@ export default function CommentEditor({
     <FormProvider {...formMethod}>
       <form
         onSubmit={handleSubmit(submitHandler)}
-        className={classes.commentForm}
+        className="grid grid-cols-[repeat(6,1fr)] gap-1"
       >
-        <>
-          {!userData ? (
-            <>
+        {/* 로그인 한 유저는 필요없음  */}
+        {!userData && (
+          <>
+            <div className="col-span-2">
               <InputField
                 autoComplete="off"
                 name="anonymous"
                 placeholder="이름"
               />
-              <PasswordInputField />
-            </>
-          ) : (
-            <Myprofile />
-          )}
-        </>
-        <div className={classes.textareaWrap}>
-          {/* OnChange 랜더링 방지하기위해 따로 분리함 */}
-          <CommentTextArea name={"content"}>
-            <div className={classes.errorDiv}>
-              {typeof errorMessage === "string" ? `! ${errorMessage}` : null}
             </div>
-          </CommentTextArea>
-
-          <button
-            type="submit"
-            className={classes.submitBtn}
-            disabled={isPending}
-          >
-            댓글 작성
-          </button>
+            <div className="col-span-2">
+              <PasswordInputField className="col-span-1" />
+            </div>
+          </>
+        )}
+        <div className="col-span-5">
+          <TextareaFormField
+            name={"content"}
+            placeholder="남기실 코멘트를 입력해주세요"
+          />
         </div>
+
+        <Button disabled={isPending} className="col-span-1 h-full">
+          댓글 작성
+        </Button>
       </form>
     </FormProvider>
   );

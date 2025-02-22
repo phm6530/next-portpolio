@@ -1,17 +1,13 @@
-import Comment from "@/app/(public-page)/(template-result)/components/Comment";
 import classes from "./CommentContainer.module.scss";
 import { Dispatch, SetStateAction } from "react";
-import Button from "@/components/ui/button/Button";
-import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
-// import ReplyIcon from "/public/asset/icon/reply.svg";
-import {
-  COMMENT_EDITOR_TYPE,
-  COMMENT_NEED_PATH,
-  CommentReponse,
-} from "@/types/comment.type";
-import { useParams } from "next/navigation";
 
-export default function CommentContainer({
+import { CommentReponse } from "@/types/comment.type";
+import { useParams } from "next/navigation";
+import MessageForm from "./message-form";
+import MessageItem from "./message-item";
+import { Button } from "../ui/button";
+
+export default function MessageThread({
   touchIdx,
   setTouch,
   ...props
@@ -20,7 +16,7 @@ export default function CommentContainer({
   parentId: number;
   setTouch: Dispatch<SetStateAction<number | null>>;
 } & CommentReponse) {
-  const { id: commentId, replies, creator } = props;
+  const { id: commentId, replies } = props;
   const params: { id: string } = useParams();
 
   const formViewHandler = () => {
@@ -34,19 +30,22 @@ export default function CommentContainer({
   };
 
   return (
-    <div className={classes.containerWrapper}>
+    <div className="animate-fadein">
       {/* Comment */}
-      <Comment
+      <MessageItem
         contentType="comment"
         {...props}
         onClickEvent={formViewHandler}
         boardId={params.id}
       />
-      <div className={classes.commentBtnWrap}>
-        <Button.noneStyleButton onClick={formViewHandler}>
-          <span>답글쓰기</span>
-        </Button.noneStyleButton>
-      </div>
+
+      <Button
+        onClick={formViewHandler}
+        variant={"link"}
+        className="p-0 dark:text-indigo-400"
+      >
+        <span className="text-[13px]">답글쓰기</span>
+      </Button>
 
       {/* 대댓글 */}
       <div
@@ -61,7 +60,7 @@ export default function CommentContainer({
               className={classes.replyWrapper}
               key={`reply-${commentId}-${idx}`}
             >
-              <Comment
+              <MessageItem
                 contentType="reply"
                 content={content}
                 onClickEvent={formViewHandler}
@@ -73,8 +72,7 @@ export default function CommentContainer({
         })}
         {touchIdx === commentId && (
           <div className={classes.replyFormContainer}>
-            <CommentEditor
-              editorType={COMMENT_EDITOR_TYPE.REPLY}
+            <MessageForm
               commentId={commentId}
               parentsId={params.id}
               setTouch={setTouch}

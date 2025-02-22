@@ -14,7 +14,7 @@ export type CommentReponse = {
   } & { email?: string };
 };
 
-export enum COMMENT_EDITOR_TYPE {
+export enum COMMENT_EDITOR_MODE {
   COMMENT = "comment",
   REPLY = "reply",
 }

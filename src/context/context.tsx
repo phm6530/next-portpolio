@@ -11,6 +11,10 @@ export const CommentEditorContext = createContext<{
   setSections: () => {},
 });
 
+/**
+ * Editor 어디 Comment Provider로 전달
+ */
+
 export function CommentEditorProvider({
   children,
   initialSection = null, // 초기 섹션 값을 props로 받을 수 있게

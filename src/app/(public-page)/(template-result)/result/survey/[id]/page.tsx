@@ -1,4 +1,3 @@
-import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
 import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
 import ResultSummry from "@/app/(public-page)/(template-result)/components/ResultSummry";
 import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyStatsCharts";
@@ -6,10 +5,10 @@ import {
   fetchComments,
   fetchSurveyData,
 } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
+
 import Grid from "@/components/ui/Grid";
-import { CommentEditorProvider } from "@/context/context";
 import {
-  COMMENT_EDITOR_TYPE,
+  COMMENT_EDITOR_MODE,
   COMMENT_NEED_PATH,
   CommentReponse,
 } from "@/types/comment.type";
@@ -21,6 +20,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { CommentEditorProvider } from "@/components/comment/context/comment-context";
+import MessageForm from "@/components/comment/message-form";
 
 const queryClient = new QueryClient();
 
@@ -65,13 +66,12 @@ export default async function SurveyResultPage({
 
             <ResultSurveyCharts id={id} />
 
-            <CommentEditorProvider initialSection={COMMENT_NEED_PATH.TEMPLATE}>
-              {/* 메인 Comment Editor */}
-              <CommentEditor
-                editorType={COMMENT_EDITOR_TYPE.COMMENT}
-                parentsType={COMMENT_NEED_PATH.TEMPLATE}
-                parentsId={id}
-              />
+            {/* Editor  */}
+            <CommentEditorProvider
+              EDITOR_PATH={COMMENT_NEED_PATH.TEMPLATE}
+              EDITOR_MODE={COMMENT_EDITOR_MODE.COMMENT}
+            >
+              <MessageForm parentsId={id} />
 
               {/* Comments */}
               <ResultCommentSection

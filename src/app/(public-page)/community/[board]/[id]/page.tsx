@@ -4,8 +4,7 @@ import { BASE_NEST_URL } from "@/config/base";
 
 import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
-import { COMMENT_EDITOR_TYPE, COMMENT_NEED_PATH } from "@/types/comment.type";
-import CommentEditor from "@/app/(public-page)/(template-result)/components/CommentEditor";
+import { COMMENT_EDITOR_MODE, COMMENT_NEED_PATH } from "@/types/comment.type";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";
 import DateCompareToday from "@/util/DateCompareToday";
@@ -19,6 +18,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import ViewCount from "./component/view-count";
+import MessageForm from "@/components/comment/message-form";
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];
@@ -126,12 +126,7 @@ export default async function Page({
       {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
       <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>
         {/* 댓글 에디터*/}
-        <CommentEditor
-          editorType={COMMENT_EDITOR_TYPE.COMMENT}
-          parentsType={COMMENT_NEED_PATH.BOARD}
-          parentsId={id}
-          category={category}
-        />
+        <MessageForm parentsId={id} category={category} />
         {/* 댓글 리스트 */}
         <ResultCommentSection
           id={parseInt(id, 10)}
