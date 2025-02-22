@@ -71,7 +71,7 @@ export default function MessageItem({
   return (
     <>
       <div className="flex flex-col w-full  items-start ">
-        <div className="flex items-center justify-start mb-3 gap-2">
+        <div className="flex items-center justify-start mb-2 gap-2">
           {/* 유저 or 익명 */}
           <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
@@ -79,7 +79,7 @@ export default function MessageItem({
           {isUserCommentAuthor && (
             <>
               {isUserCommentAuthor && (
-                <span className="text-[10px] mr-5 text-primary border-primary/50 border  py-1 px-2 rounded-full">
+                <span className="text-[10px] mr-5 text-pink-300 border-pink-300 border  py-1 px-2 rounded-full">
                   내 댓글
                 </span>
               )}
@@ -97,17 +97,17 @@ export default function MessageItem({
               }}
             >
               <button
-                className="border
+                className=" opacity-70
             "
               >
-                <X className="w-3 h-3 text-secondary-foreground" />
+                <X className="w-3 h-3 text-secondary-foreground/80" />
               </button>
             </PsConfirmModal>
           )}
         </div>
 
         <div
-          className="bg-secondary/40 dark:bg-card dark:border-white/20 hover:bg-secondary/70 text-[15px] min-w-[50px] border border-input py-3 px-4 rounded-full cursor-pointer dark:hover:brightness-125  "
+          className="bg-secondary/40 dark:bg-card leading-5 text-sm dark:border-white/20 hover:bg-secondary/70 text-[15px] min-w-[50px] border border-input py-3 px-4 rounded-full cursor-pointer dark:hover:brightness-125  "
           onClick={onClickEvent}
         >
           {content}

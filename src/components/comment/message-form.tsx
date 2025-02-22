@@ -20,6 +20,7 @@ import { z } from "zod";
 import useCommentContext from "./hook/comment-context-hook";
 import { UserMsgSchema, geustMsgSchema } from "./schema/message-schema";
 import { toast } from "react-toastify";
+import FormTextarea from "../ui/FormElement/FormTextarea";
 
 /**
  * Editor Type = Comment / Reply 유니온
@@ -29,17 +30,19 @@ import { toast } from "react-toastify";
 export default function MessageForm({
   parentsId,
   commentId,
+  EDITOR_MODE,
   setTouch,
   category,
 }: {
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
+  EDITOR_MODE: COMMENT_EDITOR_MODE;
   category?: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
-  const { EDITOR_MODE, EDITOR_PATH } = useCommentContext();
+  const { EDITOR_PATH } = useCommentContext();
 
   const params = useParams();
   const router = useRouter();
@@ -62,9 +65,10 @@ export default function MessageForm({
   });
 
   console.log(formMethod.formState.errors);
+  const errors = Object.values(formMethod.formState.errors) ?? [];
 
   //전역 인스턴스
-  const { reset, handleSubmit } = formMethod;
+  const { reset, handleSubmit, watch } = formMethod;
 
   useEffect(() => {
     reset();
@@ -131,13 +135,14 @@ export default function MessageForm({
           <>
             <div className="col-span-2">
               <InputField
+                errorField={false}
                 autoComplete="off"
                 name="anonymous"
                 placeholder="이름"
               />
             </div>
             <div className="col-span-2">
-              <PasswordInputField className="col-span-1" />
+              <PasswordInputField errorField={false} className="col-span-1" />
             </div>
           </>
         )}
@@ -145,13 +150,20 @@ export default function MessageForm({
           <TextareaFormField
             name={"content"}
             placeholder="남기실 코멘트를 입력해주세요"
+            maxLength={1000}
           />
         </div>
 
-        <Button disabled={isPending} className="col-span-1 h-full">
+        <Button disabled={isPending} className="col-span-1 h-full row-span-2">
           댓글 작성
         </Button>
       </form>
+      <div className="pt-2 text-sm flex justify-between">
+        <span className="text-destructive"> {errors[0]?.message}</span>
+        <span className="text-[11px] opacity-45">
+          {watch("content").length} / 1000 자
+        </span>
+      </div>
     </FormProvider>
   );
 }

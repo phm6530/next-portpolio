@@ -67,11 +67,12 @@ export default async function SurveyResultPage({
             <ResultSurveyCharts id={id} />
 
             {/* Editor  */}
-            <CommentEditorProvider
-              EDITOR_PATH={COMMENT_NEED_PATH.TEMPLATE}
-              EDITOR_MODE={COMMENT_EDITOR_MODE.COMMENT}
-            >
-              <MessageForm parentsId={id} />
+            <CommentEditorProvider EDITOR_PATH={COMMENT_NEED_PATH.TEMPLATE}>
+              {/* Comment Editor */}
+              <MessageForm
+                parentsId={id}
+                EDITOR_MODE={COMMENT_EDITOR_MODE.COMMENT}
+              />
 
               {/* Comments */}
               <ResultCommentSection

@@ -1,11 +1,7 @@
-import { TextareaHTMLAttributes } from "react";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../form";
+"use client";
+
+import { TextareaHTMLAttributes, useState } from "react";
+import { FormControl, FormField, FormItem, FormLabel } from "../form";
 import { Textarea } from "../textarea";
 
 export default function TextareaFormField({
@@ -17,6 +13,7 @@ export default function TextareaFormField({
   name: string;
   label?: string;
 } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const [] = useState();
   return (
     <>
       <FormField
@@ -28,7 +25,6 @@ export default function TextareaFormField({
               <FormControl>
                 <Textarea {...field} {...rest} />
               </FormControl>
-              <FormMessage />
             </FormItem>
           );
         }}

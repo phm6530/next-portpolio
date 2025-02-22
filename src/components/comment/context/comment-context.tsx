@@ -28,19 +28,16 @@ export enum COMMENT_NEED_PATH {
 
 type ContextType = {
   EDITOR_PATH: COMMENT_NEED_PATH | null;
-  EDITOR_MODE: COMMENT_EDITOR_MODE | null;
 };
 
 // inital
 export const CommentEditorContext = createContext<ContextType>({
   EDITOR_PATH: null,
-  EDITOR_MODE: null,
 });
 
 export function CommentEditorProvider({
   children,
   EDITOR_PATH,
-  EDITOR_MODE,
 }: {
   children: ReactNode;
 } & ContextType) {
@@ -48,7 +45,6 @@ export function CommentEditorProvider({
     <CommentEditorContext.Provider
       value={{
         EDITOR_PATH,
-        EDITOR_MODE,
       }}
     >
       {children}

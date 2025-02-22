@@ -15,11 +15,13 @@ export default function InputField({
   label,
   description,
   required,
+  errorField = true,
   ...rest
 }: {
   name: string;
   label?: string;
   description?: string;
+  errorField?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>) {
   const { control } = useFormContext();
   return (
@@ -39,7 +41,7 @@ export default function InputField({
               <Input {...field} {...rest} />
             </FormControl>
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
+            {errorField && <FormMessage />}
           </FormItem>
         );
       }}

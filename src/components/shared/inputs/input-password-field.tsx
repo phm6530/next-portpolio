@@ -17,8 +17,13 @@ export default function PasswordInputField({
   label,
   placeholder = "비밀번호를 입력해주세요",
   className,
+  errorField = true,
   ...rest
-}: { name?: string; label?: string } & InputHTMLAttributes<HTMLInputElement>) {
+}: {
+  name?: string;
+  label?: string;
+  errorField?: boolean;
+} & InputHTMLAttributes<HTMLInputElement>) {
   const { control } = useFormContext();
 
   return (
@@ -40,7 +45,7 @@ export default function PasswordInputField({
                 }}
               />
             </FormControl>
-            <FormMessage />
+            {errorField && <FormMessage />}
           </FormItem>
         );
       }}

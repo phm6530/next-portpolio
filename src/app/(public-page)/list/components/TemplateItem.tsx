@@ -17,7 +17,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import Male from "/public/asset/3d/male.png";
+import Female from "/public/asset/3d/female.png";
 const TemplateItem = forwardRef(
   (
     {
@@ -102,13 +103,41 @@ const TemplateItem = forwardRef(
                 </div>
               </div>
             </TooltipTrigger>
+
             <TooltipContent
               side="right"
               className="text-muted-foreground text-start max-w-[200px]"
             >
-              <div>남 {respondents.participants.male ?? 0}</div>
-
-              <div>여 {respondents.participants.female ?? 0}</div>
+              <div className="flex">
+                <div className="relative w-5 h-5">
+                  <Image
+                    src={Female}
+                    alt="logo"
+                    fill
+                    priority
+                    style={{ objectFit: "contain" }}
+                    sizes="(max-width: 768px) 50vw"
+                  />
+                </div>
+                <span className="text-[12px] ml-3 text-foreground">
+                  {respondents.participants.male ?? 0} 명
+                </span>
+              </div>
+              <div className="flex border-t pt-2 mt-2">
+                <div className="relative w-5 h-5">
+                  <Image
+                    src={Male}
+                    alt="logo"
+                    fill
+                    priority
+                    style={{ objectFit: "contain" }}
+                    sizes="(max-width: 768px) 50vw"
+                  />
+                </div>
+                <span className="text-[12px] ml-3 text-foreground">
+                  {respondents.participants.female ?? 0} 명
+                </span>
+              </div>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>{" "}

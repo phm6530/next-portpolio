@@ -12,7 +12,7 @@ export default function MessageContainer({
   const [touchFormIdx, setTouchFormIdx] = useState<null | number>(null);
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {listData.map((e, idx) => {
         return (
           <MessageThread
@@ -24,6 +24,6 @@ export default function MessageContainer({
           />
         );
       })}
-    </>
+    </div>
   );
 }

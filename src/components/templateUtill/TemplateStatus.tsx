@@ -61,10 +61,7 @@ export default function TemplateStatus({
         {curState(startDate, endDate)}
 
         {maxGroup?.maxCnt && (maxGroup?.ageGroup || maxGroup?.genderGroup) && (
-          <Badge
-            variant={"secondary"}
-            className="text-[10px] text-muted-foreground "
-          >
+          <Badge className="text-[10px] bg-primary/40  ">
             {maxGroup.ageGroup && `${maxGroup.ageGroup}대`}{" "}
             {maxGroup.genderGroup &&
               `${GenderMapper(maxGroup.genderGroup as GENDER_GROUP)}`}{" "}

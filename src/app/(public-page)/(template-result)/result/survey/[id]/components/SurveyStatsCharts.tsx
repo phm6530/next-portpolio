@@ -102,10 +102,10 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
         respondents={data?.respondents}
       />
 
-      <div className="flex flex-col gap-10 mt-6">
+      <div className="flex flex-col gap-10 mt-6 mb-9">
         {questions.map((qs, idx) => {
           return (
-            <Card key={`${idx}-card`} className="py-5">
+            <Card key={`${idx}-card`} className="py-5 rounded-3xl">
               <CardHeader>
                 <CardTitle>
                   <span className="font-Paperlogy text-indigo-400">

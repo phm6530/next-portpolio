@@ -6,19 +6,17 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 export default function MasonryLayout({
   loading,
   pending,
+  gutter = 20,
   children,
-  cnt = 6,
 }: {
   loading?: boolean;
   pending?: boolean;
+  gutter?: number;
   children: ReactNode;
-  cnt?: number;
 }) {
-  const tempArr = Array.from({ length: cnt });
-
   return (
     <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-      <Masonry gutter="20px">
+      <Masonry gutter={`${gutter}px`}>
         {children}
 
         {(loading || pending) && <LoadingWrapper />}

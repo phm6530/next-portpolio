@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import MessageForm from "./message-form";
 import MessageItem from "./message-item";
 import { Button } from "../ui/button";
+import { COMMENT_EDITOR_MODE } from "./context/comment-context";
+import { Reply, ReplyIcon } from "lucide-react";
 
 export default function MessageThread({
   touchIdx,
@@ -44,23 +46,18 @@ export default function MessageThread({
         variant={"link"}
         className="p-0 dark:text-indigo-400"
       >
-        <span className="text-[13px]">답글쓰기</span>
+        <span className="text-[12px]">답글쓰기</span>
       </Button>
 
       {/* 대댓글 */}
-      <div
-        className={`${classes.repliesContainer} ${
-          replies.length > 0 ? classes.leftMargin : undefined
-        }`}
-      >
+      <div className="flex flex-col gap-4 mb-4">
         {replies.map((reply, idx) => {
           const { content, ...rest } = reply;
           return (
-            <div
-              className={classes.replyWrapper}
-              key={`reply-${commentId}-${idx}`}
-            >
+            <div className={classes.replyWrapper}>
+              <ReplyIcon className="rotate-180 opacity-50 mr-2" />
               <MessageItem
+                key={`reply-${commentId}-${idx}`}
                 contentType="reply"
                 content={content}
                 onClickEvent={formViewHandler}
@@ -72,8 +69,10 @@ export default function MessageThread({
         })}
         {touchIdx === commentId && (
           <div className={classes.replyFormContainer}>
+            {/* Reply 용 */}
             <MessageForm
               commentId={commentId}
+              EDITOR_MODE={COMMENT_EDITOR_MODE.REPLY}
               parentsId={params.id}
               setTouch={setTouch}
             />

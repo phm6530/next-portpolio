@@ -78,19 +78,6 @@ export default function Page() {
               })}
               inputName="digit"
             />
-
-            {/* <FormTextarea
-              placeholder="textarea"
-              {...register("textarea", {
-                required: "문의 내용은 필수입니다.",
-                minLength: {
-                  value: 10,
-                  message: "최소 10글자 적어주세요",
-                },
-              })}
-              textareaName="textarea"
-              className={classes.textarea}
-            /> */}
           </FormProvider>
           <div style={{ textAlign: "center" }}>
             <Button.submit

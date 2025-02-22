@@ -14,6 +14,10 @@ import { queryClient } from "@/config/queryClient";
 import { CardContent } from "@/components/ui/card";
 import NotthingUser from "./notthing-user";
 import MasonryLayout from "@/utils/MasonryLayout";
+import Image from "next/image";
+import Male from "/public/asset/3d/male.png";
+import Female from "/public/asset/3d/female.png";
+import { cn } from "@/lib/utils";
 
 export function ResponseTexts({
   idx,
@@ -101,12 +105,6 @@ export function ResponseTexts({
     );
   }, [questionId, textAnswers, isNextPage]);
 
-  const getGenderClass = (gender: string) =>
-    gender === "female" ? classes.female : classes.male;
-
-  const getGenderText = (gender: string) =>
-    gender === "female" ? "여성" : "남성";
-
   const resultList = textQuestions?.pages.flatMap((page) => page.answers);
 
   return (
@@ -118,7 +116,7 @@ export function ResponseTexts({
             genderGroup={filter.genderGroup}
           />
         )}
-        <MasonryLayout pending={isPending} loading={isLoading}>
+        <MasonryLayout pending={isPending} loading={isLoading} gutter={10}>
           {resultList?.map((as, idx) => {
             const { id, respondent, answer } = as;
             const { gender, age } = respondent;
@@ -126,11 +124,11 @@ export function ResponseTexts({
             return (
               <div
                 key={`${id}-${idx}`}
-                className="border p-2 bg-third rounded-xl"
+                className="border p-3 bg-third rounded-xl  hover:border-primary"
               >
-                <div className="flex">
-                  <div className=" w-10 h-10 flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
-                    {/* {gender === "female" && (
+                <div className="flex items-center gap-2">
+                  <div className=" w-10 h-10 border-foreground/30 bg-black/50 border-2 rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
+                    {gender === "female" && (
                       <Image
                         src={Female}
                         alt="logo"
@@ -143,23 +141,30 @@ export function ResponseTexts({
 
                     {gender === "male" && (
                       <Image
-                        src={Female}
+                        src={Male}
                         alt="logo"
                         fill
                         priority
                         style={{ objectFit: "contain" }}
                         sizes="(max-width: 768px) 50vw"
                       />
-                    )} */}
+                    )}
                   </div>
 
-                  <div className={classes.age}>{age}대 </div>
-                  <span className={getGenderClass(gender)}>
-                    {getGenderText(gender)}
+                  <div className="text-[13px]">{age} 대 </div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      gender === "female" ? "text-pink-400" : "text-blue-300"
+                    )}
+                  >
+                    {gender === "female" ? "여성" : "남성"}
                   </span>
                 </div>
 
-                <div className="rounded-md text-foreground b">{answer}</div>
+                <div className="rounded-md text-foreground text-sm leading-6">
+                  {answer}
+                </div>
               </div>
             );
           })}

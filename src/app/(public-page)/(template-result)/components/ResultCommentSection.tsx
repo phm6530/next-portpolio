@@ -17,20 +17,22 @@ export default async function ResultCommentSection({
   const data = await fetchComments<CommentReponse[]>(id, type);
 
   return (
-    <AosWrapper className={classes.commentSection}>
-      <div className={classes.commentCount}>
-        댓글 <span>{data?.length}</span> 개
+    <div className="my-10">
+      <div className="text-lg border-b pb-2 mb-6">
+        댓글 <span className="text-indigo-400s">{data?.length}</span> 개
       </div>
 
-      {/* 댓글 리스트 */}
-      <div className={classes.commentsWrapper}>
-        {data && data.length > 0 ? (
-          <MessageContainer listData={data} />
-        ) : (
-          //댓글 없음ㅇㅇㅇ
-          <NotFoundComponent.reply />
-        )}
-      </div>
-    </AosWrapper>
+      <AosWrapper>
+        {/* 댓글 리스트 */}
+        <div className={classes.commentsWrapper}>
+          {data && data.length > 0 ? (
+            <MessageContainer listData={data} />
+          ) : (
+            //댓글 없음ㅇㅇㅇ
+            <NotFoundComponent.reply />
+          )}
+        </div>
+      </AosWrapper>
+    </div>
   );
 }
