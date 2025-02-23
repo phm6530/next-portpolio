@@ -1,5 +1,5 @@
 "use server";
-import { revaildateTags } from "@/action/revaildate";
+import { withFetchRevaildation } from "@/action/with-fetch-revaildation";
 import { BASE_NEST_URL } from "@/config/base";
 import { CategoriesKey } from "@/types/board";
 import { cookies } from "next/headers";
@@ -16,7 +16,7 @@ export async function BoardWirteAction({
   const cookieStore = cookies();
   const authCookie = cookieStore.get("token");
 
-  return await revaildateTags(async () => {
+  return await withFetchRevaildation(async () => {
     return await fetch(`${BASE_NEST_URL}/board/${boardKey}`, {
       method: "POST",
       headers: {

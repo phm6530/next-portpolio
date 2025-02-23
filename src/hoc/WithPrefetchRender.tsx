@@ -7,7 +7,7 @@ import { ComponentType } from "react";
 
 export const WithPrefetchRender = async <T extends object>(
   Component: ComponentType<T>,
-  prefetchCallback: (queryClient: QueryClient) => Promise<void> // queryClient를 전달받아 패칭하도록 설정
+  prefetchCallback: (_queryClient: QueryClient) => Promise<void> // queryClient를 전달받아 패칭하도록 설정
 ) => {
   const queryClient = new QueryClient();
 

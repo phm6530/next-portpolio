@@ -6,7 +6,7 @@ import { QUERY_KEY } from "@/types/constans";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { User } from "@/types/auth.type";
 import withAuthFetch from "@/utils/withAuthFetch";
-import { COMMENT_EDITOR_MODE } from "@/types/comment.type";
+import { MSG_TYPE } from "@/types/comment.type";
 import { useParams, useRouter } from "next/navigation";
 import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
@@ -20,7 +20,8 @@ import { z } from "zod";
 import useCommentContext from "./hook/comment-context-hook";
 import { UserMsgSchema, geustMsgSchema } from "./schema/message-schema";
 import { toast } from "react-toastify";
-import FormTextarea from "../ui/FormElement/FormTextarea";
+import UserRoleDisplay from "../ui/userRoleDisplay/UserRoleDisplay";
+import { cn } from "@/lib/utils";
 
 /**
  * Editor Type = Comment / Reply 유니온
@@ -37,7 +38,7 @@ export default function MessageForm({
   parentsId?: string;
   setTouch?: Dispatch<SetStateAction<number | null>>;
   commentId?: number;
-  EDITOR_MODE: COMMENT_EDITOR_MODE;
+  EDITOR_MODE: MSG_TYPE;
   category?: CategoriesKey;
 }) {
   const queryclient = useQueryClient();
@@ -80,9 +81,9 @@ export default function MessageForm({
       // 분기 Url 생성..
       const url = (() => {
         switch (EDITOR_MODE) {
-          case COMMENT_EDITOR_MODE.COMMENT:
+          case MSG_TYPE.COMMENT:
             return `comment/${EDITOR_PATH}/${parentsId}`;
-          case COMMENT_EDITOR_MODE.REPLY:
+          case MSG_TYPE.REPLY:
             return `reply/${commentId}`;
           default:
             return null as never;
@@ -104,6 +105,7 @@ export default function MessageForm({
         tags: [
           `comment-${EDITOR_PATH}-${params.id}`,
           ...(category ? [`${EDITOR_PATH}-${category}`] : []),
+          //카테고리가 존재하면 tag 분할하기
         ],
       });
       return req;
@@ -128,10 +130,13 @@ export default function MessageForm({
     <FormProvider {...formMethod}>
       <form
         onSubmit={handleSubmit(submitHandler)}
-        className="grid grid-cols-[repeat(6,1fr)] gap-1"
+        className={cn(
+          "grid grid-cols-[repeat(6,1fr)] gap-1 rounded-xl",
+          !!userData && " p-2 bg-card"
+        )}
       >
         {/* 로그인 한 유저는 필요없음  */}
-        {!userData && (
+        {!userData ? (
           <>
             <div className="col-span-2">
               <InputField
@@ -145,6 +150,13 @@ export default function MessageForm({
               <PasswordInputField errorField={false} className="col-span-1" />
             </div>
           </>
+        ) : (
+          <div className="col-span-6 0 text-left flex items-start  p-4 border">
+            <UserRoleDisplay
+              role={userData.role}
+              nickname={userData.nickname}
+            />
+          </div>
         )}
         <div className="col-span-5">
           <TextareaFormField

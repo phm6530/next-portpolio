@@ -6,7 +6,7 @@ import {
 } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import TemplateBadges from "@/components/ui/template/template-badges";
 import SurveyResponseForm from "./survey-response-form";
 import AosWrapper from "@/components/animation/AosWrapper";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
-import TransformPlainText from "@/components/TransformPlainText";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import TransformPlainText from "@/utils/transform-html-to-plaintext";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
@@ -113,7 +113,7 @@ export default async function SurveyDetailTemplate({
         <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="flex flex-col gap-5 mb-2">
-              <TemplateStatus
+              <TemplateBadges
                 startDate={startDate}
                 endDate={endDate}
                 createdAt={createdAt}

@@ -1,6 +1,6 @@
 import LoginForm from "./components/login-form";
 import Logo from "@/components/logo/logo";
-import { ERROR_CODE } from "@/codeMsg";
+import { ERROR_CODE } from "@/config/codeMsg";
 import RefreshQueryClient from "../_component/RefreshQueryClient";
 import MessageAlert from "@/components/shared/alerts/msg-alert";
 

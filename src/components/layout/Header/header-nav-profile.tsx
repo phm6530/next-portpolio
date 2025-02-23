@@ -3,7 +3,7 @@
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
-import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import { cn } from "@/lib/utils";
 
 export default function HeaderNavProfile({ classes }: { classes?: string }) {

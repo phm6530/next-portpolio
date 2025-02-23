@@ -1,7 +1,5 @@
 import { HTMLAttributes, ReactNode } from "react";
 import classes from "./InputTypeStyle.module.scss";
-import { cn } from "@/lib/utils";
-import { CheckSquare } from "lucide-react";
 
 // Tab
 interface RadioTabProps extends HTMLAttributes<HTMLDivElement> {

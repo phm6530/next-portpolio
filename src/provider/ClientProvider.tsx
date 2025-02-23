@@ -9,7 +9,7 @@ export default function ClientProvider({ children }: { children: ReactNode }) {
       <ThemeProvider
         attribute="class"
         enableSystem={false}
-        defaultTheme="light"
+        defaultTheme="dark"
         enableColorScheme={false}
       >
         {children}

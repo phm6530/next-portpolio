@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useForm, useFormContext } from "react-hook-form";
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import Search from "/public/asset/icon/search.svg";
-import SearchBar from "@/components/ui/SearchBar/SearchBar";
+import SearchBar from "@/components/ui/SearchBar/searchbar";
 import CustomModal from "@/components/shared/modals/custom-modal";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {

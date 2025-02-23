@@ -1,5 +1,5 @@
 "use client";
-import { ERROR_CODE } from "@/codeMsg";
+import { ERROR_CODE } from "@/config/codeMsg";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 

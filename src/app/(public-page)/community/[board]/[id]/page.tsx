@@ -1,15 +1,14 @@
-import { fetcbBoardItem } from "@/api/board.api";
-import { ListItemType } from "../../component/BoardList";
+import { ListItemType } from "../../components/board-list";
 import { BASE_NEST_URL } from "@/config/base";
 
 import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
 import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
-import { COMMENT_EDITOR_MODE, COMMENT_NEED_PATH } from "@/types/comment.type";
+import { MSG_TYPE, MSG_PARAM_PATH } from "@/types/comment.type";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";
 import DateCompareToday from "@/util/DateCompareToday";
-import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
-import { CommentEditorProvider } from "@/context/context";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -19,6 +18,9 @@ import {
 } from "@/components/ui/card";
 import ViewCount from "./component/view-count";
 import MessageForm from "@/components/comment/message-form";
+import { CommentEditorProvider } from "@/components/comment/context/comment-context";
+import { fetchBoardItem } from "./actions/board-fetch";
+
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
   const allParams = [];
@@ -57,10 +59,12 @@ export async function generateMetadata({
 }: {
   params: { board: CategoriesKey; id: string };
 }) {
-  const data: DetailBoardItemType = await fetcbBoardItem({
+  const data: DetailBoardItemType = await fetchBoardItem({
     board: params.board,
     id: params.id,
   });
+
+  console.log(data);
 
   return {
     title: `게시판 -  ${data.title}`,
@@ -74,10 +78,10 @@ export default async function Page({
   params: { board: CategoriesKey; id: string };
 }) {
   const { board: category, id } = params;
-  const dayCompare = DateCompareToday();
+  // const dayCompare = DateCompareToday();
   const boardName = BOARD_CATEGORIES[category];
 
-  const data: DetailBoardItemType = await fetcbBoardItem({
+  const data: DetailBoardItemType = await fetchBoardItem({
     board: category,
     id,
   });
@@ -97,7 +101,7 @@ export default async function Page({
               />
 
               <span className="text-muted-foreground text-sm">
-                {dayCompare.fromNow(data.createdAt)}
+                {/* {dayCompare.fromNow(data.createdAt)} */}
               </span>
             </div>
           </CardHeader>
@@ -117,20 +121,24 @@ export default async function Page({
                   ? data.creator.email
                   : null
               }
-            />{" "}
+            />
             <ViewCount className="text-sm" />
           </CardFooter>
         </Card>
       </div>
 
-      {/* 대댓글에 부모가 어떤지 알리기위해 Context 사용함 */}
-      <CommentEditorProvider initialSection={COMMENT_NEED_PATH.BOARD}>
+      <CommentEditorProvider EDITOR_PATH={MSG_PARAM_PATH.BOARD}>
         {/* 댓글 에디터*/}
-        <MessageForm parentsId={id} category={category} />
+        <MessageForm
+          parentsId={id}
+          category={category}
+          EDITOR_MODE={MSG_TYPE.COMMENT}
+        />
+
         {/* 댓글 리스트 */}
         <ResultCommentSection
           id={parseInt(id, 10)}
-          type={COMMENT_NEED_PATH.BOARD}
+          type={MSG_PARAM_PATH.BOARD}
         />
       </CommentEditorProvider>
     </>

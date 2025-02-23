@@ -1,5 +1,5 @@
 "use server";
-import { revaildateTags } from "@/action/revaildate";
+import { revaildateTags } from "@/action/with-fetch-revaildation";
 import { cookies } from "next/headers";
 
 export default async function MessageDeleteAction({

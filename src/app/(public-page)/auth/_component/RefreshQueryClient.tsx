@@ -1,6 +1,6 @@
 "use client";
 
-import { ERROR_CODE } from "@/codeMsg";
+import { ERROR_CODE } from "@/config/codeMsg";
 import { QUERY_KEY } from "@/types/constans";
 import { useQueryReset } from "@/utils/queryClientReset";
 import { useQueryClient } from "@tanstack/react-query";

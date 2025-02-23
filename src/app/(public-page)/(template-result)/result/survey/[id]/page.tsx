@@ -7,11 +7,7 @@ import {
 } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
 
 import Grid from "@/components/ui/Grid";
-import {
-  COMMENT_EDITOR_MODE,
-  COMMENT_NEED_PATH,
-  CommentReponse,
-} from "@/types/comment.type";
+import { MSG_TYPE, MSG_PARAM_PATH, CommentReponse } from "@/types/comment.type";
 
 import { QUERY_KEY } from "@/types/constans";
 import { SurveyResult } from "@/types/surveyResult.type";
@@ -41,7 +37,7 @@ export default async function SurveyResultPage({
     queryFn: async () => {
       return await fetchComments<CommentReponse[]>(
         +id,
-        COMMENT_NEED_PATH.TEMPLATE
+        MSG_PARAM_PATH.TEMPLATE
       );
     },
     staleTime: 10000,
@@ -67,17 +63,14 @@ export default async function SurveyResultPage({
             <ResultSurveyCharts id={id} />
 
             {/* Editor  */}
-            <CommentEditorProvider EDITOR_PATH={COMMENT_NEED_PATH.TEMPLATE}>
+            <CommentEditorProvider EDITOR_PATH={MSG_PARAM_PATH.TEMPLATE}>
               {/* Comment Editor */}
-              <MessageForm
-                parentsId={id}
-                EDITOR_MODE={COMMENT_EDITOR_MODE.COMMENT}
-              />
+              <MessageForm parentsId={id} EDITOR_MODE={MSG_TYPE.COMMENT} />
 
               {/* Comments */}
               <ResultCommentSection
                 id={parseInt(id, 10)}
-                type={COMMENT_NEED_PATH.TEMPLATE}
+                type={MSG_PARAM_PATH.TEMPLATE}
               />
             </CommentEditorProvider>
           </div>

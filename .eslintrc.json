@@ -1,3 +1,15 @@
 {
-  "extends": ["next/core-web-vitals"]
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^|^[A-Z][A-Z]+$",
+        "argsIgnorePattern": "^_",
+        "ignoreRestSiblings": true, // ..rest어레 제거
+        "vars": "all",
+        "args": "after-used"
+      }
+    ]
+  }
 }

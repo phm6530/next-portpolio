@@ -1,5 +1,5 @@
 import { BASE_NEST_URL } from "@/config/base";
-import { COMMENT_NEED_PATH } from "@/types/comment.type";
+import { MSG_PARAM_PATH } from "@/types/comment.type";
 import { withFetch } from "@/util/clientUtil";
 import requestHandler from "@/utils/withFetch";
 
@@ -14,7 +14,7 @@ export async function fetchSurveyData<T>(id: string): Promise<T> {
 
 export async function fetchComments<T>(
   id: number,
-  type: COMMENT_NEED_PATH
+  type: MSG_PARAM_PATH
 ): Promise<T> {
   const url = `${BASE_NEST_URL}/comment/${type}/${id}`;
   return withFetch(async () => {

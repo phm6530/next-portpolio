@@ -3,6 +3,7 @@ import PageTitle from "@/components/ui/PageTitle";
 import TemplateCractor from "./Cractor/TemplateCractor";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { CardDescription } from "@/components/ui/card";
 
 export default function ListPageBanner() {
   return (
@@ -14,9 +15,9 @@ export default function ListPageBanner() {
             <div className="pointText">생각</div>을 가졌는지 궁금하신가요?
           </PageTitle>
 
-          <p className="mt-5 text-muted-foreground">
+          <CardDescription className="mt-3 text-base">
             평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
-          </p>
+          </CardDescription>
           <div className="mt-8 flex gap-5">
             <Button asChild className="p-6">
               <Link href={"/made"}>+ 설문조사 만들기</Link>

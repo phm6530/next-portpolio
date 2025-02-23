@@ -1,11 +1,6 @@
 "use client";
 import MyContentsController from "./MycontentsController";
-import {
-  RespondentsAndMaxGroup,
-  RespondentsData,
-  TemplateItemMetadata,
-} from "@/types/template.type";
-import TransformPlainText from "@/components/TransformPlainText";
+import { RespondentsData, TemplateItemMetadata } from "@/types/template.type";
 import {
   Card,
   CardContent,
@@ -13,12 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import GenderChart from "@/components/Chart/GenderChart";
 import { Clock7 } from "lucide-react";
 import { Chart } from "@/components/shared/charts/chart";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import ImageThumbNail from "@/components/ui/image-thumbnail";
+import transformHtmlToPlainText from "@/utils/transform-html-to-plaintext";
 
 export default function MyContentsItem({
   item,
@@ -34,7 +27,7 @@ export default function MyContentsItem({
         </CardTitle>
 
         <CardDescription>
-          <TransformPlainText html={item.description} />
+          {transformHtmlToPlainText({ html: item.description })}
         </CardDescription>
       </CardHeader>
 

@@ -57,10 +57,12 @@ export default async function RootLayout({
   }
 
   return (
+    // useTheme의다크모드 때문에 suppressHydration 해둠
     <html lang="en" suppressHydrationWarning>
       <body className="body">
-        <div id="backdrop-portal"></div>
         <div id="modal-portal"></div>
+
+        <div id="backdrop-portal"></div>
 
         <ClientProvider>
           <HydrationBoundary state={dehydrate(queryClient)}>

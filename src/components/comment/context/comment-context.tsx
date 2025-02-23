@@ -1,5 +1,6 @@
 "use client";
 import { User, USER_ROLE } from "@/types/auth.type";
+import { MSG_PARAM_PATH } from "@/types/comment.type";
 import { createContext, ReactNode, useState, useEffect } from "react";
 
 export type CommentReponse = {
@@ -16,18 +17,8 @@ export type CommentReponse = {
   } & { email?: string };
 };
 
-export enum COMMENT_EDITOR_MODE {
-  COMMENT = "comment",
-  REPLY = "reply",
-}
-
-export enum COMMENT_NEED_PATH {
-  TEMPLATE = "template",
-  BOARD = "board",
-}
-
 type ContextType = {
-  EDITOR_PATH: COMMENT_NEED_PATH | null;
+  EDITOR_PATH: MSG_PARAM_PATH | null;
 };
 
 // inital

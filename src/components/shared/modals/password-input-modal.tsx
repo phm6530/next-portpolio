@@ -23,7 +23,7 @@ export function PsConfirmModal({
   disalbed,
   children,
 }: {
-  cb: (data: z.infer<typeof schema>) => Promise<void>;
+  cb: (_data: z.infer<typeof schema>) => Promise<void>;
   disalbed?: boolean;
   children: ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>;
 }) {
@@ -54,9 +54,9 @@ export function PsConfirmModal({
       <AlertDialogContent>
         <FormProvider {...method}>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>삭제하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription>
-              <p className="mb-5">삭제하실 비밀번호를 기재해주세요</p>
+              <p className="mb-5">생성 시 기재하였던 비밀번호를 입력해주세요</p>
 
               <form onSubmit={method.handleSubmit(submitHandler)}>
                 <PasswordInputField disabled={disalbed} />

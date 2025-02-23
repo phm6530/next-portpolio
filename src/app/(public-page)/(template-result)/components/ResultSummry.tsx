@@ -1,15 +1,13 @@
-import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import TemplateBadges from "@/components/ui/template/template-badges";
 import { SurveyResult } from "@/types/surveyResult.type";
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import TransformPlainText from "@/components/TransformPlainText";
 
 import { UserRound } from "lucide-react";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
@@ -34,7 +32,7 @@ export default async function ResultSummry(data: SurveyResult) {
       <CardHeader>
         <CardTitle className="flex flex-col gap-5 mb-2">
           {" "}
-          <TemplateStatus
+          <TemplateBadges
             startDate={startDate}
             endDate={endDate}
             createdAt={createdAt}

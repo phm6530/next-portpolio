@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ERROR_CODE } from "./codeMsg";
+import { ERROR_CODE } from "./config/codeMsg";
 import withAuthFetch from "./utils/withAuthFetch";
 
 const AUTH_REDIRECT_PATHS = [

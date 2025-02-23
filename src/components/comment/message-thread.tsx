@@ -1,13 +1,11 @@
-import classes from "./CommentContainer.module.scss";
 import { Dispatch, SetStateAction } from "react";
 
-import { CommentReponse } from "@/types/comment.type";
+import { CommentReponse, MSG_TYPE } from "@/types/comment.type";
 import { useParams } from "next/navigation";
 import MessageForm from "./message-form";
 import MessageItem from "./message-item";
 import { Button } from "../ui/button";
-import { COMMENT_EDITOR_MODE } from "./context/comment-context";
-import { Reply, ReplyIcon } from "lucide-react";
+import { ReplyIcon } from "lucide-react";
 
 export default function MessageThread({
   touchIdx,
@@ -35,7 +33,7 @@ export default function MessageThread({
     <div className="animate-fadein">
       {/* Comment */}
       <MessageItem
-        contentType="comment"
+        msgType={MSG_TYPE.COMMENT}
         {...props}
         onClickEvent={formViewHandler}
         boardId={params.id}
@@ -54,11 +52,10 @@ export default function MessageThread({
         {replies.map((reply, idx) => {
           const { content, ...rest } = reply;
           return (
-            <div className={classes.replyWrapper}>
+            <div className="flex" key={`reply-${commentId}-${idx}`}>
               <ReplyIcon className="rotate-180 opacity-50 mr-2" />
               <MessageItem
-                key={`reply-${commentId}-${idx}`}
-                contentType="reply"
+                msgType={MSG_TYPE.REPLY}
                 content={content}
                 onClickEvent={formViewHandler}
                 {...rest}
@@ -67,12 +64,13 @@ export default function MessageThread({
             </div>
           );
         })}
+
         {touchIdx === commentId && (
-          <div className={classes.replyFormContainer}>
-            {/* Reply 용 */}
+          <div>
+            {/* 대댓글 용 */}
             <MessageForm
               commentId={commentId}
-              EDITOR_MODE={COMMENT_EDITOR_MODE.REPLY}
+              EDITOR_MODE={MSG_TYPE.REPLY}
               parentsId={params.id}
               setTouch={setTouch}
             />

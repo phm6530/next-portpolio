@@ -1,7 +1,7 @@
 import classes from "./ResultCommentSection.module.scss";
 import { fetchComments } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
-import NotFoundComponent from "@/components/NotFoundComponent";
-import { COMMENT_NEED_PATH, CommentReponse } from "@/types/comment.type";
+import NotFoundContents from "@/components/ui/error/notfound-contents";
+import { MSG_PARAM_PATH, CommentReponse } from "@/types/comment.type";
 
 import AosWrapper from "@/components/animation/AosWrapper";
 import MessageContainer from "@/components/comment/message-container";
@@ -11,7 +11,7 @@ export default async function ResultCommentSection({
   type,
   id,
 }: {
-  type: COMMENT_NEED_PATH;
+  type: MSG_PARAM_PATH;
   id: number;
 }) {
   const data = await fetchComments<CommentReponse[]>(id, type);
@@ -29,7 +29,7 @@ export default async function ResultCommentSection({
             <MessageContainer listData={data} />
           ) : (
             //댓글 없음ㅇㅇㅇ
-            <NotFoundComponent.reply />
+            <NotFoundContents>아직 등록된 댓글이 없습니다.</NotFoundContents>
           )}
         </div>
       </AosWrapper>

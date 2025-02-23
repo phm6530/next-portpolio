@@ -11,17 +11,19 @@ import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import Logo from "../../logo/logo";
 import { useQueryReset } from "@/utils/queryClientReset";
-import { createPortal } from "react-dom";
+
 import BackDrop from "../../modal/BackDrop";
 import NavLink from "@/components/ui/nav-link";
 import useMediaQuery from "@/_hook/useMediaQuery";
-import { Menu } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../ui/button";
 import { BREAKPOINT } from "@/types/ui.type";
+import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
+import { createPortal } from "react-dom";
 
-enum PATHNAME {
+export enum PATHNAME {
   LIST = "list",
   MADE = "made",
   COMMUNITY = "community",
@@ -99,63 +101,113 @@ export default function HeaderNav() {
               <Logo link />
             </div>
 
-            <nav className="flex gap-7 text-sm justify-center">
+            <nav
+              className={cn(
+                " flex-col pt-5 md:pt-0  top-[59px] dark:bg-background/90 backdrop-blur-sm  fixed md:static right-[-80%] w-[80%] md:w-auto md:h-auto md:bg-transparent h-screen bg-card/90 md:flex-row flex md:gap-7 text-sm md:justify-center justify-start",
+                !isMobile && navView && "right-0",
+                !isMobile && "transition-all ease-in "
+              )}
+            >
+              {" "}
+              {!isMobile && (
+                <>
+                  {user ? (
+                    <div className="ml-5 border-l  flex mb-5 bg-card border">
+                      <Button
+                        variant={"ghost"}
+                        size={"sm"}
+                        asChild
+                        className="text-[12px] mr-3 "
+                      >
+                        <Link href={"/mypage"}>마이페이지</Link>
+                      </Button>
+                      <HeaderNavProfile />
+                      <Button
+                        variant={"outline"}
+                        size={"sm"}
+                        className="text-[12px] ml-4"
+                        onClick={() => logout()}
+                      >
+                        로그아웃
+                      </Button>
+                    </div>
+                  ) : (
+                    <Link href={`/auth/login?redirect=${pathname}`}>
+                      로그인
+                    </Link>
+                  )}
+                </>
+              )}
               {PATH.map((obj) => {
                 return (
                   <div
-                    className="flex items-center justify-center"
+                    className="flex items-start justify-start px-5 py-3 md:p-0"
                     key={`link-${obj.path}`}
                   >
                     <NavLink
                       href={`/${obj.path}`}
                       active={() => pathActive(obj.path)}
+                      className="h-5 items-start"
                     >
                       {obj.label}
                     </NavLink>
                     {obj.new && (
-                      <div className="text-[11px] px-2 ml-2 bg-[rgb(255,218,218)] rounded-full text-red-500">
+                      <div className="text-[11px] px-2 ml-2  bg-[rgb(255,218,218)] rounded-full text-red-500 ">
                         new
                       </div>
                     )}
                   </div>
                 );
               })}
+              {!isMobile && (
+                <Button
+                  className="mx-5 max-w-[150px] mt-10 text-[12px]"
+                  asChild
+                >
+                  <Link href={"/made"} className="text-[12px]">
+                    + 템플릿 만들기
+                  </Link>
+                </Button>
+              )}
             </nav>
 
-            <div className="flex items-center justify-end ">
-              {user ? (
-                <div className="ml-5 border-l  flex ">
-                  <Button
-                    variant={"ghost"}
-                    size={"sm"}
-                    asChild
-                    className="text-[12px] mr-3 "
-                  >
-                    <Link href={"/mypage"}>마이페이지</Link>
-                  </Button>
-                  <HeaderNavProfile />
-                  <Button
-                    variant={"outline"}
-                    size={"sm"}
-                    className="text-[12px]"
-                    onClick={() => logout()}
-                  >
-                    로그아웃
-                  </Button>
-                </div>
-              ) : (
-                <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
-              )}
-            </div>
+            {!isMobile ? (
+              <Menu
+                className="cursor-pointer"
+                onClick={() => setNavView((prev) => !prev)}
+              />
+            ) : (
+              <div className="flex items-center justify-end ">
+                {user ? (
+                  <div className="ml-5 border-l  flex ">
+                    <Button
+                      variant={"ghost"}
+                      size={"sm"}
+                      asChild
+                      className="text-[12px] mr-3 "
+                    >
+                      <Link href={"/mypage"}>마이페이지</Link>
+                    </Button>
+                    <HeaderNavProfile />
+                    <Button
+                      variant={"outline"}
+                      size={"sm"}
+                      className="text-[12px] ml-4"
+                      onClick={() => logout()}
+                    >
+                      로그아웃
+                    </Button>
+                  </div>
+                ) : (
+                  <Link href={`/auth/login?redirect=${pathname}`}>로그인</Link>
+                )}
+              </div>
+            )}
           </div>
         </Grid.center>
       </header>
-      {!isMobile &&
-        navView && // 모바일 환경에서만 렌더링
-        createPortal(
-          <BackDrop onClick={mobileNavClose} />,
-          document.getElementById("backdrop-portal") as HTMLDivElement
-        )}
+
+      {!isMobile && navView && <BackDrop onClick={mobileNavClose} />}
     </>
   );
 }

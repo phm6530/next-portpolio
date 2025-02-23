@@ -14,12 +14,12 @@ export type CommentReponse = {
   } & { email?: string };
 };
 
-export enum COMMENT_EDITOR_MODE {
+export enum MSG_TYPE {
   COMMENT = "comment",
   REPLY = "reply",
 }
 
-export enum COMMENT_NEED_PATH {
+export enum MSG_PARAM_PATH {
   TEMPLATE = "template",
   BOARD = "board",
 }

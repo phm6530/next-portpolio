@@ -10,11 +10,11 @@ import {
 } from "@/types/template.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
-import NotFoundComponent from "@/components/NotFoundComponent";
+import { useEffect, useRef } from "react";
 import LoadingSpiner from "@/components/ui/LoadingSpiner";
-import MasonryLayout from "@/utils/MasonryLayout";
-import { cn } from "@/lib/utils";
+import MasonryLayout from "@/components/layout/masonry-layout";
+import NotFoundContents from "@/components/ui/error/notfound-contents";
+import { Ban } from "lucide-react";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -66,33 +66,13 @@ export default function TemplateList() {
     };
   }, [data, fetchNextPage]);
 
-  // const callbackRef = useCallback(
-  //   (div: HTMLDivElement) => {
-  //     const ob = new IntersectionObserver(
-  //       (entries: IntersectionObserverEntry[]) => {
-  //         entries.forEach((entiry) => {
-  //           if (entiry.intersectionRect) {
-  //             fetchNextPage();
-  //           }
-  //         });
-  //       },
-  //       { threshold: 0.2 }
-  //     );
-
-  //     if (div) {
-  //       ob.observe(div);
-  //     }
-
-  //     return () => {
-  //       if (div) ob.unobserve(div);
-  //       ob.disconnect();
-  //     };
-  //   },
-  //   [fetchNextPage]
-  // );
-
   if (isError) {
-    return <NotFoundComponent.noneData />;
+    return (
+      <NotFoundContents>
+        <Ban />
+        데이터를 가져오는데 실패하였습니다..
+      </NotFoundContents>
+    );
   }
 
   if (isPending) {
@@ -104,11 +84,12 @@ export default function TemplateList() {
   }
 
   if (data?.pages[0].data.length === 0) {
-    return <NotFoundComponent.noneData text="생성된 템플릿이 없습니다." />;
+    return <NotFoundContents>생성된 템플릿이 없습니다.</NotFoundContents>;
   }
 
   //마지막 잡기
   const lastPage = data.pages.at(-1);
+
   return (
     <>
       <MasonryLayout>
@@ -129,13 +110,7 @@ export default function TemplateList() {
 
       {lastPage?.nextPage !== null && (
         <>
-          <div
-            ref={ref}
-            style={{
-              height: "10px",
-              marginTop: "10px",
-            }}
-          />
+          <div ref={ref} className="h-7" />
         </>
       )}
     </>

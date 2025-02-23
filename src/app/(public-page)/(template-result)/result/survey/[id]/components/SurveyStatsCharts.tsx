@@ -13,7 +13,12 @@ import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { fetchSurveyData } from "./test";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function ResultSurveyCharts({ id }: { id: string }) {
   //초깃값
@@ -111,7 +116,16 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                   <span className="font-Paperlogy text-indigo-400">
                     Q. {idx + 1}
                   </span>
-                  <div className="my-10">{qs.label}</div>
+                  <div className="my-10">
+                    {qs.label}
+
+                    {qs.type === QUESTION_TYPE.TEXT && (
+                      <CardDescription className="mt-3 font-normal">
+                        해당 문항에 응답입니다. 하단의 버튼을 클릭하여 10개씩
+                        추가로 메세지를 가져올 수 있습니다.
+                      </CardDescription>
+                    )}
+                  </div>
                 </CardTitle>
               </CardHeader>
               {(() => {

@@ -4,7 +4,7 @@ import { createContext, ReactNode, useState } from "react";
 // Image Upload Render
 export const ImgUploadContext = createContext<{
   isPending: boolean;
-  setIsPending: (e: boolean) => void;
+  setIsPending: (_e: boolean) => void;
 }>({
   isPending: false,
   setIsPending: () => {},

@@ -1,18 +1,18 @@
-import { notFound, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 import { Button } from "@/components/ui/button";
-import SearchBarWrapper from "../component/SearchBarWrapper";
 import Link from "next/link";
 import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
-import BoardList from "../component/BoardList";
 import { Suspense } from "react";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import BoardCategoriesWrapper from "./board-categories";
+import SearchBarWrapper from "@/components/ui/SearchBar/searchbar-wrapper";
+import BoardList from "../components/board-list";
 
 export default async function BoardListPage({
   params,
   keyword,
-  curPage,
+  curPage: _,
   searchParams,
 }: {
   params: { board: CategoriesKey };
@@ -48,6 +48,7 @@ export default async function BoardListPage({
           <Link href={`/community/${params.board}/write`}>글쓰기</Link>
         </Button>
       </div>
+
       {/* list */}
       <section className="mt-11 mb-7">
         <Suspense fallback={<LoadingWrapper />}>

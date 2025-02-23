@@ -1,5 +1,5 @@
 "use client";
-import UserRoleDisplay from "@/components/layout/userRoleDisplay/UserRoleDisplay";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import classes from "./Comment.module.scss";
 
 import dayjs from "dayjs";
@@ -8,15 +8,14 @@ import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
-import { COMMENT_NEED_PATH, CommentReponse } from "@/types/comment.type";
+import { MSG_PARAM_PATH, CommentReponse, MSG_TYPE } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { CandlestickChart, DeleteIcon, LucideDelete, X } from "lucide-react";
 import { PsConfirmModal } from "../shared/modals/password-input-modal";
-import { revaildateTags } from "@/action/revaildate";
+import { withFetchRevaildation } from "@/action/with-fetch-revaildation";
 import { toast } from "react-toastify";
-import DeleteItemForm from "../DeleteItemForm";
 import MessageDeleteAction from "./action/delete-action";
 import { BASE_NEST_URL } from "@/config/base";
 import useCommentContext from "./hook/comment-context-hook";
@@ -29,11 +28,12 @@ export default function MessageItem({
   id,
   createdAt,
   content,
+  msgType,
   creator,
   onClickEvent,
   boardId,
 }: {
-  contentType: "reply" | "comment";
+  msgType: MSG_TYPE;
   parentId?: number;
   onClickEvent?: () => void;
   boardId: string;
@@ -41,14 +41,14 @@ export default function MessageItem({
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { EDITOR_MODE, EDITOR_PATH } = useCommentContext();
+  const { EDITOR_PATH } = useCommentContext();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data?: { password: string }) => {
-      const url = `${BASE_NEST_URL}/${EDITOR_MODE}/${id}`;
+      const url = `${BASE_NEST_URL}/${msgType}/${id}`;
       return await MessageDeleteAction({
         url,
         isMember: !!userData,
@@ -79,7 +79,7 @@ export default function MessageItem({
           {isUserCommentAuthor && (
             <>
               {isUserCommentAuthor && (
-                <span className="text-[10px] mr-5 text-pink-300 border-pink-300 border  py-1 px-2 rounded-full">
+                <span className="text-[10px] mr-5 mt-0.5 text-pink-300  rounded-full">
                   내 댓글
                 </span>
               )}

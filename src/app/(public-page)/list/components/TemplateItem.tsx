@@ -5,10 +5,10 @@ import {
 } from "@/types/template.type";
 import Image from "next/image";
 import imgUrlMapper from "@/util/imgUrlMapper";
-import TemplateStatus from "@/components/templateUtill/TemplateStatus";
+import TemplateBadges from "@/components/ui/template/template-badges";
 import { useRouter } from "next/navigation";
 import { ForwardedRef, forwardRef, useEffect, useRef } from "react";
-import TransformPlainText from "@/components/TransformPlainText";
+import transformHtmlToPlainText from "@/utils/transform-html-to-plaintext";
 import useAOS from "@/_hook/usAOS";
 import { UserRound } from "lucide-react";
 import {
@@ -31,14 +31,16 @@ const TemplateItem = forwardRef(
       endDate,
       thumbnail,
       respondents,
-      ...rest
+      ..._rest
     }: TemplateItemMetadata<RespondentsAndMaxGroup>,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     //참여자
     const { allCnt, maxGroup } = respondents;
     useAOS();
+
     const tooltipRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
       const updatePosition = (event: MouseEvent) => {
         if (tooltipRef.current) {
@@ -82,7 +84,7 @@ const TemplateItem = forwardRef(
                 {/* <Image src={img} fill /> */}
                 <div className="flex flex-col gap-3 p-4 min-h-32">
                   {/* 상태 icons.. */}
-                  <TemplateStatus
+                  <TemplateBadges
                     startDate={startDate}
                     endDate={endDate}
                     createdAt={createdAt}
@@ -94,7 +96,7 @@ const TemplateItem = forwardRef(
                   </div>
 
                   <div className="line-clamp-2 min-h-10 text-[13px] leading-5 text-muted-foreground">
-                    <TransformPlainText html={description} />
+                    {transformHtmlToPlainText({ html: description })}
                   </div>
 
                   <div className="border-t text-[12px] text-muted-foreground pt-3 flex items-center">

@@ -11,19 +11,17 @@ import {
   GenderOptions,
 } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
 import { queryClient } from "@/config/queryClient";
-import { CardContent } from "@/components/ui/card";
+import { CardContent, CardDescription } from "@/components/ui/card";
 import NotthingUser from "./notthing-user";
-import MasonryLayout from "@/utils/MasonryLayout";
+import MasonryLayout from "@/components/layout/masonry-layout";
 import Image from "next/image";
 import Male from "/public/asset/3d/male.png";
 import Female from "/public/asset/3d/female.png";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function ResponseTexts({
-  idx,
-  allCnt,
   id: questionId,
-  label,
   filter,
   textAnswers,
   isNextPage,
@@ -162,7 +160,7 @@ export function ResponseTexts({
                   </span>
                 </div>
 
-                <div className="rounded-md text-foreground text-sm leading-6">
+                <div className="rounded-md  mt-3 text-foreground text-sm leading-6">
                   {answer}
                 </div>
               </div>
@@ -170,21 +168,23 @@ export function ResponseTexts({
           })}
         </MasonryLayout>
       </div>
-
       {hasNextPage && (
         <>
           <div
-            className={classes.moreButtonWrap}
+            className="mt-5"
             onClick={() => {
               fetchNextPage();
             }}
           >
-            <button type="button">
-              {isFetchingNextPage ? "로딩 중..." : "+ 10개 씩 가져오기"}
-            </button>
+            <Button className="w-full" variant={"outline"}>
+              {isFetchingNextPage ? "로딩 중..." : "+ 답변 더 가져오기"}
+            </Button>
           </div>
         </>
-      )}
+      )}{" "}
+      <CardDescription className="mt-3 font-normal">
+        * 추가 응답이 없을 경우 버튼은 노출되지 않습니다.
+      </CardDescription>
     </CardContent>
   );
 }

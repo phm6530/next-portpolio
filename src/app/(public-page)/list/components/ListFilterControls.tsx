@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import classes from "./ListFilterControls.module.scss";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
 import TabRounded from "@/components/ui/tab-rounded";
 

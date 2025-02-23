@@ -11,12 +11,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { CircleSlash, SquarePlus } from "lucide-react";
-import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
 import useAOS from "@/_hook/usAOS";
 import TabRounded from "@/components/ui/tab-rounded";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import SearchBar from "@/components/ui/SearchBar/SearchBar";
-import SearchBarWrapper from "@/app/(public-page)/community/component/SearchBarWrapper";
+import SearchBarWrapper from "@/components/ui/SearchBar/searchbar-wrapper";
 import { useSearchParams } from "next/navigation";
 
 type MyContentsListData = TemplateItemMetadata<RespondentsData>;
@@ -63,7 +61,7 @@ export default function MyContents() {
           );
 
         default:
-          throw new Error("Invalid filter value");
+          throw new Error("error 날리없음 이거");
       }
     },
   });
@@ -91,7 +89,7 @@ export default function MyContents() {
             참여자 순
           </TabRounded>
         </div>
-        <Button size={"lg"} asChild variant={"outline"}>
+        <Button size={"lg"} asChild>
           <Link href={"/made"}>
             <SquarePlus />
             템플릿 만들기
@@ -119,7 +117,7 @@ export default function MyContents() {
                 <span>생성하신 템플릿이 없습니다</span>
               </div>
             </CardContent>
-            <Button size={"lg"} asChild className="shadow-lg ">
+            <Button size={"lg"} asChild className="shadow-lg">
               <Link href={"/made"}>템플릿 만들기</Link>
             </Button>
           </Card>
