@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import classes from "./BackDrop.module.scss";
 
-export default function BackDrop({
+export default function BackDropPortal({
   onClick,
   ...rest
 }: {
@@ -21,9 +20,12 @@ export default function BackDrop({
   return (
     <>
       {createPortal(
-        <div className={classes.backDropStyle} {...rest} onClick={onClick}>
-          test
-        </div>,
+        <div
+          className="fixed top-0 left-0 bottom-0 right-0 z-10 bg-black/50 backdrop-blur-sm 
+          animate-fadein"
+          {...rest}
+          onClick={onClick}
+        />,
         document.getElementById("backdrop-portal") as HTMLDivElement
       )}
     </>

@@ -10,9 +10,10 @@ import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import React from "react";
+import React, { useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
+import { cn } from "@/lib/utils";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -33,6 +34,8 @@ const TipTapEditor = ({
   placeholder?: string;
   mode?: "view" | "editor";
 }) => {
+  const [] = useState<boolean>(trye);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -56,22 +59,33 @@ const TipTapEditor = ({
         onChange(html === "<p></p>" ? "" : html);
       },
     }),
-    ...(mode === "view" && { editable: false }), //이거에 따라 바뀜 ㅇㅇ
+    ...(mode === "view" && {
+      editable: false,
+      onCreate: () => {
+        ``;
+      },
+    }), //이거에 따라 바뀜 ㅇㅇ
   });
 
   if (!editor) return;
+
   const handleEditorClick = () => {
-    editor.chain().focus().run(); // 클릭 시 포커싱
+    if (mode === "editor") {
+      editor.chain().focus().run();
+    }
   };
 
   return (
-    <div className="table border-collapse w-full">
+    <div className="table border-collapse w-full rounded-lg overflow-hidden">
       {mode === "editor" && <TipTapToolbar editor={editor} />}
 
-      <div className="table-cell border w-full cursor-text p-2 min-h-[100px] h-full">
+      <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
         <EditorContent
           editor={editor}
-          className="w-full h-full"
+          className={cn(
+            " w-full h-full  p-3 ",
+            mode === "editor" && "bg-custom-input"
+          )}
           onClick={handleEditorClick}
         />
       </div>

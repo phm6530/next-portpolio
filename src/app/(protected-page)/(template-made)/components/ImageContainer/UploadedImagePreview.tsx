@@ -1,5 +1,4 @@
 import Image from "next/image";
-import classes from "./UploadedImagePreview.module.scss";
 
 export default function UploadedImagePreview({
   src,
@@ -9,8 +8,8 @@ export default function UploadedImagePreview({
   deleteFunc: () => void;
 }) {
   return (
-    <div className={classes.imageContainer}>
-      <div className={classes.imageWrapper}>
+    <div className="flex flex-col flex-1">
+      <div className="border rounded-lg overflow-hidden [aspect-ratio:16/9] bg-custom-input relative ">
         <Image
           src={src}
           sizes="(max-width : 765px) 100vw , (min-width : 756px) 50vw"

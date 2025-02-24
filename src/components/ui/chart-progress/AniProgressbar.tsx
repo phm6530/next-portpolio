@@ -1,8 +1,8 @@
 import { useGSAP } from "@gsap/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
-import classes from "./Aniprogressbar.module.scss";
 import AniNumbering from "./AniNumbering";
+import { cn } from "@/lib/utils";
 
 export default function AniProgressbar({
   maxCnt,
@@ -41,9 +41,10 @@ export default function AniProgressbar({
       <div
         ref={ref}
         key={percent}
-        className={`w-0 h-full left-0 rounded-full absolute bg-background ${
-          maxCnt && classes.maxCnt
-        }`}
+        className={cn(
+          `w-2 h-full left-0 rounded-full absolute bg-background `,
+          maxCnt && "text-foreground"
+        )}
       >
         <AniNumbering percent={percent} maxCnt={maxCnt} />
       </div>

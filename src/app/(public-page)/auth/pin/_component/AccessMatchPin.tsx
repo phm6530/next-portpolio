@@ -75,7 +75,6 @@ export default function AccessMatchPin({
           {/* 인증완료 */}
           {isValid && <AuthComplete complateText="인증 완료" />}
           <Button disabled={!isValid}>인증</Button>
-          {/* <Button.outlineButton type="submit">인증</Button.outlineButton> */}
         </form>
       </FormProvider>
     </>

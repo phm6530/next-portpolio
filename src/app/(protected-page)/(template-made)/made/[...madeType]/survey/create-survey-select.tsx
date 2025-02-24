@@ -108,7 +108,7 @@ export default function CreateSurveySelect({
       {/* 옵션 컨트롤러*/}
 
       <Button
-        variant={"secondary"}
+        variant={"outline"}
         onClick={handleArrAppend}
         className="!text-sm"
       >

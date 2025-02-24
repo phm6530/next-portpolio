@@ -170,6 +170,10 @@
     @apply bg-background text-foreground;
   }
 
+  .paging-btn {
+    @apply w-12 h-12 rounded-full mx-3 bg-transparent;
+  }
+
   .icon-hover {
     @apply text-zinc-300 hover:text-zinc-500;
   }

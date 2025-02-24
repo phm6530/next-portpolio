@@ -1,6 +1,5 @@
 "use client";
 import { ResultText } from "@/types/surveyResult.type";
-import classes from "./ResponseTexts.module.scss";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";

@@ -1,14 +1,9 @@
 import InputTypeStyle from "@/app/template/_component/InputTypeStyle";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
-import {
-  FILTER_AGE,
-  FILTER_GENDER,
-} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter.tab";
 import { DetailRespondents } from "@/types/template.type";
 import { ageGroupProps } from "@/types/template";
-import { Card } from "@/components/ui/card";
 import {
   Drawer,
   DrawerClose,
@@ -20,6 +15,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { FILTER_GENDER } from "../../../constants/filter-gender-group";
+import { FILTER_AGE } from "../../../constants/filter-age-group";
 
 export type GenderOptions = (typeof FILTER_GENDER)[number]["val"];
 export type AgeOptions = (typeof FILTER_AGE)[number]["val"];

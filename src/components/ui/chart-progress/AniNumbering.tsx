@@ -1,7 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
-import classes from "./AniNumbering.module.scss";
+import { cn } from "@/lib/utils";
 
 export default function AniNumbering({
   percent,
@@ -31,7 +31,10 @@ export default function AniNumbering({
   );
 
   return (
-    <div className={`${classes.numbering} ${maxCnt ? classes.max : undefined}`}>
+    <div
+      className={cn(`text-sm absolute right-0`, maxCnt && "text-indigo-300")}
+      style={{ left: "calc(100% + 20px)" }}
+    >
       <span ref={textRef}>0</span>%
     </div>
   );

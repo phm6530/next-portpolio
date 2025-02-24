@@ -1,11 +1,7 @@
-import SurveyResultBar from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyResultBar";
-import classes from "./ReponseSelect.module.scss";
-import IconLabel from "@/components/ui/IconLabel";
 import Crown from "/public/asset/icon/crown.svg";
-import Person from "/public/asset/icon/person.svg";
 import { ResultSelect, ResultSelectOption } from "@/types/surveyResult.type";
 import ZoomableImage from "@/components/ui/image-zoomable";
-import AniProgressbar from "@/components/animation/AniProgressbar";
+import AniProgressbar from "@/components/ui/chart-progress/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
 import { CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -67,18 +63,19 @@ export default function ResponseSelect({
             <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
               <div className="text-zinc-500">
                 {ixMax ? (
-                  <IconLabel className="text-indigo-300" Icon={Crown}>
+                  <div className="text-indigo-300 flex items-center gap-2 ">
+                    <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
+                      <Crown />
+                    </div>
+
                     {option.value}
-                  </IconLabel>
+                  </div>
                 ) : (
                   option.value
                 )}
-                {/* <span className={classes.cnt}>
-                  <Person /> {sumUser}
-                </span> */}
               </div>
 
-              <div className={classes.animationWrapper}>
+              <div className="grid items-center gap-2 flex-1">
                 {/* Percent */}
                 <AniProgressbar maxCnt={ixMax} percent={percent} />
               </div>

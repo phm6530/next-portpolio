@@ -16,6 +16,7 @@ import TabRounded from "@/components/ui/tab-rounded";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import SearchBarWrapper from "@/components/ui/SearchBar/searchbar-wrapper";
 import { useSearchParams } from "next/navigation";
+import NotFoundContents from "@/components/ui/error/notfound-contents";
 
 type MyContentsListData = TemplateItemMetadata<RespondentsData>;
 
@@ -110,17 +111,9 @@ export default function MyContents() {
             );
           })
         ) : (
-          <Card className="h-[200px] flex flex-col items-center justify-center">
-            <CardContent className="text-center pt-6">
-              <div className="flex gap-3 items-center">
-                <CircleSlash />
-                <span>생성하신 템플릿이 없습니다</span>
-              </div>
-            </CardContent>
-            <Button size={"lg"} asChild className="shadow-lg">
-              <Link href={"/made"}>템플릿 만들기</Link>
-            </Button>
-          </Card>
+          <NotFoundContents className="border rounded-lg">
+            생성한 템플릿이 없습니다
+          </NotFoundContents>
         )}
       </div>
     </div>

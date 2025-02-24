@@ -16,6 +16,7 @@ module.exports = {
       },
       width: {
         "calc-grid": "calc(100% - 40px)",
+        "calc-80": "calc(100% - 80px)",
       },
       fontFamily: {
         paperlogy: ["Paperlogy-8ExtraBold", "sans-serif"],
@@ -33,6 +34,7 @@ module.exports = {
         "calc-screen-sm": "calc(100% - 60px)", // sm 사이즈에서 높이 변경
         "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경
       },
+
       keyframes: {
         opacity: {
           "0%": {

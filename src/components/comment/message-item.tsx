@@ -1,20 +1,16 @@
 "use client";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-import classes from "./Comment.module.scss";
-
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
-import { MSG_PARAM_PATH, CommentReponse, MSG_TYPE } from "@/types/comment.type";
+import { CommentReponse, MSG_TYPE } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
-import { CandlestickChart, DeleteIcon, LucideDelete, X } from "lucide-react";
+import { X } from "lucide-react";
 import { PsConfirmModal } from "../shared/modals/password-input-modal";
-import { withFetchRevaildation } from "@/action/with-fetch-revaildation";
 import { toast } from "react-toastify";
 import MessageDeleteAction from "./action/delete-action";
 import { BASE_NEST_URL } from "@/config/base";
@@ -70,7 +66,7 @@ export default function MessageItem({
 
   return (
     <>
-      <div className="flex flex-col w-full  items-start ">
+      <div className="flex flex-col w-full  items-start animate-fadein ">
         <div className="flex items-center justify-start mb-2 gap-2">
           {/* 유저 or 익명 */}
           <UserRoleDisplay role={creator.role} nickname={creator.nickname} />

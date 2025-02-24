@@ -12,7 +12,7 @@ export default function NavLink({
   href: string;
   children: ReactNode;
   className?: string;
-  active: ((href: string) => boolean) | boolean;
+  active: ((_href: string) => boolean) | boolean;
   border?: boolean;
 }) {
   const isActive = active instanceof Function ? active(href) : active;

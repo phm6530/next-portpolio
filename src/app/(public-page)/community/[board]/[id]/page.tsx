@@ -2,7 +2,7 @@ import { ListItemType } from "../../components/board-list";
 import { BASE_NEST_URL } from "@/config/base";
 
 import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
-import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
+import ResultCommentSection from "@/app/(public-page)/(template-result)/result/components/ResultCommentSection";
 import { MSG_TYPE, MSG_PARAM_PATH } from "@/types/comment.type";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";

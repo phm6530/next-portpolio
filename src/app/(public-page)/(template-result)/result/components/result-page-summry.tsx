@@ -1,3 +1,4 @@
+"use client";
 import TemplateBadges from "@/components/ui/template/template-badges";
 import { SurveyResult } from "@/types/surveyResult.type";
 
@@ -11,8 +12,10 @@ import {
 
 import { UserRound } from "lucide-react";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
-export default async function ResultSummry(data: SurveyResult) {
+export default function ResultPageSummry(data: SurveyResult) {
   const {
     id,
     title,
@@ -31,22 +34,22 @@ export default async function ResultSummry(data: SurveyResult) {
     <Card className="rounded-xl">
       <CardHeader>
         <CardTitle className="flex flex-col gap-5 mb-2">
-          {" "}
           <TemplateBadges
             startDate={startDate}
             endDate={endDate}
             createdAt={createdAt}
             maxGroup={detail.maxGroup}
-          />{" "}
+          />
           <div className="my-4 leading-9">{title}</div>
         </CardTitle>
-        <CardDescription className=" border-l-2 pl-4 min-h-[50px]">
+        <CardDescription className=" min-h-[50px]">
+          {/* <EditorContent editor={editor} /> */}
           <TipTapEditor mode="view" value={description} />
         </CardDescription>
       </CardHeader>
 
-      <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
-        <div className="border-t text-[12px] text-muted-foreground pt-3 flex items-center">
+      <CardFooter>
+        <div className="text-[12px] text-muted-foreground pt-3 flex items-center">
           <UserRound className="w-4 mr-2" /> {allCnt ?? 0}
         </div>
       </CardFooter>

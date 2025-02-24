@@ -195,7 +195,7 @@ export default function CreateSurveyForm() {
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className=" aos-hidden pt-16 flex flex-col gap-8">
+      <div className=" aos-hidden pt-16 flex flex-col gap-3 mb-[200px]">
         <FormProvider {...formState}>
           <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
             <CardHeader>
@@ -289,12 +289,12 @@ export default function CreateSurveyForm() {
           </div>
         </FormProvider>
 
-        <div className="mt-5 flex [&>button]:flex-1">
+        <div className="flex [&>button]:flex-1">
           <Button
             type="submit"
             disabled={isPending}
             onClick={formState.handleSubmit(onSubmitHandler)}
-            className="py-8"
+            className="py-7 rounded-lg"
           >
             설문조사 생성하기
           </Button>

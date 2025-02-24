@@ -1,5 +1,3 @@
-import ResultCommentSection from "@/app/(public-page)/(template-result)/components/ResultCommentSection";
-import ResultSummry from "@/app/(public-page)/(template-result)/components/ResultSummry";
 import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyStatsCharts";
 import {
   fetchComments,
@@ -18,6 +16,8 @@ import {
 } from "@tanstack/react-query";
 import { CommentEditorProvider } from "@/components/comment/context/comment-context";
 import MessageForm from "@/components/comment/message-form";
+import ResultPageSummry from "../../components/result-page-summry";
+import ResultCommentSection from "../../components/ResultCommentSection";
 
 const queryClient = new QueryClient();
 
@@ -54,11 +54,11 @@ export default async function SurveyResultPage({
         />
         <div className="absolute inset-0 z-[-1] bg-gradient-to-t from-background background/70  to-transparent" />
       </div>
-      <Grid.smallCenter className="h-full">
+      <Grid.smallCenter className="h-full animate-fadein">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <div className="pt-14">
             {/* template Summry */}
-            <ResultSummry {...data} />
+            <ResultPageSummry {...data} />
 
             <ResultSurveyCharts id={id} />
 

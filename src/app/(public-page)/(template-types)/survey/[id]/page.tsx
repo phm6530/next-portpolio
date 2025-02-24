@@ -8,7 +8,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import TemplateBadges from "@/components/ui/template/template-badges";
 import SurveyResponseForm from "./survey-response-form";
-import AosWrapper from "@/components/animation/AosWrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -109,7 +108,7 @@ export default async function SurveyDetailTemplate({
         </Link>
       </Button>
 
-      <AosWrapper>
+      <div className="animate-fadein">
         <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="flex flex-col gap-5 mb-2">
@@ -135,7 +134,7 @@ export default async function SurveyDetailTemplate({
         </Card>
         {/* survey Form 응답 */}
         <SurveyResponseForm {...data} />{" "}
-      </AosWrapper>
+      </div>
     </>
   );
 }

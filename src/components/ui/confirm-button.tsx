@@ -21,7 +21,7 @@ export default function ConfirmButton({
   title: string;
   children: ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>;
   description?: string;
-  cb: (...arg: any) => Promise<void> | void;
+  cb: (..._arg: any) => Promise<void> | void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
 
