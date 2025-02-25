@@ -26,23 +26,21 @@ export default async function SurveyResultPage({
 }: {
   params: { id: string };
 }) {
-  const data = await queryClient.fetchQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
-    staleTime: 10000,
-  });
+  const [data] = await Promise.all([
+    queryClient.fetchQuery({
+      queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+      queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+      staleTime: 10000,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: [QUERY_KEY.COMMENTS, id],
+      queryFn: async () =>
+        await fetchComments<CommentReponse[]>(+id, MSG_PARAM_PATH.TEMPLATE),
+      staleTime: 10000,
+    }),
+  ]);
 
-  await queryClient.prefetchQuery({
-    queryKey: [QUERY_KEY.COMMENTS, id],
-    queryFn: async () => {
-      return await fetchComments<CommentReponse[]>(
-        +id,
-        MSG_PARAM_PATH.TEMPLATE
-      );
-    },
-    staleTime: 10000,
-  });
-
+  // console.log("🚀 서버에서 prefetch된 데이터:", dehydrate(queryClient));
   return (
     <>
       <div className="absolute w-full z-[-1]  h-[50vh] opacity-40">
@@ -54,13 +52,13 @@ export default async function SurveyResultPage({
         />
         <div className="absolute inset-0 z-[-1] bg-gradient-to-t from-background background/70  to-transparent" />
       </div>
-      <Grid.smallCenter className="h-full animate-fadein">
+      <Grid.smallCenter className="h-full animate-fadein ">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <div className="pt-14">
             {/* template Summry */}
             <ResultPageSummry {...data} />
 
-            <ResultSurveyCharts id={id} />
+            <ResultSurveyCharts templateId={id} />
 
             {/* Editor  */}
             <CommentEditorProvider EDITOR_PATH={MSG_PARAM_PATH.TEMPLATE}>
@@ -75,7 +73,7 @@ export default async function SurveyResultPage({
             </CommentEditorProvider>
           </div>
         </HydrationBoundary>
-      </Grid.smallCenter>{" "}
+      </Grid.smallCenter>
     </>
   );
 }

@@ -44,7 +44,8 @@ export default function ResultPageSummry(data: SurveyResult) {
         </CardTitle>
         <CardDescription className=" min-h-[50px]">
           {/* <EditorContent editor={editor} /> */}
-          <TipTapEditor mode="view" value={description} />
+          {/* <TipTapEditor mode="view" value={description} /> */}
+          {description}
         </CardDescription>
       </CardHeader>
 

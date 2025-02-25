@@ -64,8 +64,6 @@ export async function generateMetadata({
     id: params.id,
   });
 
-  console.log(data);
-
   return {
     title: `게시판 -  ${data.title}`,
     description: data.contents,

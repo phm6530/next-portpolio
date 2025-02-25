@@ -1,5 +1,5 @@
 "use client";
-import { ResultText } from "@/types/surveyResult.type";
+import { ResultText, SurveyResult } from "@/types/surveyResult.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
@@ -21,11 +21,11 @@ import { Button } from "@/components/ui/button";
 
 export function ResponseTexts({
   id: questionId,
+  templateId,
   filter,
-  textAnswers,
-  isNextPage,
 }: {
   idx: number;
+  templateId: string;
   allCnt: number;
   filter: {
     genderGroup: GenderOptions;
@@ -40,13 +40,21 @@ export function ResponseTexts({
     }
   }, [isFirstMount]);
 
+  const resultData = queryClient.getQueryData<SurveyResult>([
+    QUERY_KEY.SURVEY_RESULTS,
+    templateId,
+  ]);
+
+  const findTextQuestion = resultData?.questions.find(
+    (e) => e.id === questionId
+  );
+
   const {
     data: textQuestions,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isPending,
-    isLoading,
   } = useInfiniteQuery<{
     isNextPage: number | null;
     answers: ResultText["textAnswers"];
@@ -85,22 +93,19 @@ export function ResponseTexts({
       isFirstMount.current &&
       (filter.ageGroup !== "all" || filter.genderGroup !== "all"), // 초기 패칭 방지..
     staleTime: 10000,
-  });
-
-  useEffect(() => {
-    queryClient.setQueryData(
-      [
-        QUERY_KEY.QUESTION_TEXT,
-        questionId + "",
-        "all", // 초기 데이터 기준
-        "all", // 초기 데이터 기준
-      ],
-      {
-        pages: [{ isNextPage, answers: textAnswers }],
+    initialData: () => {
+      return {
+        // 캐싱재사용으로 변경
+        pages: [
+          {
+            isNextPage: (findTextQuestion as ResultText).isNextPage,
+            answers: (findTextQuestion as ResultText).textAnswers,
+          },
+        ],
         pageParams: [1],
-      }
-    );
-  }, [questionId, textAnswers, isNextPage]);
+      };
+    },
+  });
 
   const resultList = textQuestions?.pages.flatMap((page) => page.answers);
 
@@ -113,7 +118,7 @@ export function ResponseTexts({
             genderGroup={filter.genderGroup}
           />
         )}
-        <MasonryLayout pending={isPending} loading={isLoading} gutter={10}>
+        <MasonryLayout pending={isPending} gutter={10}>
           {resultList?.map((as, idx) => {
             const { id, respondent, answer } = as;
             const { gender, age } = respondent;

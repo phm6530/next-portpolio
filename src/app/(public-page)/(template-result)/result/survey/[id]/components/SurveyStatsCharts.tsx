@@ -9,7 +9,7 @@ import SurveyGroupFilter, {
 import { QUERY_KEY } from "@/types/constans";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { fetchSurveyData } from "./test";
@@ -20,8 +20,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function ResultSurveyCharts({ id }: { id: string }) {
+export default function ResultSurveyCharts({
+  templateId,
+}: {
+  templateId: string;
+}) {
   //초깃값
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<{
     genderGroup: GenderOptions;
     ageGroup: AgeOptions;
@@ -52,9 +57,12 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
   };
 
   const { data } = useQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-    queryFn: async () => await fetchSurveyData<SurveyResult>(id),
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, templateId],
+    queryFn: async () => await fetchSurveyData<SurveyResult>(templateId),
     staleTime: 10000,
+    initialData: () => {
+      return queryClient.getQueryData([QUERY_KEY.SURVEY_RESULTS, templateId]);
+    },
     select: (data) => {
       return {
         ...data,
@@ -108,6 +116,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
       />
 
       <div className="flex flex-col gap-10 mt-6 mb-9">
+        {questions.map((e) => e.id)}
         {questions.map((qs, idx) => {
           return (
             <Card key={`${idx}-card`} className="py-5 rounded-3xl">
@@ -145,6 +154,7 @@ export default function ResultSurveyCharts({ id }: { id: string }) {
                   return (
                     <ResponseTexts
                       idx={idx}
+                      templateId={templateId}
                       filter={filter}
                       allCnt={allCnt}
                       {...qs}

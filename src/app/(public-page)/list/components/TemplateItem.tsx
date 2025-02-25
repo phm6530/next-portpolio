@@ -54,6 +54,7 @@ const TemplateItem = forwardRef(
       document.addEventListener("mousemove", updatePosition);
       return () => document.removeEventListener("mousemove", updatePosition);
     }, []);
+
     const router = useRouter();
 
     return (
@@ -61,7 +62,6 @@ const TemplateItem = forwardRef(
         <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger>
-              {" "}
               <div
                 className={`hover:bg-card/50 text-start aos-hidden bg-card tdd flex flex-col cursor-pointer group border rounded-[15px] overflow-hidden`}
                 onClick={() => router.push(`/${templateType}/${id}`)}

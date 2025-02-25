@@ -7,11 +7,7 @@ import { CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export default function ResponseSelect({
-  idx,
   allCnt,
-  label,
-  selectAgeGroup,
-  selectGenderGroup,
   options,
 }: { allCnt: number } & ResultSelect & {
     idx: number;

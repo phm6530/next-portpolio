@@ -1,12 +1,5 @@
-import { User } from "@/types/auth.type";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { DetailRespondents, TemplateItemMetadata } from "@/types/template.type";
-import { ageGroupProps } from "./template";
-import { GENDER_GROUP } from "./user";
-import {
-  AgeOptions,
-  GenderOptions,
-} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
 
 type BaseResultItem = {
   id: number;

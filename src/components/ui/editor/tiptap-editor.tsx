@@ -23,18 +23,17 @@ lowlight.register("ts", ts);
 
 const TipTapEditor = ({
   mode = "editor",
-  content,
   value,
   onChange,
   placeholder,
 }: {
   content?: string;
   value?: string;
-  onChange?: (html: string) => void;
+  onChange?: (_html: string) => void;
   placeholder?: string;
   mode?: "view" | "editor";
 }) => {
-  const [] = useState<boolean>(trye);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const editor = useEditor({
     extensions: [
@@ -52,6 +51,12 @@ const TipTapEditor = ({
       Placeholder.configure({ placeholder }),
     ],
 
+    editorProps: {
+      handleDOMEvents: {
+        beforeinput: () => true,
+      },
+    },
+
     content: value || "",
     ...(onChange && {
       onUpdate: ({ editor }) => {
@@ -62,7 +67,7 @@ const TipTapEditor = ({
     ...(mode === "view" && {
       editable: false,
       onCreate: () => {
-        ``;
+        setIsLoading(false);
       },
     }), //이거에 따라 바뀜 ㅇㅇ
   });
@@ -78,17 +83,20 @@ const TipTapEditor = ({
   return (
     <div className="table border-collapse w-full rounded-lg overflow-hidden">
       {mode === "editor" && <TipTapToolbar editor={editor} />}
-
-      <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
-        <EditorContent
-          editor={editor}
-          className={cn(
-            " w-full h-full  p-3 ",
-            mode === "editor" && "bg-custom-input"
-          )}
-          onClick={handleEditorClick}
-        />
-      </div>
+      {isLoading ? (
+        <>LOADING.....</>
+      ) : (
+        <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
+          <EditorContent
+            editor={editor}
+            className={cn(
+              " w-full h-full  p-3 ",
+              mode === "editor" && "bg-custom-input"
+            )}
+            onClick={handleEditorClick}
+          />
+        </div>
+      )}
     </div>
   );
 };

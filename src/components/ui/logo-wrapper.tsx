@@ -12,7 +12,7 @@ export default function LogoWrapper({
     <Link href={"/"}>
       <div
         className={cn(
-          "w-full  bg-contain bg-[url('/asset/logo.png')] dark:bg-[url('/asset/logo_w.png')]",
+          "w-full bg-contain bg-[url('/asset/logo.png')] dark:bg-[url('/asset/logo_w.png')]",
           link && "cursor-pointer"
         )}
         style={{ maxWidth }}
