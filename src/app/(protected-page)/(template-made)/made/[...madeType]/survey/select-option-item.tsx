@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import Delete from "/public/asset/icon/delete.svg";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import { useSearchParams } from "next/navigation";
 import SvginButton from "@/components/ui/button-svg";

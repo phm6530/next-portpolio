@@ -25,7 +25,7 @@ export default function ThemeToggleButton() {
         `fixed right-10 bottom-10 z-1 cursor-pointer overflow-hidden rounded-md
          flex 
          justify-center
-        bg-[hsl(255,255,255)]
+        bg-white
          shadow-center
          dark:shadow-center-dark
         dark:bg-[#404345]

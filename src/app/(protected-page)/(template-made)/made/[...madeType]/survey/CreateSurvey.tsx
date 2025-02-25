@@ -16,8 +16,6 @@ import surveySchema from "./schema";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
 import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
-import dynamic from "next/dynamic";
-import LoadingTextSkeleton from "@/components/loading/LoadingTextSkeleton";
 import useAOS from "@/_hook/usAOS";
 import InputField from "@/components/shared/inputs/input-field";
 import {

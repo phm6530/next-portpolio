@@ -12,7 +12,6 @@ import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
-import LoadingStreming from "@/components/loading/LoadingStreming";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +22,7 @@ import GenderResponseFields from "../components/gender-response-fields";
 import AgeResponseFields from "../components/age-response-fields";
 import TextResponseField from "../components/text-response-fields";
 import SelectResponseField from "../components/select-response-fields";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 export default function SurveyResponseForm({
   id,
@@ -93,7 +93,7 @@ export default function SurveyResponseForm({
   if (isPending || isSuccess) {
     return (
       <>
-        <LoadingStreming />
+        <LoadingWrapper />
       </>
     );
   }

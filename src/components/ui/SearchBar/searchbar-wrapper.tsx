@@ -1,5 +1,5 @@
 "use client";
-import SearchBar from "@/components/ui/SearchBar/searchbar";
+import SearchBar from "@/components/ui/SearchBar/search-input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 

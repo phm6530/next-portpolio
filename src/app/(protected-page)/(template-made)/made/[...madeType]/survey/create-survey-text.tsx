@@ -6,7 +6,7 @@ import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
 import SvginButton from "@/components/ui/button-svg";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";

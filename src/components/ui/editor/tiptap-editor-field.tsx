@@ -23,13 +23,14 @@ export default function TipTapEditorField({
         name={name}
         control={formMethod.control}
         render={({ field }) => {
+          const { ref, ...restField } = field;
           return (
             <FormItem>
               <FormLabel>
                 설명 <span className="text-primary">*</span>
               </FormLabel>
               <FormControl>
-                <TipTapEditor {...field} placeholder={placeholder} />
+                <TipTapEditor {...restField} placeholder={placeholder} />
               </FormControl>
               <FormMessage />
             </FormItem>

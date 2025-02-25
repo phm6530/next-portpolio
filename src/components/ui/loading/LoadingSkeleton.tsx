@@ -1,4 +1,4 @@
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../skeleton";
 
 export default function LoadingSkeleton({
   loadingText = "L O A D I N G ...",

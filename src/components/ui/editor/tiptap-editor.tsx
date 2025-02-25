@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
-import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import SkeletonListItem from "@/components/shared/loading/skeleton-listitem";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -34,17 +34,19 @@ const TipTapEditor = ({
   placeholder?: string;
   mode?: "view" | "editor";
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(
+    mode === "editor" && false
+  );
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Heading.configure({
-        levels: [1, 2, 3],
-      }),
-      CodeBlockLowlight.configure({
-        lowlight,
-      }),
+      StarterKit, // 여기 이미 Heading + codeblock
+      // Heading.configure({
+      //   levels: [1, 2, 3],
+      // }),
+      // CodeBlockLowlight.configure({
+      //   lowlight,
+      // }),
       Youtube.configure({
         controls: false,
         nocookie: true,
@@ -67,15 +69,14 @@ const TipTapEditor = ({
     }),
     ...(mode === "view" && {
       editable: false,
-      onCreate: () => {
-        setIsLoading(false);
-      },
     }), //이거에 따라 바뀜 ㅇㅇ
+    onCreate: () => {
+      setIsLoading(false);
+    },
+    immediatelyRender: false,
   });
 
-  if (!editor || isLoading) {
-    return <LoadingWrapper />;
-  }
+  if (!editor) return;
 
   const handleEditorClick = () => {
     if (mode === "editor") {
@@ -90,7 +91,7 @@ const TipTapEditor = ({
         <EditorContent
           editor={editor}
           className={cn(
-            " w-full h-full  p-3 ",
+            " w-full h-full  p-3 min-h-[150PX]",
             mode === "editor" && "bg-custom-input"
           )}
           onClick={handleEditorClick}

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 // 쓰로틀링..
 export default function useThrottling() {

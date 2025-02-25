@@ -6,7 +6,7 @@ import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import LoadingSpinnerWrapper from "@/components/ui/loading/LoadingSpinnerWrapper";
 import {
   Form,
   FormControl,

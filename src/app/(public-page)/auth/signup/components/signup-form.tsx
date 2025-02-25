@@ -13,7 +13,7 @@ import { signUpSchema } from "./sinup-schema";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
 import useThrottling from "@/_hook/useThrottlring";
-import LoadingSpinnerWrapper from "@/components/loading/LoadingSpinnerWrapper";
+import LoadingSpinnerWrapper from "@/components/ui/loading/LoadingSpinnerWrapper";
 
 const THROTTLE_DELAY = 3000;
 const FORM_DEFAULT_VALUES = {
