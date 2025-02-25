@@ -109,7 +109,7 @@ export default async function SurveyDetailTemplate({
       </Button>
 
       <div className="animate-fadein">
-        <Card className="rounded-2xl">
+        <Card className="rounded-2xl ">
           <CardHeader>
             <CardTitle className="flex flex-col gap-5 mb-2">
               <TemplateBadges

@@ -7,7 +7,7 @@ import { CardDescription } from "@/components/ui/card";
 
 export default function ListPageBanner() {
   return (
-    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#e6f4ff] to-[#fbdfed] dark:from-[#593186]  dark:to-[#5c68b9]">
+    <div className="overflow-hidden min-h-[400px] bg-gradient-to-r from-[#edf5ff] to-[#f8e8f3] dark:from-[#3a2b5c] dark:to-[#4a5293]">
       <Grid.center className="flex items-center flex-col md:flex-row justify-between">
         <div>
           <PageTitle>

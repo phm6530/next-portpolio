@@ -13,7 +13,7 @@ const templateList = [
     icon: SurveyIcon,
     name: "Survey",
     path: `/made/${TEMPLATE_TYPE.SURVEY}`,
-    description: ["주관식 + 객관식 형태의 설문조사 전용 템플릿"],
+    description: ["주관식 + 객관식 형태의 설문조사"],
     isActive: true,
   },
   {
@@ -21,7 +21,7 @@ const templateList = [
     icon: rankIcon,
     name: "Rank",
     path: `/made/${TEMPLATE_TYPE.RANK}`,
-    description: ["주관식 + 객관식 형태의 설문조사 전용 템플릿"],
+    description: ["주제 하나로 랭킹"],
     isActive: false,
   },
 ];
@@ -55,7 +55,7 @@ export default function ChoiseTemplate() {
           <div
             key={`${template.type}-${idx}`}
             className={cn(
-              "relative shadow-2xl cursor-pointer border border-primary/40 dark:hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800 rounded-md p-5",
+              "relative shadow-2xl cursor-pointer bg-custom-input border border-transparent rounded-2xl hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800  p-5",
               !template.isActive && "opacity-50 cursor-not-allowed"
             )}
             onClick={() =>

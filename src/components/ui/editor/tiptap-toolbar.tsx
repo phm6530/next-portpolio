@@ -14,9 +14,9 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
   };
 
   return (
-    <div className="table-row">
-      <div className=" border button-group">
-        <div className="table-cell">
+    <div className="table-row border">
+      <div className="flex gap-3 p-2">
+        <div className="flex gap-1">
           <button
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
@@ -25,7 +25,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
               editor.isActive("heading", { level: 1 }) ? "is-active" : ""
             }
           >
-            <Heading1 />
+            <Heading1 className="w-5 h-5" />
           </button>
           <button
             onClick={() =>
@@ -35,7 +35,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
               editor.isActive("heading", { level: 2 }) ? "is-active" : ""
             }
           >
-            <Heading2 />
+            <Heading2 className="w-5 h-5" />
           </button>
           <button
             onClick={() =>
@@ -45,25 +45,24 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
               editor.isActive("heading", { level: 3 }) ? "is-active" : ""
             }
           >
-            <Heading3 />
+            <Heading3 className="w-5 h-5" />
           </button>
         </div>
-        <div className="table-cell ">
+        <div className="flex ">
           <button
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={editor.isActive("codeBlock") ? "is-active" : ""}
           >
-            <Code2 />
+            <Code2 className="w-5 h-5" />
           </button>
         </div>
-        <div className="table-cell">
-          <div className="button-group">
-            <button id="add" onClick={addYoutubeVideo}>
-              <div className="w-10 h-10 [&>svg]:w-10 [&>svg]:h-10 dark:[&>svg]:fill-[#ffffff] [&>svg]:fill-[#000] ">
-                <YoutubeIcon />
-              </div>
-            </button>
-          </div>
+
+        <div className="flex justify-center items-center">
+          <button id="add" onClick={addYoutubeVideo}>
+            <div className="w-5 h-5 flex justify-center items-center  [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-red-500 ">
+              <YoutubeIcon />
+            </div>
+          </button>
         </div>
       </div>
     </div>

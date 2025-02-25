@@ -126,10 +126,10 @@ export function ResponseTexts({
             return (
               <div
                 key={`${id}-${idx}`}
-                className="border p-3 bg-third rounded-xl  hover:border-primary"
+                className=" p-3 bg-third rounded-xl  hover:border-primary"
               >
                 <div className="flex items-center gap-2">
-                  <div className=" w-10 h-10 border-foreground/30 bg-black/50 border-2 rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
+                  <div className=" w-10 h-10 border-foreground/30  border-2 rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
                     {gender === "female" && (
                       <Image
                         src={Female}
@@ -186,7 +186,7 @@ export function ResponseTexts({
           </div>
         </>
       )}{" "}
-      <CardDescription className="mt-3 font-normal">
+      <CardDescription className="mt-3 text-[12px] font-normal">
         * 추가 응답이 없을 경우 버튼은 노출되지 않습니다.
       </CardDescription>
     </CardContent>

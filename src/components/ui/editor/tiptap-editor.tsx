@@ -15,6 +15,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
 import SkeletonListItem from "@/components/shared/loading/skeleton-listitem";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -76,7 +77,9 @@ const TipTapEditor = ({
     immediatelyRender: false,
   });
 
-  if (!editor) return;
+  if (!editor || isLoading) {
+    return <LoadingWrapper />;
+  }
 
   const handleEditorClick = () => {
     if (mode === "editor") {
@@ -85,14 +88,14 @@ const TipTapEditor = ({
   };
 
   return (
-    <div className="table border-collapse w-full rounded-lg overflow-hidden">
+    <div className="table w-full rounded-md overflow-hidden   border-collapse">
       {mode === "editor" && <TipTapToolbar editor={editor} />}
-      <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
+      <div className="table-cell w-full cursor-text min-h-[100px] h-full border-input border overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]">
         <EditorContent
           editor={editor}
           className={cn(
-            " w-full h-full  p-3 min-h-[150PX]",
-            mode === "editor" && "bg-custom-input"
+            " w-full h-full  p-3 min-h-[150PX] overflow-hidden"
+            // mode === "editor" && "bg-custom-input "
           )}
           onClick={handleEditorClick}
         />

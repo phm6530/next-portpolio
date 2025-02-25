@@ -63,7 +63,7 @@ const TemplateItem = forwardRef(
           <Tooltip>
             <TooltipTrigger>
               <div
-                className={`hover:bg-card/50 text-start aos-hidden bg-card tdd flex flex-col cursor-pointer group border rounded-[15px] overflow-hidden`}
+                className={`hover:bg-card/50 text-start aos-hidden bg-card border dark:border-border/50 tdd flex flex-col cursor-pointer group rounded-[15px] overflow-hidden`}
                 onClick={() => router.push(`/${templateType}/${id}`)}
                 ref={ref}
               >
@@ -91,7 +91,7 @@ const TemplateItem = forwardRef(
                     maxGroup={maxGroup}
                   />
 
-                  <div className="text-base my-2 line-clamp-1 w-full group-hover:underline">
+                  <div className="text-lg my-2 line-clamp-2 break-words break-keep w-full group-hover:underline">
                     {title}
                   </div>
 
@@ -99,7 +99,7 @@ const TemplateItem = forwardRef(
                     {transformHtmlToPlainText({ html: description })}
                   </div>
 
-                  <div className="border-t text-[12px] text-muted-foreground pt-3 flex items-center">
+                  <div className="border-t border-border/50 text-[12px] text-muted-foreground pt-3 flex items-center">
                     <UserRound className="w-4 mr-2" /> {allCnt ?? 0}
                   </div>
                 </div>

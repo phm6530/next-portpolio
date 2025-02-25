@@ -195,7 +195,7 @@ export default function CreateSurveyForm() {
 
       <div className=" aos-hidden pt-16 flex flex-col gap-3 mb-[200px]">
         <FormProvider {...formState}>
-          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+          <Card className="p-7 flex flex-col gap-4 bg-transparent border border-input/50">
             <CardHeader>
               <CardTitle className="text-2xl font-normal">
                 1. 설문조사 정보

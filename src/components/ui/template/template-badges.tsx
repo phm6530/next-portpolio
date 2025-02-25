@@ -52,7 +52,7 @@ export default function TemplateBadges({
       <div className="text-sm flex gap-2 h-5">
         {/* New Template */}
         {todayCompare.isNew(createdAt) && (
-          <Badge variant={"secondary"} className="text-[10px]">
+          <Badge variant={"secondary"} className="text-[10px] font-normal">
             New
           </Badge>
         )}
@@ -60,7 +60,7 @@ export default function TemplateBadges({
         {curState(startDate, endDate)}
 
         {maxGroup?.maxCnt && (maxGroup?.ageGroup || maxGroup?.genderGroup) && (
-          <Badge className="text-[10px] bg-primary/40">
+          <Badge className="text-[10px] font-normal" variant={"secondary"}>
             {maxGroup.ageGroup && `${maxGroup.ageGroup}대`}{" "}
             {maxGroup.genderGroup &&
               `${GenderMapper(maxGroup.genderGroup as GENDER_GROUP)}`}{" "}

@@ -1,5 +1,6 @@
+"use client";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LogoWrapper({
   maxWidth = 200,
@@ -8,17 +9,16 @@ export default function LogoWrapper({
   maxWidth?: number;
   link?: boolean;
 }) {
+  const router = useRouter();
+
   return (
-    <Link href={"/"}>
-      <div
-        className={cn(
-          "w-full bg-contain bg-[url('/asset/logo.png')] dark:bg-[url('/asset/logo_w.png')]",
-          link && "cursor-pointer"
-        )}
-        style={{ maxWidth }}
-      >
-        <div className="pb-[25%] " />
-      </div>
-    </Link>
+    <div
+      className={cn(
+        " w-full [aspect-ratio:16/4] bg-contain bg-center bg-[url('/asset/logo.png')]  dark:bg-[url('/asset/logo_w.png')]",
+        link && "cursor-pointer"
+      )}
+      style={{ maxWidth }}
+      {...(link && { onClick: () => router.push("/") })}
+    />
   );
 }
