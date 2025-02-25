@@ -12,8 +12,6 @@ import {
 
 import { UserRound } from "lucide-react";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 
 export default function ResultPageSummry(data: SurveyResult) {
   const {
@@ -43,9 +41,7 @@ export default function ResultPageSummry(data: SurveyResult) {
           <div className="my-4 leading-9">{title}</div>
         </CardTitle>
         <CardDescription className=" min-h-[50px]">
-          {/* <EditorContent editor={editor} /> */}
-          {/* <TipTapEditor mode="view" value={description} /> */}
-          {description}
+          <TipTapEditor mode="view" value={description} />
         </CardDescription>
       </CardHeader>
 

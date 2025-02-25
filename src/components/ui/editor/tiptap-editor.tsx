@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -72,7 +73,9 @@ const TipTapEditor = ({
     }), //이거에 따라 바뀜 ㅇㅇ
   });
 
-  if (!editor) return;
+  if (!editor || isLoading) {
+    return <LoadingWrapper />;
+  }
 
   const handleEditorClick = () => {
     if (mode === "editor") {
@@ -83,20 +86,16 @@ const TipTapEditor = ({
   return (
     <div className="table border-collapse w-full rounded-lg overflow-hidden">
       {mode === "editor" && <TipTapToolbar editor={editor} />}
-      {isLoading ? (
-        <>LOADING.....</>
-      ) : (
-        <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
-          <EditorContent
-            editor={editor}
-            className={cn(
-              " w-full h-full  p-3 ",
-              mode === "editor" && "bg-custom-input"
-            )}
-            onClick={handleEditorClick}
-          />
-        </div>
-      )}
+      <div className="table-cell border w-full cursor-text min-h-[100px] h-full">
+        <EditorContent
+          editor={editor}
+          className={cn(
+            " w-full h-full  p-3 ",
+            mode === "editor" && "bg-custom-input"
+          )}
+          onClick={handleEditorClick}
+        />
+      </div>
     </div>
   );
 };
