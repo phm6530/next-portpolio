@@ -29,7 +29,7 @@ export default function TextResponseField({
   return (
     <>
       {qsImg && (
-        <div className={commonStyle.previewContainer}>
+        <div>
           <Image
             src={qsImg}
             layout="responsive"

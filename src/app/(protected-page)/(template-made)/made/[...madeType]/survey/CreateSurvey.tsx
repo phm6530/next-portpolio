@@ -2,11 +2,9 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import classes from "./CreateSurvey.module.scss";
 import { TEMPLATE_TYPE, FetchTemplateForm } from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
-import BooleanGroup from "@/app/(protected-page)/(template-made)/components/BooleanGroup";
 import { QUERY_KEY } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,6 +34,8 @@ import CreateSurveyFormController, {
 } from "./survey-form-controller";
 import CreateSurveyList from "./survey-form-list";
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
+import RadioBooleanField from "@/components/ui/radio-boolean-field";
+import { cn } from "@/lib/utils";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -195,7 +195,7 @@ export default function CreateSurveyForm() {
 
       <div className=" aos-hidden pt-16 flex flex-col gap-3 mb-[200px]">
         <FormProvider {...formState}>
-          <Card className="p-7 flex flex-col gap-4 bg-transparent border border-input/50">
+          <Card className="p-7  flex flex-col gap-4  border-0">
             <CardHeader>
               <CardTitle className="text-2xl font-normal">
                 1. 설문조사 정보
@@ -226,7 +226,7 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+          <Card className="p-7 flex flex-col gap-4 border-0">
             <CardHeader>
               <CardTitle className="text-2xl font-normal">
                 2. 응답자 필터 설정
@@ -237,14 +237,14 @@ export default function CreateSurveyForm() {
             </CardHeader>
             <CardContent className="gap-10 flex flex-col">
               {/* 나이 별 수집 */}
-              <BooleanGroup<RequestSurveyFormData>
+              <RadioBooleanField<RequestSurveyFormData>
                 label="연령대별 분석을 진행할까요?"
                 groupName={"isAgeCollected"}
                 // description="연령대별 필터링이 가능합니다."
               />
 
               {/* 성별 별 수집 */}
-              <BooleanGroup<RequestSurveyFormData>
+              <RadioBooleanField<RequestSurveyFormData>
                 label="성별별 분석을 진행할까요?"
                 groupName={"isGenderCollected"}
                 // description="성별 필터링이 가능합니다."
@@ -252,7 +252,7 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <Card className="p-7 flex flex-col gap-4 !border-muted-foreground/20">
+          <Card className="p-7 flex flex-col gap-4 border-0">
             <CardHeader>
               <CardTitle className="text-2xl font-normal">
                 3. 설문 문항 구성
@@ -271,23 +271,27 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <div
-            className={`${classes.gapWrapper} ${
-              editPage ? classes.disabled : undefined
-            }`}
-          >
+          <div className={cn(editPage && "cursor-not-allowed")}>
             {/* 진행 중인 설문은 수정 불가 안내문구 */}
             {editPage && (
-              <p className={classes.info}>
-                진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.
-              </p>
+              <p>진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.</p>
             )}
 
             {/* Survey Controller */}
           </div>
         </FormProvider>
 
-        <div className="flex [&>button]:flex-1">
+        <div className="flex [&>button]:flex-1 gap-3">
+          <Button
+            type="submit"
+            disabled={isPending}
+            onClick={formState.handleSubmit(onSubmitHandler)}
+            className="py-7 rounded-lg"
+            variant={"outline"}
+          >
+            미리보기
+          </Button>
+
           <Button
             type="submit"
             disabled={isPending}

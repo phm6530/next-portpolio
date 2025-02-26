@@ -115,14 +115,6 @@ export default function CreateSurveySelect({
         <span>+</span> 항목추가{" "}
       </Button>
       <OptionsController name={`questions.${surveyIdx}`} multiSelect={true} />
-      {/* <button
-        className={"mt-3 flex gap-2 rounded-md text-[#576e8b] text-sm"}
-        type="button"
-        onClick={handleArrAppend}
-      >
-        <span>+</span> 항목추가
-      </button> */}
-      {/* Radio 전체삭제  */}
     </QuestionListWrapper>
   );
 }

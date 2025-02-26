@@ -6,7 +6,6 @@ import ResultCommentSection from "@/app/(public-page)/(template-result)/result/c
 import { MSG_TYPE, MSG_PARAM_PATH } from "@/types/comment.type";
 import { USER_ROLE } from "@/types/auth.type";
 import PostController from "./component/PostController";
-import DateCompareToday from "@/util/DateCompareToday";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 
 import { Badge } from "@/components/ui/badge";

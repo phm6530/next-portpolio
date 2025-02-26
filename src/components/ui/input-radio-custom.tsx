@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckSquare2 } from "lucide-react";
+import { CheckCircle, CheckSquare2, Circle } from "lucide-react";
 import { InputHTMLAttributes, ReactNode } from "react";
 
 export default function CustomRadio({
@@ -19,7 +19,7 @@ export default function CustomRadio({
       <label
         className={cn(
           "grid grid-cols opacity-80 p-3 border border-muted-foreground/30 transition-all items-center rounded-lg cursor-pointer",
-          active && "opacity-100 scale-105 border-primary bg-primary/10 "
+          active && "opacity-100 scale-105 border-primary bg-primary/20 "
         )}
       >
         <input
@@ -29,8 +29,14 @@ export default function CustomRadio({
           checked={active}
           {...rest}
         />
-        <div className={"flex gap-2 items-center"}>
-          <CheckSquare2 className="w-7 h-7" /> {label}
+        <div className={"flex gap-2 items-center text-sm md:text-base"}>
+          {active ? (
+            <CheckCircle className="w-5 h-5  [&>path]:text-point" />
+          ) : (
+            <Circle className="w-5 h-5 opacity-70" />
+          )}
+
+          {label}
         </div>
         {children}
       </label>

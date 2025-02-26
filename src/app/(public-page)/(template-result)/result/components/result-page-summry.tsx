@@ -20,6 +20,7 @@ export default function ResultPageSummry(data: SurveyResult) {
     description,
     templateType,
     startDate,
+
     endDate,
     createdAt,
     thumbnail,
@@ -40,9 +41,7 @@ export default function ResultPageSummry(data: SurveyResult) {
           />
           <div className="my-4 leading-9">{title}</div>
         </CardTitle>
-        <CardDescription className=" min-h-[50px]">
-          <TipTapEditor mode="view" value={description} />
-        </CardDescription>
+        <TipTapEditor mode="view" value={description} />
       </CardHeader>
 
       <CardFooter>

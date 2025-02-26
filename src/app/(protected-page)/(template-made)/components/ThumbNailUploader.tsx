@@ -1,5 +1,4 @@
-import classes from "./ThumbNailUploader.module.scss";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import ImageUploadHandler from "@/utils/img-uploader";
@@ -7,21 +6,11 @@ import UnSplashThumbNail from "./UnsplashThumbNail";
 import { FetchTemplateForm } from "@/types/template.type";
 import ImgUpload from "/public/asset/icon/imgUpload.svg";
 import UploadedImagePreview from "./ImageContainer/UploadedImagePreview";
-import { Button } from "@/components/ui/button";
-import { ImgUploadContext } from "@/context/imgUpload-context";
 import SkeletonImage from "@/components/shared/loading/skeleton-image";
 import CustomButton from "@/components/ui/button-custom";
-import {
-  DoorOpen,
-  DropletIcon,
-  LucideUploadCloud,
-  Upload,
-  UploadCloud,
-  UploadIcon,
-} from "lucide-react";
+import { LucideUploadCloud } from "lucide-react";
 import { toast } from "react-toastify";
 import { cn } from "@/lib/utils";
-import { CardDescription } from "@/components/ui/card";
 
 /**
  * template_type : 템플릿 종류
@@ -101,10 +90,11 @@ export default function ThumbNailUploader() {
       <div
         className={cn(
           `
-          w-full  hover:bg-muted/50
+          w-full  hover:bg-point/10
+          bg-custom-input
           cursor-pointer
           flex-col 
-          transition-all p-20 rounded-md text-center flex gap-2 
+          transition-all p-5 min-h-[200px] rounded-md text-center flex gap-2 
           justify-center border border-muted-foreground/50 border-dashed
         `,
           (isDragging || tempThumbNail) &&
@@ -117,12 +107,12 @@ export default function ThumbNailUploader() {
       >
         <>
           {thumnbNailPending ? (
-            <div className={classes.thumbnailWrapper}>
+            <div>
               <SkeletonImage />
             </div>
           ) : (
             tempThumbNail && (
-              <div className={classes.thumbnailWrapper}>
+              <div>
                 <UploadedImagePreview
                   src={tempThumbNail}
                   deleteFunc={clearPreview}
@@ -131,9 +121,16 @@ export default function ThumbNailUploader() {
             )
           )}
         </>
-        <div className="flex gap-2 items-center justify-center">
-          <LucideUploadCloud className="w-5 h-5" /> Image Upload & Drag Drop
-        </div>
+        {/* thunbnail없ㅇ므 */}
+        {!tempThumbNail && !thumnbNailPending && (
+          <div className="flex flex-col gap-2 items-center justify-center">
+            <LucideUploadCloud className="w-10 h-10" />
+            <p className="text-sm">
+              {" "}
+              클릭하여 썸네일 이미지 or Drag & Drop 해주세요
+            </p>
+          </div>
+        )}
       </div>
       {/* 썸네일 preView */}
 

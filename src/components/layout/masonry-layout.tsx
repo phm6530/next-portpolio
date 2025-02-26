@@ -5,11 +5,12 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 export default function MasonryLayout({
   gutter = 20,
   children,
+  loading,
 }: {
   loading?: boolean;
   pending?: boolean;
   gutter?: number;
-  children: ReactNode;
+  children?: ReactNode;
 }) {
   const [initialLoad, setInitialLoad] = useState(true);
 
@@ -20,7 +21,7 @@ export default function MasonryLayout({
   return (
     <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
       <Masonry gutter={`${gutter}px`}>
-        {initialLoad ? <LoadingWrapper /> : children}
+        {initialLoad || loading ? <LoadingWrapper /> : children}
       </Masonry>
     </ResponsiveMasonry>
   );

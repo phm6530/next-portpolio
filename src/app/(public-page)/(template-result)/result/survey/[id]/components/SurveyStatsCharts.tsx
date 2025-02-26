@@ -108,15 +108,16 @@ export default function ResultSurveyCharts({
 
   return (
     <>
-      {/* 필터 */}
-      <SurveyGroupFilter
-        curFilter={filter}
-        setFilter={setFilter}
-        respondents={data?.respondents}
-      />
+      <div className="fixed bottom-0 right-0 max-w-[800px] w-[90%] left-[50%] -translate-x-[50%] bg-background z-10 p-5 border rounded-t-lg">
+        {/* 필터 */}
+        <SurveyGroupFilter
+          curFilter={filter}
+          setFilter={setFilter}
+          respondents={data?.respondents}
+        />
+      </div>
 
       <div className="flex flex-col gap-10 mt-6 mb-9">
-        {questions.map((e) => e.id)}
         {questions.map((qs, idx) => {
           return (
             <Card key={`${idx}-card`} className="py-5 rounded-3xl">

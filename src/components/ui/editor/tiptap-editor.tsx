@@ -1,6 +1,5 @@
 "use client";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import Heading from "@tiptap/extension-heading";
+
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Youtube from "@tiptap/extension-youtube";
@@ -14,7 +13,6 @@ import React, { useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
-import SkeletonListItem from "@/components/shared/loading/skeleton-listitem";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 const lowlight = createLowlight(all);
@@ -88,14 +86,19 @@ const TipTapEditor = ({
   };
 
   return (
-    <div className="table w-full rounded-md overflow-hidden   border-collapse">
+    <div className="table w-full rounded-md overflow-hidden   border-collapse ">
       {mode === "editor" && <TipTapToolbar editor={editor} />}
-      <div className="table-cell w-full cursor-text min-h-[100px] h-full border-input border overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]">
+      <div
+        className={cn(
+          mode === "view" && "border-none",
+          "table-cell w-full border-input border !rounded-lg cursor-text min-h-[100px]  h-full overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]"
+        )}
+      >
         <EditorContent
           editor={editor}
           className={cn(
-            " w-full h-full  p-3 min-h-[150PX] overflow-hidden"
-            // mode === "editor" && "bg-custom-input "
+            " w-full h-full min-h-[150PX] overflow-hidden ",
+            mode === "editor" && "bg-custom-input p-3"
           )}
           onClick={handleEditorClick}
         />

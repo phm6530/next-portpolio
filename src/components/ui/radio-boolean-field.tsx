@@ -1,7 +1,7 @@
 import { Controller, FieldValues, Path, useFormContext } from "react-hook-form";
-import classes from "./BooleanGroup.module.scss";
+import { cn } from "@/lib/utils";
 
-export default function BooleanGroup<T extends FieldValues>({
+export default function RadioBooleanField<T extends FieldValues>({
   groupName,
   label,
   description,
@@ -10,14 +10,15 @@ export default function BooleanGroup<T extends FieldValues>({
   label: string;
   description?: string;
 }) {
-  const { control } = useFormContext<T>();
+  const { control, watch } = useFormContext<T>();
+  console.log(watch());
 
   return (
-    <div className={classes.booleanContainer}>
-      <div className={classes.header}>
+    <div className="flex flex-col gap-4">
+      <div>
         {label} <span>{description}</span>
       </div>
-      <div>
+      <div className="flex gap-2">
         <Controller
           name={groupName}
           control={control}
@@ -28,11 +29,14 @@ export default function BooleanGroup<T extends FieldValues>({
                   return (
                     <label
                       key={`boolean-${idx}`}
-                      className={`${
-                        field.value === value ? classes.active : undefined
-                      }`}
+                      className={cn(
+                        "cursor-pointer border-input min-w-20 text-center border px-4 py-3 rounded-lg",
+                        field.value === value &&
+                          "text-point border-point border"
+                      )}
                     >
                       <input
+                        className="hidden"
                         type="radio"
                         onChange={() => field.onChange(value)}
                         checked={field.value === value}
@@ -46,7 +50,6 @@ export default function BooleanGroup<T extends FieldValues>({
           }}
         />
       </div>{" "}
-      {/* <p className={classes.description}>{description}</p> */}
     </div>
   );
 }

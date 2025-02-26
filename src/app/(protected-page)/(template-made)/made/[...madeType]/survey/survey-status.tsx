@@ -16,15 +16,15 @@ export default function SurveyStatus() {
 
   return (
     <div className="flex gap-3 items-center [&>div]:flex-1 [&>div]:text-sm">
-      <div className="border flex gap-2 justify-center border-border  text-center p-4 bg-third rounded-lg">
-        총 항목 <span className="text-primary">{questionsWatch.length}</span>개
+      <div className="flex gap-2 border border-border/50 justify-center   text-center p-4 bg-custom-input rounded-lg">
+        총 항목 <span className="text-point">{questionsWatch.length}</span>개
       </div>
 
-      <div className="border flex gap-2 justify-center border-border   text-center p-4 bg-third rounded-lg">
+      <div className="flex gap-2 border border-border/50 justify-center  text-center p-4 bg-custom-input rounded-lg">
         주관식 항목 <span>{cntType(QUESTION_TYPE.TEXT)}</span>개
       </div>
 
-      <div className="border flex gap-2 justify-center border-border text-center p-4 bg-third rounded-lg">
+      <div className="flex gap-2 border border-border/50 justify-center text-center p-4 bg-custom-input rounded-lg">
         객관식 항목 <span>{cntType(QUESTION_TYPE.SELECT)}</span>개
       </div>
     </div>

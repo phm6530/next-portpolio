@@ -4,7 +4,7 @@ import { User } from "lucide-react";
 
 const Master = () => {
   return (
-    <div className="mr-1 text-[10px] w-4 h-4 flex justify-center rounded-sm items-center bg-purple-700 text-white">
+    <div className="mr-1 text-[10px] w-4 h-4 flex justify-center rounded-sm items-center bg-primary text-white">
       M
     </div>
   );
@@ -21,7 +21,7 @@ const Member = () => {
 const anonymonus = () => {
   return (
     <div className="text-[10px] relative border border-foreground/20 bg-slate-500/30 w-4 h-4 flex justify-center rounded-sm items-center">
-      <User />
+      <AnonymousIcon />
     </div>
   );
 };

@@ -19,7 +19,7 @@ export default function AgeResponseFields() {
               <FormLabel className="text-xl">연령대를 선택해주세요</FormLabel>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-2 flex-wrap [&>label]:flex-1">
+              <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(100px,1fr))]">
                 {AgeGroups.map((range) => {
                   return (
                     <CustomRadio

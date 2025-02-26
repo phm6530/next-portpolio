@@ -1,7 +1,6 @@
 import requestHandler from "@/utils/withFetch";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import classes from "./UnsplashTunmbNail.module.scss";
 import Image from "next/image";
 import { useForm, useFormContext } from "react-hook-form";
 import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
@@ -18,6 +17,7 @@ import {
 
 import SkeletonImage from "@/components/shared/loading/skeleton-image";
 import CustomButton from "@/components/ui/button-custom";
+import NotFoundContents from "@/components/ui/error/notfound-contents";
 
 // unplashe Api Type임
 type UnsplashApi = {
@@ -103,7 +103,7 @@ function UnSplashContents({ closeModal }: { closeModal: () => void }) {
         {getValues("keyword") ? (
           // 로딩 시 스켈레톤 띄움
           isPending ? (
-            <div className={classes.slugItemsWrap}>
+            <div className="grid gap-3 max-h-[400px] overflow-y-scroll grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
               <SkeletonImage />
               <SkeletonImage />
               <SkeletonImage />
@@ -114,11 +114,11 @@ function UnSplashContents({ closeModal }: { closeModal: () => void }) {
           ) : (
             <>
               {data?.total !== 0 ? (
-                <div className={classes.slugItemsWrap}>
+                <div className="grid gap-3 max-h-[400px] overflow-y-scroll grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
                   {data?.results.map((e, key) => {
                     return (
                       <div
-                        className={classes.slugItem}
+                        className="cursor-pointer relative [aspect-ratio:16/9]"
                         key={`${key}-wrap`}
                         onClick={() => selectSlug(e.urls.regular)}
                       >
@@ -134,10 +134,10 @@ function UnSplashContents({ closeModal }: { closeModal: () => void }) {
                   })}
                 </div>
               ) : (
-                <div className={classes.notfoundSearch}>
+                <NotFoundContents>
                   &apos;{getValues("keyword")}&lsquo;과 일치하는 이미지가
                   없습니다.
-                </div>
+                </NotFoundContents>
               )}
             </>
           )

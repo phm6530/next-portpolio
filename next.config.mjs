@@ -20,16 +20,7 @@ const nextConfig = {
       "hnfcmdvepwcpcxxwavim.supabase.co",
     ], // 내 포트폴리오
   },
-  sassOptions: {
-    // 이거 이제 루트경로됨
-    includePaths: [path.join(__dirname, "src/styles")],
 
-    // 전역적으로 반영된거임
-    additionalData: `
-      @import "@/styles/_colors.scss";
-      @import "@/styles/_mixin.scss";
-  `,
-  },
   logging: {
     fetches: {
       fullUrl: true,

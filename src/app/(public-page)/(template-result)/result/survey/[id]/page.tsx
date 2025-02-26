@@ -18,6 +18,7 @@ import { CommentEditorProvider } from "@/components/comment/context/comment-cont
 import MessageForm from "@/components/comment/message-form";
 import ResultPageSummry from "../../components/result-page-summry";
 import ResultCommentSection from "../../components/ResultCommentSection";
+import SurveyGroupFilter from "./components/SurveyGroupFilter";
 
 const queryClient = new QueryClient();
 
@@ -54,7 +55,7 @@ export default async function SurveyResultPage({
       </div>
       <Grid.smallCenter className="h-full animate-fadein ">
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <div className="pt-14">
+          <div className="pt-14 relative">
             {/* template Summry */}
             <ResultPageSummry {...data} />
 

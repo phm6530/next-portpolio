@@ -43,7 +43,7 @@ export default function SelectResponseField({
                 className={cn(
                   "grid gap-4 ",
                   isPictureOption &&
-                    "grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+                    "grid-cols-[repeat(auto-fit,minmax(230px,1fr))]"
                 )}
               >
                 {options?.map((op, idx) => {

@@ -59,7 +59,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
 
         <div className="flex justify-center items-center">
           <button id="add" onClick={addYoutubeVideo}>
-            <div className="w-5 h-5 flex justify-center items-center  [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-red-500 ">
+            <div className="w-5 h-5 flex justify-center items-center  [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-white ">
               <YoutubeIcon />
             </div>
           </button>

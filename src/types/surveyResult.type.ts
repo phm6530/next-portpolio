@@ -1,5 +1,7 @@
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { DetailRespondents, TemplateItemMetadata } from "@/types/template.type";
+import { GENDER_GROUP } from "./user";
+import { ageGroupProps } from "./template";
 
 type BaseResultItem = {
   id: number;
@@ -10,8 +12,8 @@ type BaseResultItem = {
 //응답자
 interface Respondent {
   id: number;
-  age: number;
-  gender: string;
+  age: ageGroupProps;
+  gender: GENDER_GROUP;
 }
 
 export interface TextAnswer {

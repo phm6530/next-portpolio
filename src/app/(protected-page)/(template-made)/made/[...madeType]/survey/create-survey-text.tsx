@@ -15,7 +15,6 @@ import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OptionsController from "./option-controller";
 import ConfirmDialog from "@/components/ui/confirm-button";
-import { toast } from "react-toastify";
 
 export default function CreateSurveyText({
   surveyIdx,

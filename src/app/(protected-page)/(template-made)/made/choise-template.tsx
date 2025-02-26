@@ -55,7 +55,7 @@ export default function ChoiseTemplate() {
           <div
             key={`${template.type}-${idx}`}
             className={cn(
-              "relative shadow-2xl cursor-pointer bg-custom-input border border-transparent rounded-2xl hover:border-primary dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800  p-5",
+              "relative shadow-2xl cursor-pointer bg-card border border-transparent rounded-2xl hover:border-point dark:shadow-zinc-900 shadow-zinc-200 hover:shadow-zinc-300 dark:hover:shadow-zinc-800  p-5",
               !template.isActive && "opacity-50 cursor-not-allowed"
             )}
             onClick={() =>

@@ -10,6 +10,7 @@ export default function AniProgressbar({
 }: // trigger,
 {
   maxCnt: boolean;
+  optionIdx: number;
   percent: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,9 +25,11 @@ export default function AniProgressbar({
         },
 
         {
-          width: `${percent}%`,
+          width: `${percent < 2 ? 2 : percent}%`,
           duration: 3,
-          background: maxCnt ? "rgb(158 133 219)" : "rgb(219 215 255)",
+          background: () => {
+            return maxCnt ? "rgb(76 76 192)" : "rgb(116 116 158)";
+          },
         }
       );
     },
@@ -43,7 +46,7 @@ export default function AniProgressbar({
         key={percent}
         className={cn(
           `w-2 h-full left-0 rounded-full absolute bg-background `,
-          maxCnt && "text-foreground"
+          maxCnt && "text-[rgb(76,76,192)]"
         )}
       >
         <AniNumbering percent={percent} maxCnt={maxCnt} />

@@ -33,7 +33,7 @@ export default function InputField({
           <FormItem>
             {label && (
               <FormLabel>
-                {label} {required && <span className="text-primary">*</span>}
+                {label} {required && <span className="text-point">*</span>}
               </FormLabel>
             )}
 

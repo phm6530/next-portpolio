@@ -27,7 +27,7 @@ export default function TipTapEditorField({
           return (
             <FormItem>
               <FormLabel>
-                설명 <span className="text-primary">*</span>
+                설명 <span className="text-point">*</span>
               </FormLabel>
               <FormControl>
                 <TipTapEditor {...restField} placeholder={placeholder} />

@@ -9,7 +9,7 @@ export default function QuestionListWrapper({
   useAOS();
   return (
     <article
-      className={`rounded-lg border border-muted p-4 shadow-md flex flex-col gap-6 aos-hidden`}
+      className={`rounded-lg border-2 bg-card brightness-120 p-4 shadow-lg flex flex-col gap-6 aos-hidden`}
     >
       {children}
     </article>

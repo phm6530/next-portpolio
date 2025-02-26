@@ -15,6 +15,7 @@ import LoadingSpiner from "@/components/ui/LoadingSpiner";
 import MasonryLayout from "@/components/layout/masonry-layout";
 import NotFoundContents from "@/components/ui/error/notfound-contents";
 import { Ban } from "lucide-react";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -113,6 +114,8 @@ export default function TemplateList() {
           <div ref={ref} className="h-7" />
         </>
       )}
+      {/* Infinity Scroll Loading.. */}
+      {isFetching && <LoadingWrapper />}
     </>
   );
 }

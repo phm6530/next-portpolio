@@ -93,8 +93,10 @@ export default function HeaderNav() {
                   </div>
                 );
               })}
-              <Button asChild className="md:hidden mt-6">
-                <Link href={"/made"}>+ 템플릿 만들기</Link>
+              <Button asChild className="md:hidden mt-6 !text-sm">
+                <Link href={"/made"} style={{ fontSize: "12px !important" }}>
+                  + 템플릿 만들기
+                </Link>
               </Button>
             </nav>
 

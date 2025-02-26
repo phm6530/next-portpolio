@@ -38,7 +38,7 @@ export default function BoardListItem({
           nickname={itemData.creator.nickname}
         />
 
-        <div className="text-muted-foreground text-[11px] ml-6">
+        <div className="opacity-50 text-[11px] ml-6">
           {dayjs(itemData.createdAt).format("YYYY. M. DD")}
         </div>
 

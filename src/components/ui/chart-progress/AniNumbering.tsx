@@ -32,7 +32,7 @@ export default function AniNumbering({
 
   return (
     <div
-      className={cn(`text-sm absolute right-0`, maxCnt && "text-indigo-300")}
+      className={cn(`text-sm absolute right-0`, maxCnt && "text-point")}
       style={{ left: "calc(100% + 20px)" }}
     >
       <span ref={textRef}>0</span>%

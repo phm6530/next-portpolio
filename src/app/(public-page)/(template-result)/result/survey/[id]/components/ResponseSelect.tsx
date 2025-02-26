@@ -47,7 +47,7 @@ export default function ResponseSelect({
       <div
         className={cn(
           "grid gap-4 ",
-          isPictureOption && "grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+          isPictureOption && "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]"
         )}
       >
         {sortedOptions.map((option, idx) => {
@@ -59,7 +59,7 @@ export default function ResponseSelect({
             <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
               <div className="text-zinc-500">
                 {ixMax ? (
-                  <div className="text-indigo-300 flex items-center gap-2 ">
+                  <div className="text-point flex items-center gap-2 ">
                     <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
                       <Crown />
                     </div>
@@ -71,9 +71,13 @@ export default function ResponseSelect({
                 )}
               </div>
 
-              <div className="grid items-center gap-2 flex-1">
+              <div className="grid items-center gap-2">
                 {/* Percent */}
-                <AniProgressbar maxCnt={ixMax} percent={percent} />
+                <AniProgressbar
+                  maxCnt={ixMax}
+                  optionIdx={idx}
+                  percent={percent}
+                />
               </div>
 
               {option.img && (

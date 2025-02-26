@@ -3,9 +3,10 @@ import Grid from "../ui/Grid";
 
 export default function Footer() {
   return (
-    <div className="border  mt-5 py-12">
-      <footer className="py-8">
-        <Grid.center className="flex flex-col gap-4">
+    <div className="mt-5 py-12">
+      {" "}
+      <Grid.smallCenter className="min-h-0">
+        <footer className="py-8 border-t flex flex-col gap-4 text-centers items-center">
           <LogoWrapper maxWidth={100} />
 
           <p className="text-[12px] leading-6 opacity-80 text-center">
@@ -14,9 +15,9 @@ export default function Footer() {
             않은 작업물은 포함하지 않으며, 오직 공개된 작업물만을 게시합니다.
           </p>
           <br></br>
-          <p className="text-sm">Copyright ⓒ p. Hyun</p>
-        </Grid.center>
-      </footer>
+          <p className="text-sm text-muted-foreground">Copyright ⓒ p. Hyun</p>
+        </footer>
+      </Grid.smallCenter>
     </div>
   );
 }

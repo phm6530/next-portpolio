@@ -13,7 +13,7 @@ import { ReactNode } from "react";
 type ModalMode = "confirm" | "default";
 
 export default function CustomModal({
-  mode = "default",
+  // mode = "default",
   title,
   description,
   open,

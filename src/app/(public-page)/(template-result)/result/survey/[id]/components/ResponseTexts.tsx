@@ -1,10 +1,14 @@
 "use client";
-import { ResultText, SurveyResult } from "@/types/surveyResult.type";
+import {
+  ResultText,
+  SurveyResult,
+  TextAnswer,
+} from "@/types/surveyResult.type";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AgeOptions,
   GenderOptions,
@@ -20,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export function ResponseTexts({
+  idx,
   id: questionId,
   templateId,
   filter,
@@ -32,56 +37,45 @@ export function ResponseTexts({
     ageGroup: AgeOptions;
   };
 } & ResultText) {
-  const isFirstMount = useRef<boolean>(false);
+  const mountRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!isFirstMount.current) {
-      isFirstMount.current = true;
-    }
-  }, [isFirstMount]);
-
-  const resultData = queryClient.getQueryData<SurveyResult>([
+  const cacheData = queryClient.getQueryData<SurveyResult>([
     QUERY_KEY.SURVEY_RESULTS,
     templateId,
   ]);
 
-  const findTextQuestion = resultData?.questions.find(
+  const findTextQuestion = cacheData?.questions.find(
     (e) => e.id === questionId
   );
+
+  const initalCachingData = () => {
+    if (cacheData?.questions[idx].type === "text") {
+      return cacheData?.questions[idx].textAnswers;
+    } else {
+      return [];
+    }
+  };
+
+  const [list, setList] = useState<TextAnswer[]>(() => initalCachingData());
 
   const {
     data: textQuestions,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isSuccess,
     isPending,
   } = useInfiniteQuery<{
     isNextPage: number | null;
     answers: ResultText["textAnswers"];
   }>({
-    queryKey: [
-      QUERY_KEY.QUESTION_TEXT,
-      questionId + "",
-      filter.ageGroup,
-      filter.genderGroup,
-    ],
+    queryKey: [QUERY_KEY.QUESTION_TEXT, questionId + ""],
 
     queryFn: ({ pageParam }) => {
       return requestHandler(
         async () =>
           await fetch(
-            `${BASE_NEST_URL}/answer/question/${questionId}/${pageParam}`,
-            {
-              cache: "no-store",
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                genderGroup: filter.genderGroup,
-                ageGroup: filter.ageGroup,
-              }),
-            }
+            `${BASE_NEST_URL}/answer/question/${questionId}/${pageParam}`
           )
       );
     },
@@ -89,10 +83,7 @@ export function ResponseTexts({
       return lastPage.isNextPage;
     }, // 다음 페이지 결정
     initialPageParam: 1,
-    enabled:
-      isFirstMount.current &&
-      (filter.ageGroup !== "all" || filter.genderGroup !== "all"), // 초기 패칭 방지..
-    staleTime: 10000,
+
     initialData: () => {
       return {
         // 캐싱재사용으로 변경
@@ -107,26 +98,69 @@ export function ResponseTexts({
     },
   });
 
-  const resultList = textQuestions?.pages.flatMap((page) => page.answers);
+  useEffect(() => {
+    // 마운트안됐을때는 리턴
+    if (!mountRef.current) {
+      mountRef.current = true;
+      return;
+    }
+
+    if (isSuccess) {
+      setList((prev) => [
+        ...prev,
+        ...(textQuestions.pages.at(-1)?.answers as TextAnswer[]),
+      ]);
+    }
+  }, [isSuccess, textQuestions]);
+
+  const filterList = (list: TextAnswer[]): TextAnswer[] => {
+    return list.filter((e) => {
+      // 필터가 모두 "all"인 경우 모든 항목 표시
+      if (filter.ageGroup === "all" && filter.genderGroup === "all") {
+        return true;
+      }
+
+      // age만 필터링할 때
+      if (filter.ageGroup !== "all" && filter.genderGroup === "all") {
+        return filter.ageGroup === e.respondent.age;
+      }
+
+      // gender만 필터링할 때
+      if (filter.ageGroup === "all" && filter.genderGroup !== "all") {
+        return filter.genderGroup === e.respondent.gender;
+      }
+
+      // 두 필터 모두 "all"이 아닐 때 (둘 다 필터링)
+      if (filter.ageGroup !== "all" && filter.genderGroup !== "all") {
+        return (
+          filter.genderGroup === e.respondent.gender &&
+          filter.ageGroup === e.respondent.age
+        );
+      }
+
+      // 기본적으로 포함하지 않음 (위의 조건에 해당하지 않는 경우)
+      return false;
+    });
+  };
 
   return (
     <CardContent>
       <div>
-        {resultList?.length === 0 && (
+        {filterList(list)?.length === 0 && (
           <NotthingUser
             ageGroup={filter.ageGroup}
             genderGroup={filter.genderGroup}
           />
         )}
         <MasonryLayout pending={isPending} gutter={10}>
-          {resultList?.map((as, idx) => {
+          {filterList(list)?.map((as, idx) => {
             const { id, respondent, answer } = as;
             const { gender, age } = respondent;
 
             return (
               <div
                 key={`${id}-${idx}`}
-                className=" p-3 bg-third rounded-xl  hover:border-primary"
+                className=" p-3 bg-third rounded-xl border hover:border-primary animate-fadein"
               >
                 <div className="flex items-center gap-2">
                   <div className=" w-10 h-10 border-foreground/30  border-2 rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">

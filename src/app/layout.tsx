@@ -1,5 +1,4 @@
 import Footer from "@/components/layout/Footer";
-import "@/styles/_styles.scss";
 import { Metadata } from "next";
 import {
   dehydrate,

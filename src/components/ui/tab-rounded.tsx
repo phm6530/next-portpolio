@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
 
 export default function TabRounded({
   active,
@@ -8,7 +9,7 @@ export default function TabRounded({
 }: {
   active: boolean;
   onClick: (...arg: any) => void;
-  children: string;
+  children: ReactNode;
   Icon?: React.ComponentType;
 }) {
   return (

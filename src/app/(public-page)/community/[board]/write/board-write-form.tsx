@@ -20,6 +20,7 @@ import {
 } from "./board-write-schema";
 import { BoardWirteAction } from "./board-wirte-action";
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
@@ -81,7 +82,7 @@ export default function BoardForm({
         className="flex flex-col gap-8 mt-7 "
         onSubmit={handleSubmit(onSubmitHandler)}
       >
-        {!userData && (
+        {!userData ? (
           <div className="flex gap-5 [&>div]:flex-1">
             <>
               <InputField
@@ -93,6 +94,15 @@ export default function BoardForm({
               <PasswordInputField label="비밀번호" />
             </>
           </div>
+        ) : (
+          <>
+            <div className="col-span-6 0 text-left flex items-start  p-4 border">
+              <UserRoleDisplay
+                role={userData.role}
+                nickname={userData.nickname}
+              />
+            </div>
+          </>
         )}
         <InputField
           name="title"
