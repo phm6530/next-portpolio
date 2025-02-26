@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import MessageDeleteAction from "./action/delete-action";
 import { BASE_NEST_URL } from "@/config/base";
 import useCommentContext from "./hook/comment-context-hook";
+import ConfirmButton from "../ui/confirm-button";
 
 //import
 dayjs.extend(relativeTime);
@@ -43,13 +44,13 @@ export default function MessageItem({
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (data?: { password: string }) => {
+    mutationFn: async (data?: { password?: string }) => {
       const url = `${BASE_NEST_URL}/${msgType}/${id}`;
       return await MessageDeleteAction({
         url,
         isMember: !!userData,
         tags: [`comment-${EDITOR_PATH}-${boardId}`],
-        password: data!.password,
+        ...(!userData ? { password: data!.password } : {}),
       });
     },
     onSuccess: () => {
@@ -75,9 +76,24 @@ export default function MessageItem({
           {isUserCommentAuthor && (
             <>
               {isUserCommentAuthor && (
-                <span className="text-[10px] mr-5 mt-0.5 text-pink-300  rounded-full">
-                  내 댓글
-                </span>
+                <>
+                  <span className="text-[10px] mr-5 mt-0.5 text-pink-300  rounded-full">
+                    내 댓글
+                  </span>
+                  <ConfirmButton
+                    title="질문을 삭제하시겠습니까?"
+                    cb={async (e) => {
+                      await mutateAsync(e);
+                    }}
+                  >
+                    <button
+                      className=" opacity-70
+            "
+                    >
+                      <X className="w-3 h-3 text-secondary-foreground/80" />
+                    </button>
+                  </ConfirmButton>
+                </>
               )}
             </>
           )}

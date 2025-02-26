@@ -20,18 +20,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-import TransformPlainText from "@/utils/transform-html-to-plaintext";
+// import TransformPlainText from "@/utils/transform-html-to-plaintext";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
 
 // 동적 생성
-export const dynamicParams = true;
+// export const dynamicParams = true;
 export async function generateStaticParams() {
   let url = `${BASE_NEST_URL}/template?sort=all`;
   url += "&page=1";

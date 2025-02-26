@@ -1,11 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
-import InputWrapper from "@/components/ui/InputWrapper/InputWrapper";
-import FormInput from "@/components/ui/FormElement/FormInput";
-
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AuthComplete from "./AuthComplete";
-import useStore from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { withFetch } from "@/util/clientUtil";
 import { BASE_NEST_URL } from "@/config/base";

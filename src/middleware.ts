@@ -13,14 +13,13 @@ type Pathname = (typeof AUTH_REDIRECT_PATHS)[number];
 
 export async function middleware(req: NextRequest, res: NextResponse) {
   const pathname = req.nextUrl.pathname as Pathname;
-  const qs = req.nextUrl.searchParams;
 
   // get Token
   const token = req.cookies.get("token")?.value;
 
   //로그인 페이지인데 로그인 되어있을때 ReDirect 시켜버리기
   if (AUTH_REDIRECT_PATHS.includes(pathname) && token) {
-    const path = qs.get("redirect") || "/";
+    const path = "/";
     return NextResponse.redirect(new URL(path, req.nextUrl.origin));
   }
 

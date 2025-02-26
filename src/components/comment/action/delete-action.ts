@@ -1,5 +1,5 @@
 "use server";
-import { revaildateTags } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildation } from "@/action/with-fetch-revaildation";
 import { cookies } from "next/headers";
 
 export default async function MessageDeleteAction({
@@ -11,12 +11,12 @@ export default async function MessageDeleteAction({
   url: string;
   isMember: boolean;
   tags: string[];
-  password: string;
+  password?: string;
 }) {
   const cookieStore = cookies();
   const authCookie = cookieStore.get("token");
 
-  return await revaildateTags(async () => {
+  return await withFetchRevaildation(async () => {
     return await fetch(url, {
       method: "DELETE",
       headers: {

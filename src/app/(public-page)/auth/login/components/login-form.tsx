@@ -5,7 +5,7 @@ import { User } from "@/types/auth.type";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import LoadingSpinnerWrapper from "@/components/ui/loading/LoadingSpinnerWrapper";
 import {
   Form,
@@ -33,6 +33,7 @@ type SignUpResponse = {
 export default function LoginForm() {
   const router = useRouter();
   const { throttle } = useThrottlring();
+  const qs = useSearchParams();
   //zodResolver
   const formMethod = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -58,8 +59,8 @@ export default function LoginForm() {
       });
     },
     onSuccess: () => {
-      //초기 로그인 시에 받은 쿠키로 서버 정보 갱신하기위해 refresh 시킴
-      router.refresh();
+      const redirectPath = qs.get("redirect") ?? "/";
+      window.location.href = redirectPath;
     },
     onError: () => {
       // 미 일치시 Password 지워 버림
