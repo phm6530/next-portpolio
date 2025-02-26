@@ -36,6 +36,16 @@ export type DetailRespondents = {
   };
 };
 
+export type RespondentsData = {
+  female: Record<string, number>;
+  male: Record<string, number>;
+  selectUserCnt: number;
+  totalByGender: {
+    female: number;
+    male: number;
+  };
+};
+
 // MaxGroup + 참여자
 export type RespondentsAndMaxGroup = {
   tag: RESPONDENT_TAG.MAXGROUP;
@@ -60,7 +70,7 @@ export interface Respondent {
 
 //Template List Props ...
 export type TemplateItemMetadata<
-  T extends DetailRespondents | RespondentsAndMaxGroup
+  T extends DetailRespondents | RespondentsAndMaxGroup | RespondentsData
 > = {
   id: number;
   // updatedAt: string;

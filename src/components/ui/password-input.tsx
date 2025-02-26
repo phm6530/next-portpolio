@@ -26,7 +26,11 @@ export default function PasswordInput() {
         onMouseUp={leaveToMouseHandler}
         onMouseLeave={leaveToMouseHandler}
       >
-        {!psView ? <Eye /> : <EyeOff />}
+        {!psView ? (
+          <Eye className="text-zinc-300" />
+        ) : (
+          <EyeOff className="text-zinc-300" />
+        )}
       </div>
     </div>
   );

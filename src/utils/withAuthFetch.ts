@@ -1,10 +1,7 @@
 import { BASE_URL } from "@/config/base";
 import requestHandler from "./withFetch";
 
-async function withAuthFetch<T>(
-  url: string,
-  option: RequestInit = {}
-) {
+async function withAuthFetch<T>(url: string, option: RequestInit = {}) {
   return await requestHandler<T>(async () => {
     if (typeof window !== undefined) {
       //Client

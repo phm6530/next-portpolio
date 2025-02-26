@@ -2,7 +2,6 @@
 import gsap from "gsap";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import "./test.scss";
 
 export default function Page() {
   const gsapScopeRef = useRef<HTMLDivElement>(null);

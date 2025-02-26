@@ -1,5 +1,5 @@
 "use client";
-import { ERROR_CODE } from "@/codeMsg";
+import { ERROR_CODE } from "@/config/codeMsg";
 import { BASE_NEST_URL } from "@/config/base";
 import { QUERY_KEY } from "@/types/constans";
 
@@ -10,7 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
-export default function WithProtectedComponent({ children }: { children: ReactNode }) {
+export default function WithProtectedComponent({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const sessionToken = SessionStorage.getAccessToken();
 
   const router = useRouter();
@@ -39,7 +43,9 @@ export default function WithProtectedComponent({ children }: { children: ReactNo
       SessionStorage.removeAccessToken();
       router.refresh();
 
-      router.replace(`/auth/login?redirect=${pathname}&code=${ERROR_CODE.UNAUTHORIZED}`);
+      router.replace(
+        `/auth/login?redirect=${pathname}&code=${ERROR_CODE.UNAUTHORIZED}`
+      );
     }
   }, [sessionToken, pathname, router, isError]);
 

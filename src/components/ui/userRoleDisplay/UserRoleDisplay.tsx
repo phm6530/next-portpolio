@@ -1,5 +1,4 @@
-import UserMarker from "../usericon/UserMarker";
-import classes from "./UserRoleDisplay.module.scss";
+import UserMarker from "./UserMarker";
 import { USER_ROLE } from "@/types/auth.type";
 
 export default function UserRoleDisplay({
@@ -10,14 +9,16 @@ export default function UserRoleDisplay({
   nickname: string | null;
 }) {
   return (
-    <div className={classes.userDisplayContainer}>
+    <div className="flex gap-1 items-center text-sm justify-center">
       {/* Icon 임의로 반영함 */}
-      {role === USER_ROLE.USER && <UserMarker.anonymonus />}
+      {role === USER_ROLE.USER && <UserMarker.Member />}
       {role === USER_ROLE.ANONYMOUS && <UserMarker.anonymonus />}
       {role === "admin" && <UserMarker.Master />}
 
       {/* 닉네임 */}
-      <div className={classes.nickName}>{nickname}</div>
+      <div className="max-w-[150px] text-[13px] line-clamp-1 text-foreground ">
+        {nickname}
+      </div>
     </div>
   );
 }

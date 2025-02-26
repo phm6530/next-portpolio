@@ -6,7 +6,7 @@ export const scriptFilter = (text: string): string => {
 };
 
 const badWord = ["용석", "다빈"];
-export const badWordfIlter: (text: string) => string = (text) => {
+export const badWordfIlter: (_: string) => string = (text) => {
   const isFindBadWord = badWord.filter((word) => {
     return text.includes(word);
   });

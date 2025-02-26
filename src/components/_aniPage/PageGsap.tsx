@@ -40,7 +40,9 @@ export default function PageGsap({
             }),
           onLeave: (batch) =>
             gsap.set(batch, {
-              opacity: 0, y: -100, overwrite: true 
+              opacity: 0,
+              y: -100,
+              overwrite: true,
             }),
           start: "top 90%",
         });

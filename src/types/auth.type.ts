@@ -7,17 +7,9 @@ export enum USER_ROLE {
 
 //UserData
 export type User = {
-  createAt: string;
+  createdAt: string;
   email: string;
   id: number;
   nickname: string;
   role: USER_ROLE;
 };
-
-//Sign In
-export type SignIn = { email: string; password: string };
-
-//register User
-export type SignupUser = {
-  nickname: string;
-} & SignIn;

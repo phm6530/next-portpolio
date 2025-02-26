@@ -11,6 +11,64 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        "auto-fill": "repeat(auto-fill, minmax(250px, 1fr))",
+      },
+      width: {
+        "calc-grid": "calc(100% - 40px)",
+        "calc-80": "calc(100% - 80px)",
+      },
+      fontFamily: {
+        paperlogy: ["Paperlogy-8ExtraBold", "sans-serif"],
+      },
+      boxShadow: {
+        custom: "5px 14px 29px rgb(100 63 255 / 25%)",
+        center: "0px 0px 3px #757575a2",
+        "center-dark": "0px 0px 3px #ffffffa2",
+      },
+      colors: {
+        throw: "hsl(var(--throw))",
+      },
+      height: {
+        "calc-screen": "calc(100vh - 80px)", // 기본 설정
+        "calc-screen-sm": "calc(100% - 60px)", // sm 사이즈에서 높이 변경
+        "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경
+      },
+
+      keyframes: {
+        opacity: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        fadein: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        fadeout: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(-10px)",
+          },
+        },
+      },
+      animation: {
+        fadein: "fadein .4s ease",
+        fadeout: "fadeout 1s",
+        opacity: "opacity 0.5s linear infinite alternate",
+      },
       fontFamily: {
         pretendard: ["pretendard", "sans-serif"],
         Paperlogy: ["Paperlogy-8ExtraBold", "sans-serif"],
@@ -23,6 +81,7 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -51,6 +110,7 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,6 +121,10 @@ module.exports = {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+
+        "custom-input": "hsl(var(--custom-input))",
+        third: "hsl(var(--third))",
+        point: "hsl(var(--point))",
       },
     },
   },

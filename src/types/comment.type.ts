@@ -3,7 +3,7 @@ import { User, USER_ROLE } from "@/types/auth.type";
 export type CommentReponse = {
   id: number;
   updateAt: string;
-  createAt: string;
+  createdAt: string;
   content: string;
   replies: CommentReponse[];
   user: User | null;
@@ -14,12 +14,12 @@ export type CommentReponse = {
   } & { email?: string };
 };
 
-export enum COMMENT_EDITOR_TYPE {
+export enum MSG_TYPE {
   COMMENT = "comment",
   REPLY = "reply",
 }
 
-export enum COMMENT_NEED_PATH {
+export enum MSG_PARAM_PATH {
   TEMPLATE = "template",
   BOARD = "board",
 }

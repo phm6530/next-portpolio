@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo } from "react";
 import { CONST_PAGING, QUERY_STRING } from "@/types/constans";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import classes from "./Paging.module.scss";
+import { cn } from "@/lib/utils";
 
 interface PagingProps {
   cnt: number;
@@ -77,7 +77,7 @@ export default function Paging({ cnt = 1 }: PagingProps) {
   const pages = pageArr();
 
   return (
-    <div className={classes.pagingWrap}>
+    <div className="flex items-center justify-center p-9">
       <button
         aria-label="prevNav"
         onClick={() => pagingHandler("prev")}
@@ -92,7 +92,7 @@ export default function Paging({ cnt = 1 }: PagingProps) {
             type="button"
             key={`page-${idx}`}
             value={page}
-            className={page === pageNumber ? classes.active : undefined}
+            className={cn("paging-btn", page === pageNumber && "border")}
             disabled={typeof page === "string"} // ... 클릭 방지
             aria-label={`nav-${page}`}
           >
