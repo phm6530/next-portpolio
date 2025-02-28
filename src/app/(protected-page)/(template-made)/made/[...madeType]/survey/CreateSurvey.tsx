@@ -189,20 +189,20 @@ export default function CreateSurveyForm() {
   return (
     <>
       <SubheaderDescrition
-        title={`생성하실 템플릿 서식을\n기재해주세요`}
+        title={`설문조사 템플릿 생성하기`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className=" aos-hidden pt-16 flex flex-col gap-3 mb-[200px]">
+      <div className=" aos-hidden pt-5 md:pt-16 flex flex-col gap-0 md:gap-3 mb-[200px]">
         <FormProvider {...formState}>
-          <Card className="p-7  flex flex-col gap-4  border-0">
-            <CardHeader>
-              <CardTitle className="text-2xl font-normal">
+          <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
+            <CardHeader className="px-0 md:px-6">
+              <CardTitle className="text-xl md:text-2xl  font-normal">
                 1. 설문조사 정보
               </CardTitle>
               <CardDescription> 가장 먼저 노출되는 항목이에요</CardDescription>
             </CardHeader>
-            <CardContent className="gap-10 flex flex-col">
+            <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
               {/* 설문조사 제목 */}
               <InputField
                 name="title"
@@ -226,35 +226,35 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <Card className="p-7 flex flex-col gap-4 border-0">
-            <CardHeader>
-              <CardTitle className="text-2xl font-normal">
+          <Card className="md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b">
+            <CardHeader className="px-0 md:px-6">
+              <CardTitle className="text-xl md:text-2xl font-normal">
                 2. 응답자 필터 설정
               </CardTitle>
               <CardDescription>
                 설문 결과를 더 자세히 분석하기 위한 설정입니다.
               </CardDescription>
             </CardHeader>
-            <CardContent className="gap-10 flex flex-col">
+            <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
               {/* 나이 별 수집 */}
               <RadioBooleanField<RequestSurveyFormData>
-                label="연령대별 분석을 진행할까요?"
+                label="연령대 별 집계를 진행 하시겠습니까?"
                 groupName={"isAgeCollected"}
                 // description="연령대별 필터링이 가능합니다."
               />
 
               {/* 성별 별 수집 */}
               <RadioBooleanField<RequestSurveyFormData>
-                label="성별별 분석을 진행할까요?"
+                label="성별 별 집계를 진행 하시겠습니까?"
                 groupName={"isGenderCollected"}
                 // description="성별 필터링이 가능합니다."
               />
             </CardContent>
           </Card>
 
-          <Card className="p-7 flex flex-col gap-4 border-0">
-            <CardHeader>
-              <CardTitle className="text-2xl font-normal">
+          <Card className="md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b">
+            <CardHeader className="px-0 md:px-6">
+              <CardTitle className=" text-xl md:text-2xl font-normal">
                 3. 설문 문항 구성
               </CardTitle>
               <CardDescription>
@@ -262,7 +262,7 @@ export default function CreateSurveyForm() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="gap-10 flex flex-col">
+            <CardContent className="px-0 md:px-6 gap-6 flex flex-col">
               <SurveyStatus />
               {/* List.. */}
               <CreateSurveyList />
@@ -282,7 +282,7 @@ export default function CreateSurveyForm() {
         </FormProvider>
 
         <div className="flex [&>button]:flex-1 gap-3">
-          <Button
+          {/* <Button
             type="submit"
             disabled={isPending}
             onClick={formState.handleSubmit(onSubmitHandler)}
@@ -290,13 +290,13 @@ export default function CreateSurveyForm() {
             variant={"outline"}
           >
             미리보기
-          </Button>
+          </Button> */}
 
           <Button
             type="submit"
             disabled={isPending}
             onClick={formState.handleSubmit(onSubmitHandler)}
-            className="py-7 rounded-lg"
+            className="py-7 rounded-lg md:text-base text-sm"
           >
             설문조사 생성하기
           </Button>

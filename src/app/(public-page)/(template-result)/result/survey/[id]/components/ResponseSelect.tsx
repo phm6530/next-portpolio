@@ -60,9 +60,9 @@ export default function ResponseSelect({
               <div className="text-zinc-500">
                 {ixMax ? (
                   <div className="text-point flex items-center gap-2 ">
-                    <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
+                    {/* <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
                       <Crown />
-                    </div>
+                    </div> */}
 
                     {option.value}
                   </div>

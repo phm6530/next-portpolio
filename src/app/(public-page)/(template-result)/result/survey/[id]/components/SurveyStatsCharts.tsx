@@ -108,7 +108,10 @@ export default function ResultSurveyCharts({
 
   return (
     <>
-      <div className="fixed bottom-0 right-0 max-w-[800px] w-[90%] left-[50%] -translate-x-[50%] bg-background z-10 p-5 border rounded-t-lg">
+      <div
+
+      //  className="fixed bottom-0 right-0 max-w-[800px] w-[90%] left-[50%] -translate-x-[50%] bg-background z-10 p-5 border rounded-t-lg"
+      >
         {/* 필터 */}
         <SurveyGroupFilter
           curFilter={filter}
@@ -120,19 +123,25 @@ export default function ResultSurveyCharts({
       <div className="flex flex-col gap-10 mt-6 mb-9">
         {questions.map((qs, idx) => {
           return (
-            <Card key={`${idx}-card`} className="py-5 rounded-3xl">
+            <Card
+              key={`${idx}-card`}
+              className="py-5 rounded-3xl border-border"
+            >
               <CardHeader>
                 <CardTitle>
-                  <span className="font-Paperlogy text-indigo-400">
-                    Q. {idx + 1}
-                  </span>
-                  <div className="my-10">
-                    {qs.label}
+                  <div className="flex gap-2 items-center">
+                    <span className="text-lg md:text-2xl font-Paperlogy text-primary dark:text-indigo-400">
+                      Q{idx + 1}.{" "}
+                    </span>
+                  </div>
 
+                  <div className="mt-10 mb-10">
+                    <span>{qs.label}</span>
                     {qs.type === QUESTION_TYPE.TEXT && (
                       <CardDescription className="mt-3 font-normal">
-                        해당 문항에 응답입니다. 하단의 버튼을 클릭하여 10개씩
-                        추가로 메세지를 가져올 수 있습니다.
+                        해당 문항에 응답입니다. <br />
+                        하단의 버튼을 클릭하여 10개씩 추가로 메세지를 가져올 수
+                        있습니다.
                       </CardDescription>
                     )}
                   </div>

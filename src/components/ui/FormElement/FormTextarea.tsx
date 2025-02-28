@@ -36,19 +36,18 @@ const FormTextarea = forwardRef<
                 </CardHeader>
               )}
 
-              <CardContent>
-                <FormControl>
-                  <Textarea
-                    placeholder={placeholder}
-                    onChange={(e) => {
-                      rowsHandler(e);
-                      field?.onChange?.(e);
-                    }}
-                    rows={rows}
-                  />
-                </FormControl>
-                <FormMessage className="mt-2" />
-              </CardContent>
+              <FormControl>
+                <Textarea
+                  placeholder={placeholder}
+                  onChange={(e) => {
+                    rowsHandler(e);
+                    field?.onChange?.(e);
+                  }}
+                  rows={rows}
+                  className="text-sm"
+                />
+              </FormControl>
+              <FormMessage className="mt-2" />
             </FormItem>
           );
         }}

@@ -2,7 +2,6 @@
 
 import girlCractor from "/public/asset/girl_template.png";
 import Image from "next/image";
-import classes from "./Creactor.module.scss";
 import AgeGroupIcon from "./genarationIcon/AgeGroupIcon";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
@@ -59,21 +58,26 @@ export default function TemplateCractor() {
 
   return (
     <>
-      <div className={`${classes.CreactorWrap}`} ref={ref}>
-        <div className={`${classes.ageGroup10}  icon`}>
+      <div
+        className="relative w-[240px]  md:w-[290px] mt-4 aspect-[3/4] invisible"
+        ref={ref}
+      >
+        <div className={`top-[41%] right-[34%] z-30  absolute invisible icon`}>
           <AgeGroupIcon ageGroup={10} size={"extraLarge"} />
         </div>
-        <div className={`${classes.ageGroup20}  icon`}>
+        <div className={`top-[25%] right-[15%] z-20  absolute invisible  icon`}>
           <AgeGroupIcon ageGroup={20} size={"small"} gender="female" />
         </div>
-        <div className={`${classes.ageGroup30}  icon`}>
+        <div
+          className={`top-[70%] right-[106%] z-10  absolute invisible  icon`}
+        >
           <AgeGroupIcon ageGroup={30} size={"large"} />
         </div>
-        <div className={`${classes.ageGroup40}  icon`}>
-          <AgeGroupIcon ageGroup={40} size={"small"} gender="male" />
+        <div className={`top-[50%] right-[120%] z-0  absolute invisible  icon`}>
+          <AgeGroupIcon ageGroup={40} size={"small"} gender="female" />
         </div>
-        <div className={`${classes.ageGroup50}  icon`}>
-          <AgeGroupIcon ageGroup={50} size={"small"} />
+        <div className={`top-[13%] right-[50%] z-0  absolute invisible  icon`}>
+          <AgeGroupIcon ageGroup={50} size={"small"} gender="male" />
         </div>
 
         <Image src={girlCractor} alt="girlCractor" priority fill />

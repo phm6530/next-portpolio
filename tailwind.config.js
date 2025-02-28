@@ -34,6 +34,9 @@ module.exports = {
         "calc-screen-sm": "calc(100% - 60px)", // sm 사이즈에서 높이 변경
         "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경
       },
+      maxHeight: {
+        "calc-screen-xs": "calc(100% - 20px)", // xs 사이즈에서 높이 변경
+      },
 
       keyframes: {
         opacity: {

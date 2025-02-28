@@ -31,12 +31,17 @@ export default function CustomModal({
 }) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className={cn("overflow-hidden", className)}>
+      <DialogContent
+        className={cn(
+          "custom-scroll overflow-y-scroll max-h-calc-screen-xs",
+          className
+        )}
+      >
         <DialogHeader>
-          <DialogTitle className="whitespace-pre-line text-xl mb-3">
+          <DialogTitle className="whitespace-pre-line text-xl mb-3 text-left">
             {title}
           </DialogTitle>
-          <DialogDescription className="whitespace-pre-line ">
+          <DialogDescription className="whitespace-pre-line  text-left text-[12px] leading-5 md:text-sm">
             {description}
           </DialogDescription>
         </DialogHeader>

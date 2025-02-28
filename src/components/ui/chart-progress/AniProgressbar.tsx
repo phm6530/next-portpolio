@@ -28,7 +28,7 @@ export default function AniProgressbar({
           width: `${percent < 2 ? 2 : percent}%`,
           duration: 3,
           background: () => {
-            return maxCnt ? "rgb(76 76 192)" : "rgb(116 116 158)";
+            return maxCnt ? "#8274f3" : "rgb(226,226,226,0.5)";
           },
         }
       );

@@ -131,8 +131,8 @@ export default function MessageForm({
       <form
         onSubmit={handleSubmit(submitHandler)}
         className={cn(
-          "grid grid-cols-[repeat(6,1fr)] gap-1 rounded-xl",
-          !!userData && " p-2 bg-card"
+          "flex flex-col md:grid md:grid-cols-[repeat(6,1fr)]  gap-2 rounded-xl",
+          !!userData && "p-2 bg-card"
         )}
       >
         {/* 로그인 한 유저는 필요없음  */}
@@ -144,10 +144,15 @@ export default function MessageForm({
                 autoComplete="off"
                 name="anonymous"
                 placeholder="이름"
+                disabled={isPending}
               />
             </div>
             <div className="col-span-2">
-              <PasswordInputField errorField={false} className="col-span-1" />
+              <PasswordInputField
+                errorField={false}
+                disabled={isPending}
+                placeholder="비밀번호"
+              />
             </div>
           </>
         ) : (
@@ -163,19 +168,23 @@ export default function MessageForm({
             name={"content"}
             placeholder="남기실 코멘트를 입력해주세요"
             maxLength={1000}
+            disabled={isPending}
           />
         </div>
-
-        <Button disabled={isPending} className="col-span-1 h-full row-span-2">
+        <Button
+          disabled={isPending}
+          className="mt-3 md:mt-0 col-span-6  md:col-span-1 h-full order-2 md:order-none py-5"
+        >
           댓글 작성
-        </Button>
+        </Button>{" "}
+        <div className="pt-2 text-sm flex gap-3 col-span-6 order-1 md:order-none">
+          <span className="text-[11px] opacity-45">
+            {watch("content").length} / 1000 자
+          </span>
+
+          <span className="text-destructive"> {errors[0]?.message}</span>
+        </div>
       </form>
-      <div className="pt-2 text-sm flex justify-between">
-        <span className="text-destructive"> {errors[0]?.message}</span>
-        <span className="text-[11px] opacity-45">
-          {watch("content").length} / 1000 자
-        </span>
-      </div>
     </FormProvider>
   );
 }

@@ -13,11 +13,16 @@ import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
 import { QUERY_KEY } from "@/types/constans";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createSurveyFormSchema } from "./survey-response-form-schema";
-import { FormLabel } from "@/components/ui/form";
 import GenderResponseFields from "../components/gender-response-fields";
 import AgeResponseFields from "../components/age-response-fields";
 import TextResponseField from "../components/text-response-fields";
@@ -109,38 +114,64 @@ export default function SurveyResponseForm({
 
           {questions.map((qs, idx) => {
             return (
-              <Card key={qs.id}>
+              <Card key={qs.id} className="md:py-5 py-2 px-1 rounded-2xl">
                 {/* Header 같이쓰기 */}
-                <CardHeader>
-                  <FormLabel className="text-xl">
-                    {qs.label} {!qs.required && "선택"}{" "}
-                    {"options" in qs && // type guard 추가
-                      qs.multi_select &&
-                      "복수 선택"}
-                  </FormLabel>
-                </CardHeader>
 
-                {(() => {
-                  switch (qs.type) {
-                    case QUESTION_TYPE.TEXT:
-                      return (
-                        <TextResponseField qsImg={qs.pictrue} qsId={qs.id} />
-                      );
-                    //주관식
-                    case QUESTION_TYPE.SELECT:
-                      if ("options" in qs)
+                <CardHeader className="md:p-6 p-3">
+                  <CardTitle>
+                    <div className="flex gap-2 items-center">
+                      <span className="text-lg md:text-2xl font-Paperlogy text-indigo-400">
+                        Q. {idx + 1}{" "}
+                      </span>
+                    </div>
+
+                    <div className="mt-10">
+                      <span>{qs.label}</span>
+                      <CardDescription>
+                        <div className="flex gap-3 mt-3  text-[12px] text-point/80">
+                          {"options" in qs && qs.multi_select && (
+                            <>
+                              <span className="font-normal flex gap-2">
+                                {/* <CheckCheck className="w-3 h-3" /> */}
+                                복수 선택 가능
+                              </span>
+                              {"/"}
+                            </>
+                          )}
+
+                          <span className="font-normal flex gap-2">
+                            {!!qs.required ? "필수 항목" : "선택 항목"}
+                          </span>
+                        </div>{" "}
+                      </CardDescription>
+
+                      <CardDescription className="mt-3 font-normal"></CardDescription>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2 md:p-6 p-3">
+                  {(() => {
+                    switch (qs.type) {
+                      case QUESTION_TYPE.TEXT:
                         return (
-                          <SelectResponseField
-                            label={qs.label}
-                            options={qs.options}
-                            idx={idx}
-                            isMulti={qs.multi_select}
-                          />
+                          <TextResponseField qsImg={qs.pictrue} qsId={qs.id} />
                         );
-                    default:
-                      return null as never;
-                  }
-                })()}
+                      //주관식
+                      case QUESTION_TYPE.SELECT:
+                        if ("options" in qs)
+                          return (
+                            <SelectResponseField
+                              label={qs.label}
+                              options={qs.options}
+                              idx={idx}
+                              isMulti={qs.multi_select}
+                            />
+                          );
+                      default:
+                        return null as never;
+                    }
+                  })()}{" "}
+                </CardContent>
               </Card>
             );
           })}
@@ -153,6 +184,7 @@ export default function SurveyResponseForm({
           size={"lg"}
           onClick={formMethod.handleSubmit(onSubmitHandler)}
           disabled={isPending || isSuccess}
+          className="w-full py-8"
         >
           제출하기
         </Button>

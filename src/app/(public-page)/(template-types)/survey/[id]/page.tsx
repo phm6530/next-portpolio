@@ -20,18 +20,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-// import TransformPlainText from "@/utils/transform-html-to-plaintext";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
-// export const runtime = "edge";
+export const runtime = "edge";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
 
 // 동적 생성
-// export const dynamicParams = true;
+export const dynamicParams = true;
 export async function generateStaticParams() {
   let url = `${BASE_NEST_URL}/template?sort=all`;
   url += "&page=1";
@@ -94,7 +93,6 @@ export default async function SurveyDetailTemplate({
     endDate,
     createdAt,
     creator,
-    respondents,
   } = data;
 
   return (
@@ -123,12 +121,10 @@ export default async function SurveyDetailTemplate({
             </CardTitle>
             <TipTapEditor mode="view" value={description} />
           </CardHeader>
-          <CardContent>
+          <CardContent className="md:p-6 p-3">
             <ImageThumbNail thumbnail={thumbnail} />
-
-            <div className="mt-5">{/* Desciprtion */}</div>
           </CardContent>
-          <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
+          <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
             <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
             <span className="text-[12px]">생성 일 {createdAt}</span>
           </CardFooter>

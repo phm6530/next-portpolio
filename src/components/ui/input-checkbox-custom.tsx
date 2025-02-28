@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckCheck } from "lucide-react";
+import { CheckCheck, CheckCircle, Circle } from "lucide-react";
 import { InputHTMLAttributes, ReactNode } from "react";
 
 export default function CustomCheckbox({
@@ -22,7 +22,12 @@ export default function CustomCheckbox({
       >
         <input type="checkbox" className="hidden" checked={active} {...rest} />
         <div className={"flex gap-2 items-center"}>
-          <CheckCheck className="w-7 h-7" /> {label}
+          {active ? (
+            <CheckCircle className="w-5 h-5  [&>path]:text-point" />
+          ) : (
+            <Circle className="w-5 h-5 opacity-70" />
+          )}
+          {label}
         </div>
         {children}
       </label>

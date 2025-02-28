@@ -57,7 +57,9 @@ export default function OptionsController({
                       />
                     </FormControl>
                     <div className="leading-none">
-                      <FormLabel>필수 선택 항목</FormLabel>
+                      <FormLabel className=" text-[12px] md:text-sm">
+                        필수 선택 항목
+                      </FormLabel>
                     </div>
                   </FormItem>
                 </TooltipTrigger>
@@ -94,7 +96,9 @@ export default function OptionsController({
                         />
                       </FormControl>
                       <div className="leading-none">
-                        <FormLabel>복수 선택 여부</FormLabel>
+                        <FormLabel className=" text-[12px] md:text-sm">
+                          복수 선택 여부
+                        </FormLabel>
                       </div>
                     </FormItem>
                   </TooltipTrigger>

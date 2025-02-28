@@ -16,7 +16,7 @@ export default async function ResultCommentSection({
   return (
     <div className="my-10">
       <div className="text-lg border-b pb-2 mb-6">
-        댓글 <span className="text-indigo-300">{data?.length}</span> 개
+        댓글 <span className="font-bold">{data?.length}</span> 개
       </div>
 
       {/* 댓글 리스트 */}

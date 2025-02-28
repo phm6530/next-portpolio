@@ -122,7 +122,7 @@ const TemplateItem = forwardRef(
                   />
                 </div>
                 <span className="text-[12px] ml-3 text-foreground">
-                  {respondents.participants.male ?? 0} 명
+                  {respondents.participants.female ?? 0} 명
                 </span>
               </div>
               <div className="flex border-t pt-2 mt-2">
@@ -137,7 +137,7 @@ const TemplateItem = forwardRef(
                   />
                 </div>
                 <span className="text-[12px] ml-3 text-foreground">
-                  {respondents.participants.female ?? 0} 명
+                  {respondents.participants.male ?? 0} 명
                 </span>
               </div>
             </TooltipContent>

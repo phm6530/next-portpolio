@@ -64,7 +64,7 @@ export default function CreateSurveySelect({
                   <Input
                     {...field}
                     placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
-                    className="border-transparent !bg-transparent text-lg placeholder:text-lg focus:border-transparent hover:border-transparent border-b "
+                    className="border-transparent !bg-transparent text-base placeholder:text-base md:text-lg md:placeholder:text-lg focus:border-transparent hover:border-transparent border-b "
                     autoComplete="off"
                   />
                   {/* <ConfirmDialog></ConfirmDialog> */}
