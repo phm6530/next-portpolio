@@ -140,8 +140,7 @@ export default function ResultSurveyCharts({
                   <div className="mt-10 mb-10">
                     <span>{qs.label}</span>
                     {qs.type === QUESTION_TYPE.TEXT && (
-                      <CardDescription className="mt-3 font-normal">
-                        해당 문항에 응답입니다. <br />
+                      <CardDescription className="mt-3 font-normal leading-7">
                         하단의 버튼을 클릭하여 10개씩 추가로 메세지를 가져올 수
                         있습니다.
                       </CardDescription>

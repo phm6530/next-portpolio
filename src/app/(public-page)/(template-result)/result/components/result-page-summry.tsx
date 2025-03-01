@@ -12,6 +12,8 @@ import {
 
 import { UserRound } from "lucide-react";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
+import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import { Badge } from "@/components/ui/badge";
 
 export default function ResultPageSummry(data: SurveyResult) {
   const {
@@ -39,15 +41,20 @@ export default function ResultPageSummry(data: SurveyResult) {
             createdAt={createdAt}
             maxGroup={detail.maxGroup}
           />
+
           <div className="my-4 leading-9">{title}</div>
         </CardTitle>
         <TipTapEditor mode="view" value={description} />
-      </CardHeader>
-
-      <CardFooter>
-        <div className="text-[12px] text-muted-foreground pt-3 flex items-center">
-          <UserRound className="w-4 mr-2" /> {allCnt ?? 0}
+        <div>
+          <Badge variant={"outline"}>
+            <UserRound className="w-4 mr-2" /> {allCnt ?? 0}
+          </Badge>
         </div>
+      </CardHeader>
+      <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
+        <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
+
+        <span className="text-[12px]">생성 일 {createdAt}</span>
       </CardFooter>
     </Card>
   );

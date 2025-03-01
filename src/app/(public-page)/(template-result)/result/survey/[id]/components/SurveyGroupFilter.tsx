@@ -7,6 +7,9 @@ import { FILTER_AGE } from "../../../constants/filter-age-group";
 import TabRounded from "@/components/ui/tab-rounded";
 import { cn } from "@/lib/utils";
 import { Filter } from "lucide-react";
+import Male from "/public/asset/3d/male.png";
+import Female from "/public/asset/3d/female.png";
+import Image from "next/image";
 
 export type GenderOptions = (typeof FILTER_GENDER)[number]["val"];
 export type AgeOptions = (typeof FILTER_AGE)[number]["val"];
@@ -99,6 +102,31 @@ export default function SurveyGroupFilter({
               onClick={() => filterGenderHandler(e.val)}
               className={cn(curFilter.genderGroup === e.val && "border-point")}
             >
+              {e.val === "female" && (
+                <div className="relative w-5 h-5">
+                  <Image
+                    src={Female}
+                    alt="logo"
+                    fill
+                    priority
+                    style={{ objectFit: "contain" }}
+                    sizes="(max-width: 768px) 50vw"
+                  />
+                </div>
+              )}
+              {e.val === "male" && (
+                <div className="relative w-5 h-5">
+                  <Image
+                    src={Male}
+                    alt="logo"
+                    fill
+                    priority
+                    style={{ objectFit: "contain" }}
+                    sizes="(max-width: 768px) 50vw"
+                  />
+                </div>
+              )}
+
               {e.label}
             </TabRounded>
           ))}

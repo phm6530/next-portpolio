@@ -5,6 +5,8 @@ import AniProgressbar from "@/components/ui/chart-progress/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
 import { CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { User2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function ResponseSelect({
   allCnt,
@@ -66,13 +68,17 @@ export default function ResponseSelect({
           return (
             <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
               <div className="text-zinc-500">
-                {ixMax ? (
-                  <div className="text-point flex items-center gap-2 ">
-                    {option.value}
+                <div
+                  className={cn(
+                    " flex items-center gap-2",
+                    ixMax && "text-point"
+                  )}
+                >
+                  <span>{option.value}</span>
+                  <div className="flex gap-1 items-center border-l pl-3 text-sm">
+                    <User2 className="w-3 h-3" /> {sumUser}
                   </div>
-                ) : (
-                  option.value
-                )}
+                </div>
               </div>
 
               <div className="grid items-center gap-2">

@@ -20,8 +20,11 @@ import MasonryLayout from "@/components/layout/masonry-layout";
 import Image from "next/image";
 import Male from "/public/asset/3d/male.png";
 import Female from "/public/asset/3d/female.png";
+import Anonymous from "/public/asset/3d/anonymous.png";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { User2, User2Icon } from "lucide-react";
 
 export function ResponseTexts({
   idx,
@@ -163,7 +166,45 @@ export function ResponseTexts({
                 className=" p-3 bg-third rounded-xl border hover:border-primary animate-fadein"
               >
                 <div className="flex items-center gap-2">
-                  <div className=" w-10 h-10 border-foreground/30  border-2 rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] dark:[&>svg]:fill-[#ffffff] ">
+                  <div className="items-center justify-center w-10 h-10 border-foreground/10  border  rounded-full flex relative  flex-col overflow-hidden [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-[#000000] ">
+                    {(() => {
+                      switch (gender) {
+                        case "female":
+                          return (
+                            <Image
+                              src={Female}
+                              alt="logo"
+                              fill
+                              priority
+                              style={{ objectFit: "contain" }}
+                              sizes="(max-width: 768px) 50vw"
+                            />
+                          );
+                        case "male":
+                          return (
+                            <Image
+                              src={Male}
+                              alt="logo"
+                              fill
+                              priority
+                              style={{ objectFit: "contain" }}
+                              sizes="(max-width: 768px) 50vw"
+                            />
+                          );
+                        default:
+                          return (
+                            <Image
+                              src={Anonymous}
+                              alt="logo"
+                              fill
+                              priority
+                              style={{ objectFit: "contain" }}
+                              sizes="(max-width: 768px) 50vw"
+                            />
+                          );
+                      }
+                    })()}
+
                     {gender === "female" && (
                       <Image
                         src={Female}
@@ -186,16 +227,26 @@ export function ResponseTexts({
                       />
                     )}
                   </div>
+                  {age && <div className="text-[13px]">{age} 대</div>}
 
-                  <div className="text-[13px]">{age} 대 </div>
-                  <span
-                    className={cn(
-                      "text-sm",
-                      gender === "female" ? "text-pink-400" : "text-blue-300"
-                    )}
-                  >
-                    {gender === "female" ? "여성" : "남성"}
-                  </span>
+                  {(() => {
+                    switch (gender) {
+                      case "female":
+                        return (
+                          <span className="text-pink-400 text-sm">여성</span>
+                        );
+                      case "male":
+                        return (
+                          <span className="text-blue-300 text-sm">남성</span>
+                        );
+                      default:
+                        return (
+                          <span className="text-point text-sm">
+                            익명의 응답자
+                          </span>
+                        );
+                    }
+                  })()}
                 </div>
 
                 <div className="rounded-md  mt-3 text-foreground text-sm leading-6">

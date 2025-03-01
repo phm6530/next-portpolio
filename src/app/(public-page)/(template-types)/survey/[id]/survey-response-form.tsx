@@ -28,6 +28,7 @@ import AgeResponseFields from "../components/age-response-fields";
 import TextResponseField from "../components/text-response-fields";
 import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import { CheckCheck } from "lucide-react";
 
 export default function SurveyResponseForm({
   id,
@@ -139,8 +140,15 @@ export default function SurveyResponseForm({
                             </>
                           )}
 
-                          <span className="font-normal flex gap-2">
-                            {!!qs.required ? "필수 항목" : "선택 항목"}
+                          <span className="font-normal flex gap-2 items-center">
+                            {!!qs.required ? (
+                              <>
+                                {/* <CheckCheck className="w-3 h-3" />  */}
+                                필수 항목
+                              </>
+                            ) : (
+                              "선택 항목"
+                            )}
                           </span>
                         </div>{" "}
                       </CardDescription>

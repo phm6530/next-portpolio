@@ -59,10 +59,10 @@ export default function TemplateBadges({
 
         {curState(startDate, endDate)}
 
-        {maxGroup?.maxCnt && (maxGroup?.ageGroup || maxGroup?.genderGroup) && (
+        {!!(maxGroup?.ageGroup && maxGroup.ageGroup) && (
           <Badge className="text-[10px] font-normal" variant={"secondary"}>
-            {maxGroup.ageGroup && `${maxGroup.ageGroup}대`}{" "}
-            {maxGroup.genderGroup &&
+            {maxGroup?.ageGroup && `${maxGroup.ageGroup}대`}{" "}
+            {maxGroup?.genderGroup &&
               `${GenderMapper(maxGroup.genderGroup as GENDER_GROUP)}`}{" "}
             선호
           </Badge>

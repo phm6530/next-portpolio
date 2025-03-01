@@ -40,12 +40,15 @@ export default function AniProgressbar({
   );
 
   return (
-    <div className="relative h-6 rounded-full">
+    <div
+      className="relative h-6 rounded-full"
+      style={{ width: "calc(100% - 40px)" }}
+    >
       <div
         ref={ref}
         key={percent}
         className={cn(
-          `w-2 h-full left-0 rounded-full absolute bg-background `,
+          `w-2 h-full left-0 rounded-full absolute bg-background`,
           maxCnt && "text-[rgb(76,76,192)]"
         )}
       >
