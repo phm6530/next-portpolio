@@ -6,13 +6,7 @@ import { FILTER_GENDER } from "../../../constants/filter-gender-group";
 import { FILTER_AGE } from "../../../constants/filter-age-group";
 import TabRounded from "@/components/ui/tab-rounded";
 import { cn } from "@/lib/utils";
-import {
-  Filter,
-  FilterX,
-  Group,
-  GroupIcon,
-  UserRoundCheck,
-} from "lucide-react";
+import { Filter } from "lucide-react";
 
 export type GenderOptions = (typeof FILTER_GENDER)[number]["val"];
 export type AgeOptions = (typeof FILTER_AGE)[number]["val"];

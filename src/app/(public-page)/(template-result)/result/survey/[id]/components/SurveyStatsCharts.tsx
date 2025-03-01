@@ -103,7 +103,7 @@ export default function ResultSurveyCharts({
     return notFound();
   }
 
-  const { questions, respondents } = data;
+  const { questions, respondents, isAgeCollected, isGenderCollected } = data;
   const allCnt = respondents.allCnt;
 
   return (
@@ -113,11 +113,13 @@ export default function ResultSurveyCharts({
       //  className="fixed bottom-0 right-0 max-w-[800px] w-[90%] left-[50%] -translate-x-[50%] bg-background z-10 p-5 border rounded-t-lg"
       >
         {/* 필터 */}
-        <SurveyGroupFilter
-          curFilter={filter}
-          setFilter={setFilter}
-          respondents={data?.respondents}
-        />
+        {isAgeCollected && isGenderCollected && (
+          <SurveyGroupFilter
+            curFilter={filter}
+            setFilter={setFilter}
+            respondents={data?.respondents}
+          />
+        )}
       </div>
 
       <div className="flex flex-col gap-10 mt-6 mb-9">
@@ -152,9 +154,9 @@ export default function ResultSurveyCharts({
                   // 객관식 차트
                   return (
                     <ResponseSelect
+                      isAgeCollected={data.isAgeCollected}
+                      isGenderCollected={data.isGenderCollected}
                       idx={idx}
-                      selectAgeGroup={filter.ageGroup}
-                      selectGenderGroup={filter.genderGroup}
                       allCnt={allCnt}
                       {...qs}
                     />

@@ -93,7 +93,13 @@ export default function CreateSurveyForm() {
     resolver: zodResolver(surveySchema),
   });
 
-  const { setValue, reset } = formState;
+  const { setValue, reset, watch } = formState;
+  const isGenderCollected = watch("isGenderCollected");
+
+  useEffect(() => {
+    setValue("isAgeCollected", isGenderCollected);
+  }, [isGenderCollected, setValue]);
+
   const editId = qs.get("edit");
 
   //수정시 get해오기
@@ -232,20 +238,21 @@ export default function CreateSurveyForm() {
                 2. 응답자 필터 설정
               </CardTitle>
               <CardDescription>
-                설문 결과를 더 자세히 분석하기 위한 설정입니다.
+                {"'예'"} 체크 시, 나이 성별을 수집하며 차트로 익명 참여자들의
+                필터링이 제공됩니다.
               </CardDescription>
             </CardHeader>
             <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
               {/* 나이 별 수집 */}
-              <RadioBooleanField<RequestSurveyFormData>
+              {/* <RadioBooleanField<RequestSurveyFormData>
                 label="연령대 별 집계를 진행 하시겠습니까?"
                 groupName={"isAgeCollected"}
                 // description="연령대별 필터링이 가능합니다."
-              />
+              /> */}
 
               {/* 성별 별 수집 */}
               <RadioBooleanField<RequestSurveyFormData>
-                label="성별 별 집계를 진행 하시겠습니까?"
+                // label="나이 및 성별 수집을 하시겠습니까?"
                 groupName={"isGenderCollected"}
                 // description="성별 필터링이 가능합니다."
               />

@@ -9,12 +9,18 @@ import { cn } from "@/lib/utils";
 export default function ResponseSelect({
   allCnt,
   options,
+  isAgeCollected,
+  isGenderCollected,
 }: { allCnt: number } & ResultSelect & {
     idx: number;
-    selectAgeGroup: AgeOptions;
-    selectGenderGroup: GenderOptions;
+    isAgeCollected: boolean;
+    isGenderCollected: boolean;
   }) {
   const sumFilterUsers = (arr: ResultSelectOption["response"]) => {
+    if (!isAgeCollected && !isGenderCollected) {
+      return arr.selectUserCnt;
+    }
+
     //남자 합
     const sumFemale = Object.values(arr.female ?? {}).reduce((arr, cur) => {
       return (arr += cur);
@@ -41,7 +47,9 @@ export default function ResponseSelect({
     return sumB - sumA;
   });
 
+  //d사진 하나라도있으면 그리드 변환
   const isPictureOption = options.some((e) => e.img);
+
   return (
     <CardContent>
       <div
@@ -60,10 +68,6 @@ export default function ResponseSelect({
               <div className="text-zinc-500">
                 {ixMax ? (
                   <div className="text-point flex items-center gap-2 ">
-                    {/* <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
-                      <Crown />
-                    </div> */}
-
                     {option.value}
                   </div>
                 ) : (
