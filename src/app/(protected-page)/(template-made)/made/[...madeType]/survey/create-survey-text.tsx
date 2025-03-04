@@ -74,7 +74,7 @@ export default function CreateSurveyText({
             render={({ field }) => {
               return (
                 <>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2">
                     <Input
                       {...field}
                       placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}

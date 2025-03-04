@@ -9,7 +9,7 @@ import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
@@ -40,12 +40,6 @@ const TipTapEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit, // 여기 이미 Heading + codeblock
-      // Heading.configure({
-      //   levels: [1, 2, 3],
-      // }),
-      // CodeBlockLowlight.configure({
-      //   lowlight,
-      // }),
       Youtube.configure({
         controls: false,
         nocookie: true,
@@ -74,6 +68,12 @@ const TipTapEditor = ({
     },
     immediatelyRender: false,
   });
+
+  useEffect(() => {
+    if (editor && value !== undefined && editor.getHTML() !== value) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
 
   if (!editor || isLoading) {
     return <LoadingWrapper />;

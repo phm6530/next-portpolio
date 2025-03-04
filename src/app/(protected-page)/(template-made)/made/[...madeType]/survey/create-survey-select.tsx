@@ -27,9 +27,7 @@ export default function CreateSurveySelect({
   surveyIdx: number;
 }) {
   //FormContext
-  const { control, watch, getValues } = useFormContext<RequestSurveyFormData>();
-
-  console.log(defaultValues);
+  const { control, watch } = useFormContext<RequestSurveyFormData>();
 
   //항목 컨트롤러
   const {
@@ -60,7 +58,7 @@ export default function CreateSurveySelect({
           render={({ field }) => {
             return (
               <>
-                <div className="flex">
+                <div className="flex items-center">
                   <Input
                     {...field}
                     placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}

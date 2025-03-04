@@ -58,7 +58,7 @@ export default function OptionsController({
                     </FormControl>
                     <div className="leading-none">
                       <FormLabel className=" text-[12px] md:text-sm">
-                        필수 선택 항목
+                        필수 응답 항목
                       </FormLabel>
                     </div>
                   </FormItem>

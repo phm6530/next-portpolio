@@ -21,19 +21,23 @@ export default function MyContentsItem({
   return (
     <Card className="aos-hidden">
       <CardHeader>
-        <CardTitle className="flex  flex-col gap-5 items-start">
+        <CardTitle className="flex mb-4  flex-col gap-5 items-start">
           <Badge variant={"secondary"}>{item.templateType}</Badge>
-          <div>{item.title}</div>
+          <div className="leading-10 line-clamp-3">{item.title}</div>
         </CardTitle>
 
-        <CardDescription>
+        <CardDescription className="leading-6 line-clamp-2">
           {transformHtmlToPlainText({ html: item.description })}
         </CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
         {/* 차트 */}
-        <Chart {...item.respondents} />
+        <Chart
+          isAgeColltected={item.isAgeCollected}
+          isGenderCollected={item.isGenderCollected}
+          {...item.respondents}
+        />
 
         <div className="flex items-center gap-[10px] text-[12px] text-zinc-400">
           <Clock7 className="w-4 h-4" />

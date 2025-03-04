@@ -38,7 +38,7 @@ export default function CustomModal({
         )}
       >
         <DialogHeader>
-          <DialogTitle className="whitespace-pre-line text-xl mb-3 text-left">
+          <DialogTitle className="whitespace-pre-line text-base md:text-xl mb-3 text-left">
             {title}
           </DialogTitle>
           <DialogDescription className="whitespace-pre-line  text-left text-[12px] leading-5 md:text-sm">

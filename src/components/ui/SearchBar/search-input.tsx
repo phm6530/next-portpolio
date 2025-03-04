@@ -22,7 +22,7 @@ export default function SearchBar({
         type="text"
         autoComplete="off"
         name={name}
-        className="bg-transparent flex-1 h-full p-4 pl-4"
+        className="bg-transparent flex-1 h-full p-4 pl-4 md:text-sm text-[13px]"
         placeholder="검색어를 입력해주세요"
         {...props}
       />

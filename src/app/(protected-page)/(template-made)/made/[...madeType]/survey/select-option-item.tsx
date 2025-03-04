@@ -124,7 +124,7 @@ export default function SurveyOptionItem({
           name={`questions.${surveyIdx}.options.${optionIdx}.value`}
           render={({ field }) => {
             return (
-              <div className="w-full">
+              <div className="w-full flex flex-col gap-2">
                 <div className="w-full flex focus-within:border-primary border rounded-md bg-custom-input">
                   <Input
                     {...field}

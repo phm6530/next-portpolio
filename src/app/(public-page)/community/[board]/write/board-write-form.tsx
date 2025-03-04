@@ -111,7 +111,10 @@ export default function BoardForm({
         />
         <div>
           {/* Quill Editor */}
-          <TipTapEditorField name={"contents"} placeholder="test" />
+          <TipTapEditorField
+            name={"contents"}
+            placeholder="작성할 내용을 입력해주세요"
+          />
         </div>
 
         <Button className="p-8" disabled={isPending || isSuccess}>

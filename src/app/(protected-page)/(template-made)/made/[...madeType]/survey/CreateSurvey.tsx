@@ -36,6 +36,7 @@ import CreateSurveyList from "./survey-form-list";
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 import RadioBooleanField from "@/components/ui/radio-boolean-field";
 import { cn } from "@/lib/utils";
+import { Info } from "lucide-react";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -95,6 +96,8 @@ export default function CreateSurveyForm() {
 
   const { setValue, reset, watch } = formState;
   const isGenderCollected = watch("isGenderCollected");
+
+  console.log(formState.formState.errors);
 
   useEffect(() => {
     setValue("isAgeCollected", isGenderCollected);
@@ -232,17 +235,35 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <Card className="md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b">
+          <Card
+            className={cn(
+              "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
+              editPage && "cursor-not-allowed"
+            )}
+          >
             <CardHeader className="px-0 md:px-6">
               <CardTitle className="text-xl md:text-2xl font-normal">
                 2. 응답자 필터 설정
               </CardTitle>
               <CardDescription>
-                {"'예'"} 체크 시, 나이 성별을 수집하며 차트로 익명 참여자들의
+                {"'예'"} 체크 시, 나이 성별을 수집하며 차트와 응답자 들의
                 필터링이 제공됩니다.
               </CardDescription>
+
+              {editPage && (
+                <CardDescription className="text-xl pt-5 mt-10 text-white flex gap-2 items-center text-point">
+                  <Info />
+                  설문 중에는 필터 수정이 불가합니다.
+                </CardDescription>
+              )}
             </CardHeader>
-            <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
+
+            <CardContent
+              className={cn(
+                "px-0 md:px-6 gap-6 flex flex-col",
+                editPage && " pointer-events-none opacity-50"
+              )}
+            >
               {/* 나이 별 수집 */}
               {/* <RadioBooleanField<RequestSurveyFormData>
                 label="연령대 별 집계를 진행 하시겠습니까?"
@@ -259,7 +280,12 @@ export default function CreateSurveyForm() {
             </CardContent>
           </Card>
 
-          <Card className="md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b">
+          <Card
+            className={cn(
+              editPage && "cursor-not-allowed",
+              "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
+            )}
+          >
             <CardHeader className="px-0 md:px-6">
               <CardTitle className=" text-xl md:text-2xl font-normal">
                 3. 설문 문항 구성
@@ -267,9 +293,20 @@ export default function CreateSurveyForm() {
               <CardDescription>
                 설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
               </CardDescription>
+              {editPage && (
+                <CardDescription className="text-xl pt-5 mt-10 text-white flex gap-2 items-center text-point">
+                  <Info />
+                  설문 중에는 항목 수정이 불가합니다.
+                </CardDescription>
+              )}
             </CardHeader>
 
-            <CardContent className="px-0 md:px-6 gap-6 flex flex-col">
+            <CardContent
+              className={cn(
+                "px-0 md:px-6 gap-6 flex flex-col",
+                editPage && " pointer-events-none opacity-50"
+              )}
+            >
               <SurveyStatus />
               {/* List.. */}
               <CreateSurveyList />
@@ -277,15 +314,6 @@ export default function CreateSurveyForm() {
               <CreateSurveyFormController />
             </CardContent>
           </Card>
-
-          <div className={cn(editPage && "cursor-not-allowed")}>
-            {/* 진행 중인 설문은 수정 불가 안내문구 */}
-            {editPage && (
-              <p>진행 중인 설문에서는 집계 항목을 수정할 수 없습니다.</p>
-            )}
-
-            {/* Survey Controller */}
-          </div>
         </FormProvider>
 
         <div className="flex [&>button]:flex-1 gap-3">

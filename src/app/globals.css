@@ -213,6 +213,11 @@ input:focus {
   .min-h-calc-screen {
     min-height: calc(100vh - 80px);
   }
+
+  .role-icon {
+    @apply text-[10px] rounded-full  relative w-5 h-5 flex  justify-center items-center;
+  }
+
   .custom-scroll {
     &::-webkit-scrollbar {
       width: 5px; /* 스크롤바 너비 */
