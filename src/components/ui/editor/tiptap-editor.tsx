@@ -14,6 +14,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -40,6 +41,9 @@ const TipTapEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit, // 여기 이미 Heading + codeblock
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
       Youtube.configure({
         controls: false,
         nocookie: true,

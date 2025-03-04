@@ -97,8 +97,6 @@ export default function CreateSurveyForm() {
   const { setValue, reset, watch } = formState;
   const isGenderCollected = watch("isGenderCollected");
 
-  console.log(formState.formState.errors);
-
   useEffect(() => {
     setValue("isAgeCollected", isGenderCollected);
   }, [isGenderCollected, setValue]);

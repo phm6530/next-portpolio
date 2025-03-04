@@ -130,7 +130,7 @@ export default async function SurveyDetailTemplate({
           </CardFooter>
         </Card>
         {/* survey Form 응답 */}
-        <SurveyResponseForm {...data} />{" "}
+        <SurveyResponseForm {...data} />
       </div>
     </>
   );

@@ -9,16 +9,14 @@ import PostController from "./component/PostController";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import ViewCount from "./component/view-count";
 import MessageForm from "@/components/comment/message-form";
 import { CommentEditorProvider } from "@/components/comment/context/comment-context";
 import { fetchBoardItem } from "./actions/board-fetch";
+import TipTapEditor from "@/components/ui/editor/tiptap-editor";
+import DateCompareToday from "@/util/DateCompareToday";
+import dynamic from "next/dynamic";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
@@ -82,46 +80,52 @@ export default async function Page({
     board: category,
     id,
   });
+  const todayCompare = DateCompareToday();
+  const DynamicTipTapEditor = dynamic(
+    () => import("@/components/ui/editor/tiptap-editor"),
+    { ssr: false, loading: () => <LoadingWrapper /> } // 서버 사이드 렌더링 비활성화
+  );
 
   return (
     <>
       <div className="flex flex-col gap-5 py-8">
-        <Card className="bg-transparent">
-          <CardHeader className="flex items-start flex-col gap-3">
-            <Badge variant={"secondary"}>{boardName}게시판</Badge>
-            <h2>{data.title}</h2>
-
-            <div className="flex">
-              <UserRoleDisplay
-                role={data.creator.role}
-                nickname={data.creator.nickname}
-              />
-
-              <span className="text-muted-foreground text-sm">
-                {/* {dayCompare.fromNow(data.createdAt)} */}
-              </span>
-            </div>
-          </CardHeader>
-          <CardContent className="border-t pt-5 bg-slate-50 dark:bg-custom-input">
-            <div
-              className="ProseMirror"
-              dangerouslySetInnerHTML={{ __html: data.contents }}
+        <div className="flex items-start flex-col gap-4 leading-10">
+          <Badge variant={"secondary"} className="font-normal">
+            {boardName}게시판
+          </Badge>
+          <h2>{data.title}</h2>
+          <div className="flex gap-3">
+            <UserRoleDisplay
+              role={data.creator.role}
+              nickname={data.creator.nickname}
             />
-          </CardContent>
-          <CardFooter className="border-t pt-5 flex justify-between">
-            <PostController
-              id={id}
-              category={category}
-              creatorRole={data.creator.role}
-              creatorEmail={
-                data.creator.role !== USER_ROLE.ANONYMOUS
-                  ? data.creator.email
-                  : null
-              }
-            />
-            <ViewCount className="text-sm" />
-          </CardFooter>
-        </Card>
+
+            <span className="text-muted-foreground text-[12px]">
+              {todayCompare.fromNow(data.createdAt)}
+            </span>
+          </div>
+        </div>
+
+        <div className="py-5 border-t border-b">
+          <DynamicTipTapEditor mode="view" value={data.contents} />
+        </div>
+
+        {/* <CardContent className="border py-5 bg-transparent  dark:bg-custom-input">
+          
+        </CardContent> */}
+        <div className="flex justify-between items-center">
+          <PostController
+            id={id}
+            category={category}
+            creatorRole={data.creator.role}
+            creatorEmail={
+              data.creator.role !== USER_ROLE.ANONYMOUS
+                ? data.creator.email
+                : null
+            }
+          />
+          <ViewCount className="text-sm" />
+        </div>
       </div>
 
       <CommentEditorProvider EDITOR_PATH={MSG_PARAM_PATH.BOARD}>

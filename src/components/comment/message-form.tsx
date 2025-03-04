@@ -22,6 +22,7 @@ import { UserMsgSchema, geustMsgSchema } from "./schema/message-schema";
 import { toast } from "react-toastify";
 import UserRoleDisplay from "../ui/userRoleDisplay/UserRoleDisplay";
 import { cn } from "@/lib/utils";
+import LoadingSpinnerWrapper from "../ui/loading/LoadingSpinnerWrapper";
 
 /**
  * Editor Type = Comment / Reply 유니온
@@ -127,64 +128,66 @@ export default function MessageForm({
   };
 
   return (
-    <FormProvider {...formMethod}>
-      <form
-        onSubmit={handleSubmit(submitHandler)}
-        className={cn(
-          "flex flex-col md:grid md:grid-cols-[repeat(6,1fr)]  gap-2 rounded-xl",
-          !!userData && "p-2 bg-card"
-        )}
-      >
-        {/* 로그인 한 유저는 필요없음  */}
-        {!userData ? (
-          <>
-            <div className="col-span-2">
-              <InputField
-                errorField={false}
-                autoComplete="off"
-                name="anonymous"
-                placeholder="이름"
-                disabled={isPending}
+    <LoadingSpinnerWrapper loading={isPending}>
+      <FormProvider {...formMethod}>
+        <form
+          onSubmit={handleSubmit(submitHandler)}
+          className={cn(
+            "flex flex-col md:grid md:grid-cols-[repeat(6,1fr)]  gap-2 rounded-xl",
+            !!userData && "p-2 bg-card"
+          )}
+        >
+          {/* 로그인 한 유저는 필요없음  */}
+          {!userData ? (
+            <>
+              <div className="col-span-2">
+                <InputField
+                  errorField={false}
+                  autoComplete="off"
+                  name="anonymous"
+                  placeholder="이름"
+                  disabled={isPending}
+                />
+              </div>
+              <div className="col-span-2">
+                <PasswordInputField
+                  errorField={false}
+                  disabled={isPending}
+                  placeholder="비밀번호"
+                />
+              </div>
+            </>
+          ) : (
+            <div className="col-span-6 0 text-left flex items-start  p-4 border">
+              <UserRoleDisplay
+                role={userData.role}
+                nickname={userData.nickname}
               />
             </div>
-            <div className="col-span-2">
-              <PasswordInputField
-                errorField={false}
-                disabled={isPending}
-                placeholder="비밀번호"
-              />
-            </div>
-          </>
-        ) : (
-          <div className="col-span-6 0 text-left flex items-start  p-4 border">
-            <UserRoleDisplay
-              role={userData.role}
-              nickname={userData.nickname}
+          )}
+          <div className="col-span-5">
+            <TextareaFormField
+              name={"content"}
+              placeholder="남기실 코멘트를 입력해주세요"
+              maxLength={1000}
+              disabled={isPending}
             />
           </div>
-        )}
-        <div className="col-span-5">
-          <TextareaFormField
-            name={"content"}
-            placeholder="남기실 코멘트를 입력해주세요"
-            maxLength={1000}
+          <Button
             disabled={isPending}
-          />
-        </div>
-        <Button
-          disabled={isPending}
-          className="mt-3 md:mt-0 col-span-6  md:col-span-1 h-full order-2 md:order-none py-5"
-        >
-          댓글 작성
-        </Button>{" "}
-        <div className="pt-2 text-sm flex gap-3 col-span-6 order-1 md:order-none">
-          <span className="text-[11px] opacity-45">
-            {watch("content").length} / 1000 자
-          </span>
+            className="mt-3 md:mt-0 col-span-6  md:col-span-1 h-full order-2 md:order-none py-5"
+          >
+            댓글 작성
+          </Button>{" "}
+          <div className="pt-2 text-sm flex gap-3 col-span-6 order-1 md:order-none">
+            <span className="text-[11px] opacity-45">
+              {watch("content").length} / 1000 자
+            </span>
 
-          <span className="text-destructive"> {errors[0]?.message}</span>
-        </div>
-      </form>
-    </FormProvider>
+            <span className="text-destructive"> {errors[0]?.message}</span>
+          </div>
+        </form>
+      </FormProvider>
+    </LoadingSpinnerWrapper>
   );
 }

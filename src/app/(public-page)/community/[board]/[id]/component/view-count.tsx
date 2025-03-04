@@ -29,7 +29,7 @@ export default function ViewCount({ className }: { className?: string }) {
           <Skeleton className="w-5 h-4" />
         </div>
       ) : (
-        <span className={cn("text-[11px] text-muted-foreground", className)}>
+        <span className={cn("text-[10px] text-muted-foreground", className)}>
           조회수 {result?.count}
         </span>
       )}

@@ -1,9 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction, useContext } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import classes from "./FindmenberAndSendPin.module.scss";
 import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_NEST_URL } from "@/config/base";
@@ -80,7 +79,7 @@ export default function FindmenberAndSendPin({
             autoComplete="off"
           />
 
-          <Button disabled={isPending}>
+          <Button disabled={isPending} className="py-6">
             {isPending ? "발송 중..." : "Pin 발송"}
           </Button>
         </form>
