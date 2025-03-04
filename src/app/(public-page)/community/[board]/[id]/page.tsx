@@ -13,7 +13,6 @@ import ViewCount from "./component/view-count";
 import MessageForm from "@/components/comment/message-form";
 import { CommentEditorProvider } from "@/components/comment/context/comment-context";
 import { fetchBoardItem } from "./actions/board-fetch";
-import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 import DateCompareToday from "@/util/DateCompareToday";
 import dynamic from "next/dynamic";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
@@ -80,6 +79,7 @@ export default async function Page({
     board: category,
     id,
   });
+
   const todayCompare = DateCompareToday();
   const DynamicTipTapEditor = dynamic(
     () => import("@/components/ui/editor/tiptap-editor"),

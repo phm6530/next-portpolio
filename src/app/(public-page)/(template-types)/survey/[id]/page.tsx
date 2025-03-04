@@ -14,7 +14,6 @@ import Link from "next/link";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -23,22 +22,22 @@ import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
-export const runtime = "edge";
+import dynamic from "next/dynamic";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
 
-// 동적 생성
-export const dynamicParams = true;
+const DynamicTemplateController = dynamic(
+  () => import("../components/template-visible-controller"),
+  { ssr: false } // 클라이언트 측에서만 렌더링
+);
+
 export async function generateStaticParams() {
   let url = `${BASE_NEST_URL}/template?sort=all`;
   url += "&page=1";
 
-  /**
-   * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
-   */
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "force-cache" });
 
   const {
     data: listResponse,
@@ -55,7 +54,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    cache: "force-cache",
+    next: {
+      tags: [`template-survey-${+id}`], // Tags
+    },
+  });
 
   //존재하지 않는  페이지면 Redirect 시켜버림
   if (!response.ok) {
@@ -65,12 +69,12 @@ export async function generateMetadata({
   const data: FetchTemplateForm = await response.json();
 
   return {
-    title: data.title,
+    title: `[dopoll] ${data.title}`,
     description: data.description,
     openGraph: {
-      title: data.title,
+      title: `[dopoll] ${data.title}`,
       description: data.description,
-      images: "",
+      images: data.thumbnail,
     },
   };
 }
@@ -78,7 +82,12 @@ export async function generateMetadata({
 export default async function SurveyDetailTemplate({
   params: { id },
 }: SurveyDetailTemplateParams) {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    cache: "force-cache",
+    next: {
+      tags: [`template-survey-${+id}`], // Tags
+    },
+  });
   const data: FetchTemplateForm = await response.json();
 
   if (!data) {
@@ -96,7 +105,11 @@ export default async function SurveyDetailTemplate({
   } = data;
 
   return (
-    <>
+    <DynamicTemplateController
+      startDate={startDate}
+      endDate={endDate}
+      data={data}
+    >
       <Button
         asChild
         variant={"link"}
@@ -121,17 +134,18 @@ export default async function SurveyDetailTemplate({
             </CardTitle>
             <TipTapEditor mode="view" value={description} />
           </CardHeader>
-          <CardContent className="md:p-6 p-3">
-            <ImageThumbNail thumbnail={thumbnail} />
-          </CardContent>
+          {thumbnail && (
+            <CardContent className="md:p-6 p-3">
+              <ImageThumbNail thumbnail={thumbnail} />
+            </CardContent>
+          )}
           <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
             <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
             <span className="text-[12px]">생성 일 {createdAt}</span>
           </CardFooter>
         </Card>
-        {/* survey Form 응답 */}
         <SurveyResponseForm {...data} />
       </div>
-    </>
+    </DynamicTemplateController>
   );
 }

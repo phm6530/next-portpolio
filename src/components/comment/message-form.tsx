@@ -12,7 +12,6 @@ import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
-import Myprofile from "@/app/(protected-page)/mypage/_components/Myprofile";
 import TextareaFormField from "@/components/ui/FormElement/textarea-form-field";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,7 +65,6 @@ export default function MessageForm({
     resolver: zodResolver(dynamicSchema),
   });
 
-  console.log(formMethod.formState.errors);
   const errors = Object.values(formMethod.formState.errors) ?? [];
 
   //전역 인스턴스

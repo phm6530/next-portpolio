@@ -125,7 +125,7 @@ export default function SurveyOptionItem({
           render={({ field }) => {
             return (
               <div className="w-full flex flex-col gap-2">
-                <div className="w-full flex focus-within:border-primary border rounded-md bg-custom-input">
+                <div className="w-full flex focus-within:border-primary border rounded-md bg-custom-input/20 dark:bg-custom-input">
                   <Input
                     {...field}
                     autoComplete="off"

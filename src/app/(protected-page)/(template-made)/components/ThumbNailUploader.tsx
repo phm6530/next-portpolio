@@ -91,7 +91,7 @@ export default function ThumbNailUploader() {
         className={cn(
           `
           w-full  hover:bg-point/10
-          bg-custom-input
+          dark:bg-custom-input
           cursor-pointer
           flex-col 
           transition-all p-5 min-h-[200px] rounded-md text-center flex gap-2 

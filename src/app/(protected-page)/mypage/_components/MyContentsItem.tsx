@@ -12,6 +12,8 @@ import { Clock7 } from "lucide-react";
 import { Chart } from "@/components/shared/charts/chart";
 import { Badge } from "@/components/ui/badge";
 import transformHtmlToPlainText from "@/utils/transform-html-to-plaintext";
+import Male from "/public/asset/3d/male.png";
+import Female from "/public/asset/3d/female.png";
 
 export default function MyContentsItem({
   item,

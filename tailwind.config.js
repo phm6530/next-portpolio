@@ -30,6 +30,7 @@ module.exports = {
         throw: "hsl(var(--throw))",
       },
       height: {
+        "calc-screen-lg": "calc(100vh - 140px)", // 기본 설정
         "calc-screen": "calc(100vh - 80px)", // 기본 설정
         "calc-screen-sm": "calc(100% - 60px)", // sm 사이즈에서 높이 변경
         "calc-screen-md": "calc(100% - 50px)", // md 사이즈에서 높이 변경

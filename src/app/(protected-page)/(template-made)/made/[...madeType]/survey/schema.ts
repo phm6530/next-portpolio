@@ -61,8 +61,8 @@ const surveySchema = z.object({
       message: "부적절한 표현이 포함되어 있습니다.",
     }),
   thumbnail: z.string().nullable(), // Null 허용..
-  startDate: z.string().nullable().optional(),
-  endDate: z.string().nullable().optional(),
+  startDate: z.date().nullable().optional(),
+  endDate: z.date().nullable().optional(),
   isGenderCollected: z.boolean().optional(),
   isAgeCollected: z.boolean().optional(),
   templateType: z.nativeEnum(TEMPLATE_TYPE),

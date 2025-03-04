@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import revaildateTags from "@/lib/revaildateTags";
+import { useRouter } from "next/navigation";
 
 export default function MyContentsController({
   templateType,
@@ -18,6 +20,8 @@ export default function MyContentsController({
   id: number;
 }) {
   const queryClient = useQueryClient();
+
+  const router = useRouter();
 
   const { mutate } = useMutation<
     unknown,
@@ -32,6 +36,7 @@ export default function MyContentsController({
         credentials: "include",
       };
       const response = await withAuthFetch(url, options);
+      await revaildateTags({ tags: [`template-${templateType}-${+id}`] });
       return response;
     },
 
@@ -40,6 +45,7 @@ export default function MyContentsController({
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.MY_CONTENTS],
       });
+      router.refresh();
     },
   });
 

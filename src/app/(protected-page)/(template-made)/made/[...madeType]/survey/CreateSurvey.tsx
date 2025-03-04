@@ -16,6 +16,7 @@ import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 import useAOS from "@/_hook/usAOS";
 import InputField from "@/components/shared/inputs/input-field";
+
 import {
   Card,
   CardContent,
@@ -37,6 +38,10 @@ import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 import RadioBooleanField from "@/components/ui/radio-boolean-field";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
+import DateRangeSelector from "@/components/ui/date-range";
+import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import revaildateTags from "@/lib/revaildateTags";
+import { toast } from "react-toastify";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -108,6 +113,7 @@ export default function CreateSurveyForm() {
     data: editData,
     error,
     isError,
+    isLoading,
   } = useQuery<FetchTemplateForm>({
     queryKey: ["test", editId],
     queryFn: async () => {
@@ -143,6 +149,8 @@ export default function CreateSurveyForm() {
         questions: editData.questions,
         templateKey: editData.templateKey,
         creator: userData,
+        startDate: editData.startDate ? new Date(editData.startDate) : null,
+        endDate: editData.endDate ? new Date(editData.endDate) : null,
       });
       setEditPage(true);
     }
@@ -158,15 +166,17 @@ export default function CreateSurveyForm() {
       setValue("templateKey", newKey);
     }
   }, [qs, setValue, editId]);
-
   const { mutate, isPending } = useMutation<
-    unknown,
+    {
+      statusCode: number;
+      templateId: number;
+    },
     Error,
     z.infer<typeof surveySchema>
   >({
     mutationFn: async (data) => {
       let options: RequestInit = {
-        method: editId ? "PUT" : "POST",
+        method: !!editId ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -175,13 +185,23 @@ export default function CreateSurveyForm() {
 
       // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
       let url = `template/survey${editId ? `/${editId}` : ""}`;
-      return await withAuthFetch(url, options);
+
+      const result = await withAuthFetch<{
+        statusCode: number;
+        templateId: number;
+      }>(url, options);
+
+      if (editId) {
+        await revaildateTags({ tags: [`template-survey-${+editId}`] });
+      }
+
+      return result;
     },
-    onSuccess: () => {
-      router.replace("/list");
-      alert(
+    onSuccess: (res) => {
+      toast.success(
         !editId ? "설문조사 개설 완료되었습니다." : "수정 완료 되었습니다."
       );
+      window.location.href = `/survey/${res.templateId}`;
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.MY_CONTENTS],
       });
@@ -196,144 +216,174 @@ export default function CreateSurveyForm() {
   return (
     <>
       <SubheaderDescrition
-        title={`설문조사 템플릿 생성하기`}
+        title={`설문조사 템플릿 생성하기 ${editId && "(수정)"}`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
-      <div className=" aos-hidden pt-5 md:pt-16 flex flex-col gap-0 md:gap-3 mb-[200px]">
-        <FormProvider {...formState}>
-          <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
-            <CardHeader className="px-0 md:px-6">
-              <CardTitle className="text-xl md:text-2xl  font-normal">
-                1. 설문조사 정보
-              </CardTitle>
-              <CardDescription> 가장 먼저 노출되는 항목이에요</CardDescription>
-            </CardHeader>
-            <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
-              {/* 설문조사 제목 */}
-              <InputField
-                name="title"
-                label="템플릿 제목"
-                required
-                placeholder="템플릿 제목을 입력해주세요"
-                autoComplete="off"
-              />
+      <div className=" pt-5 md:pt-16 flex flex-col gap-0 md:gap-3 mb-[200px]">
+        {isLoading ? (
+          <LoadingWrapper />
+        ) : (
+          <>
+            <FormProvider {...formState}>
+              <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
+                <CardHeader className="px-0 md:px-6">
+                  <CardTitle className="text-xl md:text-2xl  font-normal">
+                    1. 설문조사 정보
+                  </CardTitle>
+                  <CardDescription>
+                    {" "}
+                    가장 먼저 노출되는 항목이에요
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
+                  {/* 설문조사 제목 */}
+                  <InputField
+                    name="title"
+                    label="템플릿 제목"
+                    required
+                    placeholder="템플릿 제목을 입력해주세요"
+                    autoComplete="off"
+                  />
 
-              {/* 설문조사 설명 */}
-              <TipTapEditorField
-                name="description"
-                placeholder="간략한 설명을 입력해주세요.!!"
-              />
+                  {/* 설문조사 설명 */}
+                  <TipTapEditorField
+                    name="description"
+                    placeholder="간략한 설명을 입력해주세요.!!"
+                  />
 
-              {/* 썸네일 */}
-              <FormItem>
-                <FormLabel>섬네일 (선택)</FormLabel>
-                <ThumbNailUploader />
-              </FormItem>
-            </CardContent>
-          </Card>
+                  {/* 썸네일 */}
+                  <FormItem>
+                    <FormLabel>섬네일 (선택)</FormLabel>
+                    <ThumbNailUploader />
+                  </FormItem>
+                </CardContent>
+              </Card>
 
-          <Card
-            className={cn(
-              "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
-              editPage && "cursor-not-allowed"
-            )}
-          >
-            <CardHeader className="px-0 md:px-6">
-              <CardTitle className="text-xl md:text-2xl font-normal">
-                2. 응답자 필터 설정
-              </CardTitle>
-              <CardDescription>
-                {"'예'"} 체크 시, 나이 성별을 수집하며 차트와 응답자 들의
-                필터링이 제공됩니다.
-              </CardDescription>
+              <Card
+                className={cn(
+                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-1 border-0 md:border border-b"
+                )}
+              >
+                <CardHeader className="px-0 md:px-6 flex flex-col gap-4 mb-4">
+                  <CardTitle className="text-xl md:text-2xl font-normal">
+                    2. 설문조사 기간 설정{" "}
+                    <span className="text-sm">(선택)</span>
+                  </CardTitle>
+                  <CardDescription className="leading-6">
+                    시작일을 설정하지 않으면 설문조사는 바로 시작되며, <br />
+                    종료 일이 없다면 무기한으로 설정됩니다. 시작 종료일 모두
+                    00시 기준입니다.
+                  </CardDescription>
+                </CardHeader>
 
-              {editPage && (
-                <CardDescription className="text-xl pt-5 mt-10 text-white flex gap-2 items-center text-point">
-                  <Info />
-                  설문 중에는 필터 수정이 불가합니다.
-                </CardDescription>
-              )}
-            </CardHeader>
+                <CardContent className={cn("px-0 md:px-6 gap-6 flex flex-col")}>
+                  <DateRangeSelector />
+                </CardContent>
+              </Card>
 
-            <CardContent
-              className={cn(
-                "px-0 md:px-6 gap-6 flex flex-col",
-                editPage && " pointer-events-none opacity-50"
-              )}
-            >
-              {/* 나이 별 수집 */}
-              {/* <RadioBooleanField<RequestSurveyFormData>
+              <Card
+                className={cn(
+                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
+                  editPage && "cursor-not-allowed"
+                )}
+              >
+                <CardHeader className="px-0 md:px-6">
+                  <CardTitle className="text-xl md:text-2xl font-normal">
+                    2. 응답자 필터 설정
+                  </CardTitle>
+                  <CardDescription>
+                    {"'예'"} 체크 시, 나이 성별을 수집하며 차트와 응답자 들의
+                    필터링이 제공됩니다.
+                  </CardDescription>
+
+                  {editPage && (
+                    <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
+                      <Info />
+                      설문 중에는 필터 수정이 불가합니다.
+                    </CardDescription>
+                  )}
+                </CardHeader>
+
+                <CardContent
+                  className={cn(
+                    "px-0 md:px-6 gap-6 flex flex-col",
+                    editPage && " pointer-events-none opacity-50"
+                  )}
+                >
+                  {/* 나이 별 수집 */}
+                  {/* <RadioBooleanField<RequestSurveyFormData>
                 label="연령대 별 집계를 진행 하시겠습니까?"
                 groupName={"isAgeCollected"}
                 // description="연령대별 필터링이 가능합니다."
               /> */}
 
-              {/* 성별 별 수집 */}
-              <RadioBooleanField<RequestSurveyFormData>
-                // label="나이 및 성별 수집을 하시겠습니까?"
-                groupName={"isGenderCollected"}
-                // description="성별 필터링이 가능합니다."
-              />
-            </CardContent>
-          </Card>
+                  {/* 성별 별 수집 */}
+                  <RadioBooleanField<RequestSurveyFormData>
+                    // label="나이 및 성별 수집을 하시겠습니까?"
+                    groupName={"isGenderCollected"}
+                    // description="성별 필터링이 가능합니다."
+                  />
+                </CardContent>
+              </Card>
 
-          <Card
-            className={cn(
-              editPage && "cursor-not-allowed",
-              "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
-            )}
-          >
-            <CardHeader className="px-0 md:px-6">
-              <CardTitle className=" text-xl md:text-2xl font-normal">
-                3. 설문 문항 구성
-              </CardTitle>
-              <CardDescription>
-                설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
-              </CardDescription>
-              {editPage && (
-                <CardDescription className="text-xl pt-5 mt-10 text-white flex gap-2 items-center text-point">
-                  <Info />
-                  설문 중에는 항목 수정이 불가합니다.
-                </CardDescription>
-              )}
-            </CardHeader>
+              <Card
+                className={cn(
+                  editPage && "cursor-not-allowed",
+                  "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
+                )}
+              >
+                <CardHeader className="px-0 md:px-6">
+                  <CardTitle className=" text-xl md:text-2xl font-normal">
+                    3. 설문 문항 구성
+                  </CardTitle>
+                  <CardDescription>
+                    설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
+                  </CardDescription>
+                  {editPage && (
+                    <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
+                      <Info />
+                      설문 중에는 항목 수정이 불가합니다.
+                    </CardDescription>
+                  )}
+                </CardHeader>
 
-            <CardContent
-              className={cn(
-                "px-0 md:px-6 gap-6 flex flex-col",
-                editPage && " pointer-events-none opacity-50"
-              )}
-            >
-              <SurveyStatus />
-              {/* List.. */}
-              <CreateSurveyList />
-              {/* 항목 추가 */}
-              <CreateSurveyFormController />
-            </CardContent>
-          </Card>
-        </FormProvider>
+                <CardContent
+                  className={cn(
+                    "px-0 md:px-6 gap-6 flex flex-col",
+                    editPage && " pointer-events-none opacity-50"
+                  )}
+                >
+                  <SurveyStatus />
+                  {/* List.. */}
+                  <CreateSurveyList />
+                  {/* 항목 추가 */}
+                  <CreateSurveyFormController />
+                </CardContent>
+              </Card>
+            </FormProvider>
+            <div className="flex [&>button]:flex-1 gap-3">
+              {/* <Button
+                  type="submit"
+                  disabled={isPending}
+                  onClick={formState.handleSubmit(onSubmitHandler)}
+                  className="py-7 rounded-lg"
+                  variant={"outline"}
+                >
+                  미리보기
+                </Button> */}
 
-        <div className="flex [&>button]:flex-1 gap-3">
-          {/* <Button
-            type="submit"
-            disabled={isPending}
-            onClick={formState.handleSubmit(onSubmitHandler)}
-            className="py-7 rounded-lg"
-            variant={"outline"}
-          >
-            미리보기
-          </Button> */}
-
-          <Button
-            type="submit"
-            disabled={isPending}
-            onClick={formState.handleSubmit(onSubmitHandler)}
-            className="py-7 rounded-lg md:text-base text-sm"
-          >
-            설문조사 생성하기
-          </Button>
-        </div>
+              <Button
+                type="submit"
+                disabled={isPending}
+                onClick={formState.handleSubmit(onSubmitHandler)}
+                className="py-7 rounded-lg md:text-base text-sm"
+              >
+                설문조사 생성하기
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

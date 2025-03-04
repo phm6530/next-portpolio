@@ -95,14 +95,14 @@ const TipTapEditor = ({
       <div
         className={cn(
           mode === "view" && "border-none",
-          "table-cell w-full border-input border !rounded-lg cursor-text min-h-[100px]  h-full overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]"
+          "table-cell w-full border-input border !rounded-lg cursor-text  h-full overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]"
         )}
       >
         <EditorContent
           editor={editor}
           className={cn(
-            " w-full h-full min-h-[150PX] overflow-hidden ",
-            mode === "editor" && "bg-custom-input p-3"
+            " w-full h-full min-h-[150px] overflow-hidden ",
+            mode === "editor" && "bg-[#feffff] dark:bg-custom-input p-3"
           )}
           onClick={handleEditorClick}
         />

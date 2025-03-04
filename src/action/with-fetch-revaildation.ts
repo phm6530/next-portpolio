@@ -11,8 +11,10 @@ export const withFetchRevaildation = async <T>(
       const errorMsg = await result.json();
       throw new Error(errorMsg.message || "error");
     }
+    if (tags.length > 0) {
+      tags.forEach((tag) => revalidateTag(tag));
+    }
 
-    tags.forEach((tag) => revalidateTag(tag));
     return result.json();
   } catch (error) {
     if (error instanceof Error) {
