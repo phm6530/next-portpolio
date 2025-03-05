@@ -28,7 +28,8 @@ import AgeResponseFields from "../components/age-response-fields";
 import TextResponseField from "../components/text-response-fields";
 import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import { CheckCheck } from "lucide-react";
+import ImageThumbNail from "@/components/ui/image-thumbnail";
+import { Check } from "lucide-react";
 
 export default function SurveyResponseForm({
   id,
@@ -42,9 +43,19 @@ export default function SurveyResponseForm({
 
     answers: questions.map((e) => {
       if (e.type === QUESTION_TYPE.TEXT) {
-        return { questionId: e.id, type: e.type, answer: "" };
+        return {
+          questionId: e.id,
+          type: e.type,
+          answer: "",
+          required: e.required,
+        };
       } else if (e.type === QUESTION_TYPE.SELECT) {
-        return { questionId: e.id, type: e.type, optionId: [] };
+        return {
+          questionId: e.id,
+          type: e.type,
+          optionId: [],
+          required: e.required,
+        };
       } else {
         throw new Error("지원되지 않는 질문 타입입니다.") as never;
       }
@@ -70,6 +81,7 @@ export default function SurveyResponseForm({
     AnswerSurvey
   >({
     mutationFn: async (data) => {
+      console.log(data);
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
           method: "POST",
@@ -81,7 +93,7 @@ export default function SurveyResponseForm({
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
+      queryClient.removeQueries({
         queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
       });
 
@@ -140,20 +152,18 @@ export default function SurveyResponseForm({
                             </>
                           )}
 
-                          <span className="font-normal flex gap-2 items-center">
-                            {!!qs.required ? (
-                              <>
-                                {/* <CheckCheck className="w-3 h-3" />  */}
-                                필수 항목
-                              </>
-                            ) : (
-                              "선택 항목"
-                            )}
-                          </span>
+                          {!qs.required && (
+                            <p className="flex  rounded-full mt-3 gap-2 text-[12px] items-center  font-normal leading-7  dark:text-indigo-300 ">
+                              <Check className="w-5 h-5" />
+                              선택 항목
+                            </p>
+                          )}
                         </div>{" "}
                       </CardDescription>
 
-                      <CardDescription className="mt-3 font-normal"></CardDescription>
+                      <CardDescription className="mt-3 font-normal">
+                        {qs.img && <ImageThumbNail thumbnail={qs.img} />}
+                      </CardDescription>
                     </div>
                   </CardTitle>
                 </CardHeader>
@@ -161,9 +171,7 @@ export default function SurveyResponseForm({
                   {(() => {
                     switch (qs.type) {
                       case QUESTION_TYPE.TEXT:
-                        return (
-                          <TextResponseField qsImg={qs.pictrue} qsId={qs.id} />
-                        );
+                        return <TextResponseField qsId={qs.id} />;
                       //주관식
                       case QUESTION_TYPE.SELECT:
                         if ("options" in qs)

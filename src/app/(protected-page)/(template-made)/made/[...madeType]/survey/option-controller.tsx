@@ -14,8 +14,9 @@ import {
 import { Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
-import surveySchema from "./schema";
+
 import { toast } from "react-toastify";
+import surveySchema from "../schema/survey-schema";
 
 export default function OptionsController({
   name,

@@ -5,17 +5,16 @@ import "dayjs/locale/ko";
 
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { CommentReponse, MSG_TYPE } from "@/types/comment.type";
 import { User } from "@/types/auth.type";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { PsConfirmModal } from "../shared/modals/password-input-modal";
 import { toast } from "react-toastify";
-import MessageDeleteAction from "./action/delete-action";
-import { BASE_NEST_URL } from "@/config/base";
 import useCommentContext from "./hook/comment-context-hook";
 import ConfirmButton from "../ui/confirm-button";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 //import
 dayjs.extend(relativeTime);
@@ -45,13 +44,23 @@ export default function MessageItem({
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data?: { password?: string }) => {
-      const url = `${BASE_NEST_URL}/${msgType}/${id}`;
-      return await MessageDeleteAction({
-        url,
-        isMember: !!userData,
+      const result = await withFetchRevaildationAction({
+        endPoint: `${msgType}/${id}`,
+        requireAuth: !!userData,
         tags: [`comment-${EDITOR_PATH}-${boardId}`],
-        ...(!userData ? { password: data!.password } : {}),
+        options: {
+          method: REQUEST_METHOD.DELETE,
+          ...(!userData
+            ? { body: JSON.stringify({ password: data!.password }) }
+            : {}),
+        },
       });
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+
+      return result;
     },
     onSuccess: () => {
       toast.success("댓글이 삭제되었습니다.");

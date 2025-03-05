@@ -126,7 +126,19 @@ export default function DateRangeSelector() {
                       field.onChange(date);
                     }
                   }}
-                  disabled={(date) => date < new Date(watch("startDate"))}
+                  disabled={(date) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (date < today) {
+                      return true;
+                    }
+                    if (!!watch("startDate")) {
+                      return date < new Date(watch("startDate")); //오늘포함
+                    }
+
+                    return false;
+                  }}
                   initialFocus
                 />
               </PopoverContent>

@@ -16,7 +16,7 @@ export default function CustomCheckbox({
     <>
       <label
         className={cn(
-          "grid grid-cols opacity-80 p-3 border border-muted-foreground/30 transition-all items-center rounded-lg cursor-pointer",
+          "grid grid-cols opacity-80 p-3  border border-muted-foreground/30 transition-all items-center rounded-lg cursor-pointer",
           active && "opacity-100 scale-105 border-primary bg-primary/10 "
         )}
       >

@@ -13,6 +13,33 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
     }
   };
 
+  const addLink = () => {
+    const previousUrl = editor.getAttributes("link").href;
+    const url = prompt("URL을 입력해주세요:", previousUrl);
+
+    if (url === null) {
+      return;
+    }
+
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    const urlWithProtocol =
+      url.startsWith("http://") || url.startsWith("https://")
+        ? url
+        : `https://${url}`;
+
+    // 링크 추가
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: urlWithProtocol, target: "_blank" })
+      .run();
+  };
+
   return (
     <div className="table-row border">
       <div className="flex gap-3 p-2">
@@ -63,6 +90,16 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
               <YoutubeIcon />
             </div>
           </button>
+        </div>
+
+        <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center">
+            <button onClick={addLink} type="button">
+              <div className="w-5 h-5 flex justify-center items-center [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-white">
+                Link
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>

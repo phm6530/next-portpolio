@@ -1,7 +1,4 @@
-import {
-  defaultValues,
-  RequestSurveyFormData,
-} from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
+import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import SurveyOptionItem from "./select-option-item";
 
 import { QUESTION_TYPE } from "@/types/survey.type";

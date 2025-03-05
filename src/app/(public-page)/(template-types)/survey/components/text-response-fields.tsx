@@ -1,17 +1,9 @@
 import Image from "next/image";
 import { useFormContext, useWatch } from "react-hook-form";
-import commonStyle from "@/styles/pages/template.module.scss";
-
 import FormTextarea from "@/components/ui/FormElement/FormTextarea";
 import { AnswerSurvey } from "@/types/survey.type";
 
-export default function TextResponseField({
-  qsImg,
-  qsId,
-}: {
-  qsImg: string | null;
-  qsId: number;
-}) {
+export default function TextResponseField({ qsId }: { qsId: number }) {
   const { control } = useFormContext<AnswerSurvey>();
 
   const answers = useWatch({
@@ -28,20 +20,6 @@ export default function TextResponseField({
 
   return (
     <>
-      {qsImg && (
-        <div>
-          <Image
-            src={qsImg}
-            layout="responsive"
-            width={16}
-            height={9}
-            style={{ maxWidth: 700, objectFit: "cover" }}
-            alt="preview"
-            priority
-          />
-          {/* <ImageZoom alt={"preview"} image={qsImg} /> */}
-        </div>
-      )}
       <div
         style={{
           display: "flex",

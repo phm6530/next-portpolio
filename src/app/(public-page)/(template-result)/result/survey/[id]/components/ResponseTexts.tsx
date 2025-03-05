@@ -21,10 +21,7 @@ import Image from "next/image";
 import Male from "/public/asset/3d/male.png";
 import Female from "/public/asset/3d/female.png";
 import Anonymous from "/public/asset/3d/anonymous.png";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { User2, User2Icon } from "lucide-react";
 
 export function ResponseTexts({
   idx,
@@ -73,7 +70,6 @@ export function ResponseTexts({
     answers: ResultText["textAnswers"];
   }>({
     queryKey: [QUERY_KEY.QUESTION_TEXT, questionId + ""],
-
     queryFn: ({ pageParam }) => {
       return requestHandler(
         async () =>
@@ -84,12 +80,10 @@ export function ResponseTexts({
     },
     getNextPageParam: (lastPage) => {
       return lastPage.isNextPage;
-    }, // 다음 페이지 결정
+    },
     initialPageParam: 1,
-
     initialData: () => {
       return {
-        // 캐싱재사용으로 변경
         pages: [
           {
             isNextPage: (findTextQuestion as ResultText).isNextPage,
@@ -102,38 +96,46 @@ export function ResponseTexts({
   });
 
   useEffect(() => {
-    // 마운트안됐을때는 리턴
     if (!mountRef.current) {
       mountRef.current = true;
       return;
     }
 
     if (isSuccess) {
-      setList((prev) => [
-        ...prev,
-        ...(textQuestions.pages.at(-1)?.answers as TextAnswer[]),
-      ]);
+      const newAnswers = textQuestions.pages.at(-1)?.answers || [];
+
+      setList((prev) => {
+        const updatedList = [...prev];
+
+        newAnswers.forEach((newAnswer) => {
+          if (
+            !updatedList.some(
+              (existingAnswer) => existingAnswer.id === newAnswer.id
+            )
+          ) {
+            updatedList.push(newAnswer); // 중복된 아이디가 없을 때만 추가
+          }
+        });
+
+        return updatedList;
+      });
     }
   }, [isSuccess, textQuestions]);
 
   const filterList = (list: TextAnswer[]): TextAnswer[] => {
     return list.filter((e) => {
-      // 필터가 모두 "all"인 경우 모든 항목 표시
       if (filter.ageGroup === "all" && filter.genderGroup === "all") {
         return true;
       }
 
-      // age만 필터링할 때
       if (filter.ageGroup !== "all" && filter.genderGroup === "all") {
         return filter.ageGroup === e.respondent.age;
       }
 
-      // gender만 필터링할 때
       if (filter.ageGroup === "all" && filter.genderGroup !== "all") {
         return filter.genderGroup === e.respondent.gender;
       }
 
-      // 두 필터 모두 "all"이 아닐 때 (둘 다 필터링)
       if (filter.ageGroup !== "all" && filter.genderGroup !== "all") {
         return (
           filter.genderGroup === e.respondent.gender &&
@@ -141,7 +143,6 @@ export function ResponseTexts({
         );
       }
 
-      // 기본적으로 포함하지 않음 (위의 조건에 해당하지 않는 경우)
       return false;
     });
   };
@@ -204,31 +205,8 @@ export function ResponseTexts({
                           );
                       }
                     })()}
-
-                    {gender === "female" && (
-                      <Image
-                        src={Female}
-                        alt="logo"
-                        fill
-                        priority
-                        style={{ objectFit: "contain" }}
-                        sizes="(max-width: 768px) 50vw"
-                      />
-                    )}
-
-                    {gender === "male" && (
-                      <Image
-                        src={Male}
-                        alt="logo"
-                        fill
-                        priority
-                        style={{ objectFit: "contain" }}
-                        sizes="(max-width: 768px) 50vw"
-                      />
-                    )}
                   </div>
                   {age && <div className="text-[13px]">{age} 대</div>}
-
                   {(() => {
                     switch (gender) {
                       case "female":
@@ -258,21 +236,15 @@ export function ResponseTexts({
         </MasonryLayout>
       </div>
       {hasNextPage && (
-        <>
-          <div
-            className="mt-5"
-            onClick={() => {
-              fetchNextPage();
-            }}
-          >
-            <Button className="w-full" variant={"outline"}>
-              {isFetchingNextPage ? "로딩 중..." : "+ 답변 더 가져오기"}
-            </Button>
-          </div>
-        </>
-      )}{" "}
-      <CardDescription className="mt-3 text-[12px] font-normal">
-        * 추가 응답이 없을 경우 버튼은 노출되지 않습니다.
+        <div className="mt-5" onClick={() => fetchNextPage()}>
+          <Button className="w-full" variant={"outline"}>
+            {isFetchingNextPage ? "로딩 중..." : "+ 답변 더 가져오기"}
+          </Button>
+        </div>
+      )}
+      <CardDescription className="mt-3 text-[12px] font-normal leading-5 ">
+        * 버튼 클릭 시 전체 데이터 기준 10개씩 가져오며, 추가 응답이 없을 경우
+        버튼은 노출되지 않습니다.
       </CardDescription>
     </CardContent>
   );

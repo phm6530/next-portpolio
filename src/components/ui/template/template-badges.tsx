@@ -2,19 +2,18 @@ import DateCompareToday from "@/util/DateCompareToday";
 import { RespondentsAndMaxGroup } from "@/types/template.type";
 import { GENDER_GROUP } from "@/types/user";
 import { Badge } from "../badge";
-import { Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function TemplateBadges({
   startDate,
   endDate,
-  createdAt,
   maxGroup,
+  className,
 }: {
   startDate?: string | null;
   endDate?: string | null;
-  createdAt: string;
   maxGroup?: RespondentsAndMaxGroup["maxGroup"];
+  className?: string;
 }) {
   const todayCompare = DateCompareToday();
 
@@ -42,11 +41,7 @@ export default function TemplateBadges({
         </Badge>
       );
     } else if (!endDate) {
-      return (
-        <Badge variant={"secondary"} className="font-normal text-[10px]">
-          무기한
-        </Badge>
-      );
+      return <Badge className="font-normal text-[10px]">진행 중</Badge>;
     } else {
       return null;
     }
@@ -63,11 +58,9 @@ export default function TemplateBadges({
     }
   };
 
-  console.log(maxGroup?.genderGroup);
-
   return (
     <>
-      <div className="text-sm flex gap-2 h-5">
+      <div className={cn("text-sm flex gap-2 h-5", className)}>
         {/* New Template */}
         {/* {todayCompare.isNew(createdAt) && (
           <Badge variant={"outline"} className="text-[10px] font-normal">
@@ -81,10 +74,10 @@ export default function TemplateBadges({
           <Badge
             variant={"secondary"}
             className={cn(
-              "text-[10px] font-normal ",
+              "text-[10px] font-normal "
 
-              maxGroup?.genderGroup === "female" && "!bg-chart-4",
-              maxGroup?.genderGroup === "male" && "!bg-primary"
+              // maxGroup?.genderGroup === "female" && "!bg-chart-4",
+              // maxGroup?.genderGroup === "male" && "!bg-primary"
             )}
           >
             {maxGroup?.ageGroup && `${maxGroup.ageGroup}대`}{" "}

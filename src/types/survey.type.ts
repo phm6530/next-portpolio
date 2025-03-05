@@ -14,6 +14,7 @@ export type BaseQuestionsType = {
   type: QUESTION_TYPE;
   label: string;
   required: boolean;
+  img: string | null;
 };
 
 //설문조사 Detail Page Props
@@ -22,20 +23,13 @@ export type SurveyTemplateDetail = {
 } & TemplateItemMetadata<RespondentsAndMaxGroup>;
 
 // 주관식
-export type SurveyQuestionsText = {
-  pictrue: null;
-} & BaseQuestionsType;
+export type SurveyQuestionsText = {} & BaseQuestionsType;
 
 // 객관식
 export type SurveyQuestionSelect = {
-  id: number;
-  type: string;
-  label: string;
-  pictrue: null | string;
-  required: boolean;
   multi_select: boolean;
   options: SurveyQuestionOption[];
-};
+} & BaseQuestionsType;
 
 // 객관식- 옵션
 export type SurveyQuestionOption = {

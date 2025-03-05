@@ -14,6 +14,7 @@ import { UserRound } from "lucide-react";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import { Badge } from "@/components/ui/badge";
+import dayjs from "dayjs";
 
 export default function ResultPageSummry(data: SurveyResult) {
   const {
@@ -38,7 +39,6 @@ export default function ResultPageSummry(data: SurveyResult) {
           <TemplateBadges
             startDate={startDate}
             endDate={endDate}
-            createdAt={createdAt}
             maxGroup={detail.maxGroup}
           />
 
@@ -54,7 +54,10 @@ export default function ResultPageSummry(data: SurveyResult) {
       <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
         <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
 
-        <span className="text-[12px]">생성 일 {createdAt}</span>
+        <span className="text-[12px]">
+          {" "}
+          생성 일 {dayjs(createdAt).format("YYYY.MM.DD")}
+        </span>
       </CardFooter>
     </Card>
   );

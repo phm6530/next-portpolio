@@ -3,13 +3,20 @@ import {
   SurveyQuestionSelect,
   SurveyTemplateDetail,
 } from "@/types/survey.type";
+import { TextFilter } from "@/utils/text-filter";
 import { z } from "zod";
 
 //주관관
 export const textAnswerSchema = z.object({
   questionId: z.number(),
   type: z.literal(QUESTION_TYPE.TEXT),
-  answer: z.string().nullable(),
+  answer: z
+    .string()
+    .nullable()
+    .refine((txt) => !TextFilter.hasBadText(txt as string), {
+      message: "부적절한 표현이 포함되어 있습니다.",
+    }),
+  required: z.boolean(),
 });
 
 //객관
@@ -19,6 +26,7 @@ export const selectAnswerSchema = z.object({
 
   // id를 객체화 해서 O(1)으로 별차이없지만
   optionId: z.array(z.record(z.string(), z.number())),
+  required: z.boolean(),
 });
 
 export const createSurveyFormSchema = (

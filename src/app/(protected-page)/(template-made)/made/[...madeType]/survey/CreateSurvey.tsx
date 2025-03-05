@@ -10,7 +10,6 @@ import { User } from "@/types/auth.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEffect, useState } from "react";
-import surveySchema from "./schema";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
 import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
@@ -42,6 +41,7 @@ import DateRangeSelector from "@/components/ui/date-range";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import revaildateTags from "@/lib/revaildateTags";
 import { toast } from "react-toastify";
+import surveySchema from "../schema/survey-schema";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -166,7 +166,7 @@ export default function CreateSurveyForm() {
       setValue("templateKey", newKey);
     }
   }, [qs, setValue, editId]);
-  const { mutate, isPending } = useMutation<
+  const { mutate, isPending, isSuccess } = useMutation<
     {
       statusCode: number;
       templateId: number;
@@ -216,7 +216,7 @@ export default function CreateSurveyForm() {
   return (
     <>
       <SubheaderDescrition
-        title={`설문조사 템플릿 생성하기 ${editId && "(수정)"}`}
+        title={`설문조사 템플릿 생성하기 ${editId ? "(수정)" : ""}`}
         description="아래의 서식에 맞춰 정보를 적어주세요!"
       />
 
@@ -375,7 +375,7 @@ export default function CreateSurveyForm() {
 
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || isSuccess}
                 onClick={formState.handleSubmit(onSubmitHandler)}
                 className="py-7 rounded-lg md:text-base text-sm"
               >

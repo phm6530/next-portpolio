@@ -18,7 +18,7 @@ type TextAreaProps = {
 const FormTextarea = forwardRef<
   HTMLTextAreaElement,
   TextAreaProps & { label?: string }
->(({ className, placeholder, name, label, ...rest }, ref) => {
+>(({ className, placeholder, name, label, ..._rest }, _ref) => {
   const [rows, rowsHandler] = useRows();
   const { control } = useFormContext();
 

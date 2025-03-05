@@ -29,3 +29,9 @@ export enum NEXTAUTH_ID {
 export enum AUTH {
   ACCESS_TOKEN = "ACCESS_TOKEN",
 }
+
+export enum REQUEST_METHOD {
+  DELETE = "DELETE",
+  POST = "POST",
+  GET = "GET",
+}

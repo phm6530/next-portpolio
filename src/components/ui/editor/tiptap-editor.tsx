@@ -15,6 +15,7 @@ import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Link from "@tiptap/extension-link";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -49,6 +50,9 @@ const TipTapEditor = ({
         nocookie: true,
       }),
       Placeholder.configure({ placeholder }),
+      Link.configure({
+        openOnClick: false,
+      }),
     ],
 
     editorProps: {

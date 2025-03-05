@@ -23,6 +23,8 @@ import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
 import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import { Badge } from "@/components/ui/badge";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
@@ -123,13 +125,18 @@ export default async function SurveyDetailTemplate({
       <div className="animate-fadein">
         <Card className="rounded-2xl ">
           <CardHeader>
-            <CardTitle className="flex flex-col gap-5 mb-2">
-              <TemplateBadges
+            <CardTitle className="flex flex-col gap-5 mb-2 items-start">
+              <div className="flex gap-2">
+                <Badge variant={"secondary"} className="font-normal">
+                  Survey
+                </Badge>
+                <Badge className="font-normal">진행 중</Badge>
+              </div>
+              {/* <TemplateBadges
                 startDate={startDate}
                 endDate={endDate}
-                createdAt={createdAt}
                 maxGroup={data.respondents.maxGroup}
-              />
+              /> */}
               <div className="my-4 leading-9">{title}</div>
             </CardTitle>
             <TipTapEditor mode="view" value={description} />
@@ -141,7 +148,9 @@ export default async function SurveyDetailTemplate({
           )}
           <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
             <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
-            <span className="text-[12px]">생성 일 {createdAt}</span>
+            <span className="text-[12px]">
+              생성 일 {dayjs(createdAt).format("YYYY-MM-DD")}
+            </span>
           </CardFooter>
         </Card>
         <SurveyResponseForm {...data} />

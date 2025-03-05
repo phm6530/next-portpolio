@@ -57,7 +57,8 @@ export default function ResponseSelect({
       <div
         className={cn(
           "grid gap-4 ",
-          isPictureOption && "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]"
+          isPictureOption &&
+            "grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10"
         )}
       >
         {sortedOptions.map((option, idx) => {
@@ -66,7 +67,10 @@ export default function ResponseSelect({
           const percent = Math.round((sumUser / allCnt) * 100);
 
           return (
-            <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
+            <div
+              className="flex flex-col gap-2 items-start w-full "
+              key={`${option.label}-${idx}`}
+            >
               <div className="text-zinc-500">
                 <div
                   className={cn(
@@ -81,7 +85,7 @@ export default function ResponseSelect({
                 </div>
               </div>
 
-              <div className="grid items-center gap-2">
+              <div className="grid items-center gap-2 w-full">
                 {/* Percent */}
                 <AniProgressbar
                   maxCnt={ixMax}

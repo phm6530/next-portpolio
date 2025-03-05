@@ -89,7 +89,6 @@ const TemplateItem = forwardRef(
                   <TemplateBadges
                     startDate={startDate}
                     endDate={endDate}
-                    createdAt={createdAt}
                     maxGroup={maxGroup}
                   />
 

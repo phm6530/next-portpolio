@@ -2,21 +2,15 @@
 
 import { CategoriesKey } from "@/types/board";
 import { User, USER_ROLE } from "@/types/auth.type";
-import {
-  useIsMutating,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "react-toastify";
-import { BoardDeleteAction } from "../board-delete-action";
 import ConfirmDialog from "@/components/ui/confirm-button";
 import { PsConfirmModal } from "@/components/shared/modals/password-input-modal";
-import { useState } from "react";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 export default function PostController({
   id,
@@ -45,12 +39,21 @@ export default function PostController({
     { password?: string }
   >({
     mutationFn: async (data) => {
-      await BoardDeleteAction({
-        category,
-        id: parseInt(id),
-        body: authrozationPost ? {} : { password: data.password },
-        isMember: !!userData,
+      const result = await withFetchRevaildationAction({
+        endPoint: `board/${category}/${id}`,
+        requireAuth: !!userData,
+        options: {
+          method: REQUEST_METHOD.DELETE,
+          ...(!!userData
+            ? {}
+            : { body: JSON.stringify({ password: data.password }) }),
+        },
+        tags: [`post-${category}-${id}`, `community-${category}`],
       });
+
+      if (!result.success) {
+        throw new Error(result.message);
+      }
     },
 
     onSuccess: () => {
@@ -60,7 +63,6 @@ export default function PostController({
       });
 
       router.replace(`/community/${category}`);
-
       router.refresh();
     },
   });
@@ -82,14 +84,14 @@ export default function PostController({
               <ConfirmDialog
                 title="해당 글을 삭제하시겠습니까?"
                 description={"삭제 한 게시물은 복구가 불가합니다."}
-                cb={async () => mutateAsync({})}
+                cb={async () => await mutateAsync({})}
               >
                 <Button variant={"outline"}>삭제</Button>
               </ConfirmDialog>
             ) : (
               <PsConfirmModal
                 disalbed={isPending}
-                cb={(formData) => mutateAsync(formData)}
+                cb={async (formData) => await mutateAsync(formData)}
               >
                 <Button variant="outline" disabled={isPending}>
                   삭제

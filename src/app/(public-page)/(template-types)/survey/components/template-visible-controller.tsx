@@ -51,7 +51,9 @@ export default function TemplateVisibleController({
             </CardContent>
           )}
           <div className="text-2xl break-keep">
-            "{title}" 은 아직 진행 기간이 아닙니다
+            {"'"}
+            {title}
+            {"'"} 은 아직 진행 기간이 아닙니다
           </div>
           <div className="flex gap-2  text-center items-center mb-7 justify-center">
             <CalendarCheck2Icon /> {startDate} ~ {endDate ?? "무기한"}
@@ -76,7 +78,9 @@ export default function TemplateVisibleController({
             </CardContent>
           )}
           <div className="text-2xl break-keep">
-            "{title}" 은 <span className="text-point">종료</span> 되었습니다.
+            {"'"}
+            {title}
+            {"'"} 은 <span className="text-point">종료</span> 되었습니다.
           </div>
           <div className="flex gap-2  text-center items-center mb-7 justify-center">
             <CalendarCheck2Icon /> {startDate} ~ {endDate ?? "무기한"}
