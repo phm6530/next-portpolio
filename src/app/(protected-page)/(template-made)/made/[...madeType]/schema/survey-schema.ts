@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { TEMPLATE_TYPE } from "@/types/template.type";
+import { TextFilter } from "@/utils/text-filter";
 
 const RequestTextSchema = z.object({
   label: z.string().min(1, "질문 제목은 필수입니다"),
@@ -24,22 +25,24 @@ const RequestSelectSchema = z.object({
     )
     .min(2, "선택 옵션은 최소 2개가 필요합니다.")
     .superRefine((options, ctx) => {
-      // 비어 있지 않은 값만 중복 검사
-      const nonEmptyValues = options
-        .map((o) => o.value)
-        .filter((value) => value.trim() !== "");
+      // 값 중복 확인을 위한 맵 생성
+      const valueMap = new Map();
 
-      // 중복 값 찾기
-      const duplicates = nonEmptyValues.filter(
-        (value, index, self) => self.indexOf(value) !== index
-      );
-      if (duplicates.length > 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `중복된 옵션 값이 있습니다 `,
-          path: ["root"],
-        });
-      }
+      options.forEach((option, index) => {
+        const value = option.value.trim();
+
+        if (value !== "") {
+          if (valueMap.has(value)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `중복된 항목입니다.`,
+              path: [index, "value"], // 정확한 중복 옵션의 경로 지정
+            });
+          } else {
+            valueMap.set(value, index);
+          }
+        }
+      });
     }),
 });
 
@@ -47,11 +50,19 @@ const surveySchema = z.object({
   title: z
     .string()
     .min(1, "제목은 필수 입니다.")
-    .min(4, "제목은 최소 4글자 이상으로 적어주세요"),
-  description: z.string().min(1, "해당 조사의 설명을 적어주세요"),
+    .min(4, "제목은 최소 4글자 이상으로 적어주세요")
+    .refine((txt) => !TextFilter.hasBadText(txt), {
+      message: "부적절한 표현이 포함되어 있습니다.",
+    }),
+  description: z
+    .string()
+    .min(1, "해당 조사의 설명을 적어주세요")
+    .refine((txt) => !TextFilter.hasBadText(txt), {
+      message: "부적절한 표현이 포함되어 있습니다.",
+    }),
   thumbnail: z.string().nullable(), // Null 허용..
-  startDate: z.string().nullable().optional(),
-  endDate: z.string().nullable().optional(),
+  startDate: z.date().nullable().optional(),
+  endDate: z.date().nullable().optional(),
   isGenderCollected: z.boolean().optional(),
   isAgeCollected: z.boolean().optional(),
   templateType: z.nativeEnum(TEMPLATE_TYPE),

@@ -40,7 +40,7 @@ export default async function BoardListPage({
       <BoardCategoriesWrapper curBoard={params.board} />
 
       {/* Search Bar */}
-      <div className="flex gap-5 [&>div:first-child]:flex-1">
+      <div className="flex gap-5 flex-col md:flex-row [&>div:first-child]:flex-1">
         {/* 검색처리를 위해 Client 한번더 감쌓았음 */}
         <SearchBarWrapper />
         <Button asChild size={"lg"} className="p-6 rounded-sm">

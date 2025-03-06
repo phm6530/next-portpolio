@@ -9,8 +9,7 @@ import MyContentsItem from "./MyContentsItem";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { CircleSlash, SquarePlus } from "lucide-react";
+import { SquarePlus } from "lucide-react";
 import useAOS from "@/_hook/usAOS";
 import TabRounded from "@/components/ui/tab-rounded";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
@@ -103,7 +102,7 @@ export default function MyContents() {
 
       {/* <h2>생성한 템플릿</h2> */}
 
-      <div className="grid flex-col gap-10">
+      <div className="flex flex-col gap-4">
         {data && data.length > 0 ? (
           data?.map((item) => {
             return (

@@ -1,0 +1,23 @@
+.tiptap {
+  /* Code and preformatted text styles */
+  /* Link styles */
+}
+.tiptap :first-child {
+  margin-top: 0;
+}
+.tiptap code {
+  background-color: var(--purple-light);
+  border-radius: 0.4rem;
+  color: var(--black);
+  font-size: 0.85rem;
+  padding: 0.25em 0.3em;
+}
+.tiptap a {
+  color: var(--purple);
+  cursor: pointer;
+}
+.tiptap a:hover {
+  color: var(--purple-contrast);
+}
+
+/*# sourceMappingURL=testi.css.map */

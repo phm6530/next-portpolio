@@ -15,6 +15,7 @@ import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OptionsController from "./option-controller";
 import ConfirmDialog from "@/components/ui/confirm-button";
+import { DeleteIcon, X } from "lucide-react";
 
 export default function CreateSurveyText({
   surveyIdx,
@@ -73,11 +74,11 @@ export default function CreateSurveyText({
             render={({ field }) => {
               return (
                 <>
-                  <div className="flex">
+                  <div className="flex items-center gap-2">
                     <Input
                       {...field}
                       placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
-                      className="border-transparent !bg-transparent placeholder:text-lg focus:border-transparent hover:border-transparent"
+                      className="border-transparent !bg-transparent  text-base placeholder:text-base md:text-lg md:placeholder:text-lg focus:border-transparent hover:border-transparent"
                       autoComplete="off"
                     />
 
@@ -92,7 +93,12 @@ export default function CreateSurveyText({
                         remove(surveyIdx);
                       }}
                     >
-                      <Button variant={"ghost"}>삭제</Button>
+                      <button
+                        type="button"
+                        className={`flex items-center justify-center [&>svg]:hover:fill-[#647487]`}
+                      >
+                        <X className="fill-[#647487] text-[#647487]" />
+                      </button>
                     </ConfirmDialog>
                   </div>
                   <FormMessage />
@@ -111,7 +117,7 @@ export default function CreateSurveyText({
           </div>
         ) : null}
         {/* 주관식에서 알려주기 */}
-        <div className="bg-muted/50 text-sm p-3 rounded-sm border border-border">
+        <div className="bg-muted/50 text-[12px] md:text-sm p-3 rounded-sm border border-border">
           응답자 답변 (500자 내외)
         </div>{" "}
         <OptionsController name={`questions.${surveyIdx}`} />

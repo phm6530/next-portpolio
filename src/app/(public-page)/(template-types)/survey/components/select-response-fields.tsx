@@ -38,72 +38,70 @@ export default function SelectResponseField({
       render={({ field }) => {
         return (
           <>
-            <CardContent>
-              <div
-                className={cn(
-                  "grid gap-4 ",
-                  isPictureOption &&
-                    "grid-cols-[repeat(auto-fit,minmax(230px,1fr))]"
-                )}
-              >
-                {options?.map((op, idx) => {
-                  const selectOptionId = field.value.find(
-                    (option) => option[op.id]
-                  );
+            <div
+              className={cn(
+                "grid gap-4 ",
+                isPictureOption &&
+                  "grid-cols-[repeat(auto-fit,minmax(230px,1fr))]"
+              )}
+            >
+              {options?.map((op, idx) => {
+                const selectOptionId = field.value.find(
+                  (option) => option[op.id]
+                );
 
-                  return (
-                    <FormItem key={`option-${op.id}-${idx}`}>
-                      <FormControl>
-                        {isMulti ? (
-                          <CustomCheckbox
-                            label={op.value}
-                            active={!!selectOptionId}
-                            onChange={() => {
-                              if (selectOptionId) {
-                                field.onChange([
-                                  ...field.value.filter((obj) => {
-                                    return obj[op.id] !== op.id;
-                                  }),
-                                ]);
-
-                                return;
-                              }
-
+                return (
+                  <FormItem key={`option-${op.id}-${idx}`}>
+                    <FormControl>
+                      {isMulti ? (
+                        <CustomCheckbox
+                          label={op.value}
+                          active={!!selectOptionId}
+                          onChange={() => {
+                            if (selectOptionId) {
                               field.onChange([
-                                ...field.value,
-                                { [op.id]: op.id },
+                                ...field.value.filter((obj) => {
+                                  return obj[op.id] !== op.id;
+                                }),
                               ]);
-                            }}
-                          >
-                            {op.img && (
-                              <>
-                                <ZoomableImage image={op.img} alt={op.value} />
-                              </>
-                            )}
-                          </CustomCheckbox>
-                        ) : (
-                          <CustomRadio
-                            onChange={() => {
-                              // 그냥 덮어버려
-                              field.onChange([{ [op.id]: op.id }]);
-                            }}
-                            label={op.value}
-                            active={(field.value[0] ?? {})[op.id] === op.id}
-                          >
-                            {op.img && (
-                              <>
-                                <ZoomableImage image={op.img} alt={op.value} />
-                              </>
-                            )}
-                          </CustomRadio>
-                        )}
-                      </FormControl>
-                    </FormItem>
-                  );
-                })}
-              </div>
-              <FormMessage />
-            </CardContent>
+
+                              return;
+                            }
+
+                            field.onChange([
+                              ...field.value,
+                              { [op.id]: op.id },
+                            ]);
+                          }}
+                        >
+                          {op.img && (
+                            <>
+                              <ZoomableImage image={op.img} alt={op.value} />
+                            </>
+                          )}
+                        </CustomCheckbox>
+                      ) : (
+                        <CustomRadio
+                          onChange={() => {
+                            // 그냥 덮어버려
+                            field.onChange([{ [op.id]: op.id }]);
+                          }}
+                          label={op.value}
+                          active={(field.value[0] ?? {})[op.id] === op.id}
+                        >
+                          {op.img && (
+                            <>
+                              <ZoomableImage image={op.img} alt={op.value} />
+                            </>
+                          )}
+                        </CustomRadio>
+                      )}
+                    </FormControl>
+                  </FormItem>
+                );
+              })}
+            </div>
+            <FormMessage />
           </>
         );
       }}

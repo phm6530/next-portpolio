@@ -16,7 +16,9 @@ export async function POST(req: NextRequest) {
     }
 
     // 반복처리
-    tags.forEach((tag) => revalidateTag(tag));
+    for (const tag of tags) {
+      revalidateTag(tag);
+    }
 
     // 캐시 태그 갱신
     return NextResponse.json({

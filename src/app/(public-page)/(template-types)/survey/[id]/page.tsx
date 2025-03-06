@@ -6,7 +6,6 @@ import {
 } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import TemplateBadges from "@/components/ui/template/template-badges";
 import SurveyResponseForm from "./survey-response-form";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -14,32 +13,32 @@ import Link from "next/link";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-// import TransformPlainText from "@/utils/transform-html-to-plaintext";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import TipTapEditor from "@/components/ui/editor/tiptap-editor";
 
-// export const runtime = "edge";
+import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import { Badge } from "@/components/ui/badge";
 
 type SurveyDetailTemplateParams = {
   params: { id: number };
 };
 
-// 동적 생성
-// export const dynamicParams = true;
+const DynamicTemplateController = dynamic(
+  () => import("../components/template-visible-controller"),
+  { ssr: false } // 클라이언트 측에서만 렌더링
+);
+
 export async function generateStaticParams() {
   let url = `${BASE_NEST_URL}/template?sort=all`;
   url += "&page=1";
 
-  /**
-   * 정적 페이지는 초기 Page 1만 Static으로 생성하고 이후 페이지들은 정적으로 생성되길 유도함
-   */
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "force-cache" });
 
   const {
     data: listResponse,
@@ -56,7 +55,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params: { id },
 }: SurveyDetailTemplateParams): Promise<Metadata> {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    cache: "force-cache",
+    next: {
+      tags: [`template-survey-${+id}`], // Tags
+    },
+  });
 
   //존재하지 않는  페이지면 Redirect 시켜버림
   if (!response.ok) {
@@ -66,12 +70,12 @@ export async function generateMetadata({
   const data: FetchTemplateForm = await response.json();
 
   return {
-    title: data.title,
+    title: `[dopoll] ${data.title}`,
     description: data.description,
     openGraph: {
-      title: data.title,
+      title: `[dopoll] ${data.title}`,
       description: data.description,
-      images: "",
+      images: data.thumbnail,
     },
   };
 }
@@ -79,7 +83,12 @@ export async function generateMetadata({
 export default async function SurveyDetailTemplate({
   params: { id },
 }: SurveyDetailTemplateParams) {
-  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`);
+  const response = await fetch(`${BASE_NEST_URL}/template/survey/${id}`, {
+    cache: "force-cache",
+    next: {
+      tags: [`template-survey-${+id}`], // Tags
+    },
+  });
   const data: FetchTemplateForm = await response.json();
 
   if (!data) {
@@ -94,11 +103,14 @@ export default async function SurveyDetailTemplate({
     endDate,
     createdAt,
     creator,
-    respondents,
   } = data;
 
   return (
-    <>
+    <DynamicTemplateController
+      startDate={startDate}
+      endDate={endDate}
+      data={data}
+    >
       <Button
         asChild
         variant={"link"}
@@ -112,30 +124,36 @@ export default async function SurveyDetailTemplate({
       <div className="animate-fadein">
         <Card className="rounded-2xl ">
           <CardHeader>
-            <CardTitle className="flex flex-col gap-5 mb-2">
-              <TemplateBadges
+            <CardTitle className="flex flex-col gap-5 mb-2 items-start">
+              <div className="flex gap-2">
+                <Badge variant={"secondary"} className="font-normal">
+                  Survey
+                </Badge>
+                <Badge className="font-normal">진행 중</Badge>
+              </div>
+              {/* <TemplateBadges
                 startDate={startDate}
                 endDate={endDate}
-                createdAt={createdAt}
                 maxGroup={data.respondents.maxGroup}
-              />
+              /> */}
               <div className="my-4 leading-9">{title}</div>
             </CardTitle>
             <TipTapEditor mode="view" value={description} />
           </CardHeader>
-          <CardContent>
-            <ImageThumbNail thumbnail={thumbnail} />
-
-            <div className="mt-5">{/* Desciprtion */}</div>
-          </CardContent>
-          <CardFooter className="flex justify-between border-t pt-5 text-sm text-muted-foreground">
+          {thumbnail && (
+            <CardContent className="md:p-6 p-3">
+              <ImageThumbNail thumbnail={thumbnail} />
+            </CardContent>
+          )}
+          <CardFooter className="flex md:p-6 p-3 justify-between border-t pt-5 text-sm text-muted-foreground">
             <UserRoleDisplay role={creator.role} nickname={creator.nickname} />
-            <span className="text-[12px]">생성 일 {createdAt}</span>
+            <span className="text-[12px]">
+              생성 일 {dayjs(createdAt).format("YYYY-MM-DD")}
+            </span>
           </CardFooter>
         </Card>
-        {/* survey Form 응답 */}
-        <SurveyResponseForm {...data} />{" "}
+        <SurveyResponseForm {...data} />
       </div>
-    </>
+    </DynamicTemplateController>
   );
 }

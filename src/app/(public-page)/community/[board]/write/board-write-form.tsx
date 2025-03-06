@@ -4,10 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CategoriesKey, CategoriesValues } from "@/types/board";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { useRouter } from "next/navigation";
-import QuillEditor from "@/components/ui/editor/QuillEditor";
 
 import { toast } from "react-toastify";
 import InputField from "@/components/shared/inputs/input-field";
@@ -18,9 +17,9 @@ import {
   anonymousSchema,
   boardWirteSchema,
 } from "./board-write-schema";
-import { BoardWirteAction } from "./board-wirte-action";
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
@@ -53,11 +52,18 @@ export default function BoardForm({
     UnionBoardProps
   >({
     mutationFn: async (data) => {
-      return await BoardWirteAction({
-        boardKey,
-        body: data,
-        isMember: !!userData,
+      const result = await withFetchRevaildationAction({
+        endPoint: `board/${boardKey}`,
+        requireAuth: !!userData,
+        options: {
+          method: REQUEST_METHOD.POST,
+          body: JSON.stringify(data),
+        },
       });
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+      return result;
     },
 
     onSuccess: () => {
@@ -111,7 +117,10 @@ export default function BoardForm({
         />
         <div>
           {/* Quill Editor */}
-          <TipTapEditorField name={"contents"} placeholder="test" />
+          <TipTapEditorField
+            name={"contents"}
+            placeholder="작성할 내용을 입력해주세요"
+          />
         </div>
 
         <Button className="p-8" disabled={isPending || isSuccess}>

@@ -48,7 +48,7 @@ export default function MessageThread({
       </Button>
 
       {/* 대댓글 */}
-      <div className="flex flex-col gap-4 mb-4">
+      <div className="flex flex-col gap-4 ">
         {replies.map((reply, idx) => {
           const { content, ...rest } = reply;
           return (

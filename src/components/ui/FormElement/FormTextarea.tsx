@@ -18,7 +18,7 @@ type TextAreaProps = {
 const FormTextarea = forwardRef<
   HTMLTextAreaElement,
   TextAreaProps & { label?: string }
->(({ className, placeholder, name, label, ...rest }, ref) => {
+>(({ className, placeholder, name, label, ..._rest }, _ref) => {
   const [rows, rowsHandler] = useRows();
   const { control } = useFormContext();
 
@@ -36,19 +36,18 @@ const FormTextarea = forwardRef<
                 </CardHeader>
               )}
 
-              <CardContent>
-                <FormControl>
-                  <Textarea
-                    placeholder={placeholder}
-                    onChange={(e) => {
-                      rowsHandler(e);
-                      field?.onChange?.(e);
-                    }}
-                    rows={rows}
-                  />
-                </FormControl>
-                <FormMessage className="mt-2" />
-              </CardContent>
+              <FormControl>
+                <Textarea
+                  placeholder={placeholder}
+                  onChange={(e) => {
+                    rowsHandler(e);
+                    field?.onChange?.(e);
+                  }}
+                  rows={rows}
+                  className="text-sm"
+                />
+              </FormControl>
+              <FormMessage className="mt-2" />
             </FormItem>
           );
         }}

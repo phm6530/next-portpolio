@@ -70,10 +70,10 @@ export function PsConfirmModal({
                 method.reset();
               }}
             >
-              Cancel
+              닫기
             </AlertDialogCancel>
             <AlertDialogAction onClick={method.handleSubmit(submitHandler)}>
-              Continue
+              삭제
             </AlertDialogAction>
           </AlertDialogFooter>
         </FormProvider>

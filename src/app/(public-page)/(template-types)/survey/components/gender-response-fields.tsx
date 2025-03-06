@@ -16,12 +16,12 @@ export default function GenderResponseFields() {
         return (
           <>
             <Card>
-              <CardHeader>
-                <FormLabel className="text-xl">
-                  성별이 어떻게 되시나요?
+              <CardHeader className="md:px-6 px-3">
+                <FormLabel className="md:text-xl text-base ">
+                  성별이 어떻게 되시나요? <span className="text-point">*</span>
                 </FormLabel>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-col gap-2 md:px-6 px-3">
                 <div className="flex gap-3">
                   {genders.map((gender) => {
                     return (

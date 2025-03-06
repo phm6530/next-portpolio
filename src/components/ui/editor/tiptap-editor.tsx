@@ -9,11 +9,13 @@ import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import TipTapToolbar from "./tiptap-toolbar";
 import { cn } from "@/lib/utils";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Link from "@tiptap/extension-link";
 
 const lowlight = createLowlight(all);
 lowlight.register("html", html);
@@ -40,17 +42,17 @@ const TipTapEditor = ({
   const editor = useEditor({
     extensions: [
       StarterKit, // 여기 이미 Heading + codeblock
-      // Heading.configure({
-      //   levels: [1, 2, 3],
-      // }),
-      // CodeBlockLowlight.configure({
-      //   lowlight,
-      // }),
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
       Youtube.configure({
         controls: false,
         nocookie: true,
       }),
       Placeholder.configure({ placeholder }),
+      Link.configure({
+        openOnClick: false,
+      }),
     ],
 
     editorProps: {
@@ -75,6 +77,12 @@ const TipTapEditor = ({
     immediatelyRender: false,
   });
 
+  useEffect(() => {
+    if (editor && value !== undefined && editor.getHTML() !== value) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
+
   if (!editor || isLoading) {
     return <LoadingWrapper />;
   }
@@ -91,14 +99,14 @@ const TipTapEditor = ({
       <div
         className={cn(
           mode === "view" && "border-none",
-          "table-cell w-full border-input border !rounded-lg cursor-text min-h-[100px]  h-full overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]"
+          "table-cell w-full border-input border !rounded-lg cursor-text  h-full overflow-hidden rounded-b-md focus-within:border-primary focus-within:focus-within:bg-[hsl(var(--custom-color))]"
         )}
       >
         <EditorContent
           editor={editor}
           className={cn(
-            " w-full h-full min-h-[150PX] overflow-hidden ",
-            mode === "editor" && "bg-custom-input p-3"
+            " w-full h-full min-h-[150px] overflow-hidden ",
+            mode === "editor" && "bg-[#feffff] dark:bg-custom-input p-3"
           )}
           onClick={handleEditorClick}
         />

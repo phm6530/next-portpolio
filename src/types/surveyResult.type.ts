@@ -7,6 +7,7 @@ type BaseResultItem = {
   id: number;
   label: string;
   picture: string | null;
+  required: boolean; // 필수여부
 };
 
 //응답자

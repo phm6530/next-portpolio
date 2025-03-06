@@ -17,18 +17,16 @@ export default function BoardListItem({
         className="mb-1"
       >
         <div className="cursor-pointer hover:text-primary text-sm flex gap-2  items-center">
-          <p className="mt-[1px] text-base">{itemData.title}</p>{" "}
-          <span className="text-[13px] flex items-center gap-1 ml-3 ">
-            <MessageSquareMore className="w-3.5 h-3.5 opacity-50" />
-            <span
-              className={cn(
-                "opacity-60",
-                itemData.commentCnt > 0 && "opacity-100"
-              )}
-            >
-              {itemData.commentCnt}
+          <p className="mt-[1px] text-sm md:text-base line-clamp-1">
+            {itemData.title}
+          </p>
+
+          {itemData.commentCnt !== 0 && (
+            <span className="text-[13px] flex items-center gap-1 ml-3 ">
+              <MessageSquareMore className="w-3.5 h-3.5 opacity-50" />
+              <span className={cn("opacity-60")}>{itemData.commentCnt}</span>
             </span>
-          </span>
+          )}
         </div>
       </Link>
       <div className="flex items-center text-sm">
@@ -36,6 +34,7 @@ export default function BoardListItem({
         <UserRoleDisplay
           role={itemData.creator.role}
           nickname={itemData.creator.nickname}
+          size={"sm"}
         />
 
         <div className="opacity-50 text-[11px] ml-6">
@@ -48,19 +47,6 @@ export default function BoardListItem({
               <Eye className="w-4 h-4 opacity-50" /> {itemData.view}
             </span>
           </div>
-
-          {/* <span className="text-[13px] flex items-center gap-1 ">
-            <MessageSquareMore className="w-3.5 h-3.5 opacity-50" />
-            <span
-              className={cn(
-                "opacity-60",
-                itemData.commentCnt > 0 && "opacity-100"
-              )}
-            >
-              {" "}
-              {itemData.commentCnt}
-            </span>
-          </span> */}
         </div>
       </div>
     </div>

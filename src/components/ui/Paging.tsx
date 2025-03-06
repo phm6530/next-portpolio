@@ -85,21 +85,23 @@ export default function Paging({ cnt = 1 }: PagingProps) {
       >
         {/* <Image src={PrevIcon} alt="prev" priority width={10} /> */}
       </button>
-      {pages.map((page, idx) => {
-        return (
-          <button
-            onClick={queryStringHandler}
-            type="button"
-            key={`page-${idx}`}
-            value={page}
-            className={cn("paging-btn", page === pageNumber && "border")}
-            disabled={typeof page === "string"} // ... 클릭 방지
-            aria-label={`nav-${page}`}
-          >
-            {page}
-          </button>
-        );
-      })}
+      <div className="flex gap-2 md:gap-3">
+        {pages.map((page, idx) => {
+          return (
+            <button
+              onClick={queryStringHandler}
+              type="button"
+              key={`page-${idx}`}
+              value={page}
+              className={cn("paging-btn", page === pageNumber && "border")}
+              disabled={typeof page === "string"} // ... 클릭 방지
+              aria-label={`nav-${page}`}
+            >
+              {page}
+            </button>
+          );
+        })}
+      </div>
       <button
         onClick={() => pagingHandler("next")}
         disabled={pageNumber >= pageLength}

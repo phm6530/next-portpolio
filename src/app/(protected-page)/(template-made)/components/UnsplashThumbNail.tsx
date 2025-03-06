@@ -114,7 +114,7 @@ function UnSplashContents({ closeModal }: { closeModal: () => void }) {
           ) : (
             <>
               {data?.total !== 0 ? (
-                <div className="grid gap-3 max-h-[400px] overflow-y-scroll grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+                <div className="grid gap-3 max-h-[400px] custom-scroll overflow-y-scroll grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
                   {data?.results.map((e, key) => {
                     return (
                       <div
@@ -155,7 +155,7 @@ export default function UnSplashThumbNail() {
   return (
     <>
       <CustomModal
-        className="max-w-2xl w-[90%]"
+        className="max-w-2xl w-[90%] text-left"
         title={`사용하실 섬네일 키워드를\n 검색해보세요`}
         description={`UnSlash Api 사용으로 검색어를 영어로 입력하시면 더 정확한 결과를 검색합니다. \n 예) 동물 > animal`}
         open={modal}

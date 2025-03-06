@@ -12,21 +12,34 @@ import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { fetchSurveyData } from "./test";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+
+// 성별 및 나이 필터 함수
+const filterGenderAndAgeGroup = (
+  option: ResultSelectOption["response"],
+  gender: GenderOptions,
+  age: AgeOptions
+) => {
+  if (gender === "all") {
+    return {
+      female:
+        age === "all" ? option.female : { [age]: option?.female?.[age] ?? 0 },
+      male: age === "all" ? option.male : { [age]: option?.male?.[age] ?? 0 },
+    };
+  } else {
+    return age === "all"
+      ? { [gender]: option[gender] }
+      : { [gender]: { [age]: option[gender]?.[age] ?? 0 } };
+  }
+};
 
 export default function ResultSurveyCharts({
   templateId,
 }: {
   templateId: string;
 }) {
-  //초깃값
-  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<{
     genderGroup: GenderOptions;
     ageGroup: AgeOptions;
@@ -35,139 +48,118 @@ export default function ResultSurveyCharts({
     ageGroup: "all",
   });
 
-  const filterGenderAndAgeGroup = (
-    option: ResultSelectOption["response"],
-    gender: GenderOptions,
-    age: AgeOptions
-  ) => {
-    //성별 전체 +
-    if (gender === "all") {
-      return {
-        female:
-          age === "all" ? option.female : { [age]: option.female![age] ?? 0 },
-        male: age === "all" ? option.male : { [age]: option.male![age] ?? 0 },
-      };
-    } else {
-      if (age === "all") {
-        return { [gender]: option[gender] };
-      } else {
-        return { [gender]: { [age]: option[gender]![age] ?? 0 } };
-      }
-    }
-  };
-
+  // Query 데이터 가져오기 - 캐싱 잘됨 확인함
   const { data } = useQuery({
     queryKey: [QUERY_KEY.SURVEY_RESULTS, templateId],
-    queryFn: async () => await fetchSurveyData<SurveyResult>(templateId),
+    queryFn: async () => {
+      const result: {
+        success: boolean;
+        result?: SurveyResult;
+        message?: string;
+      } = await withFetchRevaildationAction({
+        endPoint: `answer/survey/${templateId}`,
+      });
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+      return result.result;
+    },
     staleTime: 10000,
-    initialData: () => {
-      return queryClient.getQueryData([QUERY_KEY.SURVEY_RESULTS, templateId]);
-    },
-    select: (data) => {
-      return {
-        ...data,
-        questions: data.questions.map((question) => {
-          switch (question.type) {
-            case QUESTION_TYPE.SELECT:
-              return {
-                ...question,
-                options: question.options.map((option) => {
-                  return {
-                    ...option,
-                    response: {
-                      selectUserCnt: option.response.selectUserCnt,
-                      ...filterGenderAndAgeGroup(
-                        option.response,
-                        filter.genderGroup,
-                        filter.ageGroup
-                      ),
-                    },
-                  };
-                }),
-              };
-            case QUESTION_TYPE.TEXT:
-              // TEXT 질문의 경우 textAnswers 필터링
-              return {
-                ...question,
-              };
-            default:
-              throw new Error("알 수 없는 질문 유형입니다.") as never;
-          }
-        }),
-      };
-    },
   });
 
-  //데이터없으면 notFOund로
+  // 데이터가 없으면 notFound 처리
   if (!data) {
     return notFound();
   }
 
-  const { questions, respondents } = data;
+  const { questions, respondents, isAgeCollected, isGenderCollected } = data;
   const allCnt = respondents.allCnt;
+
+  // 필터된 데이터 반환
+  const filterDatas = (
+    lists: SurveyResult["questions"]
+  ): SurveyResult["questions"] => {
+    return lists.map((question) => {
+      if (question.type === QUESTION_TYPE.SELECT) {
+        return {
+          ...question,
+          options: question.options.map((option) => ({
+            ...option,
+            response: {
+              selectUserCnt: option.response.selectUserCnt,
+              ...filterGenderAndAgeGroup(
+                option.response,
+                filter.genderGroup,
+                filter.ageGroup
+              ),
+            },
+          })),
+        };
+      }
+      return question;
+    });
+  };
 
   return (
     <>
-      <div className="fixed bottom-0 right-0 max-w-[800px] w-[90%] left-[50%] -translate-x-[50%] bg-background z-10 p-5 border rounded-t-lg">
-        {/* 필터 */}
-        <SurveyGroupFilter
-          curFilter={filter}
-          setFilter={setFilter}
-          respondents={data?.respondents}
-        />
+      <div>
+        {/* 필터 컴포넌트 */}
+        {isAgeCollected && isGenderCollected && (
+          <SurveyGroupFilter
+            curFilter={filter}
+            setFilter={setFilter}
+            respondents={data?.respondents}
+          />
+        )}
       </div>
 
       <div className="flex flex-col gap-10 mt-6 mb-9">
-        {questions.map((qs, idx) => {
-          return (
-            <Card key={`${idx}-card`} className="py-5 rounded-3xl">
-              <CardHeader>
-                <CardTitle>
-                  <span className="font-Paperlogy text-indigo-400">
-                    Q. {idx + 1}
-                  </span>
-                  <div className="my-10">
-                    {qs.label}
+        {/* 질문을 필터링한 데이터로 렌더링 */}
+        {filterDatas(questions).map((qs, idx) => (
+          <Card key={`${idx}-card`} className="py-5 rounded-3xl border-border">
+            <CardHeader>
+              <CardTitle>
+                <div className="flex gap-2 items-start justify-between">
+                  <span className="text-xl md:text-2xl font-Paperlogy text-primary dark:text-indigo-400">
+                    Q{idx + 1}.{" "}
+                  </span>{" "}
+                </div>
+                <div className="mt-10 mb-10 flex flex-col items-start">
+                  <span className="text-lg md:text-2xl">{qs.label}</span>{" "}
+                  {!qs.required && (
+                    <p className="flex  rounded-full mt-3 gap-2 text-[12px] items-center  font-normal leading-7  dark:text-indigo-300 ">
+                      <Check className="w-5 h-5" />
+                      선택 항목으로 전체 수와 상이 할 수 있습니다
+                    </p>
+                  )}
+                </div>
+              </CardTitle>
+            </CardHeader>
 
-                    {qs.type === QUESTION_TYPE.TEXT && (
-                      <CardDescription className="mt-3 font-normal">
-                        해당 문항에 응답입니다. 하단의 버튼을 클릭하여 10개씩
-                        추가로 메세지를 가져올 수 있습니다.
-                      </CardDescription>
-                    )}
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              {(() => {
-                if (qs.type === QUESTION_TYPE.SELECT) {
-                  // 객관식 차트
-                  return (
-                    <ResponseSelect
-                      idx={idx}
-                      selectAgeGroup={filter.ageGroup}
-                      selectGenderGroup={filter.genderGroup}
-                      allCnt={allCnt}
-                      {...qs}
-                    />
-                  );
-                } else if (qs.type === QUESTION_TYPE.TEXT) {
-                  // 주관식 답글
-                  return (
-                    <ResponseTexts
-                      idx={idx}
-                      templateId={templateId}
-                      filter={filter}
-                      allCnt={allCnt}
-                      {...qs}
-                    />
-                  );
-                } else {
-                  return null as never;
-                }
-              })()}
-            </Card>
-          );
-        })}
+            {/* 객관식 차트 또는 주관식 답글 렌더링 */}
+            {qs.type === QUESTION_TYPE.SELECT ? (
+              <ResponseSelect
+                isAgeCollected={data.isAgeCollected}
+                isGenderCollected={data.isGenderCollected}
+                idx={idx}
+                allCnt={allCnt}
+                {...qs}
+              />
+            ) : qs.type === QUESTION_TYPE.TEXT ? (
+              <>
+                <ResponseTexts
+                  idx={idx}
+                  questionId={qs.id}
+                  templateId={templateId}
+                  filter={filter}
+                  allCnt={allCnt}
+                  hasNextPage={qs.isNextPage} //infinity Next
+                  initalTextAnswers={qs.textAnswers} // initalData
+                />
+              </>
+            ) : null}
+          </Card>
+        ))}
       </div>
     </>
   );

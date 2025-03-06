@@ -7,14 +7,13 @@ export default function RadioBooleanField<T extends FieldValues>({
   description,
 }: {
   groupName: Path<T>;
-  label: string;
+  label?: string;
   description?: string;
 }) {
-  const { control, watch } = useFormContext<T>();
-  console.log(watch());
+  const { control } = useFormContext<T>();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <div>
         {label} <span>{description}</span>
       </div>

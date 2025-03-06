@@ -19,7 +19,15 @@ export default function UploadedImagePreview({
           fill
         />
       </div>
-      <Button className="text-sm" variant={"outline"} onClick={deleteFunc}>
+      <Button
+        className="text-sm"
+        type="button"
+        variant={"outline"}
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          e.stopPropagation();
+          deleteFunc();
+        }}
+      >
         이미지 삭제
       </Button>
     </div>

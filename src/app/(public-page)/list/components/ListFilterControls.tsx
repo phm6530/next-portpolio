@@ -5,6 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TEMPLATERLIST_SORT } from "@/types/template.type";
 import TabRounded from "@/components/ui/tab-rounded";
 
+import Male from "/public/asset/3d/male.png";
+import Female from "/public/asset/3d/female.png";
+import Image from "next/image";
+
 const btnArr = [
   {
     label: "최신 순",
@@ -17,10 +21,12 @@ const btnArr = [
   {
     label: "남성 선호도",
     value: TEMPLATERLIST_SORT.MALE,
+    Icon: Male,
   },
   {
     label: "여성 선호도",
     value: TEMPLATERLIST_SORT.FEMALE,
+    Icon: Female,
   },
 ];
 
@@ -52,6 +58,19 @@ export default function ListFilterControls() {
             onClick={() => onClickHandler(btn.value)}
             key={`btn-${idx}`}
           >
+            {btn.Icon && (
+              <div className="w-5 h-5 relative">
+                <Image
+                  src={btn.Icon}
+                  alt="logo"
+                  fill
+                  priority
+                  style={{ objectFit: "contain" }}
+                  sizes="(max-width: 768px) 50vw"
+                />
+              </div>
+            )}
+
             {btn.label}
           </TabRounded>
         );

@@ -37,7 +37,7 @@ export default function ConfirmButton({
   return (
     <AlertDialog open={open}>
       {ModalTriggerButton}
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[95%]">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

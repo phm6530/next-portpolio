@@ -1,12 +1,30 @@
 "use client";
 import SubheaderDescrition from "@/components/ui/subheader-description";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import FindmenberAndSendPin from "./_component/FindmenberAndSendPin";
 import AccessMatchPin from "./_component/AccessMatchPin";
 import SettingPassword from "./_component/SettingPassword";
 import Indicator from "./_component/Indicator";
 import UserEmailProvider from "./user-context";
 import { useUserEmail } from "./useUserEmail";
+import { AnimatePresence, motion } from "framer-motion";
+
+const Motions = ({ children }: { children: ReactNode }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -100 }}
+      style={{ width: "100%" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 100 }}
+      transition={{
+        duration: 0.5,
+        ease: [0.6, -0.05, 0.01, 0.99], // 예시 큐빅 베지어 값
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 const ForgotPasswordPage = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -57,7 +75,20 @@ const ForgotPasswordPage = () => {
       />{" "}
       <Indicator step={step} />
       <UserEmailProvider>
-        <div ref={contentRef}>{stepData[step].component}</div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step} // `key`를 통해 step이 바뀔 때마다 컴포넌트를 새로 마운트
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.5,
+              ease: [0.6, -0.05, 0.01, 0.99],
+            }}
+          >
+            {stepData[step].component}
+          </motion.div>
+        </AnimatePresence>
       </UserEmailProvider>
     </div>
   );

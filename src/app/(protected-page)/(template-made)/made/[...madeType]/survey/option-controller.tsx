@@ -14,8 +14,9 @@ import {
 import { Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
-import surveySchema from "./schema";
+
 import { toast } from "react-toastify";
+import surveySchema from "../schema/survey-schema";
 
 export default function OptionsController({
   name,
@@ -57,7 +58,9 @@ export default function OptionsController({
                       />
                     </FormControl>
                     <div className="leading-none">
-                      <FormLabel>필수 선택 항목</FormLabel>
+                      <FormLabel className=" text-[12px] md:text-sm">
+                        필수 응답 항목
+                      </FormLabel>
                     </div>
                   </FormItem>
                 </TooltipTrigger>
@@ -94,7 +97,9 @@ export default function OptionsController({
                         />
                       </FormControl>
                       <div className="leading-none">
-                        <FormLabel>복수 선택 여부</FormLabel>
+                        <FormLabel className=" text-[12px] md:text-sm">
+                          복수 선택 여부
+                        </FormLabel>
                       </div>
                     </FormItem>
                   </TooltipTrigger>

@@ -21,6 +21,7 @@ export default function CustomButton({
             dark:hover:text-point
             hover:text-point hover:border-point !bg-transparent 
             [&:hover>svg]:fill-point  svg-button
+            md:text-sm text-[12px]
               
           `,
           className

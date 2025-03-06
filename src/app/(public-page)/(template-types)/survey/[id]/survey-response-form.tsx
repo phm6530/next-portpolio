@@ -11,18 +11,26 @@ import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createSurveyFormSchema } from "./survey-response-form-schema";
-import { FormLabel } from "@/components/ui/form";
 import GenderResponseFields from "../components/gender-response-fields";
 import AgeResponseFields from "../components/age-response-fields";
 import TextResponseField from "../components/text-response-fields";
 import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import ImageThumbNail from "@/components/ui/image-thumbnail";
+import { Check } from "lucide-react";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 export default function SurveyResponseForm({
   id,
@@ -36,9 +44,19 @@ export default function SurveyResponseForm({
 
     answers: questions.map((e) => {
       if (e.type === QUESTION_TYPE.TEXT) {
-        return { questionId: e.id, type: e.type, answer: "" };
+        return {
+          questionId: e.id,
+          type: e.type,
+          answer: "",
+          required: e.required,
+        };
       } else if (e.type === QUESTION_TYPE.SELECT) {
-        return { questionId: e.id, type: e.type, optionId: [] };
+        return {
+          questionId: e.id,
+          type: e.type,
+          optionId: [],
+          required: e.required,
+        };
       } else {
         throw new Error("지원되지 않는 질문 타입입니다.") as never;
       }
@@ -64,22 +82,36 @@ export default function SurveyResponseForm({
     AnswerSurvey
   >({
     mutationFn: async (data) => {
-      return withFetch(async () => {
-        return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await withFetchRevaildationAction({
+        endPoint: `answer/${TEMPLATE_TYPE.SURVEY}/${id}`,
+        options: {
+          method: REQUEST_METHOD.POST,
           body: JSON.stringify(data),
-        });
-      });
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
+        },
+        //응답 시에 데이터캐싱 삭제
+        tags: [`${QUERY_KEY.SURVEY_RESULTS}-${id}`],
       });
 
-      // 이동
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response.result;
+    },
+    onSuccess: async () => {
+      // 이건 전체 차트 떄매 날리고
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.SURVEY_RESULTS, id.toString()],
+      });
+
+      await queryClient.resetQueries({
+        // removeQueries 대신 resetQueries 사용
+        queryKey: [QUERY_KEY.QUESTION_TEXT],
+        exact: false,
+      });
+
+      formMethod.reset();
+      router.refresh();
       router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });
@@ -109,38 +141,67 @@ export default function SurveyResponseForm({
 
           {questions.map((qs, idx) => {
             return (
-              <Card key={qs.id}>
+              <Card key={qs.id} className="md:py-5 py-2 px-1 rounded-2xl">
                 {/* Header 같이쓰기 */}
-                <CardHeader>
-                  <FormLabel className="text-xl">
-                    {qs.label} {!qs.required && "선택"}{" "}
-                    {"options" in qs && // type guard 추가
-                      qs.multi_select &&
-                      "복수 선택"}
-                  </FormLabel>
-                </CardHeader>
 
-                {(() => {
-                  switch (qs.type) {
-                    case QUESTION_TYPE.TEXT:
-                      return (
-                        <TextResponseField qsImg={qs.pictrue} qsId={qs.id} />
-                      );
-                    //주관식
-                    case QUESTION_TYPE.SELECT:
-                      if ("options" in qs)
-                        return (
-                          <SelectResponseField
-                            label={qs.label}
-                            options={qs.options}
-                            idx={idx}
-                            isMulti={qs.multi_select}
-                          />
-                        );
-                    default:
-                      return null as never;
-                  }
-                })()}
+                <CardHeader className="md:p-6 p-3">
+                  <CardTitle>
+                    <div className="flex gap-2 items-center">
+                      <span className="text-lg md:text-2xl font-Paperlogy text-indigo-400">
+                        Q. {idx + 1}{" "}
+                      </span>
+                    </div>
+
+                    <div className="mt-10">
+                      <span className="text-lg md:text-2xl">{qs.label}</span>
+                      <CardDescription>
+                        <div className="flex gap-3 mt-3  text-[12px] text-point/80">
+                          {"options" in qs && qs.multi_select && (
+                            <>
+                              <span className="font-normal flex gap-2">
+                                {/* <CheckCheck className="w-3 h-3" /> */}
+                                복수 선택 가능
+                              </span>
+                              {"/"}
+                            </>
+                          )}
+
+                          {!qs.required && (
+                            <p className="flex  rounded-full mt-3 gap-2 text-[12px] items-center  font-normal leading-7  dark:text-indigo-300 ">
+                              <Check className="w-5 h-5" />
+                              선택 항목
+                            </p>
+                          )}
+                        </div>{" "}
+                      </CardDescription>
+
+                      <CardDescription className="mt-3 font-normal">
+                        {qs.img && <ImageThumbNail thumbnail={qs.img} />}
+                      </CardDescription>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2 md:p-6 p-3">
+                  {(() => {
+                    switch (qs.type) {
+                      case QUESTION_TYPE.TEXT:
+                        return <TextResponseField qsId={qs.id} />;
+                      //주관식
+                      case QUESTION_TYPE.SELECT:
+                        if ("options" in qs)
+                          return (
+                            <SelectResponseField
+                              label={qs.label}
+                              options={qs.options}
+                              idx={idx}
+                              isMulti={qs.multi_select}
+                            />
+                          );
+                      default:
+                        return null as never;
+                    }
+                  })()}{" "}
+                </CardContent>
               </Card>
             );
           })}
@@ -153,6 +214,7 @@ export default function SurveyResponseForm({
           size={"lg"}
           onClick={formMethod.handleSubmit(onSubmitHandler)}
           disabled={isPending || isSuccess}
+          className="w-full py-8"
         >
           제출하기
         </Button>

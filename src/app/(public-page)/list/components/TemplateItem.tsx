@@ -31,6 +31,8 @@ const TemplateItem = forwardRef(
       endDate,
       thumbnail,
       respondents,
+      isAgeCollected,
+      isGenderCollected,
       ..._rest
     }: TemplateItemMetadata<RespondentsAndMaxGroup>,
     ref?: ForwardedRef<HTMLDivElement>
@@ -87,7 +89,6 @@ const TemplateItem = forwardRef(
                   <TemplateBadges
                     startDate={startDate}
                     endDate={endDate}
-                    createdAt={createdAt}
                     maxGroup={maxGroup}
                   />
 
@@ -105,42 +106,43 @@ const TemplateItem = forwardRef(
                 </div>
               </div>
             </TooltipTrigger>
-
-            <TooltipContent
-              side="right"
-              className="text-muted-foreground text-start max-w-[200px]"
-            >
-              <div className="flex">
-                <div className="relative w-5 h-5">
-                  <Image
-                    src={Female}
-                    alt="logo"
-                    fill
-                    priority
-                    style={{ objectFit: "contain" }}
-                    sizes="(max-width: 768px) 50vw"
-                  />
+            {isAgeCollected && isGenderCollected && (
+              <TooltipContent
+                side="right"
+                className="text-muted-foreground text-start max-w-[200px]"
+              >
+                <div className="flex">
+                  <div className="relative w-5 h-5">
+                    <Image
+                      src={Female}
+                      alt="logo"
+                      fill
+                      priority
+                      style={{ objectFit: "contain" }}
+                      sizes="(max-width: 768px) 50vw"
+                    />
+                  </div>
+                  <span className="text-[12px] ml-3 text-foreground">
+                    {respondents.participants.female ?? 0} 명
+                  </span>
                 </div>
-                <span className="text-[12px] ml-3 text-foreground">
-                  {respondents.participants.male ?? 0} 명
-                </span>
-              </div>
-              <div className="flex border-t pt-2 mt-2">
-                <div className="relative w-5 h-5">
-                  <Image
-                    src={Male}
-                    alt="logo"
-                    fill
-                    priority
-                    style={{ objectFit: "contain" }}
-                    sizes="(max-width: 768px) 50vw"
-                  />
+                <div className="flex border-t pt-2 mt-2">
+                  <div className="relative w-5 h-5">
+                    <Image
+                      src={Male}
+                      alt="logo"
+                      fill
+                      priority
+                      style={{ objectFit: "contain" }}
+                      sizes="(max-width: 768px) 50vw"
+                    />
+                  </div>
+                  <span className="text-[12px] ml-3 text-foreground">
+                    {respondents.participants.male ?? 0} 명
+                  </span>
                 </div>
-                <span className="text-[12px] ml-3 text-foreground">
-                  {respondents.participants.female ?? 0} 명
-                </span>
-              </div>
-            </TooltipContent>
+              </TooltipContent>
+            )}
           </Tooltip>
         </TooltipProvider>{" "}
       </>

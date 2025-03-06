@@ -5,16 +5,24 @@ import AniProgressbar from "@/components/ui/chart-progress/AniProgressbar";
 import { AgeOptions, GenderOptions } from "./SurveyGroupFilter";
 import { CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { User2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function ResponseSelect({
   allCnt,
   options,
+  isAgeCollected,
+  isGenderCollected,
 }: { allCnt: number } & ResultSelect & {
     idx: number;
-    selectAgeGroup: AgeOptions;
-    selectGenderGroup: GenderOptions;
+    isAgeCollected: boolean;
+    isGenderCollected: boolean;
   }) {
   const sumFilterUsers = (arr: ResultSelectOption["response"]) => {
+    if (!isAgeCollected && !isGenderCollected) {
+      return arr.selectUserCnt;
+    }
+
     //남자 합
     const sumFemale = Object.values(arr.female ?? {}).reduce((arr, cur) => {
       return (arr += cur);
@@ -41,13 +49,16 @@ export default function ResponseSelect({
     return sumB - sumA;
   });
 
+  //d사진 하나라도있으면 그리드 변환
   const isPictureOption = options.some((e) => e.img);
+
   return (
     <CardContent>
       <div
         className={cn(
           "grid gap-4 ",
-          isPictureOption && "grid-cols-[repeat(auto-fit,minmax(250px,1fr))]"
+          isPictureOption &&
+            "grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-10"
         )}
       >
         {sortedOptions.map((option, idx) => {
@@ -56,22 +67,25 @@ export default function ResponseSelect({
           const percent = Math.round((sumUser / allCnt) * 100);
 
           return (
-            <div className="flex flex-col gap-2" key={`${option.label}-${idx}`}>
+            <div
+              className="flex flex-col gap-2 items-start w-full "
+              key={`${option.label}-${idx}`}
+            >
               <div className="text-zinc-500">
-                {ixMax ? (
-                  <div className="text-point flex items-center gap-2 ">
-                    <div className="w-4 h-4 relative [&>svg]:absolute [&>svg]:w-full [&>svg]:h-full">
-                      <Crown />
-                    </div>
-
-                    {option.value}
+                <div
+                  className={cn(
+                    " flex items-center gap-2",
+                    ixMax && "text-point"
+                  )}
+                >
+                  <span>{option.value}</span>
+                  <div className="flex gap-1 items-center border-l pl-3 text-sm">
+                    <User2 className="w-3 h-3" /> {sumUser}
                   </div>
-                ) : (
-                  option.value
-                )}
+                </div>
               </div>
 
-              <div className="grid items-center gap-2">
+              <div className="grid items-center gap-2 w-full">
                 {/* Percent */}
                 <AniProgressbar
                   maxCnt={ixMax}
