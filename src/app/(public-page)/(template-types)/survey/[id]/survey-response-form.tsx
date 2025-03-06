@@ -153,7 +153,7 @@ export default function SurveyResponseForm({
                     </div>
 
                     <div className="mt-10">
-                      <span>{qs.label}</span>
+                      <span className="text-lg md:text-2xl">{qs.label}</span>
                       <CardDescription>
                         <div className="flex gap-3 mt-3  text-[12px] text-point/80">
                           {"options" in qs && qs.multi_select && (

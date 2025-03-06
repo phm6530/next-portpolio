@@ -34,6 +34,7 @@ export default function BoardListItem({
         <UserRoleDisplay
           role={itemData.creator.role}
           nickname={itemData.creator.nickname}
+          size={"sm"}
         />
 
         <div className="opacity-50 text-[11px] ml-6">

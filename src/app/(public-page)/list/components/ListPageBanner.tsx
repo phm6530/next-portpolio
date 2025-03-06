@@ -12,13 +12,14 @@ export default function ListPageBanner() {
         className={`
           flex items-center flex-col justify-between
           md:flex-row 
+        
         `}
       >
-        <div>
+        <div className="w-full md:w-auto">
           <div className="">
             <span
               className={`
-            text-2xl leading-8 
+            text-xl leading-8 
             md:text-3xl md:leading-10`}
             >
               다른사람들은 <br />
@@ -26,7 +27,7 @@ export default function ListPageBanner() {
               궁금하신가요?
             </span>
           </div>
-          <CardDescription className="mt-3 text-base">
+          <CardDescription className="mt-3 text-sm md:text-base">
             평소에 궁금했던 질문을 익명의 장점을 살려 질문해보세요!
           </CardDescription>
           <div className="mt-8 flex gap-5">

@@ -125,7 +125,7 @@ export default function ResultSurveyCharts({
                   </span>{" "}
                 </div>
                 <div className="mt-10 mb-10 flex flex-col items-start">
-                  <span>{qs.label}</span>{" "}
+                  <span className="text-lg md:text-2xl">{qs.label}</span>{" "}
                   {!qs.required && (
                     <p className="flex  rounded-full mt-3 gap-2 text-[12px] items-center  font-normal leading-7  dark:text-indigo-300 ">
                       <Check className="w-5 h-5" />
