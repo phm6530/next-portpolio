@@ -11,7 +11,7 @@ import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,6 +30,7 @@ import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import { Check } from "lucide-react";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 export default function SurveyResponseForm({
   id,
@@ -81,15 +82,21 @@ export default function SurveyResponseForm({
     AnswerSurvey
   >({
     mutationFn: async (data) => {
-      return withFetch(async () => {
-        return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await withFetchRevaildationAction({
+        endPoint: `answer/${TEMPLATE_TYPE.SURVEY}/${id}`,
+        options: {
+          method: REQUEST_METHOD.POST,
           body: JSON.stringify(data),
-        });
+        },
+        //응답 시에 데이터캐싱 삭제
+        tags: [`${QUERY_KEY.SURVEY_RESULTS}-${id}`],
       });
+
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      return response.result;
     },
     onSuccess: async () => {
       // 이건 전체 차트 떄매 날리고

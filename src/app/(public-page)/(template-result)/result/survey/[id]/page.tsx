@@ -1,9 +1,4 @@
 import ResultSurveyCharts from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyStatsCharts";
-import {
-  fetchComments,
-  fetchSurveyData,
-} from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
-
 import Grid from "@/components/ui/Grid";
 import { MSG_TYPE, MSG_PARAM_PATH, CommentReponse } from "@/types/comment.type";
 
@@ -28,30 +23,28 @@ export default async function SurveyResultPage({
   params: { id: string };
 }) {
   // 서버액션은 새로운 것을 매번 가져옴 no-store이기 때문에
-  const [data] = await Promise.all([
-    queryClient.fetchQuery({
-      queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-      queryFn: async () => {
-        const result: {
-          success: boolean;
-          result?: SurveyResult;
-          message?: string;
-        } = await withFetchRevaildationAction({
-          endPoint: `answer/survey/${id}`,
-        });
-        if (!result.success) {
-          throw new Error(result.message);
-        }
-        return result.result;
-      },
-    }),
-    queryClient.prefetchQuery({
-      queryKey: [QUERY_KEY.COMMENTS, id],
-      queryFn: async () =>
-        await fetchComments<CommentReponse[]>(+id, MSG_PARAM_PATH.TEMPLATE),
-      staleTime: 10000,
-    }),
-  ]);
+  const data = await queryClient.fetchQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
+    queryFn: async () => {
+      const result: {
+        success: boolean;
+        result?: SurveyResult;
+        message?: string;
+      } = await withFetchRevaildationAction({
+        endPoint: `answer/survey/${id}`,
+        options: {
+          cache: "force-cache",
+          next: {
+            tags: [`${QUERY_KEY.SURVEY_RESULTS}-${id}`],
+          },
+        },
+      });
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+      return result.result;
+    },
+  });
 
   return (
     <>
@@ -69,10 +62,7 @@ export default async function SurveyResultPage({
               <MessageForm parentsId={id} EDITOR_MODE={MSG_TYPE.COMMENT} />
 
               {/* Comments */}
-              <ResultCommentSection
-                id={parseInt(id, 10)}
-                type={MSG_PARAM_PATH.TEMPLATE}
-              />
+              <ResultCommentSection id={parseInt(id, 10)} />
             </CommentEditorProvider>
           </div>
         </HydrationBoundary>

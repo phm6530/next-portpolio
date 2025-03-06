@@ -6,7 +6,6 @@ import {
 } from "@/types/template.type";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import TemplateBadges from "@/components/ui/template/template-badges";
 import SurveyResponseForm from "./survey-response-form";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";

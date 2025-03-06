@@ -12,9 +12,8 @@ import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { fetchSurveyData } from "./test";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Import, MessageCircleWarning } from "lucide-react";
+import { Check } from "lucide-react";
 import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 // 성별 및 나이 필터 함수
@@ -41,7 +40,6 @@ export default function ResultSurveyCharts({
 }: {
   templateId: string;
 }) {
-  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<{
     genderGroup: GenderOptions;
     ageGroup: AgeOptions;
@@ -155,8 +153,8 @@ export default function ResultSurveyCharts({
                   templateId={templateId}
                   filter={filter}
                   allCnt={allCnt}
-                  hasNextPage={qs.isNextPage}
-                  initalTextAnswers={qs.textAnswers}
+                  hasNextPage={qs.isNextPage} //infinity Next
+                  initalTextAnswers={qs.textAnswers} // initalData
                 />
               </>
             ) : null}

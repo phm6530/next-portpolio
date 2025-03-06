@@ -23,7 +23,6 @@ export default function ResultPageSummry(data: SurveyResult) {
     description,
     templateType,
     startDate,
-
     endDate,
     createdAt,
     thumbnail,

@@ -12,6 +12,7 @@ import {
   AgeOptions,
   GenderOptions,
 } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
+import { queryClient } from "@/config/queryClient";
 import { CardContent, CardDescription } from "@/components/ui/card";
 import MasonryLayout from "@/components/layout/masonry-layout";
 import Image from "next/image";
