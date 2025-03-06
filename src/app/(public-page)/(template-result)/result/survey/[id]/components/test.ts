@@ -24,13 +24,3 @@ export async function fetchComments<T>(
     });
   });
 }
-// export async function fetchComments<T>(id: string, type: string): Promise<T> {
-//   try {
-//     const response = await fetch(`${BASE_NEST_URL}/comment/${type}/${id}`, {
-//       cache: "no-store",
-//     });
-//     return response.json();
-//   } catch (error) {
-//     throw new Error("에러..");
-//   }
-// }

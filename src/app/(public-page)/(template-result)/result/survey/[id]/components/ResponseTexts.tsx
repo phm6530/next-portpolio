@@ -8,68 +8,58 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import requestHandler from "@/utils/withFetch";
 import { BASE_NEST_URL } from "@/config/base";
-import { useEffect, useRef, useState } from "react";
 import {
   AgeOptions,
   GenderOptions,
 } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/SurveyGroupFilter";
-import { queryClient } from "@/config/queryClient";
 import { CardContent, CardDescription } from "@/components/ui/card";
-import NotthingUser from "./notthing-user";
 import MasonryLayout from "@/components/layout/masonry-layout";
 import Image from "next/image";
 import Male from "/public/asset/3d/male.png";
 import Female from "/public/asset/3d/female.png";
 import Anonymous from "/public/asset/3d/anonymous.png";
 import { Button } from "@/components/ui/button";
+import { useCallback, useEffect, useRef, useState } from "react";
+import NotthingUser from "./notthing-user";
 
 export function ResponseTexts({
-  idx,
-  id: questionId,
+  idx: _,
+  questionId,
   templateId,
   filter,
+  hasNextPage,
+  initalTextAnswers,
 }: {
   idx: number;
+  questionId: number;
   templateId: string;
   allCnt: number;
   filter: {
     genderGroup: GenderOptions;
     ageGroup: AgeOptions;
   };
-} & ResultText) {
+  hasNextPage: number | null;
+  initalTextAnswers: TextAnswer[];
+}) {
   const mountRef = useRef<boolean>(false);
-
-  const cacheData = queryClient.getQueryData<SurveyResult>([
-    QUERY_KEY.SURVEY_RESULTS,
-    templateId,
-  ]);
-
-  const findTextQuestion = cacheData?.questions.find(
-    (e) => e.id === questionId
-  );
-
-  const initalCachingData = () => {
-    if (cacheData?.questions[idx].type === "text") {
-      return cacheData?.questions[idx].textAnswers;
-    } else {
-      return [];
-    }
-  };
-
-  const [list, setList] = useState<TextAnswer[]>(() => initalCachingData());
+  const [list, setList] = useState<
+    {
+      isNextPage: number | null;
+      answers: ResultText["textAnswers"];
+    }[]
+  >([]);
 
   const {
     data: textQuestions,
     fetchNextPage,
-    hasNextPage,
     isFetchingNextPage,
-    isSuccess,
     isPending,
+    isSuccess,
   } = useInfiniteQuery<{
     isNextPage: number | null;
     answers: ResultText["textAnswers"];
   }>({
-    queryKey: [QUERY_KEY.QUESTION_TEXT, questionId + ""],
+    queryKey: [QUERY_KEY.QUESTION_TEXT, templateId, questionId + "", filter],
     queryFn: ({ pageParam }) => {
       return requestHandler(
         async () =>
@@ -81,89 +71,89 @@ export function ResponseTexts({
     getNextPageParam: (lastPage) => {
       return lastPage.isNextPage;
     },
-    initialPageParam: 1,
-    initialData: () => {
-      return {
-        pages: [
-          {
-            isNextPage: (findTextQuestion as ResultText).isNextPage,
-            answers: (findTextQuestion as ResultText).textAnswers,
-          },
-        ],
-        pageParams: [1],
-      };
-    },
+    enabled: false, // 캐시 재사용하려고 false 해버림
+    initialPageParam: 2,
   });
 
+  //최초 마운트에만 실행 될것,
   useEffect(() => {
     if (!mountRef.current) {
+      setList([
+        {
+          isNextPage: hasNextPage,
+          answers: initalTextAnswers,
+        },
+      ]);
+
       mountRef.current = true;
-      return;
     }
 
-    if (isSuccess) {
-      const newAnswers = textQuestions.pages.at(-1)?.answers || [];
+    return () => {
+      mountRef.current = false;
+      setList([]); // 정리
+    };
+  }, [initalTextAnswers, hasNextPage]);
 
-      setList((prev) => {
-        const updatedList = [...prev];
-
-        newAnswers.forEach((newAnswer) => {
-          if (
-            !updatedList.some(
-              (existingAnswer) => existingAnswer.id === newAnswer.id
-            )
-          ) {
-            updatedList.push(newAnswer); // 중복된 아이디가 없을 때만 추가
-          }
+  //마운트 이후 Infinity 요청에만
+  useEffect(() => {
+    if (mountRef.current && isSuccess) {
+      const newData = textQuestions.pages.at(-1);
+      if (newData) {
+        setList((prev) => {
+          return [...prev, newData];
         });
-
-        return updatedList;
-      });
+      }
     }
   }, [isSuccess, textQuestions]);
 
-  const filterList = (list: TextAnswer[]): TextAnswer[] => {
-    return list.filter((e) => {
-      if (filter.ageGroup === "all" && filter.genderGroup === "all") {
-        return true;
-      }
+  const filterList = useCallback(
+    (answers: TextAnswer[]): TextAnswer[] => {
+      return answers.filter((e) => {
+        if (filter.ageGroup === "all" && filter.genderGroup === "all") {
+          return true;
+        }
 
-      if (filter.ageGroup !== "all" && filter.genderGroup === "all") {
-        return filter.ageGroup === e.respondent.age;
-      }
+        if (filter.ageGroup !== "all" && filter.genderGroup === "all") {
+          return filter.ageGroup === e.respondent.age;
+        }
 
-      if (filter.ageGroup === "all" && filter.genderGroup !== "all") {
-        return filter.genderGroup === e.respondent.gender;
-      }
+        if (filter.ageGroup === "all" && filter.genderGroup !== "all") {
+          return filter.genderGroup === e.respondent.gender;
+        }
 
-      if (filter.ageGroup !== "all" && filter.genderGroup !== "all") {
-        return (
-          filter.genderGroup === e.respondent.gender &&
-          filter.ageGroup === e.respondent.age
-        );
-      }
+        if (filter.ageGroup !== "all" && filter.genderGroup !== "all") {
+          return (
+            filter.genderGroup === e.respondent.gender &&
+            filter.ageGroup === e.respondent.age
+          );
+        }
+        return false;
+      });
+    },
+    [filter.ageGroup, filter.genderGroup]
+  );
 
-      return false;
-    });
-  };
+  const allAnswers = list.flatMap((page) => page.answers);
+  const filteredAnswers = filterList(allAnswers);
 
   return (
     <CardContent>
       <div>
-        {filterList(list)?.length === 0 && (
+        {mountRef.current && filteredAnswers?.length === 0 && (
           <NotthingUser
             ageGroup={filter.ageGroup}
             genderGroup={filter.genderGroup}
           />
         )}
-        <MasonryLayout pending={isPending} gutter={10}>
-          {filterList(list)?.map((as, idx) => {
-            const { id, respondent, answer } = as;
+
+        <MasonryLayout pending={isPending || !mountRef.current} gutter={10}>
+          {filteredAnswers.map((res, questionsIdx) => {
+            const { id, respondent, answer } = res;
             const { gender, age } = respondent;
 
             return (
               <div
-                key={`${id}-${idx}`}
+                key={`${res.id}-${questionsIdx}`}
                 className=" p-3 bg-third rounded-xl border hover:border-primary animate-fadein"
               >
                 <div className="flex items-center gap-2">
@@ -227,7 +217,7 @@ export function ResponseTexts({
                   })()}
                 </div>
 
-                <div className="rounded-md  mt-3 text-foreground text-sm leading-6">
+                <div className="rounded-md mt-3 text-foreground text-sm leading-6 overflow-wrap break-all whitespace-pre-wrap">
                   {answer}
                 </div>
               </div>
@@ -235,7 +225,7 @@ export function ResponseTexts({
           })}
         </MasonryLayout>
       </div>
-      {hasNextPage && (
+      {list.at(-1)?.isNextPage && (
         <div className="mt-5" onClick={() => fetchNextPage()}>
           <Button className="w-full" variant={"outline"}>
             {isFetchingNextPage ? "로딩 중..." : "+ 답변 더 가져오기"}

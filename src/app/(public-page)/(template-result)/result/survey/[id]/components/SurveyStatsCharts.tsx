@@ -11,15 +11,11 @@ import { QUESTION_TYPE } from "@/types/survey.type";
 import { ResultSelectOption, SurveyResult } from "@/types/surveyResult.type";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { fetchSurveyData } from "./test";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Import, MessageCircleWarning } from "lucide-react";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 // 성별 및 나이 필터 함수
 const filterGenderAndAgeGroup = (
@@ -54,13 +50,23 @@ export default function ResultSurveyCharts({
     ageGroup: "all",
   });
 
-  // Query 데이터 가져오기
-  const { data, isSuccess } = useQuery({
-    queryKey: [QUERY_KEY.SURVEY_RESULTS, templateId, filter],
-    queryFn: () => fetchSurveyData<SurveyResult>(templateId),
+  // Query 데이터 가져오기 - 캐싱 잘됨 확인함
+  const { data } = useQuery({
+    queryKey: [QUERY_KEY.SURVEY_RESULTS, templateId],
+    queryFn: async () => {
+      const result: {
+        success: boolean;
+        result?: SurveyResult;
+        message?: string;
+      } = await withFetchRevaildationAction({
+        endPoint: `answer/survey/${templateId}`,
+      });
+      if (!result.success) {
+        throw new Error(result.message);
+      }
+      return result.result;
+    },
     staleTime: 10000,
-    initialData: () =>
-      queryClient.getQueryData([QUERY_KEY.SURVEY_RESULTS, templateId]),
   });
 
   // 데이터가 없으면 notFound 처리
@@ -77,7 +83,6 @@ export default function ResultSurveyCharts({
   ): SurveyResult["questions"] => {
     return lists.map((question) => {
       if (question.type === QUESTION_TYPE.SELECT) {
-        console.log(question.options);
         return {
           ...question,
           options: question.options.map((option) => ({
@@ -117,7 +122,7 @@ export default function ResultSurveyCharts({
             <CardHeader>
               <CardTitle>
                 <div className="flex gap-2 items-start justify-between">
-                  <span className="text-lg md:text-2xl font-Paperlogy text-primary dark:text-indigo-400">
+                  <span className="text-xl md:text-2xl font-Paperlogy text-primary dark:text-indigo-400">
                     Q{idx + 1}.{" "}
                   </span>{" "}
                 </div>
@@ -143,13 +148,17 @@ export default function ResultSurveyCharts({
                 {...qs}
               />
             ) : qs.type === QUESTION_TYPE.TEXT ? (
-              <ResponseTexts
-                idx={idx}
-                templateId={templateId}
-                filter={filter}
-                allCnt={allCnt}
-                {...qs}
-              />
+              <>
+                <ResponseTexts
+                  idx={idx}
+                  questionId={qs.id}
+                  templateId={templateId}
+                  filter={filter}
+                  allCnt={allCnt}
+                  hasNextPage={qs.isNextPage}
+                  initalTextAnswers={qs.textAnswers}
+                />
+              </>
             ) : null}
           </Card>
         ))}

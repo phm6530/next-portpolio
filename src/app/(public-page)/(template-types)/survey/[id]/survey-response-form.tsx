@@ -81,7 +81,6 @@ export default function SurveyResponseForm({
     AnswerSurvey
   >({
     mutationFn: async (data) => {
-      console.log(data);
       return withFetch(async () => {
         return fetch(`${BASE_NEST_URL}/answer/${TEMPLATE_TYPE.SURVEY}/${id}`, {
           method: "POST",
@@ -93,11 +92,19 @@ export default function SurveyResponseForm({
       });
     },
     onSuccess: async () => {
-      queryClient.removeQueries({
-        queryKey: [QUERY_KEY.SURVEY_RESULTS, id + ""],
+      // 이건 전체 차트 떄매 날리고
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY.SURVEY_RESULTS, id.toString()],
       });
 
-      // 이동
+      await queryClient.resetQueries({
+        // removeQueries 대신 resetQueries 사용
+        queryKey: [QUERY_KEY.QUESTION_TEXT],
+        exact: false,
+      });
+
+      formMethod.reset();
+      router.refresh();
       router.push(`/result/${TEMPLATE_TYPE.SURVEY}/${id}`);
     },
   });

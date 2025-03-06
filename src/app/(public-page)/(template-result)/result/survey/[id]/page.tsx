@@ -18,6 +18,7 @@ import { CommentEditorProvider } from "@/components/comment/context/comment-cont
 import MessageForm from "@/components/comment/message-form";
 import ResultPageSummry from "../../components/result-page-summry";
 import ResultCommentSection from "../../components/ResultCommentSection";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 const queryClient = new QueryClient();
 
@@ -26,11 +27,23 @@ export default async function SurveyResultPage({
 }: {
   params: { id: string };
 }) {
+  // 서버액션은 새로운 것을 매번 가져옴 no-store이기 때문에
   const [data] = await Promise.all([
     queryClient.fetchQuery({
       queryKey: [QUERY_KEY.SURVEY_RESULTS, id],
-      queryFn: async () => await fetchSurveyData<SurveyResult>(id),
-      staleTime: 10000,
+      queryFn: async () => {
+        const result: {
+          success: boolean;
+          result?: SurveyResult;
+          message?: string;
+        } = await withFetchRevaildationAction({
+          endPoint: `answer/survey/${id}`,
+        });
+        if (!result.success) {
+          throw new Error(result.message);
+        }
+        return result.result;
+      },
     }),
     queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.COMMENTS, id],
@@ -40,23 +53,13 @@ export default async function SurveyResultPage({
     }),
   ]);
 
-  // console.log("🚀 서버에서 prefetch된 데이터:", dehydrate(queryClient));
   return (
     <>
-      {/* <div className="absolute w-full z-[-1]  h-[50vh] opacity-40">
-        <div
-          className="w-full h-full absolute z-[-1] bg-center bg-cover bg-no-repeat"
-          style={{
-            backgroundImage: `url(${data?.thumbnail})`,
-          }}
-        />
-        <div className="absolute inset-0 z-[-1] bg-gradient-to-t from-background background/70  to-transparent" />
-      </div> */}
       <Grid.smallCenter className="h-full animate-fadein ">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <div className="pt-14 relative">
             {/* template Summry */}
-            <ResultPageSummry {...data} />
+            {data && <ResultPageSummry {...data} />}
 
             <ResultSurveyCharts templateId={id} />
 
