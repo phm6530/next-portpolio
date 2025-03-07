@@ -91,6 +91,8 @@ export default async function SurveyDetailTemplate({
   });
   const data: FetchTemplateForm = await response.json();
 
+  console.log(data);
+
   if (!data) {
     notFound();
   }

@@ -62,7 +62,10 @@ export default async function SurveyResultPage({
               <MessageForm parentsId={id} EDITOR_MODE={MSG_TYPE.COMMENT} />
 
               {/* Comments */}
-              <ResultCommentSection id={parseInt(id, 10)} />
+              <ResultCommentSection
+                id={parseInt(id, 10)}
+                type={MSG_PARAM_PATH.TEMPLATE}
+              />
             </CommentEditorProvider>
           </div>
         </HydrationBoundary>

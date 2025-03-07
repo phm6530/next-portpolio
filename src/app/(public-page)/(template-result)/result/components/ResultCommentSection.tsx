@@ -1,11 +1,16 @@
-import { fetchComments } from "@/app/(public-page)/(template-result)/result/survey/[id]/components/test";
 import NotFoundContents from "@/components/ui/error/notfound-contents";
 import { MSG_PARAM_PATH, CommentReponse } from "@/types/comment.type";
 import MessageContainer from "@/components/comment/message-container";
 import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 //tempalte ID
-export default async function ResultCommentSection({ id }: { id: number }) {
+export default async function ResultCommentSection({
+  id,
+  type,
+}: {
+  id: number;
+  type: MSG_PARAM_PATH;
+}) {
   const {
     success,
     result,
@@ -15,10 +20,10 @@ export default async function ResultCommentSection({ id }: { id: number }) {
     result?: CommentReponse[];
     message?: string;
   } = await withFetchRevaildationAction({
-    endPoint: `comment/${MSG_PARAM_PATH.TEMPLATE}/${id}`,
+    endPoint: `comment/${type}/${id}`,
     options: {
       cache: "force-cache",
-      next: { tags: [`comment-${MSG_PARAM_PATH.TEMPLATE}-${id}`] },
+      next: { tags: [`comment-${type}-${id}`] },
     },
   });
 

@@ -29,6 +29,7 @@ export default function BoardListItem({
           )}
         </div>
       </Link>
+
       <div className="flex items-center text-sm">
         {/* 유저 or 익명 */}
         <UserRoleDisplay

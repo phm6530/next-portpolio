@@ -34,4 +34,5 @@ export enum REQUEST_METHOD {
   DELETE = "DELETE",
   POST = "POST",
   GET = "GET",
+  PUT = "PUT",
 }

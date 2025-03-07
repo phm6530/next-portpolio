@@ -1,8 +1,8 @@
-import DateCompareToday from "@/util/DateCompareToday";
 import { RespondentsAndMaxGroup } from "@/types/template.type";
 import { GENDER_GROUP } from "@/types/user";
 import { Badge } from "../badge";
 import { cn } from "@/lib/utils";
+import { DateCompareToday } from "@/util/DateCompareToday";
 
 export default function TemplateBadges({
   startDate,
@@ -15,10 +15,8 @@ export default function TemplateBadges({
   maxGroup?: RespondentsAndMaxGroup["maxGroup"];
   className?: string;
 }) {
-  const todayCompare = DateCompareToday();
-
   const curState = (startDate?: string | null, endDate?: string | null) => {
-    if (startDate && todayCompare.isBefore(startDate)) {
+    if (startDate && DateCompareToday.isBefore(startDate)) {
       return (
         <Badge variant={"secondary"} className="font-normal text-[10px]">
           대기 중
@@ -26,12 +24,13 @@ export default function TemplateBadges({
       );
     } else if (
       startDate &&
-      (todayCompare.isAfter(startDate) || todayCompare.isSame(startDate))
+      (DateCompareToday.isAfter(startDate) ||
+        DateCompareToday.isSame(startDate))
     ) {
       return (
         <Badge className="font-normal text-[10px] flex gap-2 ">진행 중</Badge>
       );
-    } else if (endDate && todayCompare.isAfter(endDate)) {
+    } else if (endDate && DateCompareToday.isAfter(endDate)) {
       return (
         <Badge
           variant={"secondary"}

@@ -2,7 +2,6 @@
 
 import { useFormContext } from "react-hook-form";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
 import {
   FormControl,
   FormField,
@@ -13,18 +12,21 @@ import {
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { CalendarIcon, Check, Timer } from "lucide-react";
+import { CalendarIcon, Check } from "lucide-react";
+import { ko } from "date-fns/locale";
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.locale("ko");
 
 export default function DateRangeSelector() {
   const { watch, control } = useFormContext();
-
-  console.log(watch());
 
   return (
     <>
@@ -50,24 +52,16 @@ export default function DateRangeSelector() {
                       ? "시작일을 선택해주세요"
                       : dayjs(field.value).format("YYYY-MM-DD")}
 
-                    <CalendarIcon
-                      local={"ko"}
-                      className="ml-auto h-4 w-4 opacity-50"
-                    />
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
+                  locale={ko}
                   selected={field.value}
-                  onSelect={(date) => {
-                    if (dayjs(date).isSame(dayjs(field.value), "day")) {
-                      field.onChange(null);
-                    } else {
-                      field.onChange(date);
-                    }
-                  }}
+                  onSelect={(date) => field.onChange(date || null)}
                   disabled={(date) => {
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -118,14 +112,9 @@ export default function DateRangeSelector() {
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
+                  locale={ko}
                   selected={field.value}
-                  onSelect={(date) => {
-                    if (dayjs(date).isSame(dayjs(field.value), "day")) {
-                      field.onChange(null);
-                    } else {
-                      field.onChange(date);
-                    }
-                  }}
+                  onSelect={(date) => field.onChange(date || null)}
                   disabled={(date) => {
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
