@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TEMPLATE_TYPE, FetchTemplateForm } from "@/types/template.type";
 import { v4 as uuid4 } from "uuid";
 
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -42,6 +42,8 @@ import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import revaildateTags from "@/lib/revaildateTags";
 import { toast } from "react-toastify";
 import surveySchema from "../schema/survey-schema";
+import { useTransformToKrDate } from "@/_hook/useTransformToKrDate";
+import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -86,6 +88,8 @@ export const defaultValues = {
 export default function CreateSurveyForm() {
   useAOS();
 
+  const transformDate = useTransformToKrDate();
+
   const queryClient = useQueryClient();
   const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [editPage, setEditPage] = useState<boolean>(false);
@@ -102,6 +106,7 @@ export default function CreateSurveyForm() {
   const { setValue, reset, watch } = formState;
   const isGenderCollected = watch("isGenderCollected");
 
+  console.log(watch());
   useEffect(() => {
     setValue("isAgeCollected", isGenderCollected);
   }, [isGenderCollected, setValue]);
@@ -149,12 +154,14 @@ export default function CreateSurveyForm() {
         questions: editData.questions,
         templateKey: editData.templateKey,
         creator: userData,
-        startDate: editData.startDate ? new Date(editData.startDate) : null,
-        endDate: editData.endDate ? new Date(editData.endDate) : null,
+        startDate: editData.startDate
+          ? transformDate(editData.startDate)
+          : null,
+        endDate: editData.endDate ? transformDate(editData.endDate) : null,
       });
       setEditPage(true);
     }
-  }, [editData, reset, userData, editId]);
+  }, [editData, reset, userData, editId, transformDate]);
 
   useEffect(() => {
     /**
@@ -174,28 +181,31 @@ export default function CreateSurveyForm() {
     Error,
     z.infer<typeof surveySchema>
   >({
-    mutationFn: async (data) => {
-      let options: RequestInit = {
-        method: !!editId ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-
+    mutationFn: async (
+      data
+    ): Promise<{ statusCode: number; templateId: number }> => {
       // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
-      let url = `template/survey${editId ? `/${editId}` : ""}`;
-
-      const result = await withAuthFetch<{
+      const { success, message, result } = await withFetchRevaildationAction<{
         statusCode: number;
         templateId: number;
-      }>(url, options);
+      }>({
+        endPoint: `template/survey${editId ? `/${editId}` : ""}`,
+        requireAuth: true,
+        options: {
+          method: !!editId ? REQUEST_METHOD.PUT : REQUEST_METHOD.POST,
+          body: JSON.stringify(data),
+        },
+        tags: !!editId ? [`template-survey-${+editId}`] : [],
+      });
 
-      if (editId) {
-        await revaildateTags({ tags: [`template-survey-${+editId}`] });
+      if (!success) {
+        throw new Error(message);
       }
 
-      return result;
+      return result as {
+        statusCode: number;
+        templateId: number;
+      };
     },
     onSuccess: (res) => {
       toast.success(

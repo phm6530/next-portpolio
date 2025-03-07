@@ -1,39 +1,54 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeData from "dayjs/plugin/localeData";
+import timezone from "dayjs/plugin/timezone"; // timezone 플러그인 추가
+import utc from "dayjs/plugin/utc"; // timezone 사용하려면 utc도 필요함
 import "dayjs/locale/ko"; // 한국어 로케일
 
 // 플러그인 활성화
 dayjs.extend(relativeTime);
 dayjs.extend(localeData);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.locale("ko");
 
-export default function DateCompareToday() {
-  const today = dayjs();
+type DateFormat =
+  | "YYYY-MM-DD"
+  | "YYYY년 MM월 DD일"
+  | "YYYY.MM.DD"
+  | "HH:mm:ss"
+  | "YYYY-MM-DD HH:mm:ss"
+  | string;
 
-  // 한국어 날짜 문자열을 파싱하는 헬퍼 함수
-  const parseKoreanDate = (dateStr: string) => {
-    // "2024. 12. 9. 오전 2:53:22" 형식의 문자열을 파싱
-    return dayjs(dateStr, "YYYY. MM. DD. A h:mm:ss");
-  };
+export class DateCompareToday {
+  private static today = dayjs();
 
-  return {
-    isAfter: (date: string): boolean => {
-      return today.isAfter(parseKoreanDate(date), "day");
-    },
-    isBefore: (date: string): boolean => {
-      return today.isBefore(parseKoreanDate(date), "day");
-    },
-    isSame: (date: string): boolean => {
-      return today.isSame(parseKoreanDate(date), "day");
-    },
-    isNew: (date: string): boolean => {
-      const parsedDate = parseKoreanDate(date);
-      const diffDays = today.diff(parsedDate, "day");
-      return diffDays >= 0 && diffDays < 7;
-    },
-    fromNow: (date: string): string => {
-      return parseKoreanDate(date).fromNow();
-    },
-  };
+  private static parseKoreanDate(date: string) {
+    return dayjs(date).tz("Asia/Seoul");
+  }
+
+  static dateFormatKR(date: string, format: DateFormat) {
+    return this.parseKoreanDate(date).format(format);
+  }
+
+  static isAfter(date: string): boolean {
+    return this.today.isAfter(this.parseKoreanDate(date), "day");
+  }
+
+  static isBefore(date: string) {
+    return this.today.isBefore(this.parseKoreanDate(date), "day");
+  }
+
+  static isSame(date: string) {
+    return this.today.isSame(this.parseKoreanDate(date), "day");
+  }
+
+  static isNew(date: string) {
+    const diffDays = this.today.diff(this.parseKoreanDate(date), "day");
+    return diffDays >= 0 && diffDays < 7;
+  }
+
+  static fromNow(date: string) {
+    return this.parseKoreanDate(date).fromNow();
+  }
 }
