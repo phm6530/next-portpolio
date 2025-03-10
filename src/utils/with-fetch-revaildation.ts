@@ -10,22 +10,36 @@ type ActionsProps = {
   options?: RequestInit;
 };
 
+type SuccessResponse<T> = {
+  success: true;
+  result: T;
+  message?: undefined;
+  statusCode?: number;
+};
+
+type ErrorResponse = {
+  success: false;
+  result?: undefined;
+  message: string;
+  statusCode?: number;
+};
+
 export const withFetchRevaildationAction = async <T>({
   endPoint,
   tags,
   requireAuth,
   options,
-}: ActionsProps): Promise<{
-  success: boolean;
-  result?: T;
-  message?: string;
-}> => {
+}: ActionsProps): Promise<SuccessResponse<T> | ErrorResponse> => {
   // Cookie
   const cookieStore = cookies();
   const authCookie = cookieStore.get("token");
 
   if (requireAuth && !authCookie) {
-    throw new Error("잘못된 요청입니다.");
+    return {
+      success: false,
+      message: "인증 토큰이 없습니다.",
+      statusCode: 401,
+    };
   }
 
   try {
@@ -41,6 +55,9 @@ export const withFetchRevaildationAction = async <T>({
 
     if (!result.ok) {
       const error = await result.json();
+      if (error.status === 404) {
+        throw new Error("NOT_FOUND");
+      }
       throw new Error(error.message || "Request Faild");
     }
 

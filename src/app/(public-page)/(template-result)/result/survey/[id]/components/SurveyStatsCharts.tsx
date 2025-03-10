@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 // 성별 및 나이 필터 함수
 const filterGenderAndAgeGroup = (

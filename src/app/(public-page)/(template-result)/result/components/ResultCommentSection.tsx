@@ -1,7 +1,7 @@
 import NotFoundContents from "@/components/ui/error/notfound-contents";
 import { MSG_PARAM_PATH, CommentReponse } from "@/types/comment.type";
 import MessageContainer from "@/components/comment/message-container";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 //tempalte ID
 export default async function ResultCommentSection({

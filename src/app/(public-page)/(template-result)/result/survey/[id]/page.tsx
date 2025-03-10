@@ -13,7 +13,7 @@ import { CommentEditorProvider } from "@/components/comment/context/comment-cont
 import MessageForm from "@/components/comment/message-form";
 import ResultPageSummry from "../../components/result-page-summry";
 import ResultCommentSection from "../../components/ResultCommentSection";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 const queryClient = new QueryClient();
 

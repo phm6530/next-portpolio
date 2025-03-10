@@ -30,7 +30,7 @@ import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import { Check } from "lucide-react";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 export default function SurveyResponseForm({
   id,

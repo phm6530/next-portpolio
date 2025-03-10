@@ -11,7 +11,7 @@ const AUTH_REQUIRED_PATHS = ["/made", "/mypage"] as const;
 
 type Pathname = (typeof AUTH_REDIRECT_PATHS)[number];
 
-export async function middleware(req: NextRequest, res: NextResponse) {
+export async function middleware(req: NextRequest, _res: NextResponse) {
   const pathname = req.nextUrl.pathname as Pathname;
 
   // get Token

@@ -15,6 +15,7 @@ import toastConfig from "@/config/toast";
 import "./globals.css";
 import HeaderNav from "@/components/layout/Header/header-nav";
 import ThemeToggleButton from "@/components/ui/thema-toggle-btn";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -45,19 +46,27 @@ export default async function RootLayout({
    */
 
   if (token) {
-    // 유저데이터 캐싱해서 사용
+    // 유저데이터 캐싱해서 사용하려고
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],
       queryFn: async () => {
-        const endpoint = `user/me`;
-        const option: RequestInit = {
-          cache: "no-store",
-          headers: {
-            authorization: `Bearer ${token}`,
+        const endPoint = `user/me`;
+        const { result, success } = await withFetchRevaildationAction({
+          endPoint,
+          requireAuth: true,
+          options: {
+            cache: "no-store",
           },
-        };
-        return await withAuthFetch<any>(endpoint, option);
+        });
+
+        if (!success) {
+          queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] });
+        }
+
+        return result;
       },
+      staleTime: Infinity,
+      gcTime: Infinity,
     });
   }
 

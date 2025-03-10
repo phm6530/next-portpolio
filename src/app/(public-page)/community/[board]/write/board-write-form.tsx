@@ -19,7 +19,7 @@ import {
 } from "./board-write-schema";
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
