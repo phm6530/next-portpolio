@@ -4,7 +4,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Youtube from "@tiptap/extension-youtube";
 
-import { all, createLowlight } from "lowlight";
+import { common, createLowlight } from "lowlight";
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
@@ -17,7 +17,7 @@ import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Link from "@tiptap/extension-link";
 
-const lowlight = createLowlight(all);
+const lowlight = createLowlight(common);
 lowlight.register("html", html);
 lowlight.register("css", css);
 lowlight.register("js", js);

@@ -1,7 +1,5 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
-
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import Delete from "/public/asset/icon/delete.svg";
@@ -13,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import SvginButton from "@/components/ui/button-svg";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { SurveyPayload } from "./CreateSurvey";
 
 const MIN_OPTION_COUNT = 2;
 const MIN_OPTION_ERROR_MESSAGE =
@@ -31,7 +30,7 @@ export default function SurveyOptionItem({
   const qs = useSearchParams();
   const editMode = qs.size > 0;
 
-  const { setValue, watch } = useFormContext<RequestSurveyFormData>();
+  const { setValue, watch } = useFormContext<SurveyPayload<"req">>();
 
   const [curRadio, preView, key] = watch([
     `questions.${surveyIdx}.options`,

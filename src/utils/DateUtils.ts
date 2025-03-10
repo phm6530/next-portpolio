@@ -20,7 +20,7 @@ type DateFormat =
   | "YYYY-MM-DD HH:mm:ss"
   | string;
 
-export class DateCompareToday {
+export class DateUtils {
   private static today = dayjs();
 
   private static parseKoreanDate(date: string) {

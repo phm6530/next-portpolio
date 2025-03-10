@@ -219,6 +219,9 @@ export default function SurveyResponseForm({
           제출하기
         </Button>
       </div>
+      {formMethod.formState.isSubmitted && !formMethod.formState.isValid && (
+        <p className="text-red-500 mt-2">아직 작성이 안된 항목이 있어요.</p>
+      )}
     </>
   );
 }

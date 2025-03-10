@@ -2,7 +2,7 @@ import { RespondentsAndMaxGroup } from "@/types/template.type";
 import { GENDER_GROUP } from "@/types/user";
 import { Badge } from "../badge";
 import { cn } from "@/lib/utils";
-import { DateCompareToday } from "@/util/DateCompareToday";
+import { DateUtils } from "@/utils/DateUtils";
 
 export default function TemplateBadges({
   startDate,
@@ -16,7 +16,7 @@ export default function TemplateBadges({
   className?: string;
 }) {
   const curState = (startDate?: string | null, endDate?: string | null) => {
-    if (startDate && DateCompareToday.isBefore(startDate)) {
+    if (startDate && DateUtils.isBefore(startDate)) {
       return (
         <Badge variant={"secondary"} className="font-normal text-[10px]">
           대기 중
@@ -24,13 +24,12 @@ export default function TemplateBadges({
       );
     } else if (
       startDate &&
-      (DateCompareToday.isAfter(startDate) ||
-        DateCompareToday.isSame(startDate))
+      (DateUtils.isAfter(startDate) || DateUtils.isSame(startDate))
     ) {
       return (
         <Badge className="font-normal text-[10px] flex gap-2 ">진행 중</Badge>
       );
-    } else if (endDate && DateCompareToday.isAfter(endDate)) {
+    } else if (endDate && DateUtils.isAfter(endDate)) {
       return (
         <Badge
           variant={"secondary"}

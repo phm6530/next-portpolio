@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef } from "react";
 import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
 
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
+import { SurveyPayload } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import ImageUploadHandler from "@/utils/img-uploader";
 import { useMutation } from "@tanstack/react-query";
 import imgUpload from "/public/asset/icon/imgUpload.svg";
@@ -10,12 +10,11 @@ import LoadingSkeleton from "@/components/ui/loading/LoadingSkeleton";
 
 import UploadedImagePreview from "@/app/(protected-page)/(template-made)/components/ImageContainer/UploadedImagePreview";
 import QuestionListWrapper from "@/app/(protected-page)/(template-made)/components/QuestionItem/QuestionContainer";
-import { Button } from "@/components/ui/button";
 import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OptionsController from "./option-controller";
 import ConfirmDialog from "@/components/ui/confirm-button";
-import { DeleteIcon, X } from "lucide-react";
+import { GripVertical, X } from "lucide-react";
 
 export default function CreateSurveyText({
   surveyIdx,
@@ -25,8 +24,7 @@ export default function CreateSurveyText({
   remove: UseFieldArrayRemove;
 }) {
   const imgRef = useRef<HTMLInputElement>(null);
-  const { watch, setValue, control, getValues } =
-    useFormContext<RequestSurveyFormData>();
+  const { watch, setValue, control } = useFormContext<SurveyPayload<"req">>();
 
   const preView = watch(`questions.${surveyIdx}.img`);
   const key = watch("templateKey");
@@ -74,14 +72,14 @@ export default function CreateSurveyText({
             render={({ field }) => {
               return (
                 <>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <GripVertical className="opacity-40" />
                     <Input
                       {...field}
                       placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}
                       className="border-transparent !bg-transparent  text-base placeholder:text-base md:text-lg md:placeholder:text-lg focus:border-transparent hover:border-transparent"
                       autoComplete="off"
                     />
-
                     <SvginButton
                       Svg={imgUpload}
                       alt="업로드 버튼"

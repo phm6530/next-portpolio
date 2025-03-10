@@ -13,9 +13,9 @@ import ViewCount from "./component/view-count";
 import MessageForm from "@/components/comment/message-form";
 import { CommentEditorProvider } from "@/components/comment/context/comment-context";
 import { fetchBoardItem } from "./actions/board-fetch";
-import DateCompareToday from "@/util/DateCompareToday";
 import dynamic from "next/dynamic";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import { DateUtils } from "@/utils/DateUtils";
 
 export async function generateStaticParams() {
   const categories = ["free", "notice", "qa"]; // 카테고리 리스트
@@ -72,7 +72,7 @@ export default async function Page({
   params: { board: CategoriesKey; id: string };
 }) {
   const { board: category, id } = params;
-  // const dayCompare = DateCompareToday();
+  // const dayCompare = DateUtils();
   const boardName = BOARD_CATEGORIES[category];
 
   const data: DetailBoardItemType = await fetchBoardItem({
@@ -80,7 +80,6 @@ export default async function Page({
     id,
   });
 
-  const todayCompare = DateCompareToday();
   const DynamicTipTapEditor = dynamic(
     () => import("@/components/ui/editor/tiptap-editor"),
     { ssr: false, loading: () => <LoadingWrapper /> } // 서버 사이드 렌더링 비활성화
@@ -101,7 +100,7 @@ export default async function Page({
             />
 
             <span className="text-muted-foreground text-[12px]">
-              {todayCompare.fromNow(data.createdAt)}
+              {DateUtils.fromNow(data.createdAt)}
             </span>
           </div>
         </div>
