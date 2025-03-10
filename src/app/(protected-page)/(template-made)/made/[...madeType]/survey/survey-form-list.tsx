@@ -1,6 +1,6 @@
 "use client";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
+import { SurveyPayload } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import { FormMessage } from "@/components/ui/form";
 import CreateSurveySelect from "./create-survey-select";
@@ -17,7 +17,8 @@ export default function CreateSurveyList() {
     watch,
     formState: { errors },
     setError,
-  } = useFormContext<RequestSurveyFormData>();
+  } = useFormContext<SurveyPayload<"res">>();
+
   const { remove, move } = useFieldArray({
     control,
     name: "questions",
@@ -33,9 +34,12 @@ export default function CreateSurveyList() {
     }
   }, [questionsWatch, setError]); //
 
-  const onDragStart = useCallback((qsIdx: number) => {
-    setDragTargetIdx(qsIdx);
-  }, []);
+  const onDragStart = useCallback(
+    (qsIdx: number) => {
+      setDragTargetIdx(qsIdx);
+    },
+    [] // 의존성 없음 유지
+  );
 
   const onDragOver = useCallback(
     (e: DragEvent<HTMLDivElement>, qsIdx: number) => {
@@ -75,7 +79,7 @@ export default function CreateSurveyList() {
                 "py-2 rounded-md md:p-2 cursor-grab",
                 qsIdx === curOverIdx && "bg-primary"
               )}
-              key={qsIdx}
+              key={`${field.id}-${qsIdx}`}
               draggable
               onDragStart={() => onDragStart(qsIdx)}
               onDragOver={(e) => onDragOver(e, qsIdx)}

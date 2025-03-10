@@ -1,10 +1,10 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
 import Pen from "/public/asset/icon/pen.svg";
 import Checkbox from "/public/asset/icon/checkbox.svg";
 import CustomButton from "@/components/ui/button-custom";
+import { SurveyPayload } from "./CreateSurvey";
 
 export type RequestSelectOption = {
   value: string;
@@ -29,7 +29,7 @@ export type RequestSelect = {
 };
 
 export default function CreateSurveyFormController() {
-  const { control } = useFormContext<RequestSurveyFormData>();
+  const { control } = useFormContext<SurveyPayload<"req">>();
 
   //questions
   const { append } = useFieldArray({

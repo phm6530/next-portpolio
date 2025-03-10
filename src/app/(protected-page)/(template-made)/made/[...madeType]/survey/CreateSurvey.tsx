@@ -51,8 +51,7 @@ export enum SURVEY_EDITOR_TYPE {
   EDIT = "edit",
 }
 
-//Form
-export type RequestSurveyFormData = {
+export type SurveyPayload<T extends "res" | "req"> = {
   title: string;
   description: string;
   thumbnail: string | null;
@@ -61,9 +60,11 @@ export type RequestSurveyFormData = {
   isGenderCollected: boolean;
   isAgeCollected: boolean;
   templateType: TEMPLATE_TYPE;
-  questions: (RequestText | RequestSelect)[];
   creator?: User | null;
   templateKey: string | null;
+  questions: T extends "res"
+    ? ((RequestText & { id: string }) | (RequestSelect & { id: string }))[]
+    : (RequestText | RequestSelect)[];
 };
 
 // UserData는 useEffect로 처리
@@ -356,7 +357,7 @@ export default function CreateSurveyForm() {
               /> */}
 
                   {/* 성별 별 수집 */}
-                  <RadioBooleanField<RequestSurveyFormData>
+                  <RadioBooleanField<SurveyPayload<"req">>
                     // label="나이 및 성별 수집을 하시겠습니까?"
                     groupName={"isGenderCollected"}
                     // description="성별 필터링이 가능합니다."

@@ -1,4 +1,3 @@
-import { RequestSurveyFormData } from "@/app/(protected-page)/(template-made)/made/[...madeType]/survey/CreateSurvey";
 import SurveyOptionItem from "./select-option-item";
 
 import { QUESTION_TYPE } from "@/types/survey.type";
@@ -15,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import OptionsController from "./option-controller";
 import ConfirmButton from "@/components/ui/confirm-button";
+import { GripVertical } from "lucide-react";
+import { SurveyPayload } from "./CreateSurvey";
 
 export default function CreateSurveySelect({
   surveyDelete,
@@ -24,7 +25,7 @@ export default function CreateSurveySelect({
   surveyIdx: number;
 }) {
   //FormContext
-  const { control, watch } = useFormContext<RequestSurveyFormData>();
+  const { control, watch } = useFormContext<SurveyPayload<"req">>();
 
   //항목 컨트롤러
   const {
@@ -56,6 +57,7 @@ export default function CreateSurveySelect({
             return (
               <>
                 <div className="flex items-center">
+                  <GripVertical className="opacity-40" />
                   <Input
                     {...field}
                     placeholder={`${surveyIdx + 1}. 질문을 입력해주세요`}

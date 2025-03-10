@@ -1,11 +1,10 @@
 "use client";
-
 import { useFormContext } from "react-hook-form";
-import { RequestSurveyFormData } from "./CreateSurvey";
 import { QUESTION_TYPE } from "@/types/survey.type";
+import { SurveyPayload } from "./CreateSurvey";
 
 export default function SurveyStatus() {
-  const { watch } = useFormContext<RequestSurveyFormData>();
+  const { watch } = useFormContext<SurveyPayload<"req">>();
 
   const questionsWatch = watch("questions");
 
