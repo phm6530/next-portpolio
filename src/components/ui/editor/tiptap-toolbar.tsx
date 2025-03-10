@@ -45,6 +45,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
       <div className="flex gap-3 p-2">
         <div className="flex gap-1">
           <button
+            type="button"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
@@ -55,6 +56,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
             <Heading1 className="w-5 h-5" />
           </button>
           <button
+            type="button"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
@@ -65,6 +67,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
             <Heading2 className="w-5 h-5" />
           </button>
           <button
+            type="button"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
@@ -77,6 +80,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
         </div>
         <div className="flex ">
           <button
+            type="button"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={editor.isActive("codeBlock") ? "is-active" : ""}
           >
@@ -85,7 +89,7 @@ export default function TipTapToolbar({ editor }: { editor: Editor }) {
         </div>
 
         <div className="flex justify-center items-center">
-          <button id="add" onClick={addYoutubeVideo}>
+          <button id="add" onClick={addYoutubeVideo} type="button">
             <div className="w-5 h-5 flex justify-center items-center  [&>svg]:w-5 [&>svg]:h-5 [&>svg]:fill-white ">
               <YoutubeIcon />
             </div>

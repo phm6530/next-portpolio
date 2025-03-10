@@ -123,7 +123,7 @@ export default function BoardForm({
           />
         </div>
 
-        <Button className="p-8" disabled={isPending || isSuccess}>
+        <Button type="submit" className="p-8" disabled={isPending || isSuccess}>
           글쓰기
         </Button>
       </form>

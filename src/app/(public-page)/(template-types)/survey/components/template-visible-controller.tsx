@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import { FetchTemplateForm } from "@/types/template.type";
-import { DateCompareToday } from "@/util/DateCompareToday";
+import { DateUtils } from "@/utils/DateUtils";
 
 import { ArrowLeft, CalendarCheck2Icon } from "lucide-react";
 import Link from "next/link";
@@ -22,7 +22,7 @@ export default function TemplateVisibleController({
   children: ReactNode;
 }) {
   const { title, thumbnail } = data;
-  if (startDate && DateCompareToday.isBefore(startDate)) {
+  if (startDate && DateUtils.isBefore(startDate)) {
     return (
       <>
         <div className="flex  h-calc-screen-lg items-center max-h-[auto] animate-fadein flex-col gap-5 text-center justify-center ">
@@ -38,9 +38,9 @@ export default function TemplateVisibleController({
           </div>
           <div className="flex gap-2  text-center items-center mb-7 justify-center">
             <CalendarCheck2Icon />{" "}
-            {DateCompareToday.dateFormatKR(startDate, "YYYY. MM. DD")} ~{" "}
+            {DateUtils.dateFormatKR(startDate, "YYYY. MM. DD")} ~{" "}
             {endDate
-              ? DateCompareToday.dateFormatKR(endDate, "YYYY. MM. DD")
+              ? DateUtils.dateFormatKR(endDate, "YYYY. MM. DD")
               : "무기한"}
           </div>
           <Button variant={"outline"} asChild>
@@ -53,7 +53,7 @@ export default function TemplateVisibleController({
     );
   }
 
-  if (endDate && DateCompareToday.isAfter(endDate)) {
+  if (endDate && DateUtils.isAfter(endDate)) {
     return (
       <>
         <div className="flex  h-calc-screen-lg items-center max-h-[auto] animate-fadein flex-col gap-5 text-center justify-center ">
@@ -69,12 +69,10 @@ export default function TemplateVisibleController({
           </div>
           <div className="flex gap-2  text-center items-center mb-7 justify-center">
             <CalendarCheck2Icon />{" "}
-            {startDate
-              ? DateCompareToday.dateFormatKR(startDate, "YYYY. MM. DD")
-              : ""}{" "}
+            {startDate ? DateUtils.dateFormatKR(startDate, "YYYY. MM. DD") : ""}{" "}
             ~{" "}
             {endDate
-              ? DateCompareToday.dateFormatKR(endDate, "YYYY. MM. DD")
+              ? DateUtils.dateFormatKR(endDate, "YYYY. MM. DD")
               : "무기한"}
           </div>
           <Button variant={"outline"} asChild>

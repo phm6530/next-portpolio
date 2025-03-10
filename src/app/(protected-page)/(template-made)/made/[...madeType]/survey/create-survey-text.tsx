@@ -15,7 +15,7 @@ import { FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OptionsController from "./option-controller";
 import ConfirmDialog from "@/components/ui/confirm-button";
-import { DeleteIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function CreateSurveyText({
   surveyIdx,
