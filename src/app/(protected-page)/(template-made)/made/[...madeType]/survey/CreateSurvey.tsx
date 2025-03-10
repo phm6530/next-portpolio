@@ -9,7 +9,7 @@ import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { User } from "@/types/auth.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
 import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
@@ -44,6 +44,7 @@ import { toast } from "react-toastify";
 import surveySchema from "../schema/survey-schema";
 import { useTransformToKrDate } from "@/_hook/useTransformToKrDate";
 import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { DateUtils } from "@/utils/DateUtils";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -106,7 +107,6 @@ export default function CreateSurveyForm() {
   const { setValue, reset, watch } = formState;
   const isGenderCollected = watch("isGenderCollected");
 
-  console.log(watch());
   useEffect(() => {
     setValue("isAgeCollected", isGenderCollected);
   }, [isGenderCollected, setValue]);
@@ -223,6 +223,18 @@ export default function CreateSurveyForm() {
     mutate(data);
   };
 
+  const getIsEdit = useCallback(() => {
+    if (editPage && editData) {
+      if (editData.startDate) {
+        return !DateUtils.isBefore(editData?.startDate);
+      } else if (editData.startDate === null) {
+        return true;
+      }
+    }
+  }, [editPage, editData]);
+
+  const editLock = getIsEdit();
+
   return (
     <>
       <SubheaderDescrition
@@ -272,7 +284,8 @@ export default function CreateSurveyForm() {
 
               <Card
                 className={cn(
-                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-1 border-0 md:border border-b"
+                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-1 border-0 md:border border-b",
+                  editLock && "cursor-not-allowed"
                 )}
               >
                 <CardHeader className="px-0 md:px-6 flex flex-col gap-4 mb-4">
@@ -285,17 +298,31 @@ export default function CreateSurveyForm() {
                     종료 일이 없다면 무기한으로 설정됩니다. 시작 종료일 모두
                     00시 기준입니다.
                   </CardDescription>
+                  {editLock && (
+                    <CardDescription className="text-lg text-white flex gap-2 items-center text-primary dark:brightness-150">
+                      <Info />
+                      설문 중에는 수정이 불가합니다.
+                    </CardDescription>
+                  )}
                 </CardHeader>
 
-                <CardContent className={cn("px-0 md:px-6 gap-6 flex flex-col")}>
+                <CardContent
+                  className={cn(
+                    "px-0 md:px-6 gap-6 flex flex-col",
+                    editLock && " pointer-events-none opacity-50"
+                  )}
+                >
                   <DateRangeSelector />
+                  <CardDescription className="leading-6">
+                    설문조사가 시작되면 등록 이후 일정 변경은 불가합니다
+                  </CardDescription>
                 </CardContent>
               </Card>
 
               <Card
                 className={cn(
                   "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
-                  editPage && "cursor-not-allowed"
+                  editLock && "cursor-not-allowed"
                 )}
               >
                 <CardHeader className="px-0 md:px-6">
@@ -307,7 +334,7 @@ export default function CreateSurveyForm() {
                     필터링이 제공됩니다.
                   </CardDescription>
 
-                  {editPage && (
+                  {editLock && (
                     <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
                       <Info />
                       설문 중에는 필터 수정이 불가합니다.
@@ -318,7 +345,7 @@ export default function CreateSurveyForm() {
                 <CardContent
                   className={cn(
                     "px-0 md:px-6 gap-6 flex flex-col",
-                    editPage && " pointer-events-none opacity-50"
+                    editLock && " pointer-events-none opacity-50"
                   )}
                 >
                   {/* 나이 별 수집 */}
@@ -339,7 +366,7 @@ export default function CreateSurveyForm() {
 
               <Card
                 className={cn(
-                  editPage && "cursor-not-allowed",
+                  editLock && "cursor-not-allowed",
                   "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
                 )}
               >
@@ -350,7 +377,7 @@ export default function CreateSurveyForm() {
                   <CardDescription>
                     설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
                   </CardDescription>
-                  {editPage && (
+                  {editLock && (
                     <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
                       <Info />
                       설문 중에는 항목 수정이 불가합니다.
@@ -361,7 +388,7 @@ export default function CreateSurveyForm() {
                 <CardContent
                   className={cn(
                     "px-0 md:px-6 gap-6 flex flex-col",
-                    editPage && " pointer-events-none opacity-50"
+                    editLock && " pointer-events-none opacity-50"
                   )}
                 >
                   <SurveyStatus />
