@@ -3,7 +3,6 @@
 import { QUERY_KEY } from "@/types/constans";
 import { withFetchRevaildationAction } from "./with-fetch-revaildation";
 import { queryClient } from "@/config/queryClient";
-import { ERROR_CODE } from "@/config/codeMsg";
 
 /**
  * @param actionPromise 서버 액션 Promise
@@ -20,14 +19,15 @@ export default async function withActionAtClient<T>(
 
   if (!success) {
     if (statusCode === 401) {
-      // 전역 client 인스턴스
+      // 권한에러 처리나면 캐시 비워버리기
+      /**
+       * @comment 현재 401에러는 만료 이외엔 없기에 쿼리 비워버리기
+       */
       queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] });
-      const redirectPath = `/auth/login?code=${ERROR_CODE.UNAUTHORIZED}`;
-      window.location.href = redirectPath;
-      throw new Error("다시 로그인해주세요");
     }
     throw new Error(message);
   }
+  console.log("result", result);
 
   return result;
 }

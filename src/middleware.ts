@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ERROR_CODE } from "./config/codeMsg";
-import withAuthFetch from "./utils/withAuthFetch";
+import { withFetchRevaildationAction } from "./utils/with-fetch-revaildation";
 
 const AUTH_REDIRECT_PATHS = [
   "/auth/login",
@@ -35,10 +35,9 @@ export async function middleware(req: NextRequest, _res: NextResponse) {
       return NextResponse.redirect(new URL(redirectPath, req.nextUrl.origin));
 
     try {
-      const isAuthenticated = await withAuthFetch("auth/verify", {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+      const isAuthenticated = await withFetchRevaildationAction({
+        endPoint: "auth/verify",
+        requireAuth: true,
       });
 
       if (!isAuthenticated) {

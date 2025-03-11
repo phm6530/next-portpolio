@@ -2,13 +2,11 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { User } from "@/types/auth.type";
-import withAuthFetch from "@/utils/withAuthFetch";
 import { MSG_TYPE } from "@/types/comment.type";
 import { useParams, useRouter } from "next/navigation";
-import revaildateTags from "@/lib/revaildateTags";
 import { CategoriesKey } from "@/types/board";
 import InputField from "@/components/shared/inputs/input-field";
 import PasswordInputField from "@/components/shared/inputs/input-password-field";
@@ -22,6 +20,8 @@ import { toast } from "react-toastify";
 import UserRoleDisplay from "../ui/userRoleDisplay/UserRoleDisplay";
 import { cn } from "@/lib/utils";
 import LoadingSpinnerWrapper from "../ui/loading/LoadingSpinnerWrapper";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
+import withActionAtClient from "@/utils/with-action-at-client";
 
 /**
  * Editor Type = Comment / Reply 유니온
@@ -78,7 +78,7 @@ export default function MessageForm({
   const { mutate, isPending } = useMutation({
     mutationFn: async (data) => {
       // 분기 Url 생성..
-      const url = (() => {
+      const endPoint = (() => {
         switch (EDITOR_MODE) {
           case MSG_TYPE.COMMENT:
             return `comment/${EDITOR_PATH}/${parentsId}`;
@@ -89,25 +89,21 @@ export default function MessageForm({
         }
       })();
 
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
+      const result = await withActionAtClient(async () =>
+        withFetchRevaildationAction({
+          endPoint,
+          options: {
+            method: REQUEST_METHOD.POST,
+            body: JSON.stringify(data),
+          },
+          tags: [
+            `comment-${EDITOR_PATH}-${params.id}`,
+            ...(category ? [`${EDITOR_PATH}-${category}`] : []),
+          ],
+        })
+      );
 
-      const req = await withAuthFetch(url, options);
-
-      //cache initals
-      await revaildateTags({
-        tags: [
-          `comment-${EDITOR_PATH}-${params.id}`,
-          ...(category ? [`${EDITOR_PATH}-${category}`] : []),
-          //카테고리가 존재하면 tag 분할하기
-        ],
-      });
-      return req;
+      return result;
     },
     onSuccess: async () => {
       toast.success("댓글을 작성하였습니다.");

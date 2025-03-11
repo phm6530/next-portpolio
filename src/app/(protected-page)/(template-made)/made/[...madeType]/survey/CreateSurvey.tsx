@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useCallback, useEffect, useState } from "react";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
-import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 import useAOS from "@/_hook/usAOS";
 import InputField from "@/components/shared/inputs/input-field";
@@ -39,7 +38,6 @@ import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import DateRangeSelector from "@/components/ui/date-range";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import revaildateTags from "@/lib/revaildateTags";
 import { toast } from "react-toastify";
 import surveySchema from "../schema/survey-schema";
 import { useTransformToKrDate } from "@/_hook/useTransformToKrDate";
@@ -230,8 +228,11 @@ export default function CreateSurveyForm() {
     }
   }, [editPage, editData]);
 
+  /**
+   * @description
+   * 이벤트 진행상태 인지 파악하고 잠금처리
+   */
   const editLock = getIsEdit();
-  console.log(formState.formState.errors);
 
   return (
     <>
@@ -398,16 +399,6 @@ export default function CreateSurveyForm() {
               </Card>
             </FormProvider>
             <div className="flex [&>button]:flex-1 gap-3">
-              {/* <Button
-                  type="submit"
-                  disabled={isPending}
-                  onClick={formState.handleSubmit(onSubmitHandler)}
-                  className="py-7 rounded-lg"
-                  variant={"outline"}
-                >
-                  미리보기
-                </Button> */}
-
               <Button
                 type="submit"
                 disabled={isPending || isSuccess}

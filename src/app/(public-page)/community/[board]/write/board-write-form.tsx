@@ -20,6 +20,8 @@ import {
 import TipTapEditorField from "@/components/ui/editor/tiptap-editor-field";
 import UserRoleDisplay from "@/components/ui/userRoleDisplay/UserRoleDisplay";
 import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
+import LoadingSpinnerWrapper from "@/components/ui/loading/LoadingSpinnerWrapper";
+import useThrottling from "@/_hook/useThrottlring";
 
 // User일땐 이것만 유저 유무는 쿠키로 보낼거니까
 export type UnionBoardProps = z.infer<typeof boardWirteSchema>;
@@ -33,6 +35,7 @@ export default function BoardForm({
 }) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { throttle } = useThrottling();
 
   const userData: User | null =
     queryClient.getQueryData([QUERY_KEY.USER_DATA]) ?? null;
@@ -79,54 +82,60 @@ export default function BoardForm({
   const { handleSubmit } = method;
 
   const onSubmitHandler = (data: UnionBoardProps) => {
-    mutate(data);
+    throttle(() => mutate(data), 2000);
   };
 
   return (
-    <FormProvider {...method}>
-      <form
-        className="flex flex-col gap-8 mt-7 "
-        onSubmit={handleSubmit(onSubmitHandler)}
-      >
-        {!userData ? (
-          <div className="flex gap-5 [&>div]:flex-1">
-            <>
-              <InputField
-                name="anonymous"
-                label="글쓴이"
-                placeholder="2글자 이상 입력해주세요."
-              />
+    <LoadingSpinnerWrapper loading={isPending || isSuccess}>
+      <FormProvider {...method}>
+        <form
+          className="flex flex-col gap-8 mt-7 "
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
+          {!userData ? (
+            <div className="flex gap-5 [&>div]:flex-1">
+              <>
+                <InputField
+                  name="anonymous"
+                  label="글쓴이"
+                  placeholder="2글자 이상 입력해주세요."
+                />
 
-              <PasswordInputField label="비밀번호" />
-            </>
-          </div>
-        ) : (
-          <>
-            <div className="col-span-6 0 text-left flex items-start  p-4 border">
-              <UserRoleDisplay
-                role={userData.role}
-                nickname={userData.nickname}
-              />
+                <PasswordInputField label="비밀번호" />
+              </>
             </div>
-          </>
-        )}
-        <InputField
-          name="title"
-          label="글 제목"
-          placeholder="글 제목을 입력해주세요."
-        />
-        <div>
-          {/* Quill Editor */}
-          <TipTapEditorField
-            name={"contents"}
-            placeholder="작성할 내용을 입력해주세요"
+          ) : (
+            <>
+              <div className="col-span-6 0 text-left flex items-start  p-4 border">
+                <UserRoleDisplay
+                  role={userData.role}
+                  nickname={userData.nickname}
+                />
+              </div>
+            </>
+          )}
+          <InputField
+            name="title"
+            label="글 제목"
+            placeholder="글 제목을 입력해주세요."
           />
-        </div>
+          <div>
+            {/* Quill Editor */}
+            <TipTapEditorField
+              name={"contents"}
+              placeholder="작성할 내용을 입력해주세요"
+            />
+          </div>
 
-        <Button type="submit" className="p-8" disabled={isPending || isSuccess}>
-          글쓰기
-        </Button>
-      </form>
-    </FormProvider>
+          <Button
+            type="submit"
+            className="p-8"
+            disabled={isPending || isSuccess}
+          >
+            글쓰기
+          </Button>
+        </form>
+      </FormProvider>
+    </LoadingSpinnerWrapper>
   );
 }

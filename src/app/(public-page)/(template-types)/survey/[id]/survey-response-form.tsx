@@ -6,8 +6,6 @@ import {
 } from "@/types/survey.type";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";

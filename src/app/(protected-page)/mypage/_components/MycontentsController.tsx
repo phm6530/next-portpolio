@@ -1,16 +1,17 @@
-import { QUERY_KEY } from "@/types/constans";
+import { QUERY_KEY, REQUEST_METHOD } from "@/types/constans";
 import {
   RespondentsAndMaxGroup,
   TEMPLATE_TYPE,
   TemplateItemMetadata,
 } from "@/types/template.type";
-import withAuthFetch from "@/utils/withAuthFetch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import revaildateTags from "@/lib/revaildateTags";
 import { useRouter } from "next/navigation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
+import withActionAtClient from "@/utils/with-action-at-client";
+import { toast } from "react-toastify";
 
 export default function MyContentsController({
   templateType,
@@ -29,19 +30,20 @@ export default function MyContentsController({
     Pick<TemplateItemMetadata<RespondentsAndMaxGroup>, "id" | "templateType">
   >({
     mutationFn: async ({ templateType, id }) => {
-      const url = `template/${templateType}/${id}`;
-
-      const options: RequestInit = {
-        method: "DELETE",
-        credentials: "include",
-      };
-      const response = await withAuthFetch(url, options);
-      await revaildateTags({ tags: [`template-${templateType}-${+id}`] });
-      return response;
+      await withActionAtClient(async () =>
+        withFetchRevaildationAction({
+          endPoint: `template/${templateType}/${id}`,
+          requireAuth: true,
+          options: {
+            method: REQUEST_METHOD.DELETE,
+          },
+          tags: [`template-${templateType}-${+id}`],
+        })
+      );
     },
 
     onSuccess: () => {
-      alert("삭제되었습니다.");
+      toast.success("삭제되었습니다.");
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEY.MY_CONTENTS],
       });

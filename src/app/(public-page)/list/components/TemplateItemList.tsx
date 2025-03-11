@@ -11,11 +11,11 @@ import {
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import LoadingSpiner from "@/components/ui/LoadingSpiner";
 import MasonryLayout from "@/components/layout/masonry-layout";
 import NotFoundContents from "@/components/ui/error/notfound-contents";
 import { Ban } from "lucide-react";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
+import SkeletonTemplateItemList from "@/components/shared/loading/skeleton-template-itemlist";
 
 export default function TemplateList() {
   const qs = useSearchParams();
@@ -76,12 +76,16 @@ export default function TemplateList() {
     );
   }
 
-  if (isPending) {
-    return (
-      <div className="relative min-h-[300px]">
-        <LoadingSpiner />
-      </div>
-    );
+  // if (isPending) {
+  //   return (
+  //     <div className="relative min-h-[300px]">
+  //       <LoadingSpiner />
+  //     </div>
+  //   );
+  // }
+
+  if (!data || isPending) {
+    return <SkeletonTemplateItemList />;
   }
 
   if (data?.pages[0].data.length === 0) {

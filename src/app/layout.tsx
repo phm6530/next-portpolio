@@ -7,8 +7,6 @@ import {
 } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/types/constans";
 import ClientProvider from "@/provider/ClientProvider";
-
-import withAuthFetch from "@/utils/withAuthFetch";
 import { cookies } from "next/headers";
 import { ToastContainer } from "react-toastify";
 import toastConfig from "@/config/toast";
@@ -16,6 +14,7 @@ import "./globals.css";
 import HeaderNav from "@/components/layout/Header/header-nav";
 import ThemeToggleButton from "@/components/ui/thema-toggle-btn";
 import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
+import UserDataCaching from "@/provider/UserDataCaching";
 
 //메타 데이터
 export const metadata: Metadata = {
@@ -34,8 +33,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const queryClient = new QueryClient();
-
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   /**
@@ -45,7 +42,9 @@ export default async function RootLayout({
    *
    */
 
-  if (token) {
+  const queryClient = new QueryClient();
+
+  if (!!token) {
     // 유저데이터 캐싱해서 사용하려고
     await queryClient.prefetchQuery({
       queryKey: [QUERY_KEY.USER_DATA],
@@ -60,13 +59,11 @@ export default async function RootLayout({
         });
 
         if (!success) {
-          queryClient.removeQueries({ queryKey: [QUERY_KEY.USER_DATA] });
+          throw new Error("erro");
         }
 
         return result;
       },
-      staleTime: Infinity,
-      gcTime: Infinity,
     });
   }
 
@@ -75,11 +72,12 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="body">
         <div id="modal-portal"></div>
-
         <div id="backdrop-portal"></div>
 
         <ClientProvider>
           <HydrationBoundary state={dehydrate(queryClient)}>
+            {!!token && <UserDataCaching />}
+
             {/* Global */}
             <HeaderNav />
             <ToastContainer {...toastConfig} />
