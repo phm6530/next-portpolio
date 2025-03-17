@@ -14,7 +14,7 @@ import { PsConfirmModal } from "../shared/modals/password-input-modal";
 import { toast } from "react-toastify";
 import useCommentContext from "./hook/comment-context-hook";
 import ConfirmButton from "../ui/confirm-button";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 //import
 dayjs.extend(relativeTime);

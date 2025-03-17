@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useCallback, useEffect, useState } from "react";
 import ThumbNailUploader from "@/app/(protected-page)/(template-made)/components/ThumbNailUploader";
-import withAuthFetch from "@/utils/withAuthFetch";
 import SubheaderDescrition from "@/components/ui/subheader-description";
 import useAOS from "@/_hook/usAOS";
 import InputField from "@/components/shared/inputs/input-field";
@@ -39,12 +38,14 @@ import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import DateRangeSelector from "@/components/ui/date-range";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
-import revaildateTags from "@/lib/revaildateTags";
 import { toast } from "react-toastify";
 import surveySchema from "../schema/survey-schema";
 import { useTransformToKrDate } from "@/_hook/useTransformToKrDate";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 import { DateUtils } from "@/utils/DateUtils";
+import useThrottling from "@/_hook/useThrottlring";
+import withActionAtClient from "@/utils/with-action-at-client";
+import { resolve } from "path";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -96,6 +97,7 @@ export default function CreateSurveyForm() {
   const userData = queryClient.getQueryData<User>([QUERY_KEY.USER_DATA]);
   const [editPage, setEditPage] = useState<boolean>(false);
   const qs = useSearchParams();
+  const { throttle } = useThrottling();
 
   //초기 세션상태
   const router = useRouter();
@@ -120,11 +122,17 @@ export default function CreateSurveyForm() {
     error,
     isError,
     isLoading,
-  } = useQuery<FetchTemplateForm>({
+  } = useQuery({
     queryKey: ["test", editId],
     queryFn: async () => {
-      const url = `template/survey/${editId}?type=${SURVEY_EDITOR_TYPE.EDIT}`;
-      return await withAuthFetch(url);
+      const endPoint = `template/survey/${editId}?type=${SURVEY_EDITOR_TYPE.EDIT}`;
+
+      return await withActionAtClient(() =>
+        withFetchRevaildationAction<FetchTemplateForm>({
+          endPoint,
+          requireAuth: true,
+        })
+      );
     },
     enabled: !!editId,
     staleTime: 10000,
@@ -182,31 +190,18 @@ export default function CreateSurveyForm() {
     Error,
     z.infer<typeof surveySchema>
   >({
-    mutationFn: async (
-      data
-    ): Promise<{ statusCode: number; templateId: number }> => {
-      // 메소드 분류해서 수정인지 생성인지 구분하여 요청하기에 URL도 분기 처리하였음 11/9
-      const { success, message, result } = await withFetchRevaildationAction<{
-        statusCode: number;
-        templateId: number;
-      }>({
-        endPoint: `template/survey${editId ? `/${editId}` : ""}`,
-        requireAuth: true,
-        options: {
-          method: !!editId ? REQUEST_METHOD.PUT : REQUEST_METHOD.POST,
-          body: JSON.stringify(data),
-        },
-        tags: !!editId ? [`template-survey-${+editId}`] : [],
-      });
-
-      if (!success) {
-        throw new Error(message);
-      }
-
-      return result as {
-        statusCode: number;
-        templateId: number;
-      };
+    mutationFn: async (data) => {
+      return await withActionAtClient(() =>
+        withFetchRevaildationAction({
+          endPoint: `template/survey${editId ? `/${editId}` : ""}`,
+          requireAuth: true,
+          options: {
+            method: !!editId ? REQUEST_METHOD.PUT : REQUEST_METHOD.POST,
+            body: JSON.stringify(data),
+          },
+          tags: !!editId ? [`template-survey-${+editId}`] : [],
+        })
+      );
     },
     onSuccess: (res) => {
       toast.success(
@@ -221,7 +216,7 @@ export default function CreateSurveyForm() {
 
   //submit
   const onSubmitHandler = async (data: z.infer<typeof surveySchema>) => {
-    mutate(data);
+    throttle(() => mutate(data), 2000);
   };
 
   const getIsEdit = useCallback(() => {
@@ -234,6 +229,10 @@ export default function CreateSurveyForm() {
     }
   }, [editPage, editData]);
 
+  /**
+   * @description
+   * 이벤트 진행상태 인지 파악하고 잠금처리
+   */
   const editLock = getIsEdit();
 
   return (
@@ -401,16 +400,6 @@ export default function CreateSurveyForm() {
               </Card>
             </FormProvider>
             <div className="flex [&>button]:flex-1 gap-3">
-              {/* <Button
-                  type="submit"
-                  disabled={isPending}
-                  onClick={formState.handleSubmit(onSubmitHandler)}
-                  className="py-7 rounded-lg"
-                  variant={"outline"}
-                >
-                  미리보기
-                </Button> */}
-
               <Button
                 type="submit"
                 disabled={isPending || isSuccess}

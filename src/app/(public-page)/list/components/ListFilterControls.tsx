@@ -8,6 +8,9 @@ import TabRounded from "@/components/ui/tab-rounded";
 import Male from "/public/asset/3d/male.png";
 import Female from "/public/asset/3d/female.png";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { QUERY_KEY } from "@/types/constans";
+import { useQueryClient } from "@tanstack/react-query";
 
 const btnArr = [
   {
@@ -48,6 +51,8 @@ export default function ListFilterControls() {
     setActive(e);
     router.push(`/list?${newParams.toString()}`, { scroll: false });
   };
+
+  const queryclient = useQueryClient();
 
   return (
     <div className="flex gap-2">

@@ -6,8 +6,6 @@ import {
 } from "@/types/survey.type";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { withFetch } from "@/util/clientUtil";
-import { BASE_NEST_URL } from "@/config/base";
 import { TEMPLATE_TYPE } from "@/types/template.type";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/config/queryClient";
@@ -30,7 +28,7 @@ import SelectResponseField from "../components/select-response-fields";
 import LoadingWrapper from "@/components/shared/loading/loading-wrapper";
 import ImageThumbNail from "@/components/ui/image-thumbnail";
 import { Check } from "lucide-react";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 export default function SurveyResponseForm({
   id,

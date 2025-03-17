@@ -10,7 +10,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import ConfirmDialog from "@/components/ui/confirm-button";
 import { PsConfirmModal } from "@/components/shared/modals/password-input-modal";
-import { withFetchRevaildationAction } from "@/action/with-fetch-revaildation";
+import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 
 export default function PostController({
   id,
