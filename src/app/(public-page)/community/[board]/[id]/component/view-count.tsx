@@ -21,6 +21,8 @@ export default function ViewCount({ className }: { className?: string }) {
     },
   });
 
+  console.log(result);
+
   return (
     <>
       {isLoading ? (

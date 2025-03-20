@@ -1,5 +1,6 @@
 import { CategoriesKey } from "@/types/board";
 import BoardPage from "./[board]/page";
+import BoardListPage from "./[board]/page";
 
 type TempParams = { board: CategoriesKey };
 
