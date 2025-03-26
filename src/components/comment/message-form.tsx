@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import LoadingSpinnerWrapper from "../ui/loading/LoadingSpinnerWrapper";
 import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 import withActionAtClient from "@/utils/with-action-at-client";
+import useThrottling from "@/_hook/useThrottlring";
 
 /**
  * Editor Type = Comment / Reply 유니온
@@ -45,6 +46,7 @@ export default function MessageForm({
   const userData = queryclient.getQueryData([QUERY_KEY.USER_DATA]) as User;
   const { EDITOR_PATH } = useCommentContext();
 
+  const { throttle } = useThrottling();
   const params = useParams();
   const router = useRouter();
 
@@ -96,6 +98,7 @@ export default function MessageForm({
             method: REQUEST_METHOD.POST,
             body: JSON.stringify(data),
           },
+          requireAuth: true,
           tags: [
             `comment-${EDITOR_PATH}-${params.id}`,
             ...(category ? [`${EDITOR_PATH}-${category}`] : []),
@@ -118,7 +121,7 @@ export default function MessageForm({
   });
 
   const submitHandler = (data: any) => {
-    mutate({ ...data });
+    throttle(() => mutate({ ...data }), 1500);
   };
 
   return (

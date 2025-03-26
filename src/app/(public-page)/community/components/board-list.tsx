@@ -39,6 +39,8 @@ export default function BoardList({
   const qs = useSearchParams();
   const curPage = qs.get("page");
 
+  console.log(searchParam);
+  // http://localhost:3000/community?search=%E3%85%87%E3%85%87%E3%85%87%E3%85%87
   // number는 All Cnt
   const { data, isLoading } = useQuery<[ListItemType[], number]>({
     queryKey: ["board", curPage, searchParam, category],

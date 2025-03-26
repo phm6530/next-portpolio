@@ -11,7 +11,7 @@ import BoardList from "../components/board-list";
 
 export default async function BoardListPage({
   params,
-
+  keyword,
   searchParams,
 }: {
   params: { board: CategoriesKey };
@@ -51,7 +51,10 @@ export default async function BoardListPage({
       {/* list */}
       <section className="mt-11 mb-7">
         <Suspense fallback={<LoadingWrapper />}>
-          <BoardList category={params.board} keyword={searchParams?.search} />
+          <BoardList
+            category={params.board}
+            keyword={keyword || searchParams?.search}
+          />
         </Suspense>
       </section>
     </>
