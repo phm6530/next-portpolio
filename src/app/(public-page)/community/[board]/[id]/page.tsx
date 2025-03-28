@@ -100,7 +100,7 @@ export default async function Page({
             />
 
             <span className="text-muted-foreground text-[12px]">
-              {DateUtils.fromNow(data.createdAt)}
+              {DateUtils.dateFormatKR(data.createdAt, "YYYY. MM. DD")}
             </span>
           </div>
         </div>

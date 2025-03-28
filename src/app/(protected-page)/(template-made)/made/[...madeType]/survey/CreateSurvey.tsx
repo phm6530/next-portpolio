@@ -248,7 +248,10 @@ export default function CreateSurveyForm() {
           <LoadingWrapper />
         ) : (
           <>
-            <LoadingSpinnerWrapper loading={isPending || isSuccess}>
+            <LoadingSpinnerWrapper
+              loading={isPending || isSuccess}
+              className="gap-0 md:gap-3"
+            >
               <FormProvider {...formState}>
                 <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
                   <CardHeader className="px-0 md:px-6">

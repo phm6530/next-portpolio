@@ -128,7 +128,8 @@ export default function MessageItem({
         </div>
 
         <div
-          className="bg-secondary/40 dark:bg-card leading-5 text-sm dark:border-white/20 hover:bg-secondary/70 text-[15px] min-w-[50px] border border-input py-3 px-4 rounded-full cursor-pointer dark:hover:brightness-125  "
+          className="bg-secondary/40 dark:bg-card leading-5 text-sm dark:border-white/20 hover:bg-secondary/70 text-[15px] min-w-[50px] border border-input py-3 px-4 rounded-3xl cursor-pointer dark:hover:brightness-125  "
+          style={{ whiteSpace: "pre-line" }}
           onClick={onClickEvent}
         >
           {content}
