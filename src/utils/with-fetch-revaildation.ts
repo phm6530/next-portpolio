@@ -35,13 +35,13 @@ export const withFetchRevaildationAction = async <T>({
   const cookieStore = cookies();
   const authCookie = cookieStore.get("token");
 
-  if (requireAuth && !authCookie) {
-    return {
-      success: false,
-      message: "인증 토큰이 없습니다.",
-      statusCode: 401,
-    };
-  }
+  // if (requireAuth && !authCookie) {
+  //   return {
+  //     success: false,
+  //     message: "인증 토큰이 없습니다.",
+  //     statusCode: 401,
+  //   };
+  // }
 
   try {
     const result = await fetch(`${BASE_NEST_URL}/${endPoint}`, {
