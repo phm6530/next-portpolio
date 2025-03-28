@@ -1,4 +1,4 @@
-import { ListItemType } from "../../components/board-list";
+import BoardList, { ListItemType } from "../../components/board-list";
 import { BASE_NEST_URL } from "@/config/base";
 
 import { BOARD_CATEGORIES, CategoriesKey } from "@/types/board";
@@ -123,7 +123,7 @@ export default async function Page({
                 : null
             }
           />
-          <ViewCount className="text-sm" />
+          <ViewCount />
         </div>
       </div>
 
