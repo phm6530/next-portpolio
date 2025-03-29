@@ -70,7 +70,7 @@ export default async function RootLayout({
   return (
     // useTheme의다크모드 때문에 suppressHydration 해둠
     <html lang="en" suppressHydrationWarning>
-      <body className="body">
+      <body className="body bg-zinc-50 dark:bg-background">
         <div id="modal-portal"></div>
         <div id="backdrop-portal"></div>
 

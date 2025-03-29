@@ -71,7 +71,11 @@ export default function PostController({
     <>
       <div className="flex items-center gap-2 text-sm">
         {/* Edit  */}
-        <Button variant={"outline"} asChild>
+        <Button
+          variant={"outline"}
+          asChild
+          className="p-2 text-[12px] h-8 md:h-10 md:text-[14px] md:p-4"
+        >
           <Link href={`/community/${category}`}>목록</Link>
         </Button>
 
@@ -86,14 +90,23 @@ export default function PostController({
                 description={"삭제 한 게시물은 복구가 불가합니다."}
                 cb={async () => await mutateAsync({})}
               >
-                <Button variant={"outline"}>삭제</Button>
+                <Button
+                  variant={"outline"}
+                  className="p-2 text-[12px] h-8 md:h-10 md:text-[14px] md:p-4"
+                >
+                  삭제
+                </Button>
               </ConfirmDialog>
             ) : (
               <PsConfirmModal
                 disalbed={isPending}
                 cb={async (formData) => await mutateAsync(formData)}
               >
-                <Button variant="outline" disabled={isPending}>
+                <Button
+                  variant="outline"
+                  disabled={isPending}
+                  className="p-2 text-[12px] h-8 md:h-10 md:text-[14px] md:p-4"
+                >
                   삭제
                 </Button>
               </PsConfirmModal>

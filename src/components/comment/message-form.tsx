@@ -165,7 +165,7 @@ export default function MessageForm({
           <div className="col-span-5">
             <TextareaFormField
               name={"content"}
-              placeholder="남기실 코멘트를 입력해주세요"
+              placeholder="남기실 메세지를 입력해주세요"
               maxLength={1000}
               disabled={isPending}
             />
@@ -175,7 +175,7 @@ export default function MessageForm({
             className="mt-3 md:mt-0 col-span-6  md:col-span-1 h-full order-2 md:order-none py-5"
           >
             댓글 작성
-          </Button>{" "}
+          </Button>
           <div className="pt-2 text-sm flex gap-3 col-span-6 order-1 md:order-none">
             <span className="text-[11px] opacity-45">
               {watch("content").length} / 1000 자

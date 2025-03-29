@@ -27,7 +27,6 @@ export default async function withActionAtClient<T>(
     }
     throw new Error(message);
   }
-  console.log("result", result);
 
   return result;
 }

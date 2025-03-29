@@ -46,6 +46,7 @@ import { DateUtils } from "@/utils/DateUtils";
 import useThrottling from "@/_hook/useThrottlring";
 import withActionAtClient from "@/utils/with-action-at-client";
 import { resolve } from "path";
+import LoadingSpinnerWrapper from "@/components/ui/loading/LoadingSpinnerWrapper";
 
 export enum SURVEY_EDITOR_TYPE {
   RESPOND = "respond",
@@ -247,158 +248,163 @@ export default function CreateSurveyForm() {
           <LoadingWrapper />
         ) : (
           <>
-            <FormProvider {...formState}>
-              <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
-                <CardHeader className="px-0 md:px-6">
-                  <CardTitle className="text-xl md:text-2xl  font-normal">
-                    1. 설문조사 정보
-                  </CardTitle>
-                  <CardDescription>
-                    {" "}
-                    가장 먼저 노출되는 항목이에요
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
-                  {/* 설문조사 제목 */}
-                  <InputField
-                    name="title"
-                    label="템플릿 제목"
-                    required
-                    placeholder="템플릿 제목을 입력해주세요"
-                    autoComplete="off"
-                  />
-
-                  {/* 설문조사 설명 */}
-                  <TipTapEditorField
-                    name="description"
-                    placeholder="간략한 설명을 입력해주세요.!!"
-                  />
-
-                  {/* 썸네일 */}
-                  <FormItem>
-                    <FormLabel>섬네일 (선택)</FormLabel>
-                    <ThumbNailUploader />
-                  </FormItem>
-                </CardContent>
-              </Card>
-
-              <Card
-                className={cn(
-                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-1 border-0 md:border border-b",
-                  editLock && "cursor-not-allowed"
-                )}
-              >
-                <CardHeader className="px-0 md:px-6 flex flex-col gap-4 mb-4">
-                  <CardTitle className="text-xl md:text-2xl font-normal">
-                    2. 설문조사 기간 설정{" "}
-                    <span className="text-sm">(선택)</span>
-                  </CardTitle>
-                  <CardDescription className="leading-6">
-                    시작일을 설정하지 않으면 설문조사는 바로 시작되며, <br />
-                    종료 일이 없다면 무기한으로 설정됩니다. 시작 종료일 모두
-                    00시 기준입니다.
-                  </CardDescription>
-                  {editLock && (
-                    <CardDescription className="text-lg text-white flex gap-2 items-center text-primary dark:brightness-150">
-                      <Info />
-                      설문 중에는 수정이 불가합니다.
+            <LoadingSpinnerWrapper
+              loading={isPending || isSuccess}
+              className="gap-0 md:gap-3"
+            >
+              <FormProvider {...formState}>
+                <Card className="md:py-7 md:px-7 px-0 py-6 bg-transparent md:bg-card  flex flex-col gap-4 border-0 md:border border-b">
+                  <CardHeader className="px-0 md:px-6">
+                    <CardTitle className="text-xl md:text-2xl  font-normal">
+                      1. 설문조사 정보
+                    </CardTitle>
+                    <CardDescription>
+                      {" "}
+                      가장 먼저 노출되는 항목이에요
                     </CardDescription>
-                  )}
-                </CardHeader>
+                  </CardHeader>
+                  <CardContent className="px-0 md:px-6 gap-10 flex flex-col">
+                    {/* 설문조사 제목 */}
+                    <InputField
+                      name="title"
+                      label="템플릿 제목"
+                      required
+                      placeholder="템플릿 제목을 입력해주세요"
+                      autoComplete="off"
+                    />
 
-                <CardContent
+                    {/* 설문조사 설명 */}
+                    <TipTapEditorField
+                      name="description"
+                      placeholder="간략한 설명을 입력해주세요.!!"
+                    />
+
+                    {/* 썸네일 */}
+                    <FormItem>
+                      <FormLabel>섬네일 (선택)</FormLabel>
+                      <ThumbNailUploader />
+                    </FormItem>
+                  </CardContent>
+                </Card>
+
+                <Card
                   className={cn(
-                    "px-0 md:px-6 gap-6 flex flex-col",
-                    editLock && " pointer-events-none opacity-50"
+                    "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-1 border-0 md:border border-b",
+                    editLock && "cursor-not-allowed"
                   )}
                 >
-                  <DateRangeSelector />
-                  <CardDescription className="leading-6">
-                    설문조사가 시작되면 등록 이후 일정 변경은 불가합니다
-                  </CardDescription>
-                </CardContent>
-              </Card>
-
-              <Card
-                className={cn(
-                  "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
-                  editLock && "cursor-not-allowed"
-                )}
-              >
-                <CardHeader className="px-0 md:px-6">
-                  <CardTitle className="text-xl md:text-2xl font-normal">
-                    2. 응답자 필터 설정
-                  </CardTitle>
-                  <CardDescription>
-                    {"'예'"} 체크 시, 나이 성별을 수집하며 차트와 응답자 들의
-                    필터링이 제공됩니다.
-                  </CardDescription>
-
-                  {editLock && (
-                    <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
-                      <Info />
-                      설문 중에는 필터 수정이 불가합니다.
+                  <CardHeader className="px-0 md:px-6 flex flex-col gap-4 mb-4">
+                    <CardTitle className="text-xl md:text-2xl font-normal">
+                      2. 설문조사 기간 설정{" "}
+                      <span className="text-sm">(선택)</span>
+                    </CardTitle>
+                    <CardDescription className="leading-6">
+                      시작일을 설정하지 않으면 설문조사는 바로 시작되며, <br />
+                      종료 일이 없다면 무기한으로 설정됩니다. 시작 종료일 모두
+                      00시 기준입니다.
                     </CardDescription>
-                  )}
-                </CardHeader>
+                    {editLock && (
+                      <CardDescription className="text-lg text-white flex gap-2 items-center text-primary dark:brightness-150">
+                        <Info />
+                        설문 중에는 수정이 불가합니다.
+                      </CardDescription>
+                    )}
+                  </CardHeader>
 
-                <CardContent
+                  <CardContent
+                    className={cn(
+                      "px-0 md:px-6 gap-6 flex flex-col",
+                      editLock && " pointer-events-none opacity-50"
+                    )}
+                  >
+                    <DateRangeSelector />
+                    <CardDescription className="leading-6">
+                      설문조사가 시작되면 등록 이후 일정 변경은 불가합니다
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+
+                <Card
                   className={cn(
-                    "px-0 md:px-6 gap-6 flex flex-col",
-                    editLock && " pointer-events-none opacity-50"
+                    "md:p-7 py-6 flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b",
+                    editLock && "cursor-not-allowed"
                   )}
                 >
-                  {/* 나이 별 수집 */}
-                  {/* <RadioBooleanField<RequestSurveyFormData>
+                  <CardHeader className="px-0 md:px-6">
+                    <CardTitle className="text-xl md:text-2xl font-normal">
+                      2. 응답자 필터 설정
+                    </CardTitle>
+                    <CardDescription>
+                      {"'예'"} 체크 시, 나이 성별을 수집하며 차트와 응답자 들의
+                      필터링이 제공됩니다.
+                    </CardDescription>
+
+                    {editLock && (
+                      <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
+                        <Info />
+                        설문 중에는 필터 수정이 불가합니다.
+                      </CardDescription>
+                    )}
+                  </CardHeader>
+
+                  <CardContent
+                    className={cn(
+                      "px-0 md:px-6 gap-6 flex flex-col",
+                      editLock && " pointer-events-none opacity-50"
+                    )}
+                  >
+                    {/* 나이 별 수집 */}
+                    {/* <RadioBooleanField<RequestSurveyFormData>
                 label="연령대 별 집계를 진행 하시겠습니까?"
                 groupName={"isAgeCollected"}
                 // description="연령대별 필터링이 가능합니다."
               /> */}
 
-                  {/* 성별 별 수집 */}
-                  <RadioBooleanField<SurveyPayload<"req">>
-                    // label="나이 및 성별 수집을 하시겠습니까?"
-                    groupName={"isGenderCollected"}
-                    // description="성별 필터링이 가능합니다."
-                  />
-                </CardContent>
-              </Card>
+                    {/* 성별 별 수집 */}
+                    <RadioBooleanField<SurveyPayload<"req">>
+                      // label="나이 및 성별 수집을 하시겠습니까?"
+                      groupName={"isGenderCollected"}
+                      // description="성별 필터링이 가능합니다."
+                    />
+                  </CardContent>
+                </Card>
 
-              <Card
-                className={cn(
-                  editLock && "cursor-not-allowed",
-                  "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
-                )}
-              >
-                <CardHeader className="px-0 md:px-6">
-                  <CardTitle className=" text-xl md:text-2xl font-normal">
-                    3. 설문 문항 구성
-                  </CardTitle>
-                  <CardDescription>
-                    설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
-                  </CardDescription>
-                  {editLock && (
-                    <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
-                      <Info />
-                      설문 중에는 항목 수정이 불가합니다.
-                    </CardDescription>
-                  )}
-                </CardHeader>
-
-                <CardContent
+                <Card
                   className={cn(
-                    "px-0 md:px-6 gap-6 flex flex-col",
-                    editLock && " pointer-events-none opacity-50"
+                    editLock && "cursor-not-allowed",
+                    "md:p-7 py-6  flex flex-col bg-transparent md:bg-card gap-4 border-0 md:border border-b"
                   )}
                 >
-                  <SurveyStatus />
-                  {/* List.. */}
-                  <CreateSurveyList />
-                  {/* 항목 추가 */}
-                  <CreateSurveyFormController />
-                </CardContent>
-              </Card>
-            </FormProvider>
+                  <CardHeader className="px-0 md:px-6">
+                    <CardTitle className=" text-xl md:text-2xl font-normal">
+                      3. 설문 문항 구성
+                    </CardTitle>
+                    <CardDescription>
+                      설문을 더욱 체계적으로 만들기 위한 문항을 추가해보세요.
+                    </CardDescription>
+                    {editLock && (
+                      <CardDescription className="text-lg pt-5 mt-10 text-white flex gap-2 items-center text-primary dark:brightness-150">
+                        <Info />
+                        설문 중에는 항목 수정이 불가합니다.
+                      </CardDescription>
+                    )}
+                  </CardHeader>
+
+                  <CardContent
+                    className={cn(
+                      "px-0 md:px-6 gap-6 flex flex-col",
+                      editLock && " pointer-events-none opacity-50"
+                    )}
+                  >
+                    <SurveyStatus />
+                    {/* List.. */}
+                    <CreateSurveyList />
+                    {/* 항목 추가 */}
+                    <CreateSurveyFormController />
+                  </CardContent>
+                </Card>
+              </FormProvider>
+            </LoadingSpinnerWrapper>
             <div className="flex [&>button]:flex-1 gap-3">
               <Button
                 type="submit"
