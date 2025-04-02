@@ -1,4 +1,4 @@
-# SURVEY Portpolio
+# SURVEY Portfolio
 
 설문조사 웹 플랫폼 포트폴리오
 성별, 나이 등을 필터링 하며 익명으로도 개설 할 수 있는 설문조사 플랫폼입니다.
