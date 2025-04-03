@@ -16,6 +16,8 @@ import ThemeToggleButton from "@/components/ui/thema-toggle-btn";
 import { withFetchRevaildationAction } from "@/utils/with-fetch-revaildation";
 import UserDataCaching from "@/provider/UserDataCaching";
 
+export const runtime = "edge";
+
 //메타 데이터
 export const metadata: Metadata = {
   title: "[Dopoll] 나만의 설문조사를 만들어보세요",
